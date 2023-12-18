@@ -19,6 +19,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/safetyapp" element={<HomePage />} />
         <Route path="/home" element={<HomePage />} />
         {/* Operations Hub. Set props to pass if logged in user is Admin Level or not*/}
         <Route path="/employee-hub" element={<EmployeeHub />} />

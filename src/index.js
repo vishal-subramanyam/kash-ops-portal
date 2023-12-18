@@ -10,7 +10,7 @@ root.render(
   // <React.StrictMode>
   //   <App />
   // </React.StrictMode>
-  <BrowserRouter basename="/kash-tech">
+  <BrowserRouter>
     {/* <HashRouter> */}
     <App />
     {/* </HashRouter> */}
