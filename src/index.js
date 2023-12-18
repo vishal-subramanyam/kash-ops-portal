@@ -10,11 +10,11 @@ root.render(
   // <React.StrictMode>
   //   <App />
   // </React.StrictMode>
-  <BrowserRouter>
-    {/* <HashRouter> */}
+  // <BrowserRouter>
+  <HashRouter>
     <App />
-    {/* </HashRouter> */}
-  </BrowserRouter>
+  </HashRouter>
+  // </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

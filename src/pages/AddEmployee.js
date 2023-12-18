@@ -20,6 +20,7 @@ function AddEmployee() {
   let [contractorName, setContractorName] = useState("");
   let [adminCheckbox, setAdminCheckbox] = useState(false);
   let [adminLevelDesignation, setAdminLevelDesignation] = useState("");
+  let [employeeIds, setEmployeeIds] = useState([]);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
   let [allEmployeeUsernames, setAllEmployeeUsernames] = useState([]);
 
@@ -178,6 +179,7 @@ function AddEmployee() {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
+        setEmployeeIds(res.data);
       })
       .catch((err) => alert(err));
   };
@@ -187,6 +189,23 @@ function AddEmployee() {
     console.log("add employee form submitted" + e);
     console.log(firstNameInput);
     checkIfEmpIdAlreadyExistsInDB();
+    if (employeeIds.length !== 0) {
+      alert("Duplicate employee IDs. Choose a different ID number.");
+    } else {
+      if (adminCheckbox === true) {
+        // perform two fetch POST calls - one to the employee table and another to admin table
+        console.log("admin checkbox checked");
+        setAdminLevelDesignation("Admin");
+        console.log(adminLevelDesignation);
+        addEmployeeToDatabaseIfAdmin();
+      } else {
+        console.log("only employee not admin created");
+        // run the function that will run a fetch POST to add employee to database
+        // addEmployeeNotAdmin();
+      }
+      onModalOpen();
+    }
+
     // for (let input of requiredInputs) {
     //   if (input.checkValidity() === false) {
     //     //validInputs = false
@@ -196,19 +215,6 @@ function AddEmployee() {
     //     //throw new Error(`Please check the validity of ${input.labels[0].innerText}`)
     //   }
     // }
-
-    if (adminCheckbox === true) {
-      // perform two fetch POST calls - one to the employee table and another to admin table
-      console.log("admin checkbox checked");
-      setAdminLevelDesignation("Admin");
-      console.log(adminLevelDesignation);
-      // addEmployeeToDatabaseIfAdmin();
-    } else {
-      console.log("only employee not admin created");
-      // run the function that will run a fetch POST to add employee to database
-      // addEmployeeNotAdmin();
-    }
-    onModalOpen();
   };
 
   // run function for employee usernames
