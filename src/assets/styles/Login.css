@@ -1,0 +1,132 @@
+.kash-operations-login {
+    padding-bottom: 2rem;
+  }
+  
+  a {
+    color: unset;
+  }
+  .kash_operations_home--top-banner {
+    display: flex;
+    gap: 3rem;
+    flex-direction: column;
+    padding: 0 2rem;
+    align-items: center;
+    margin-bottom: 3rem;
+  }
+  .kash_operations_home--title {
+    font-weight: 900;
+    font-size: 3rem;
+    text-align: center;
+    line-height: 1.06;
+    color: #356575;
+  }
+  /*@import url('https://fonts.googleapis.com/css?family=Raleway:400,700');*/
+  
+  * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;	
+      font-family: Raleway, sans-serif;
+  }
+  
+  body {
+      background: linear-gradient(180deg, #ffffff, #366575);		
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+  }
+  
+  .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+  }
+  
+  .signin-screen {		
+      background: #ffffff;		
+      position: relative;	
+      height: 600px;
+      width: 360px;	
+      box-shadow: 0px 0px 24px #366575;
+      border-radius: 1rem;
+      margin-top: -100px;
+  }
+  
+  .signin-content {
+      z-index: 1;
+      position: relative;	
+      height: 100%;
+  }
+  
+  .login {
+      width: 100%;
+      padding: 30px;
+      padding-top: 156px;
+  }
+  
+  .login-field {
+      width: 100%;
+      padding: 20px 0px;
+      /*margin-left: 50px;*/
+      position: relative;	
+  }
+  
+  .signin-icons {
+      position: absolute;
+      top: 30px;
+      color: #366575;
+  }
+  
+  .login-input {
+      border: none;
+      border-bottom: 2px solid #D1D1D4;
+      background: none;
+      padding: 10px;
+      padding-left: 24px;
+      font-weight: 700;
+      width: 100%;
+      transition: .2s;
+  }
+  
+  .login-input:active,
+  .login-input:focus,
+  .login-input:hover {
+      outline: none;
+      border-bottom-color: #366575;
+  }
+  
+  .signin-button {
+      background: #fff;
+      font-size: 14px;
+      margin-top: 30px;
+      padding: 16px 20px;
+      border-radius: 26px;
+      border: 1px solid #366575;
+      text-transform: uppercase;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      color: #366575;
+      box-shadow: 0px 2px 2px #366575;
+      cursor: pointer;
+      transition: .2s;
+  }
+  
+  .signin-button:active,
+  .signin-button:focus,
+  .signin-button:hover {
+      border-color: #366575;
+      outline: none;
+  }
+  
+  /*.loin-icons {*/
+  /*    color: #366575;*/
+  /*}*/
+  
+  .button-icon {
+      font-size: 24px;
+      margin-left: auto;
+      color: #366575;
+  }
+  

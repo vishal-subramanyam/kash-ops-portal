@@ -1,0 +1,25 @@
+label {
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+  
+  input[type="checkbox"] {
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+
+  .employee-info-form {
+    display: flex;
+    flex-direction: column;
+    /* align-items: flex-start !important; */
+}
+  
+    .left_group_inputs {
+      display: flex;
+      flex-direction: column;
+  }
+
+  .left_group_inputs label {
+    text-align: left;
+  }

@@ -1,0 +1,2127 @@
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  line-height: 1.2;
+  -webkit-font-smoothing: antialiased;
+}
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+#root,
+#__next {
+  isolation: isolate;
+}
+iframe{
+    border-style: none;
+}
+/*  Button Styles Reset */
+button {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background-color: #ababab;
+  color: inherit;
+}
+
+/*  Quick Fluid Typography */
+html {
+  font-size: clamp(16px, 1.8vw + 0.5rem, 20px);
+}
+
+/* -------------------------------------------------------------------- */
+html {
+  --kashtech_operations--main-blue: #047ca3;
+  --kashtech_operations--blue-darken1: #1b4e5e;
+  --kashtech_operations--main-green: #54c488;
+  --kashtech_operations--green-darken1: #3e9f6b;
+  --kashtech_operations--characteristic-orange-1: #fa9b4b;
+  --kashtech_operations--characteristic-teal-1: #0e8973;
+  --kashtech_operations--characteristic-orange--darken-1: #e5771a;
+  --kashtech_operations--characteristic-purple-1: #a790b9;
+  --kashtech_operations--characteristic-pink-1: #e7549a;
+  --bounded-shadow: clamp(3px, 1.3vw, 15px);
+}
+
+/* -------------------------------------------------------------------- */
+
+body {
+  font-family: "Inter", "Arial", sans-serif;
+  padding: 1rem;
+  margin: 0;
+}
+input[type="text"] {
+  text-indent: 0.3rem;
+}
+/* -------------------------------------------------------------------- */
+.timesheet-update__main-section {
+  display: flex;
+  flex-direction: column;
+}
+.max-width--main-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding-bottom: 2rem;
+}
+.timesheet-update__main-section select {
+  background-color: #ebffef;
+}
+.timesheet-update__main-section input,
+.timesheet-update__main-section select {
+  border: 2px solid #5c9262;
+  border-radius: 3px;
+}
+
+.form-page-title--lg-1 {
+  font-size: 3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.weeklytimesheet__page-title {
+  color: var(--kashtech_operations--green-darken1);
+}
+
+.timesheet-staging-form {
+  margin-top: 1.5rem;
+}
+.staging-form__content-holder {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2rem;
+}
+.timesheet-information-group-holder {
+  display: flex;
+  /* flex-direction: column; */
+  gap: 2rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+.employee-input_holder {
+  max-width: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+.employee-dropdown-label {
+  color: #498092;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.employee-dropdown-input {
+  max-width: 100%;
+}
+
+.timesheet__task-category-holder {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.timesheet__task-category-holder > div {
+  max-width: 230px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.timesheet__task-category-holder > div > label {
+  margin-bottom: 0.5rem;
+  text-align: end;
+}
+.timesheet-days-btn {
+  background-color: var(--kashtech_operations--green-darken1);    
+  color: white;
+  border-radius: 0.2rem;
+  cursor: pointer;
+  padding: .3rem 0;
+  width: 3rem;
+}
+.timesheet-days-btn:hover {
+  background-color: #23795A;
+}
+
+.timesheet-log-daily-hours-popup {
+     display: none;
+     z-index: 2;
+     width: clamp(550px, 50vw, 600px);
+     height: clamp(550px, 50vw, 600px);
+     background-color: white;
+     border: 2px solid #5c9262;
+     border-radius: 0.2rem;
+     top: 20%;
+     left: 20%;
+     position: fixed;
+ 
+}
+
+
+/* ////////////////////////////////////////////// */
+/* ////////////////////////////////////////////// */
+
+.timesheet-update__main-section {
+        
+    }
+        .optional_sub-assignment_holder {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            flex-wrap: wrap;
+			/*background: hsl(176, 74%, 91%);*/
+			position: relative;
+		}
+		.optional_sub-assignment_holder::after {
+		    content: '';
+		    position: absolute;
+		    z-index: -1;
+		    inset: -1rem 0 -1rem -60vw;
+		    /*height: 100%;*/
+		    width: 250vw;
+		    background: hsla(176, 74%, 70%, 25%);
+		}
+
+		#sub-assignment-content {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 2rem;
+			align-items: flex-end;
+
+		}
+
+		#sub-assignment-content > div {
+			/*margin-right: 20px;*/
+		}
+
+			#sub-assignment-content > div:last-of-child {
+				margin-right: 0;
+			}
+
+		#sub-assignment-title {
+		    display: flex;
+		    flex-direction: row;
+		    gap: 1rem;
+		    align-items: center;
+		    /*text-transform: uppercase;*/
+		    font-weight: 700;
+		}
+
+		    #sub-assignment-title > span {
+		        text-transform: none;
+		        color: hsl(180, 20%, 49%);
+		        font-size: 0.85rem;
+		    }
+
+		.w-10 {
+			width: 8rem;
+		}
+
+			.w-10 > select, .w-10 > input {
+				width: 8rem;
+			}
+
+		.w-15 {
+			width: 8rem;
+		}
+
+			.w-15 > select, .w-15 > input {
+				width: 8rem;
+			}
+
+
+
+
+
+
+
+
+/* ////////////////////////////////////////////// */
+/* ////////////////////////////////////////////// */
+
+.popup-content {
+    margin-left: 10%;
+    margin-top: 3%;
+}
+.day-of-the-week {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 200;
+    margin-bottom: 2%;
+    color: var(--kashtech_operations--green-darken1); 
+}
+.center-save-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.close-daily-status-popup-button {
+    font-size: 2rem;
+    margin-right: 2%;
+    float: right;
+    /* clear */
+}
+.weekly-hours-input {
+    margin-top: 5%;
+    display: block;
+    width: 100px;
+}
+/*---------Ben Styles for Edit Pages-------------*/
+
+.edit_table_container{
+    border-radius: 0.7rem;
+    max-height: 1200px;
+    min-height: 500px;
+    background-color: #e2f7fe;
+}
+
+.hidden{
+    display: none;
+}
+
+.left_group_inputs label{
+    margin-bottom: 0.3rem;
+}
+
+.buttonContainer{
+    margin-top: 10px;
+}
+
+.btn-danger{
+   background-color: #bd362f !important;
+}
+/* ---------------------------------------- */
+.hours_and_text-status {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.daily-hours--title {
+  font-weight: 300;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.weekly-hours--holder {
+  display: flex;
+  gap: 1rem;
+  /* justify-content: space-between; */
+  flex-wrap: wrap;
+  background:#f6f6f6;
+}
+.input-holder__day {
+  display: flex;
+  flex-direction: column;
+}
+.input-holder__day > input {
+  max-width: 3rem;
+}
+.project-status_and_notes--label-title {
+  font-size: 0.8rem;
+  /*font-weight: 300;*/
+  margin-bottom: 0.5rem;
+}
+.project-status_and_notes--input {
+  max-width: 90vw;
+  border: 2px solid #5c9262;
+  border-radius: .4rem;
+}
+
+.timesheet__add-to-staging-button {
+  background-color: var(--kashtech_operations--main-blue);
+  color: #fff;
+  font-weight: 900;
+  text-transform: uppercase;
+  padding: 2rem 1rem;
+  border-radius: 0.6rem;
+  border: 3px solid #fff;
+}
+.timesheet__add-to-staging-button:hover {
+  background-color: var(--kashtech_operations--blue-darken1);
+  cursor: pointer;
+}
+.timesheet__add-to-staging-button:focus {
+  background-color: var(--kashtech_operations--blue-darken1);
+  border: 3px solid #e7862d;
+  outline: none;
+}
+
+.timesheet__summary-divider {
+  border-top: 4px solid #303030;
+  /*border-bottom: 4px solid #d2d2d2;*/
+  margin: 3rem 0;
+}
+.projects-summary--title {
+  margin: 2rem 0 1rem;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+.timesheet-summary_iframe {
+  width: 100%;
+  height: 30vh;
+}
+.timesheet-to-database-fex--iframe {
+  display: none;
+}
+
+.submit-timesheet--to-server_button {
+  background-color: var(--kashtech_operations--main-green);
+  color: #fff;
+  font-weight: 900;
+  text-transform: uppercase;
+  padding: 2rem 1rem;
+  border-radius: 0.6rem;
+  border: 3px solid #fff;
+  display: flex;
+  align-items: center;
+  margin-top: 2rem;
+  align-self: center;
+}
+
+.database-submit-dialog {
+  /*position: absolute;*/
+  border: none;
+  border-radius: 1rem;
+  background-color: #fff;
+  font-weight: 900;
+  padding: 1rem 1.2rem;
+  margin: auto;
+  opacity: 0;
+  width: clamp(300px, 50vw, 780px);
+  /*min-width: 40vw;*/
+}
+.database-submit-dialog .company-name--dialog-span {
+  color: #8d3ebd;
+}
+.database-submit-dialog .project-page-dialog--project-type-span,
+.database-submit-dialog .project-page-dialog--sow-id-span {
+  color: #8d3ebd;
+}
+.database-submit-dialog .employee-page-dialog--id-span {
+  color: #f57407;
+}
+.database-submit-dialog[open] {
+  opacity: 1;
+  transform: translate(0, 0);
+  animation: slideIn 0.2s ease-in forwards;
+}
+.database-submit-dialog form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.database-submit-dialog p {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.database-submit-dialog p span {
+  color: #1a90c3;
+}
+
+.database-submit-dialog p span.attach-contact-to-project--dialog_success_note {
+  color: #1a90c3;
+}
+
+.database-submit-dialog button {
+  color: #000;
+  background-color: #54c488;
+  padding: 0.8rem 2.6rem;
+  border-radius: 0.5rem;
+}
+.database-submit-dialog button:hover {
+  color: #fff;
+  background-color: #357e82;
+}
+.database-submit-dialog::backdrop {
+  background-color: hsl(0 0% 10% / 85%);
+}
+
+.submit-timesheet--to-server_button:hover {
+  background-color: var(--kashtech_operations--green-darken1);
+  cursor: pointer;
+}
+.submit-timesheet--to-server_button:hover .submit-to-server--embed-arrow {
+  transform: translate(0.25rem, 0) scale(1.2);
+}
+.submit-to-server--embed-arrow {
+  display: inline;
+  fill: #fff;
+  height: 1rem;
+  margin-left: 0.5rem;
+  transition: transform 0.3s ease-in;
+  transform-origin: center center;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translate(0, -2rem);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+/* ################################################################### */
+
+/* ################################################################### */
+
+/* ################################################################### */
+
+/* ################################################################### */
+
+/* ------------------------- Media Queries ---------------------- */
+@media (min-width: 650px) {
+  .form-page-title--lg-1 {
+    font-size: 2.5rem;
+  }
+}
+@media (min-width: 900px) {
+  .timesheet-information-group-holder {
+    flex-wrap: nowrap;
+  }
+}
+
+/* ################################################################### */
+
+/* ################################################################### */
+
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
+
+/* ^^^^^^^^^^^^^^ ********** Add Employee Form Page ********** ^^^^^^^^^^^^^^^^^^ */
+
+.max-width--main-container.add-employee-page__main-section {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.add-employee__page-title {
+  color: var(--kashtech_operations--characteristic-orange-1);
+}
+.add-employee-form {
+  margin: 2rem 0;
+}
+.add-employee-img-holder {
+  width: 100%;
+  aspect-ratio: 2.17;
+  background: #e5771a;
+  border-radius: 14px;
+}
+.add-employee-img-holder > img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center center;
+  filter: drop-shadow(
+    var(--bounded-shadow) var(--bounded-shadow) 0px
+      var(--kashtech_operations--characteristic-orange-1)
+  );
+}
+.add-employee-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 200;
+}
+.add-employee-form label > input,
+.add-employee-form label > select {
+  margin-top: 10px;
+  border: solid 2px var(--kashtech_operations--characteristic-orange-1);
+  border-radius: 4px;
+  width: 10rem;
+  background-color: #fefaf7;
+}
+.checkBoxLabel {
+    margin-top: .4rem;
+}
+.add-employee-form label > input:focus {
+  outline: 3px solid var(--kashtech_operations--characteristic-orange-1);
+}
+.add-employee-form--top-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem 0;
+}
+.add-employee-form--id-content {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 1rem 0;
+}
+.employee-form--personal-content-holder {
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem 0;
+}
+.employee-form--location-content-holder {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem 0;
+}
+
+.employee-form--add-employee-button {
+  background-color: var(--kashtech_operations--characteristic-orange-1);
+  color: #fff;
+  font-weight: 900;
+  text-transform: uppercase;
+  padding: 1.5rem 1rem;
+  border-radius: 0.6rem;
+  border: 3px solid #fff;
+  display: flex;
+  align-items: center;
+  margin-top: 2rem;
+}
+.employee-form--add-employee-button:hover {
+  background-color: var(--kashtech_operations--characteristic-orange--darken-1);
+}
+.employee-list-summary_iframe,
+.company-list-summary_iframe,
+.project-list-summary_iframe {
+  margin-top: 3rem;
+}
+.employee-list-summary_iframe,
+.company-list-summary_iframe,
+.project-list-summary_iframe,
+.timesheet-summary_iframe {
+  /*display: none;*/
+  height: 40vh;
+  width: clamp(300px, 90vw, 1200px);
+  border-style: solid;
+  border-width: 2px 0;
+  border-color: #aac8d9;
+  padding: 0.5rem 0;
+  align-self: center;
+}
+
+@media (min-width: 650px) {
+  /* .add-employee-form--top-section {
+    flex-direction: row;
+    gap: 1rem;
+    align-items: flex-start;
+  } */
+  .add-employee-form--id-content,
+  .employee-form--personal-content-holder,
+  .employee-form--location-content-holder {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .add-employee-form--top-section {
+    flex-direction: row;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+  .add-employee-form--id-content {
+    order: 1;
+    /* flex-basis: 40%; */
+  }
+  .add-employee-img-holder {
+    order: 2;
+    margin: 0;
+    /* flex-basis: 60%; */
+  }
+}
+
+/* ################################################################### */
+
+/* ################################################################### */
+
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
+
+/* ^^^^^^^^^^^^^^ ********** Add Company Form Page ********** ^^^^^^^^^^^^^^^^^^ */
+.add-company-page__main-section.max-width--main-container {
+  max-width: 1100px;
+}
+.add-company-title {
+  color: var(--kashtech_operations--main-blue);
+}
+.add-company-page--content-holder {
+  display: flex;
+  flex-direction: column;
+  margin: 3rem 0 1rem;
+  gap: 2rem;
+}
+.add-company-img-holder {
+  flex-basis: 100%;
+  aspect-ratio: 1;
+  background-color: var(--kashtech_operations--main-blue);
+}
+.add-company-img-holder > img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  filter: drop-shadow(
+    var(--bounded-shadow) var(--bounded-shadow) 0px
+      var(--kashtech_operations--main-blue)
+  );
+}
+.add-company-form {
+}
+.add-company-form--company-details,
+.add-company-form--company-location {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.add-company-form--company-location {
+  margin: 2rem 0;
+}
+.add-company-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 200;
+}
+.add-company-form label > input {
+  margin-top: 10px;
+  border: solid 2px var(--kashtech_operations--main-blue);
+  border-radius: 4px;
+  width: 14rem;
+  background-color: #f2fcff;
+}
+
+.add-company-form label > .company-form--city-input,
+.add-company-form label > .company-form--state-input,
+.add-company-form label > .company-form--zip_code-input,
+.add-company-form label > .company-form--country-input
+{
+
+  width: 8rem;
+
+}
+
+.add-company-form label > input:focus {
+  outline: 3px solid var(--kashtech_operations--main-blue);
+}
+
+.company-form--add-company-button {
+  background-color: var(--kashtech_operations--main-blue);
+  color: #fff;
+  font-weight: 900;
+  text-transform: uppercase;
+  padding: 1.5rem 1rem;
+  border-radius: 0.6rem;
+  border: 3px solid #fff;
+  display: flex;
+  align-items: center;
+  margin-top: 2rem;
+}
+.company-form--add-company-button:hover {
+  background-color: var(--kashtech_operations--blue-darken1);
+}
+
+@media (min-width: 650px) {
+  .add-company-page--content-holder {
+    flex-direction: row;
+    gap: 2rem;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .add-company-img-holder {
+    order: 2;
+  }
+}
+@media (min-width: 900px) {
+  .add-company-img-holder {
+    flex-basis: 50%;
+  }
+}
+
+/* ################################################################### */
+
+/* ################################################################### */
+
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
+
+/* ^^^^^^^^^^^^^^ ********** Add Company Contact Form Page ********** ^^^^^^^^^^^^^^^^^^ */
+
+.add-comp-contact-page__main-section {
+}
+.add-comp-contact-page__main-section.max-width--main-container {
+}
+
+.add-comp-contact-title {
+  color: var(--kashtech_operations--characteristic-teal-1);
+}
+.edit_page__return-link-holder {
+  --link-color: #255463;
+  margin-top: 0.5rem;
+  display: flex;
+  color: var(--link-color);
+}
+.edit_page__return-link-holder:hover {
+  --link-color: #ffa05b;
+}
+.edit_page__return-link-holder a {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: inherit;
+  text-decoration-line: none;
+  justify-content: flex-start;
+}
+.edit_page__return-link-holder a svg {
+  width: 0.6rem;
+  height: 1rem;
+}
+.edit_page__return-link-holder a svg > * {
+  fill: var(--link-color);
+}
+.edit_page__return-link-holder a p {
+  text-decoration-line: underline;
+  text-underline-offset: 0.05rem;
+  font-weight: 300;
+}
+.add-comp-contact-page--content-holder {
+  display: flex;
+  flex-direction: column;
+  margin: 2rem 0;
+  gap: 2rem;
+  align-items: center;
+}
+.add-comp-contact-img-holder {
+  /* background-color: var(--kashtech_operations--characteristic-teal-1); */
+  width: 50%;
+  aspect-ratio: 0.7868;
+}
+.add-comp-contact-img-holder > img {
+  --bounded-shadow: clamp(3px, 1vw, 7px);
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  filter: drop-shadow(
+    var(--bounded-shadow) var(--bounded-shadow) 0px
+      var(--kashtech_operations--characteristic-teal-1)
+  );
+}
+.add-comp-contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+.add-comp-contact-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 200;
+}
+.add-comp-contact-form label > input {
+  margin-top: 10px;
+  border: solid 2px var(--kashtech_operations--characteristic-teal-1);
+  border-radius: 4px;
+  width: 14rem;
+  background-color: #f3fcfb;
+}
+.add-comp-contact-form label > input:focus {
+  outline: 3px solid var(--kashtech_operations--characteristic-teal-1);
+}
+.add-comp-contact-form .comp-contact-form--company-name-label {
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+.add-comp-contact-form .comp-contact-form--company-name-label select {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  border: solid 2px var(--kashtech_operations--characteristic-teal-1);
+  border-radius: 4px;
+  width: 14rem;
+  background-color: #f3fcfb;
+}
+.comp-contact__contact-sub-title {
+  color: #57978c;
+  /* margin: 1rem 0; */
+}
+.add-comp-contact-form--contact-details-holder {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.contact-channel--holder,
+.comp_contact-location--holder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.comp_contact-form--add-contact-button {
+  background-color: var(--kashtech_operations--characteristic-teal-1);
+  color: #fff;
+  font-weight: 900;
+  text-transform: uppercase;
+  padding: 1.5rem 1rem;
+  border-radius: 0.6rem;
+  border: 3px solid #fff;
+  display: flex;
+  align-items: center;
+}
+.comp_contact-form--add-contact-button:hover {
+  background-color: #1a3d37;
+}
+
+@media (min-width: 650px) {
+  .add-comp__contact-page--content-holder {
+    flex-direction: row;
+    gap: 2rem;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .add-comp__contact-img-holder {
+    order: 2;
+  }
+}
+@media (min-width: 900px) {
+  .add-comp-contact-page--content-holder {
+    flex-direction: row;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+  .add-comp-contact-img-holder {
+    width: 40%;
+    aspect-ratio: 0.7868;
+    order: 2;
+  }
+}
+
+/* ################################################################### */
+
+/* ################################################################### */
+
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
+
+/* ^^^^^^^^^^^^^^ ********** Add Project Form Page ********** ^^^^^^^^^^^^^^^^^^ */
+.add-project-page--body {
+  overflow-x: clip;
+}
+.add-project-page__main-section {
+}
+.add-project-page__main-section.max-width--main-container
+  .add-project-form--project-details {
+  position: relative;
+  padding: 1rem 0;
+}
+.add-project-title {
+  color: var(--kashtech_operations--characteristic-purple-1);
+  /*margin-bottom: 1rem;*/
+}
+.add-project-page--content-holder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+.add-project-page--img-holder {
+  width: 50%;
+  aspect-ratio: 0.8761;
+  /* background-color: var(--kashtech_operations--characteristic-purple-1); */
+}
+.add-project-page--img-holder > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: drop-shadow(
+    var(--bounded-shadow) var(--bounded-shadow) 0px
+      var(--kashtech_operations--characteristic-purple-1)
+  );
+}
+.add-project--form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.add-project--form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 200;
+}
+.add-project-form--project-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.add-project-form--project-details::after {
+  position: absolute;
+  content: "";
+  background-color: #f9f4fd;
+  height: 100%;
+  width: 130vw;
+  top: 0;
+  left: -20vw;
+  z-index: -1;
+}
+
+.add-project--form label > input,
+.add-project--form label > select {
+  margin-top: 10px;
+  border: solid 2px var(--kashtech_operations--characteristic-purple-1);
+  border-radius: 4px;
+  width: 14rem;
+  background-color: #f3fcfb;
+}
+.add-project--form label > input:focus,
+.add-project--form label > select:focus {
+  outline: 3px solid var(--kashtech_operations--characteristic-purple-1);
+}
+.add-project--form label > .add-project--estimated-hours-input {
+  max-width: 4rem;
+}
+.add-project--form label > select:focus {
+  outline: 3px solid var(--kashtech_operations--characteristic-purple-1);
+}
+.project-estimates {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.date-estimates-holder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.add-project-form--add-project-button {
+  background-color: #ac80ce;
+  color: #fff;
+  font-weight: 900;
+  text-transform: uppercase;
+  padding: 1.5rem 1rem;
+  border-radius: 0.6rem;
+  border: 3px solid #fff;
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+}
+.add-project-form--add-project-button:hover {
+  background-color: #9335de;
+}
+
+@media (min-width: 900px) {
+  .add-project-page--content-holder {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .add-project-page--img-holder {
+    width: 45%;
+    order: 2;
+    margin-top: 1rem;
+  }
+}
+
+/* ################################################################### */
+
+/* ################################################################### */
+
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
+/* ^^^^^^^^^^^^^^ ********** Add Sub-Assignment Form Page ********** ^^^^^^^^^^^^^^^^^^ */
+.add-sub-assignment-page--body {
+  overflow-x: clip;
+}
+.add-sub-assignment-title {
+  color: var(--kashtech_operations--characteristic-pink-1);
+  margin-bottom: 1rem;
+}
+.add-sub-assignment--content-holder {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+.add-sub-assignment--form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.add-sub-assignment--form--edit-project-details {
+  position: relative;
+  padding: 1rem 0;
+    display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.add-sub-assignment--form--edit-project-details::after {
+  position: absolute;
+  content: "";
+  background-color: #f9f4fd;
+  height: 100%;
+  width: 130vw;
+  top: 0;
+  left: -20vw;
+  z-index: -1;
+}
+
+
+.add-sub-assignment--form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 200;
+}
+
+
+.add-sub-assignment--form label > input,
+.add-sub-assignment--form label > select {
+  margin-top: 10px;
+  border: solid 2px var(--kashtech_operations--characteristic-pink-1);
+  border-radius: 4px;
+  width: 14rem;
+  background-color: #f3fcfb;
+}
+
+.add-sub-assignment-details-form--form-input {
+  /*margin-top: 10px;*/
+  border: solid 2px var(--kashtech_operations--characteristic-pink-1);
+  border-radius: 4px;
+  width: 14rem;
+  background-color: #f3fcfb;
+}
+.add-sub-assignment-details-form--form-input:focus {
+  outline: 3px solid var(--kashtech_operations--characteristic-pink-1);
+}
+.add-sub-assignment--form label > input:focus,
+.add-sub-assignment--form label > select:focus {
+  outline: 3px solid var(--kashtech_operations--characteristic-pink-1);
+}
+.add-sub-assignment--form label > .add-sub-assignment--estimated-hours-input {
+  max-width: 4rem;
+}
+.add-sub-assignment--form label > select:focus {
+  outline: 3px solid var(--kashtech_operations--characteristic-pink-1);
+}
+.add-sub-assignment-form--form-radio {
+display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.add-sub-assignment-form--form-radio input {
+ position: absolute;
+ opacity: 0;
+ cursor: pointer;
+}
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: var(--kashtech_operations--characteristic-pink-1);
+  border-radius: 50%;
+}
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.add-sub-assignment-form--form-radio input:checked ~ .checkmark {
+  background-color: var(--kashtech_operations--characteristic-pink-1);
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.add-sub-assignment-form--form-radio input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.add-sub-assignment-form--form-radio .checkmark:after {
+ 	top: 9px;
+	left: 9px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: white;
+}
+.sub-assignment-estimates {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.date-estimates-holder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.add-sub-assignment-form--submit-changes-button {
+  background-color: #e7549a;
+  color: #fff;
+  font-weight: 900;
+  text-transform: uppercase;
+  padding: 1.5rem 1rem;
+  border-radius: 0.6rem;
+  border: 3px solid #fff;
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  &:hover {
+    color: #FDC1DE;
+    background-color: hsla(331 60% 37% / 100%);
+    cursor: pointer;
+    }
+}
+
+
+.add-sub-assignment-form--add-sub-assignment-button {
+  background-color: #ffffff;
+}
+
+
+
+.add-sub-assignment-form--add-sub-assignment-button-svg:hover {
+-webkit-box-shadow: 0px 0px 5px 10px rgba(231,84,154,0.18);
+-moz-box-shadow: 0px 0px 5px 10px rgba(231,84,154,0.18);
+box-shadow: 0px 0px 5px 2px rgba(231,84,154,0.2);
+}
+
+#addWorkspaceBtn {
+    border-radius: 0.2rem;
+}
+
+
+.add-sub-assignment-details-holder-container {
+  display: flex;
+  flex-direction: column;
+  /*align-items: center;*/
+  gap: 2rem;
+  margin-top: 1rem;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);;
+  border-radius: 0.6rem;
+  width: 100%;
+  padding: 1rem;
+}
+
+.add-sub-assignment-input-area {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.add-sub-assignment-workspace-form--form-input {
+    margin-top: 10px;
+    border: solid 2px var(--kashtech_operations--characteristic-pink-1);
+    border-radius: 4px;
+    width: 14rem;
+    background-color: #f3fcfb;
+}
+
+
+.add-sub-assignment-workspace-form--add-button {
+   background-color: #e7549a;
+   font-size: .8rem;
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.6rem;
+  border: 3px solid #fff;
+  display: flex;
+  align-items: center;
+  align-self: flex-start;   
+  &:hover {
+    color: #FDC1DE;
+    background-color: hsla(331 60% 37% / 100%);
+    cursor: pointer;
+    }
+  
+}
+
+.workspace-add-task-input-area {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+#addWorkspaceBtn {
+    width: 20px;
+}
+
+.workspace-add-task-text-input {
+    margin-top: 0px;
+}
+
+.workspace-add-task-btn {
+  background-color: #31A6E7;
+  font-size: .8rem;
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: .25rem .6rem;
+  border-radius: 0.6rem;
+  border: 3px solid #fff;
+  display: flex;
+  align-items: center;
+  align-self: flex-start; 
+  &:hover {
+    color: #C8EBFF;
+    background-color: hsla(201 77% 33% / 100%);
+    cursor: pointer;
+    }
+}
+
+
+
+*, * > * {
+  margin: 0
+}
+
+details {
+  padding: .8rem 1.5rem;
+  display: flex;
+  flex-direction: row;
+/*   border-radius: .4rem; */
+}
+details:not(details:last-child) {
+  
+}
+details:hover {
+  background-color: hsla(295, 100%, 88%, .4);
+  cursor: pointer;
+}
+
+details[open] {
+  background-color: hsla(299, 91%, 91%, .2);
+  box-shadow: 1px 2px 5px hsla(0 0% 0%/ .4);
+}
+details > summary {
+  list-style: none;
+  padding: .3rem 0;
+}
+details > summary > p {
+    width: 80%;
+    display: inline-block;
+}
+.main-grouping > summary {
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+}
+.sub-grouping > summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sub-grouping {
+  padding-left: 1rem;
+  border-radius: .4rem;
+}
+
+.main-grouping {
+  margin-top: 3rem;
+  border-radius: .4rem;
+}
+
+.new-main-grouping {
+  margin-top: 1rem;
+  background-color: hsla(299, 91%, 91%, .2);
+  box-shadow: 1px 2px 5px hsla(0 0% 0%/ .4);
+  border: .1rem dashed #e7549a;
+}
+.new-sub-grouping {
+  margin-top: 1rem;
+  background-color: hsla(299, 91%, 91%, .2);
+  /*box-shadow: 1px 2px 5px hsla(0 0% 0%/ .4);*/
+  /*border: .1rem dashed #e7549a;*/
+}
+
+.add-new-task-input {
+  /*margin-top: 10px;*/
+  border: solid 2px var(--kashtech_operations--characteristic-pink-1);
+  border-radius: 4px;
+  width: 35rem;
+  background-color: #f3fcfb;
+}
+.add-new-task-input:focus {
+  outline: 3px solid var(--kashtech_operations--characteristic-pink-1);
+}
+.add-new-sub-task-input {
+  /*margin-top: 10px;*/
+  border: solid 2px var(--kashtech_operations--characteristic-pink-1);
+  border-radius: 4px;
+  width: 20rem;
+  background-color: #f3fcfb;
+}
+.add-new-sub-task-input:focus {
+  outline: 3px solid var(--kashtech_operations--characteristic-pink-1);
+}
+
+.sub-assignment-title {
+    color: var(--kashtech_operations--characteristic-pink-1);
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#saveWorkArea {
+    margin-top: .25rem;
+    position: relative;
+    display: inline-block;
+    left: 80%;
+    background-color: #179f88;
+}
+
+/* 
+In this example, level "0" is the **project**, not the sub-assignment -- Make the sub-assignment level 0 in the working version
+****i.e: This example signifies the Operations and WF dev work are sub-assignments to the current UE engagement. The final level is *imaginary* - we don't currently require that granularity. The examples there are made up
+
+Add a note that only the final level's schema Input will be saved "all higher level inputs are temporarily stored. Confirm the lowest level categorization to save to database"
+"Add a sub-assignemnt to [Project]?"
+"Add a level-1 task to [Project -> sub-assignment]?"
+"Add a level-2 task to [Project -> sub-assignment]?"
+
+Specify # of total sub-levels?
+*/
+
+#firstSowId {
+    display: none;
+}
+
+/* $delete-red: red; */
+
+/*body {*/
+/*  margin: 32px;*/
+/*}*/
+
+.trash-btn {
+  /*right: 10rem;*/
+  position: relative;
+  display: inline-block;
+  left: 100%;
+  /*display: flex;*/
+  align-items: center;
+  background: none;
+  border: 1px solid lighten(gray, 24%);
+  height: 30px;
+  padding: 0 24px 0 16px;
+  letter-spacing: .25px;
+  border-radius: 24px;
+  cursor: pointer;
+  
+  &:focus {
+    outline: none;
+  }
+  
+  .mdi {
+    margin-right: 8px;
+  }
+}
+
+.btn-delete {
+  font-size: .1rem;
+  color: red;
+  background-color: hsla(0 0% 100% / 0%);
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  
+  >.mdi-delete-empty {
+    display: none;
+  }
+  
+  &:hover {
+    color: hsl(0 85% 30%);
+    background-color: hsla(0 87% 81% / 100%);
+    cursor: pointer;
+    
+    >.mdi-delete-empty {
+      display: block;
+    }
+    
+    >.mdi-delete {
+      display: none;
+    }
+  }
+  &:focus {
+    box-shadow: 0 0 0 4px lighten(red, 40%);
+  }
+}
+
+/*.btn-delete:hover {*/
+/*    color: hsl(0 85% 30%);*/
+/*}*/
+
+
+
+
+.confirm-delete-dialog-box{
+    left: 30%;
+    top: 30%;
+    border: gray;
+    border-radius: 1rem;
+}
+
+.modal-confirm {		
+	color: #636363;
+	width: 500px;
+}
+.modal-confirm .modal-content {
+	padding: 20px;
+	border-radius: 5px;
+	border: none;
+	text-align: center;
+	font-size: 14px;
+}
+.modal-confirm .modal-header {
+	border-bottom: none;   
+	position: relative;
+	padding: 1rem 2rem;
+}
+.modal-confirm h4 {
+	text-align: center;
+	font-size: 26px;
+	/*margin: 30px 0 -10px;*/
+}
+.modal-confirm .close {
+    position: absolute;
+    top: -1rem;
+    right: -1rem;
+    background: #ffffff;
+    font-size: 1rem;
+}
+.modal-confirm .modal-body {
+	color: #999;
+}
+.modal-confirm .modal-footer {
+	border: none;
+	text-align: center;		
+	border-radius: 5px;
+	font-size: 13px;
+	padding: 1rem;
+}
+.modal-confirm .modal-footer a {
+	color: #999;
+}		
+
+.modal-confirm .modal-btn, .modal-confirm .btn:active {
+	color: #fff;
+	border-radius: 4px;
+	background: #60c7c1;
+	text-decoration: none;
+	transition: all 0.4s;
+	line-height: normal;
+	min-width: 120px;
+	border: none;
+	min-height: 40px;
+	border-radius: 3px;
+	margin: 0 5px;
+}
+.modal-confirm .btn-secondary {
+	background: #c1c1c1;
+}
+.modal-confirm .btn-secondary:hover, .modal-confirm .btn-secondary:focus {
+	background: #a8a8a8;
+}
+.modal-confirm .btn-danger {
+	background: #f15e5e;
+}
+.modal-confirm .btn-danger:hover, .modal-confirm .btn-danger:focus {
+	background: #ee3535;
+}
+.trigger-btn {
+	display: inline-block;
+	margin: 100px auto;
+}
+
+.edit-area-close-btn {
+    background: none;
+    color: var(--kashtech_operations--characteristic-pink-1);
+    font-weight: 500;
+    position: relative;
+    display: inline-block;
+    left: 99%;
+    top: -2rem;
+    cursor: pointer;
+    
+}
+
+.edit-area-close-btn:hover {
+    font-weight: 800;
+}
+
+.sub-assignment-help-icon {
+    color: lightpink;
+    cursor: pointer;
+    display: inline;
+}
+
+.sub-assignment-help-icon::after {
+    content: 'A sub-assignemnt will only be saved by clicking Save Work Area.';
+    display: none;
+    font-size: .5rem;
+    font-family: "Inter", "Arial", sans-serif;
+    color: var(--kashtech_operations--characteristic-pink-1);
+    position: relative;
+    left: .5rem;
+    top: -.5rem;
+    border: 1px solid lightpink;
+    padding: 0.25rem;
+    /*display: inline;*/
+    
+
+}
+.sub-assignment-help-icon:hover::after {
+    display: inline;
+}
+
+
+
+@media screen and (min-width: 900px) {
+  .add-sub-assignment-page--content-holder {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+    .add-sub-assignment-details-holder-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .add-sub-assignment-page--img-holder {
+    width: 45%;
+    order: 2;
+    margin-top: 1rem;
+  }
+  .add-sub-assignment-input-area {
+    flex-direction: column;
+    display: flex;
+    gap: 1rem;
+}
+#addWorkspaceBtn {
+    display: none;
+}
+}
+
+/* ################################################################### */
+
+/* ################################################################### */
+
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
+
+/* ^^^^^^^^^^^^^^ ********** Edit Company Contacts Page ********** ^^^^^^^^^^^^^^^^^^ */
+.edit-comp-contact-page--content-holder {
+  margin: 2rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.database-submit-dialog p span.attach-contact-to-project--dialog_success_note {
+  color: #418ba2;
+}
+.database-submit-dialog
+  p
+  span.remove-contact-from-project--dialog_success_note {
+  color: #ac3c3c;
+}
+
+.database-submit-dialog p span.edit-contacts-dialog--contact-name {
+  color: #0e8973;
+}
+.database-submit-dialog p span.edit-contacts-dialog--project-description {
+  color: #9d61cd;
+}
+
+.database-submit-dialog button.negative-event {
+  background-color: #e36868;
+}
+
+.edit-comp-contact-page__main-section label {
+  font-weight: 300;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.edit-comp-contact-page__main-section input,
+.edit-comp-contact-page__main-section select {
+  max-width: 10rem;
+  font-size: 0.8rem;
+  background-color: #fff;
+  border: 2px solid;
+  border-color: var(--input-border_color, #7c7c7c);
+  border-radius: 3px;
+}
+.edit_contact_page--mini-form {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: flex-start;
+  background-color: var(--mini_form--background-color, #fdefdb);
+  border-radius: 0.7rem;
+}
+.edit_contact_page--mini-form h2 {
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  /* margin-bottom: 1.5rem; */
+  font-weight: 900;
+  color: var(--mini_form--title-color, #4e7c8f);
+}
+.attach_contact_to_project--form {
+  --mini_form--button-color: #83dc9c;
+  --mini_form-button--hover-color: #419c5a;
+  --mini_form--background-color: #f2f6f7;
+  --mini_form--title-color: #44867a;
+}
+.remove_contact_from_project--form {
+  --mini_form--button-color: #ed7971;
+  --mini_form-button--hover-color: #ed5147;
+  --mini_form--background-color: #fff0f0;
+  --mini_form--title-color: #ce5d55;
+}
+.edit_contact_page--mini-form button {
+  margin-top: auto;
+  padding: 0.8rem;
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 0.7rem;
+  background-color: var(--mini_form--button-color);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.edit_contact_page--mini-form button:hover {
+  background-color: var(--mini_form-button--hover-color);
+}
+.attach_contact_to_project--content-holder {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: auto 0;
+}
+.attach_contact_to_project--content-holder .company-information-holder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.remove_contact_from_project--content-holder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: auto 0;
+}
+.attach_contact_to_project--project_description--selection,
+.remove_contact_from_project--project_description--selection {
+  --input-border_color: #9481c8;
+}
+.attach_contact_to_project--company_name--selection,
+.attach_contact_to_project--contact_name--selection,
+.remove_contact_from_project--contact_name--selection {
+  --input-border_color: #0f806b;
+}
+
+@media (min-width: 900px) {
+  .edit-comp-contact-page--content-holder {
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  }
+}
+
+/*  -------------Temporary Gather WF Username Page ---------------------------------------   */
+.gather-wf-info--button {
+  padding: 1rem;
+  color: #fff;
+  text-transform: uppercase;
+  background: linear-gradient(95.47deg, #ea8d59 0.29%, #a05cd6 114.64%);
+  margin-top: 3rem;
+  border-radius: 0.3rem;
+}
+#clients-hub--admin-links-fex-iframe {
+  width: 98vw;
+  height: 40vh;
+}
+.attach-contact-to-project--fex-iframe {
+  display: none;
+}
+
+/* ################################################################### */
+
+/* ################################################################### */
+
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
+
+/* ^^^^^^^^^^^^^^ ********** Employee Roles and Responsibilities Page ********** ^^^^^^^^^^^^^^^^^^ */
+
+.roles_and_responsibilities_page--content-holder {
+  margin: 2rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+.roles_and_responsibilities_page--main-section label {
+  font-weight: 300;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.roles_and_responsibilities_page--main-section input,
+.roles_and_responsibilities_page--main-section select {
+  max-width: 10rem;
+  font-size: 0.8rem;
+  background-color: #fff;
+  border: 2px solid;
+  border-color: var(--input-border_color, #7c7c7c);
+  border-radius: 3px;
+}
+.roles_and_responsibilities--mini-form {
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: flex-start;
+  background-color: var(--mini_form--background-color, #fdefdb);
+  border-radius: 0.7rem;
+}
+.roles_and_responsibilities--mini-form h2 {
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  /* margin-bottom: 1.5rem; */
+  font-weight: 900;
+  color: var(--mini_form--title-color, #4e7c8f);
+
+  padding: 0 1rem;
+}
+.roles_and_responsibilities--mini-form button {
+  margin-top: auto;
+  padding: 0.8rem;
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 0.7rem;
+  background-color: var(--mini_form--button-color, #fb8a2a);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.employee-selection--holder {
+  padding: 0 1rem;
+}
+.project-information-holder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #e1b8ee;
+}
+.add_employee_to_project--form {
+  --mini_form--button-color: #d09cda;
+  --mini_form-button--hover-color: #8f4d9b;
+  --mini_form--background-color: #ffdcbf;
+  --mini_form--title-color: #926a9c;
+}
+.remove_employee_from_project--form {
+  --mini_form--button-color: #ed7971;
+  --mini_form-button--hover-color: #ed5147;
+  --mini_form--background-color: #ffd0d0;
+  --mini_form--title-color: #ce5d55;
+}
+.add_employee_to_project--employee--selection,
+.remove_employee_from_project--employee--selection {
+  --input-border_color: #fa8734;
+}
+.add_employee_to_project--project_desc--selection,
+.add_employee_to_project--sub_assignment--selection,
+.remove_employee_from_project--project_desc--selection,
+.remove_employee_from_project--sub_assignment--selection {
+  --input-border_color: #9481c8;
+}
+
+.add_employee_to_project--content-holder {
+  display: flex;
+  flex-direction: column;
+  /* flex-wrap: wrap; */
+  gap: 1rem;
+  margin: auto 0;
+  align-self: stretch;
+}
+.add_employee_to_project--button {
+  margin: auto auto 0 1rem;
+}
+.remove_employee_from_project--content-holder {
+  display: flex;
+  flex-direction: column;
+  /* flex-wrap: wrap; */
+  gap: 1rem;
+  margin: auto 0;
+  align-self: stretch;
+}
+.remove_employee_from_project--button {
+  margin: auto auto 0 1rem;
+}
+.add_employee_to_project--button:hover {
+  background-color: var(--mini_form-button--hover-color);
+}
+.remove_employee_from_project--button:hover {
+  background-color: var(--mini_form-button--hover-color);
+}
+.database-submit-dialog
+  p
+  span.roles_and_responsibilities-dialog--employee-name {
+  color: #f19407;
+}
+.database-submit-dialog
+  p
+  span.roles_and_responsibilities-dialog--project-description {
+  color: #9d61cd;
+}
+.database-submit-dialog
+  p
+  span.roles_and_responsibilities-dialog--sub-assignment {
+  color: #6f8dda;
+}
+.option-no-show {
+  display: none;
+}
+
+/* ------------- Manage Roles and Tasks -------------- */
+.manage_roles_and_tasks--form {
+  /* --mini_form--button-color: #ed7971; */
+  --mini_form-button--hover-color: #093f25;
+  --mini_form--background-color: #e2f7fe;
+  --mini_form--title-color: #706aaa;
+  grid-column: -1 / 1;
+  padding: 1rem;
+}
+.roles_and_responsibilities--mini-form.manage_roles_and_tasks--form h2 {
+  padding: 0;
+}
+.roles_and_responsibilities--mini-form.manage_roles_and_tasks--form button {
+  background-color: var(--mini_form--button-color, #226c49);
+  color: var(--mini_form--button-text-color, #fff);
+}
+.employee_and_project_details--selector-group {
+  display: flex;
+  flex-direction: column;
+  /* flex-wrap: wrap; */
+  gap: 1rem;
+  margin: auto 0;
+  align-self: stretch;
+}
+.employee_selection--holder select {
+  --input-border_color: #fa8734;
+}
+.project_selections--holder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.project_selections--holder select {
+  --input-border_color: #9481c8;
+}
+.roles_and_tasks--management-section {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.roles_and_tasks--management-section > .section_container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.roles_and_tasks--management-section > .section_container > h3 {
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+.interaction-section {
+  background-color: #fff;
+  padding: 0.5rem;
+  height: clamp(90px, 30vh, 200px);
+  width: clamp(240px, 80vw, 350px);
+  box-shadow: 2px 2px 10px hsl(0 0% 0% / 25%);
+  border-top: 5px solid var(--interaction_section--border-color);
+  border-radius: 0.2rem;
+  overflow-y: scroll;
+}
+.roles_interaction_section {
+  --interaction_section--border-color: #75d2a6;
+}
+.tasks_interaction_section {
+  --interaction_section--border-color: #e1c0e9;
+}
+.interaction-section > span {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+  padding: 0.2rem;
+}
+.roles_and_responsibilities--mini-form.manage_roles_and_tasks--form
+  .remove_item--button {
+  height: 1em;
+  aspect-ratio: 1;
+  padding: 0;
+  border-radius: 0;
+  margin-top: 0;
+  background-color: unset;
+}
+.remove_item--button > svg {
+  height: 100%;
+  width: 100%;
+}
+.addition_holder {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+.addition_holder > label {
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+.addition_holder > label > input {
+  font-weight: 300;
+  padding: 0.1rem 0;
+}
+
+.roles_and_responsibilities--mini-form.manage_roles_and_tasks--form
+  .add_task_and_role--button {
+  font-size: 0.6rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.2rem;
+}
+.add_new_task--button {
+  --mini_form--button-color: #9253a1;
+}
+.add_new_task--button:hover {
+  --mini_form--button-color: #743384;
+}
+.add_new_role--button:hover {
+  --mini_form--button-color: #0d3221;
+}
+/*[data-employee-id='8844422'][data-project-id='2214811'][data-sub-project-id='1124'] {*/
+/*    color: blue;*/
+/*    background-color: papayawhip;*/
+/*}*/
+
+@media (min-width: 900px) {
+  .roles_and_responsibilities_page--content-holder {
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  }
+}
+@media (hover: hover) {
+  /* when supported */
+
+  .roles_and_responsibilities--mini-form.manage_roles_and_tasks--form
+    .remove_item--button {
+    opacity: 0;
+  }
+  .interaction-section > span:hover .remove_item--button {
+    opacity: 1;
+  }
+}
+
+.x-button{
+    margin-left: calc(100% - 40px);
+    position: relative;
+    color: #4e7c8f;
+    text-align: right;
+    font-size: 24pt;
+    outline: none;
+    border: 0px solid none;
+    cursor: pointer;
+}
+.x-button:hover{
+    color: #ff6363;
+}
+
+.lightboxbackdrop{
+    width: 100%;
+    height: 100%;
+    display: none;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+}
+.lightbox{
+    display: none;
+    margin: auto;
+    border-radius: .5rem;
+    width: 45%;
+    height: 75%;
+    /*background-color: rgba(255, 255, 255, 1);*/
+    background-color: var(--mini_form--background-color, #e2f7fe);
+}
+.addbutton{
+    background-color: #008CBA;
+    color: white;
+    border-radius: 1.2rem;
+    padding: .6rem 1.4rem;
+    /*margin-top: 23px;*/
+    cursor: pointer;
+}
+.non-billable-category--holder{
+    visibility: hidden;
+}
+#editEmployeeFrame{
+    width: 100%;
+    height: 90%;
+}
+.edit-employee_information--body {
+    padding: 0;
+    background-color: var(--mini_form--background-color, #e2f7fe);
+}
+.dataTables_length{
+    display: none;
+}
+
+.dataTables_filter{
+    display: none;
+}
+/*.dataTables_wrapper{*/
+/*    margin-left: -100px;*/
+/*}*/
