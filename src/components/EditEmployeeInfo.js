@@ -4,7 +4,7 @@ import "../assets/styles/EditEmployeeInfo.css";
 
 function EditEmployeeInfo() {
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
-  let [selectedEmployee, setSelectedEmployee] = useState({});
+  let [selectedCurrentEmployee, setSelectedCurrentEmployee] = useState({});
   // useEffect to fetch data from KASH_OPERATIONS_EMPLOYEE_TABLE for the employee select dropdown that triggers onNameChange function
   // fetch from Employee table and check if employee is Admin level
   // if Admin level user, check the admin checkbox
@@ -41,8 +41,8 @@ function EditEmployeeInfo() {
     let selectedEmployeeFromDropdown = allEmployeesArr.filter((employee, i) => {
       return selectedEmployeeId === employee.EmpId;
     });
-    setSelectedEmployee(() => selectedEmployeeFromDropdown);
-    console.log(selectedEmployeeFromDropdown);
+    setSelectedCurrentEmployee(...selectedEmployeeFromDropdown);
+    console.log(selectedCurrentEmployee);
   };
 
   const updateUser = () => {
@@ -105,7 +105,7 @@ function EditEmployeeInfo() {
                   id="firstnamebox"
                   name="FIRSTNAME"
                   className="form-control"
-                  value=""
+                  value={selectedCurrentEmployee.FirstName}
                 ></input>
               </label>
 
