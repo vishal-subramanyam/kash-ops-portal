@@ -5,6 +5,8 @@ import "../assets/styles/EditEmployeeInfo.css";
 function EditEmployeeInfo() {
   let adminSelected;
   let adminCheckbox = useRef();
+  let firstNameInput = useRef();
+  let lastNameInput = useRef();
   let [isEmployeeAdmin, setEmployeeAsAdmin] = useState(false);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
   let [selectedCurrentEmployee, setSelectedCurrentEmployee] = useState({});
@@ -83,8 +85,65 @@ function EditEmployeeInfo() {
   console.log(isEmployeeAdmin);
   // console.log(selectedCurrentEmployee);
 
-  const updateUser = () => {
+  const updateUser = async () => {
+    console.log(selectedCurrentEmployee);
+
     // make a fetch post call to update employee info given field values
+    console.log(firstNameInput.current.value);
+    console.log(lastNameInput.current.value);
+
+    // "EmpLocationCountry": "USA",
+    // "FirstName": "Test First Name",
+    // "EmpLocationCity": "Austin",
+    // "EmailAddress": "test2@email.com",
+    // "EmpLocationState": "FL",
+    // "PhoneNumber": "5557775555",
+    // "LastName": "Changed Last Name",
+    // "EmpId": "131313131"
+
+    // http://localhost:4040/GenericTransactionService/processTransactionForUpdate
+    /*
+    try {
+      const response = await fetch(
+        "http://localhost:4040/GenericTransactionService/processTransaction",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // your expected POST request payload goes here
+            data: [
+              {
+                EmpId: employeeIDInput,
+                FirstName: firstNameInput,
+                LastName: lastNameInput,
+                EmailAddress: employeeEmail,
+                PhoneNumber: employeePhoneNumber,
+                EmpLocationCity: employeeCity,
+                EmpLocationState: emplyeeState,
+                EmpLocationCountry: employeeCountry,
+                KashOperationsEmpId: employeeIDInput,
+                WfInternalUsn: employeeUsername,
+                EmployeeAddress: employeeAdress,
+                EmployeeZipCode: employeeZip,
+                EmployeeType: employeeRoleType,
+                EmployeeContractorName: contractorName,
+              },
+            ],
+            _keyword_: "KASH_OPERATIONS_EMPLOYEE_TABLE",
+            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+          }),
+        }
+      );
+      const data = await response.json();
+      // enter you logic when the fetch is successful
+      console.log("Added to Employee table" + data);
+    } catch (error) {
+      // enter your logic for when there is an error (ex. error toast)
+      console.log(error);
+    }
+  */
   };
 
   const deleteUser = () => {
@@ -129,7 +188,7 @@ function EditEmployeeInfo() {
                 />
               </label>
               <br />
-              <label htmlFor="userName">
+              {/* <label htmlFor="userName">
                 Username
                 <input
                   // style={{ display: "none" }}
@@ -138,7 +197,7 @@ function EditEmployeeInfo() {
                   value={selectedCurrentEmployee.WfInternalUsn}
                   readOnly
                 />
-              </label>
+              </label> */}
 
               <label
                 className="manage_roles--employee_label"
@@ -150,6 +209,7 @@ function EditEmployeeInfo() {
                   name="FIRSTNAME"
                   className="form-control"
                   defaultValue={selectedCurrentEmployee.FirstName}
+                  ref={firstNameInput}
                 ></input>
               </label>
 
@@ -163,6 +223,7 @@ function EditEmployeeInfo() {
                   name="LASTNAME"
                   className="form-control"
                   defaultValue={selectedCurrentEmployee.LastName}
+                  ref={lastNameInput}
                 ></input>
               </label>
 
@@ -172,7 +233,7 @@ function EditEmployeeInfo() {
                   id="emailbox"
                   name="EMAIL"
                   className="form-control"
-                  defaultValue={selectedCurrentEmployee.EmployeeAddress}
+                  defaultValue={selectedCurrentEmployee.EmailAddress}
                 ></input>
               </label>
 
