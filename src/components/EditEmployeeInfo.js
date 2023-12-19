@@ -1,15 +1,44 @@
-import react from "react";
+import React, { useState, useEffect } from "react";
 import "../assets/styles/Styles.css";
 import "../assets/styles/EditEmployeeInfo.css";
 
 function EditEmployeeInfo() {
+  let [allEmployeesArr, setAllEmployeesArr] = useState([]);
+  let [selectedEmployee, setSelectedEmployee] = useState({});
   // useEffect to fetch data from KASH_OPERATIONS_EMPLOYEE_TABLE for the employee select dropdown that triggers onNameChange function
   // fetch from Employee table and check if employee is Admin level
   // if Admin level user, check the admin checkbox
 
-  const onNameChange = () => {
+  useEffect(() => {
+    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ _keyword_: "KASH_OPERATIONS_EMPLOYEE_TABLE" }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setAllEmployeesArr(res.data);
+      })
+      .catch((err) => alert(err));
+  }, []);
+
+  const onNameChange = (e) => {
     // fetch employee name from database
     // populate the input fields with relevant data from api call
+    console.log(
+      "selected employee from dropdown " +
+        e.target.children[e.target.selectedIndex].getAttribute(
+          "data-employeeId"
+        )
+    );
+    allEmployeesArr.map((employee, i) => {
+      setSelectedEmployee(() => employee);
+    });
+    console.log(selectedEmployee);
   };
 
   const updateUser = () => {
@@ -28,7 +57,20 @@ function EditEmployeeInfo() {
           <h2>Edit Employee Information</h2>
           <label className="manage_roles--employee_label" htmlFor="EMP_ID">
             Employee
-            <select name="EMP_ID" id="EMP_ID" onChange={onNameChange}></select>
+            <select name="EMP_ID" id="EMP_ID" onChange={onNameChange}>
+              <option value="Select an Employee">-Select an Employee-</option>
+              {allEmployeesArr.map((employee, i) => {
+                return (
+                  <option
+                    data-employeeId={employee.EmpId}
+                    value={`${employee.FirstName} ${employee.LastName}`}
+                    key={i}
+                  >
+                    {`${employee.FirstName} ${employee.LastName}`}
+                  </option>
+                );
+              })}
+            </select>
           </label>
           <div className="employee-info-form">
             <div className="left_group_inputs">

@@ -31,6 +31,7 @@ function AddEmployee() {
     employeeUsername,
   ];
 
+  // Reference to the modal div
   let submitEmployeeToDBDialog = document.querySelector(
     "#database-submit-dialog"
   );
@@ -178,7 +179,7 @@ function AddEmployee() {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        console.log("response from the employee id fetch" + res);
         setEmployeeIds(res.data);
       })
       .catch((err) => alert(err));
@@ -195,7 +196,7 @@ function AddEmployee() {
       if (adminCheckbox === true) {
         // perform two fetch POST calls - one to the employee table and another to admin table
         console.log("admin checkbox checked");
-        setAdminLevelDesignation("Admin");
+        setAdminLevelDesignation(() => "Admin");
         console.log(adminLevelDesignation);
         addEmployeeToDatabaseIfAdmin();
       } else {

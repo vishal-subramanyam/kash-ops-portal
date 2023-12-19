@@ -37,40 +37,40 @@ function Login() {
   };
 
   return (
-    <main class="kash-operations-login">
-      <div class="kash_operations_home--top-banner">
-        <h1 class="kash_operations_home--title">KASH Tech Operations</h1>
+    <main className="kash-operations-login">
+      <div className="kash_operations_home--top-banner">
+        <h1 className="kash_operations_home--title">KASH Tech Operations</h1>
       </div>
-      <div class="container">
-        <div class="signin-screen">
-          <div class="signin-content">
-            <form class="login">
-              <div class="login-field">
-                <i class="signin-icons fa fa-user"></i>
+      <div className="container">
+        <div className="signin-screen">
+          <div className="signin-content">
+            <form className="login">
+              <div className="login-field">
+                <i className="signin-icons fa fa-user"></i>
                 <input
                   type="text"
                   name="IBIC_user"
-                  class="login-input"
+                  className="login-input"
                   placeholder="User name"
                 />
               </div>
-              <div class="login-field">
-                <i class="signin-icons fa fa-lock"></i>
+              <div className="login-field">
+                <i className="signin-icons fa fa-lock"></i>
                 <input
                   type="password"
                   name="IBIC_pass"
-                  class="login-input"
+                  className="login-input"
                   placeholder="Password"
                 />
               </div>
               <button
                 type="submit"
                 value="Submit"
-                class="button signin-button"
+                className="button signin-button"
                 onClick={userLogin}
               >
-                <span class="signin-text">Log In</span>
-                <i class="button-icon fa fa-chevron-right"></i>
+                <span className="signin-text">Log In</span>
+                <i className="button-icon fa fa-chevron-right"></i>
               </button>
             </form>
           </div>
