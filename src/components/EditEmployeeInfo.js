@@ -35,10 +35,14 @@ function EditEmployeeInfo() {
           "data-employeeId"
         )
     );
-    allEmployeesArr.map((employee, i) => {
-      setSelectedEmployee(() => employee);
+    let selectedEmployeeId =
+      e.target.children[e.target.selectedIndex].getAttribute("data-employeeId");
+    // set state array for selected employee if the employee Ids match
+    let selectedEmployeeFromDropdown = allEmployeesArr.filter((employee, i) => {
+      return selectedEmployeeId === employee.EmpId;
     });
-    console.log(selectedEmployee);
+    setSelectedEmployee(() => selectedEmployeeFromDropdown);
+    console.log(selectedEmployeeFromDropdown);
   };
 
   const updateUser = () => {
