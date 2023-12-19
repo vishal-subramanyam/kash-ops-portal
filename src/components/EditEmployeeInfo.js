@@ -111,13 +111,13 @@ function EditEmployeeInfo() {
             // your expected POST request payload goes here
             data: [
               {
-                EmpLocationCountry: employeeLocationCountry,
-                FirstName: firstNameInput,
-                EmpLocationCity: employeeLocationCity,
-                EmailAddress: emailAddressInput,
-                EmpLocationState: employeeLocationState,
-                PhoneNumber: employeePhoneNumber,
-                LastName: lastNameInput,
+                EmpLocationCountry: employeeLocationCountry.current.value,
+                FirstName: firstNameInput.current.value,
+                EmpLocationCity: employeeLocationCity.current.value,
+                EmailAddress: emailAddressInput.current.value,
+                EmpLocationState: employeeLocationState.current.value,
+                PhoneNumber: employeePhoneNumber.current.value,
+                LastName: lastNameInput.current.value,
                 EmpId: selectedCurrentEmployee.EmpId,
               },
             ],
@@ -128,7 +128,7 @@ function EditEmployeeInfo() {
       );
       const data = await response.json();
       // enter you logic when the fetch is successful
-      console.log("Added to Employee table" + data);
+      console.log("Updated employee" + data);
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
       console.log(error);
