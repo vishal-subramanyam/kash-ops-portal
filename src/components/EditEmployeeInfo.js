@@ -135,9 +135,86 @@ function EditEmployeeInfo() {
     }
   };
 
-  const deleteUser = () => {
+  const deleteAdminEmployee = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // your expected POST request payload goes here
+            data: [
+              {
+                EmpId: selectedCurrentEmployee.EmpId,
+              },
+            ],
+            _keyword_: "KASH_OPERATIONS_ADMIN_TABLE",
+            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+          }),
+        }
+      );
+      const data = await response.json();
+      // enter you logic when the fetch is successful
+      console.log("Deleted employee" + data);
+      setSelectedCurrentEmployee({});
+      console.log(selectedCurrentEmployee);
+    } catch (error) {
+      // enter your logic for when there is an error (ex. error toast)
+      console.log(error);
+    }
+  };
+
+  const deleteEmployeeNotAdmin = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // your expected POST request payload goes here
+            data: [
+              {
+                EmpId: selectedCurrentEmployee.EmpId,
+              },
+            ],
+            _keyword_: "KASH_OPERATIONS_EMPLOYEE_TABLE",
+            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+          }),
+        }
+      );
+      const data = await response.json();
+      // enter you logic when the fetch is successful
+      console.log("Deleted employee" + data);
+      // setSelectedCurrentEmployee({});
+      // console.log(selectedCurrentEmployee);
+    } catch (error) {
+      // enter your logic for when there is an error (ex. error toast)
+      console.log(error);
+    }
+  };
+
+  const deleteUser = async () => {
+    // check if selected employee is admin, delete from admin and employee tables
+    console.log(isEmployeeAdmin);
+    if (isEmployeeAdmin === true) {
+      console.log(
+        "employee is admin. delete from both admin and employee tables"
+      );
+      deleteAdminEmployee();
+      deleteEmployeeNotAdmin();
+    } else {
+      console.log("employee is not admin. just delete from employee table");
+      deleteEmployeeNotAdmin();
+    }
     // make a fetch call to the delete user endpoint
   };
+
   return (
     <div className="edit-employee_information--body">
       {/* <iframe id="loadSelectionsFrame" className="hidden" src="WFServlet?IBIC_server=EDASERVE&IBIMR_drill=IBFS,RUNFEX,IBIF_ex,true&IBIF_ex=IBFS:/WFC/Repository/KashDemo_Files/KASH_Operations/get_employee_dropdown.fex"></iframe> */}
