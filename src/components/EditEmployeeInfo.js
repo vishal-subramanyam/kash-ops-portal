@@ -7,6 +7,11 @@ function EditEmployeeInfo() {
   let adminCheckbox = useRef();
   let firstNameInput = useRef();
   let lastNameInput = useRef();
+  let emailAddressInput = useRef();
+  let employeePhoneNumber = useRef();
+  let employeeLocationCity = useRef();
+  let employeeLocationState = useRef();
+  let employeeLocationCountry = useRef();
   let [isEmployeeAdmin, setEmployeeAsAdmin] = useState(false);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
   let [selectedCurrentEmployee, setSelectedCurrentEmployee] = useState({});
@@ -92,20 +97,11 @@ function EditEmployeeInfo() {
     console.log(firstNameInput.current.value);
     console.log(lastNameInput.current.value);
 
-    // "EmpLocationCountry": "USA",
-    // "FirstName": "Test First Name",
-    // "EmpLocationCity": "Austin",
-    // "EmailAddress": "test2@email.com",
-    // "EmpLocationState": "FL",
-    // "PhoneNumber": "5557775555",
-    // "LastName": "Changed Last Name",
-    // "EmpId": "131313131"
-
     // http://localhost:4040/GenericTransactionService/processTransactionForUpdate
-    /*
+
     try {
       const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransaction",
+        "http://localhost:4040/GenericTransactionService/processTransactionForUpdate",
         {
           method: "POST",
           headers: {
@@ -115,20 +111,14 @@ function EditEmployeeInfo() {
             // your expected POST request payload goes here
             data: [
               {
-                EmpId: employeeIDInput,
+                EmpLocationCountry: employeeLocationCountry,
                 FirstName: firstNameInput,
-                LastName: lastNameInput,
-                EmailAddress: employeeEmail,
+                EmpLocationCity: employeeLocationCity,
+                EmailAddress: emailAddressInput,
+                EmpLocationState: employeeLocationState,
                 PhoneNumber: employeePhoneNumber,
-                EmpLocationCity: employeeCity,
-                EmpLocationState: emplyeeState,
-                EmpLocationCountry: employeeCountry,
-                KashOperationsEmpId: employeeIDInput,
-                WfInternalUsn: employeeUsername,
-                EmployeeAddress: employeeAdress,
-                EmployeeZipCode: employeeZip,
-                EmployeeType: employeeRoleType,
-                EmployeeContractorName: contractorName,
+                LastName: lastNameInput,
+                EmpId: selectedCurrentEmployee.EmpId,
               },
             ],
             _keyword_: "KASH_OPERATIONS_EMPLOYEE_TABLE",
@@ -143,7 +133,6 @@ function EditEmployeeInfo() {
       // enter your logic for when there is an error (ex. error toast)
       console.log(error);
     }
-  */
   };
 
   const deleteUser = () => {
@@ -234,6 +223,7 @@ function EditEmployeeInfo() {
                   name="EMAIL"
                   className="form-control"
                   defaultValue={selectedCurrentEmployee.EmailAddress}
+                  ref={emailAddressInput}
                 ></input>
               </label>
 
@@ -244,6 +234,7 @@ function EditEmployeeInfo() {
                   name="PHONE"
                   className="form-control"
                   defaultValue={selectedCurrentEmployee.PhoneNumber}
+                  ref={employeePhoneNumber}
                 ></input>
               </label>
             </div>
@@ -256,6 +247,7 @@ function EditEmployeeInfo() {
                   name="manage_employees--city"
                   className="form-control"
                   defaultValue={selectedCurrentEmployee.EmpLocationCity}
+                  ref={employeeLocationCity}
                 ></input>
               </label>
 
@@ -266,6 +258,7 @@ function EditEmployeeInfo() {
                   name="manage_employees--state"
                   className="form-control"
                   defaultValue={selectedCurrentEmployee.EmpLocationState}
+                  ref={employeeLocationState}
                 ></input>
               </label>
 
@@ -276,6 +269,7 @@ function EditEmployeeInfo() {
                   name="manage_employees--email"
                   className="form-control"
                   defaultValue={selectedCurrentEmployee.EmpLocationCountry}
+                  ref={employeeLocationCountry}
                 ></input>
               </label>
               <div className="buttonContainer">
