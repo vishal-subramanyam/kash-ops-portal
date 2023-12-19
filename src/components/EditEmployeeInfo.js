@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../assets/styles/Styles.css";
 import "../assets/styles/EditEmployeeInfo.css";
 
 function EditEmployeeInfo() {
+  // let adminCheckbox = useRef();
+  let [isEmployeeAdmin, setEmployeeAsAdmin] = useState(false);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
   let [selectedCurrentEmployee, setSelectedCurrentEmployee] = useState({});
   // useEffect to fetch data from KASH_OPERATIONS_EMPLOYEE_TABLE for the employee select dropdown that triggers onNameChange function
@@ -26,6 +28,22 @@ function EditEmployeeInfo() {
       .catch((err) => alert(err));
   }, []);
 
+  const checkIfEmployeeAdmin = (id) => {
+    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ _keyword_: "KASH_OPERATIONS_ADMIN_TABLE" }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => alert(err));
+  };
+
   const onNameChange = (e) => {
     // fetch employee name from database
     // populate the input fields with relevant data from api call
@@ -36,13 +54,16 @@ function EditEmployeeInfo() {
         )
     );
     let selectedEmployeeId =
-      e.target.children[e.target.selectedIndex].getAttribute("data-employeeId");
+      e.target.children[e.target.selectedIndex].getAttribute("data-employeeid");
     // set state array for selected employee if the employee Ids match
     let selectedEmployeeFromDropdown = allEmployeesArr.filter((employee, i) => {
       return selectedEmployeeId === employee.EmpId;
     });
     setSelectedCurrentEmployee(...selectedEmployeeFromDropdown);
     console.log(selectedCurrentEmployee);
+
+    // if selected user employee id in admin table, set attrribute checked to admin checkbox input
+    checkIfEmployeeAdmin();
   };
 
   const updateUser = () => {
@@ -66,7 +87,7 @@ function EditEmployeeInfo() {
               {allEmployeesArr.map((employee, i) => {
                 return (
                   <option
-                    data-employeeId={employee.EmpId}
+                    data-employeeid={employee.EmpId}
                     value={`${employee.FirstName} ${employee.LastName}`}
                     key={i}
                   >
@@ -86,6 +107,7 @@ function EditEmployeeInfo() {
                   id="admin-checkbox"
                   name="admin-checkbox"
                   value="1"
+                  // ref={adminCheckbox}
                 />
               </label>
               <br />
@@ -118,7 +140,7 @@ function EditEmployeeInfo() {
                   id="lastnamebox"
                   name="LASTNAME"
                   className="form-control"
-                  value=""
+                  value={selectedCurrentEmployee.LastName}
                 ></input>
               </label>
 
@@ -128,7 +150,7 @@ function EditEmployeeInfo() {
                   id="emailbox"
                   name="EMAIL"
                   className="form-control"
-                  value=""
+                  value={selectedCurrentEmployee.EmployeeAddress}
                 ></input>
               </label>
 
@@ -138,7 +160,7 @@ function EditEmployeeInfo() {
                   id="phonebox"
                   name="PHONE"
                   className="form-control"
-                  value=""
+                  value={selectedCurrentEmployee.PhoneNumber}
                 ></input>
               </label>
             </div>
@@ -150,7 +172,7 @@ function EditEmployeeInfo() {
                   id="citybox"
                   name="manage_employees--city"
                   className="form-control"
-                  value=""
+                  value={selectedCurrentEmployee.EmpLocationCity}
                 ></input>
               </label>
 
@@ -160,7 +182,7 @@ function EditEmployeeInfo() {
                   id="statebox"
                   name="manage_employees--state"
                   className="form-control"
-                  value=""
+                  value={selectedCurrentEmployee.EmpLocationState}
                 ></input>
               </label>
 
@@ -170,7 +192,7 @@ function EditEmployeeInfo() {
                   id="countrybox"
                   name="manage_employees--email"
                   className="form-control"
-                  value=""
+                  value={selectedCurrentEmployee.EmpLocationCountry}
                 ></input>
               </label>
               <div className="buttonContainer">
