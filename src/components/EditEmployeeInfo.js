@@ -15,6 +15,12 @@ function EditEmployeeInfo() {
   let [isEmployeeAdmin, setEmployeeAsAdmin] = useState(false);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
   let [selectedCurrentEmployee, setSelectedCurrentEmployee] = useState({});
+
+  const hideLightbox = () => {
+    document.getElementsByClassName("lightboxbackdrop")[0].style.display =
+      "none";
+  };
+
   // useEffect to fetch data from KASH_OPERATIONS_EMPLOYEE_TABLE for the employee select dropdown that triggers onNameChange function
   // fetch from Employee table and check if employee is Admin level
   // if Admin level user, check the admin checkbox
@@ -201,6 +207,7 @@ function EditEmployeeInfo() {
 
   const deleteUser = async () => {
     // check if selected employee is admin, delete from admin and employee tables
+    // make a fetch call to the delete user endpoint
     console.log(isEmployeeAdmin);
     if (isEmployeeAdmin === true) {
       console.log(
@@ -212,49 +219,58 @@ function EditEmployeeInfo() {
       console.log("employee is not admin. just delete from employee table");
       deleteEmployeeNotAdmin();
     }
-    // make a fetch call to the delete user endpoint
   };
 
   return (
-    <div className="edit-employee_information--body">
-      {/* <iframe id="loadSelectionsFrame" className="hidden" src="WFServlet?IBIC_server=EDASERVE&IBIMR_drill=IBFS,RUNFEX,IBIF_ex,true&IBIF_ex=IBFS:/WFC/Repository/KashDemo_Files/KASH_Operations/get_employee_dropdown.fex"></iframe> */}
+    <div className="lightboxbackdrop">
+      <div className="lightbox" style={{ overflow: "scroll" }}>
+        <span onClick={hideLightbox} className="x-button">
+          X
+        </span>
+        <div className="edit-employee_information--body">
+          {/* <iframe id="loadSelectionsFrame" className="hidden" src="WFServlet?IBIC_server=EDASERVE&IBIMR_drill=IBFS,RUNFEX,IBIF_ex,true&IBIF_ex=IBFS:/WFC/Repository/KashDemo_Files/KASH_Operations/get_employee_dropdown.fex"></iframe> */}
 
-      <div id="employee_edit_container" className="edit_table_container col-12">
-        <div className="roles_and_responsibilities--mini-form manage_roles_and_tasks--form">
-          <h2>Edit Employee Information</h2>
-          <label className="manage_roles--employee_label" htmlFor="EMP_ID">
-            Employee
-            <select name="EMP_ID" id="EMP_ID" onChange={onNameChange}>
-              <option value="Select an Employee">-Select an Employee-</option>
-              {allEmployeesArr.map((employee, i) => {
-                return (
-                  <option
-                    data-employeeid={employee.EmpId}
-                    value={`${employee.FirstName} ${employee.LastName}`}
-                    key={i}
-                  >
-                    {`${employee.FirstName} ${employee.LastName}`}
+          <div
+            id="employee_edit_container"
+            className="edit_table_container col-12"
+          >
+            <div className="roles_and_responsibilities--mini-form manage_roles_and_tasks--form">
+              <h2>Edit Employee Information</h2>
+              <label className="manage_roles--employee_label" htmlFor="EMP_ID">
+                Employee
+                <select name="EMP_ID" id="EMP_ID" onChange={onNameChange}>
+                  <option value="Select an Employee">
+                    -Select an Employee-
                   </option>
-                );
-              })}
-            </select>
-          </label>
-          <div className="employee-info-form">
-            <div className="left_group_inputs">
-              <br />
-              <label htmlFor="admin-checkbox">
-                Admin
-                <input
-                  type="checkbox"
-                  id="admin-checkbox"
-                  name="admin-checkbox"
-                  value=""
-                  // ref={adminCheckbox}
-                  checked={isEmployeeAdmin ? "checked" : ""}
-                />
+                  {allEmployeesArr.map((employee, i) => {
+                    return (
+                      <option
+                        data-employeeid={employee.EmpId}
+                        value={`${employee.FirstName} ${employee.LastName}`}
+                        key={i}
+                      >
+                        {`${employee.FirstName} ${employee.LastName}`}
+                      </option>
+                    );
+                  })}
+                </select>
               </label>
-              <br />
-              {/* <label htmlFor="userName">
+              <div className="employee-info-form">
+                <div className="left_group_inputs">
+                  <br />
+                  <label htmlFor="admin-checkbox">
+                    Admin
+                    <input
+                      type="checkbox"
+                      id="admin-checkbox"
+                      name="admin-checkbox"
+                      value=""
+                      // ref={adminCheckbox}
+                      checked={isEmployeeAdmin ? "checked" : ""}
+                    />
+                  </label>
+                  <br />
+                  {/* <label htmlFor="userName">
                 Username
                 <input
                   // style={{ display: "none" }}
@@ -265,97 +281,114 @@ function EditEmployeeInfo() {
                 />
               </label> */}
 
-              <label
-                className="manage_roles--employee_label"
-                htmlFor="FIRSTNAME"
-              >
-                First name
-                <input
-                  id="firstnamebox"
-                  name="FIRSTNAME"
-                  className="form-control"
-                  defaultValue={selectedCurrentEmployee.FirstName}
-                  ref={firstNameInput}
-                ></input>
-              </label>
+                  <label
+                    className="manage_roles--employee_label"
+                    htmlFor="FIRSTNAME"
+                  >
+                    First name
+                    <input
+                      id="firstnamebox"
+                      name="FIRSTNAME"
+                      className="form-control"
+                      defaultValue={selectedCurrentEmployee.FirstName}
+                      ref={firstNameInput}
+                    ></input>
+                  </label>
 
-              <label
-                className="manage_roles--employee_label"
-                htmlFor="manage_employees--last_name"
-              >
-                Last name
-                <input
-                  id="lastnamebox"
-                  name="LASTNAME"
-                  className="form-control"
-                  defaultValue={selectedCurrentEmployee.LastName}
-                  ref={lastNameInput}
-                ></input>
-              </label>
+                  <label
+                    className="manage_roles--employee_label"
+                    htmlFor="manage_employees--last_name"
+                  >
+                    Last name
+                    <input
+                      id="lastnamebox"
+                      name="LASTNAME"
+                      className="form-control"
+                      defaultValue={selectedCurrentEmployee.LastName}
+                      ref={lastNameInput}
+                    ></input>
+                  </label>
 
-              <label className="manage_roles--employee_label" htmlFor="EMAIL">
-                Email Address
-                <input
-                  id="emailbox"
-                  name="EMAIL"
-                  className="form-control"
-                  defaultValue={selectedCurrentEmployee.EmailAddress}
-                  ref={emailAddressInput}
-                ></input>
-              </label>
+                  <label
+                    className="manage_roles--employee_label"
+                    htmlFor="EMAIL"
+                  >
+                    Email Address
+                    <input
+                      id="emailbox"
+                      name="EMAIL"
+                      className="form-control"
+                      defaultValue={selectedCurrentEmployee.EmailAddress}
+                      ref={emailAddressInput}
+                    ></input>
+                  </label>
 
-              <label className="manage_roles--employee_label" htmlFor="PHONE">
-                Phone Number
-                <input
-                  id="phonebox"
-                  name="PHONE"
-                  className="form-control"
-                  defaultValue={selectedCurrentEmployee.PhoneNumber}
-                  ref={employeePhoneNumber}
-                ></input>
-              </label>
-            </div>
+                  <label
+                    className="manage_roles--employee_label"
+                    htmlFor="PHONE"
+                  >
+                    Phone Number
+                    <input
+                      id="phonebox"
+                      name="PHONE"
+                      className="form-control"
+                      defaultValue={selectedCurrentEmployee.PhoneNumber}
+                      ref={employeePhoneNumber}
+                    ></input>
+                  </label>
+                </div>
 
-            <div className=" left_group_inputs">
-              <label className="manage_roles--employee_label" htmlFor="CITY">
-                Location City
-                <input
-                  id="citybox"
-                  name="manage_employees--city"
-                  className="form-control"
-                  defaultValue={selectedCurrentEmployee.EmpLocationCity}
-                  ref={employeeLocationCity}
-                ></input>
-              </label>
+                <div className=" left_group_inputs">
+                  <label
+                    className="manage_roles--employee_label"
+                    htmlFor="CITY"
+                  >
+                    Location City
+                    <input
+                      id="citybox"
+                      name="manage_employees--city"
+                      className="form-control"
+                      defaultValue={selectedCurrentEmployee.EmpLocationCity}
+                      ref={employeeLocationCity}
+                    ></input>
+                  </label>
 
-              <label className="manage_roles--employee_label" htmlFor="STATE">
-                State/Province/Territory
-                <input
-                  id="statebox"
-                  name="manage_employees--state"
-                  className="form-control"
-                  defaultValue={selectedCurrentEmployee.EmpLocationState}
-                  ref={employeeLocationState}
-                ></input>
-              </label>
+                  <label
+                    className="manage_roles--employee_label"
+                    htmlFor="STATE"
+                  >
+                    State/Province/Territory
+                    <input
+                      id="statebox"
+                      name="manage_employees--state"
+                      className="form-control"
+                      defaultValue={selectedCurrentEmployee.EmpLocationState}
+                      ref={employeeLocationState}
+                    ></input>
+                  </label>
 
-              <label className="manage_roles--employee_label" htmlFor="COUNTRY">
-                Country
-                <input
-                  id="countrybox"
-                  name="manage_employees--email"
-                  className="form-control"
-                  defaultValue={selectedCurrentEmployee.EmpLocationCountry}
-                  ref={employeeLocationCountry}
-                ></input>
-              </label>
-              <div className="buttonContainer">
-                <button className="btn btn-primary" onClick={updateUser}>
-                  Update
-                </button>
-                <button className="btn btn-danger" onClick={deleteUser}>
-                  Delete User
-                </button>
+                  <label
+                    className="manage_roles--employee_label"
+                    htmlFor="COUNTRY"
+                  >
+                    Country
+                    <input
+                      id="countrybox"
+                      name="manage_employees--email"
+                      className="form-control"
+                      defaultValue={selectedCurrentEmployee.EmpLocationCountry}
+                      ref={employeeLocationCountry}
+                    ></input>
+                  </label>
+                  <div className="buttonContainer">
+                    <button className="btn btn-primary" onClick={updateUser}>
+                      Update
+                    </button>
+                    <button className="btn btn-danger" onClick={deleteUser}>
+                      Delete User
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
