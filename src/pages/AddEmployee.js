@@ -5,6 +5,7 @@ import "../assets/styles/HomePage.css";
 
 function AddEmployee() {
   //   // input value variables
+  let adminLevelDesignation = "";
   let addEmployeeForm = useRef();
   let firstNameInput = useRef();
   let lastNameInput = useRef();
@@ -13,12 +14,15 @@ function AddEmployee() {
   let employeeEmail = useRef();
   let employeePhoneNumber = useRef();
   let employeeCity = useRef();
-  let emplyeeState = useRef();
+  let employeeState = useRef();
   let employeeCountry = useRef();
   let employeeAdress = useRef();
   let employeeZip = useRef();
   let employeeRoleType = useRef();
   let contractorName = useRef();
+  let modalEmployeeFirstName = useRef();
+  let modalEmployeeLastName = useRef();
+  let modalEmployeeId = useRef();
   // let [firstNameInput, setFirstNameInput] = useState("");
   // let [lastNameInput, setLastNameInput] = useState("");
   // let [employeeIDInput, setEmployeeIDInput] = useState("");
@@ -33,7 +37,7 @@ function AddEmployee() {
   // let [employeeRoleType, setEmployeeRoleType] = useState("");
   // let [contractorName, setContractorName] = useState("");
   let [adminCheckbox, setAdminCheckbox] = useState(false);
-  let [adminLevelDesignation, setAdminLevelDesignation] = useState("");
+  // let [adminLevelDesignation, setAdminLevelDesignation] = useState("");
   let [employeeIds, setEmployeeIds] = useState([]);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
   let [allEmployeeUsernames, setAllEmployeeUsernames] = useState([]);
@@ -85,20 +89,20 @@ function AddEmployee() {
             // your expected POST request payload goes here
             data: [
               {
-                EmpId: employeeIDInput,
-                FirstName: firstNameInput,
-                LastName: lastNameInput,
-                EmailAddress: employeeEmail,
-                PhoneNumber: employeePhoneNumber,
-                EmpLocationCity: employeeCity,
-                EmpLocationState: emplyeeState,
-                EmpLocationCountry: employeeCountry,
-                KashOperationsEmpId: employeeIDInput,
-                WfInternalUsn: employeeUsername,
-                EmployeeAddress: employeeAdress,
-                EmployeeZipCode: employeeZip,
-                EmployeeType: employeeRoleType,
-                EmployeeContractorName: contractorName,
+                EmpId: employeeIDInput.current.value,
+                FirstName: firstNameInput.current.value,
+                LastName: lastNameInput.current.value,
+                EmailAddress: employeeEmail.current.value,
+                PhoneNumber: employeePhoneNumber.current.value,
+                EmpLocationCity: employeeCity.current.value,
+                EmpLocationState: employeeState.current.value,
+                EmpLocationCountry: employeeCountry.current.value,
+                KashOperationsEmpId: employeeIDInput.current.value,
+                WfInternalUsn: employeeUsername.current.value,
+                EmployeeAddress: employeeAdress.current.value,
+                EmployeeZipCode: employeeZip.current.value,
+                EmployeeType: employeeRoleType.current.value,
+                EmployeeContractorName: contractorName.current.value,
               },
             ],
             _keyword_: "KASH_OPERATIONS_EMPLOYEE_TABLE",
@@ -116,6 +120,7 @@ function AddEmployee() {
   };
 
   const addToAdminTable = async () => {
+    console.log(adminLevelDesignation);
     try {
       const response = await fetch(
         "http://localhost:4040/GenericTransactionService/processTransaction",
@@ -128,8 +133,8 @@ function AddEmployee() {
             // your expected POST request payload goes here
             data: [
               {
-                EmpId: employeeIDInput,
-                WfInternalUsn: employeeUsername,
+                EmpId: employeeIDInput.current.value,
+                WfInternalUsn: employeeUsername.current.value,
                 AdminLevel: adminLevelDesignation,
               },
             ],
@@ -188,7 +193,7 @@ function AddEmployee() {
       },
       body: JSON.stringify({
         _keyword_: "EMPLOYEE_BY_ID",
-        EmpId: employeeIDInput,
+        EmpId: employeeIDInput.current.value,
       }),
     })
       .then((res) => res.json())
@@ -211,7 +216,7 @@ function AddEmployee() {
       if (adminCheckbox === true) {
         // perform two fetch POST calls - one to the employee table and another to admin table
         console.log("admin checkbox checked");
-        setAdminLevelDesignation(() => "Admin");
+        adminLevelDesignation = "Admin";
         console.log(adminLevelDesignation);
         addEmployeeToDatabaseIfAdmin();
       } else {
@@ -244,22 +249,19 @@ function AddEmployee() {
             <span
               id="employee-page-dialog--first_name-span"
               className="employee-page-dialog--first_name-span"
-            >
-              {firstNameInput}
-            </span>
+              ref={modalEmployeeFirstName}
+            ></span>
             <span
               className="employee-page-dialog--last_name-span"
               id="employee-page-dialog--last_name-span"
-            >
-              {lastNameInput}
-            </span>
+              ref={modalEmployeeLastName}
+            ></span>
             <br />
             <span
               id="employee-page-dialog--id-span"
               className="employee-page-dialog--id-span"
-            >
-              {employeeIDInput}
-            </span>
+              ref={modalEmployeeId}
+            ></span>
           </p>
           <div>
             <button
@@ -320,7 +322,7 @@ function AddEmployee() {
                   className="add-employee-form-input employee-form--firstname-input"
                   id="employee-form--firstname-input"
                   name="employee-form--firstname-input"
-                  onChange={(e) => setFirstNameInput(e.target.value)}
+                  ref={firstNameInput}
                 />
               </label>
 
@@ -335,7 +337,7 @@ function AddEmployee() {
                   className="add-employee-form-input employee-form--lastname-input"
                   id="employee-form--lastname-input"
                   name="employee-form--lastname-input"
-                  onChange={(e) => setLastNameInput(e.target.value)}
+                  ref={lastNameInput}
                 />
               </label>
 
@@ -350,7 +352,7 @@ function AddEmployee() {
                   className="add-employee-form-input employee-form--id-input"
                   id="employee-form--id-input"
                   name="employee-form--id-input"
-                  onChange={(e) => setEmployeeIDInput(e.target.value)}
+                  ref={employeeIDInput}
                 />
               </label>
 
@@ -364,7 +366,7 @@ function AddEmployee() {
                   className="employee-form--wf-name-select"
                   id="employee-form--wf-name-select"
                   name="employee-form--wf-name-select"
-                  onChange={(e) => setEmployeeUsername(e.target.value)}
+                  ref={employeeUsername}
                 />
                 <div className="checkBoxLabel">
                   <span className="employee--form--id-label">
@@ -392,7 +394,7 @@ function AddEmployee() {
                 className="add-employee-form-input employee-form--email-input"
                 id="employee-form--email-input"
                 name="employee-form--email-input"
-                onChange={(e) => setEmployeeEmail(e.target.value)}
+                ref={employeeEmail}
               />
             </label>
 
@@ -406,7 +408,7 @@ function AddEmployee() {
                 className="add-employee-form-input employee-form--phone-input"
                 id="employee-form--phone-input"
                 name="employee-form--phone-input"
-                onChange={(e) => setEmployeePhoneNumber(e.target.value)}
+                ref={employeePhoneNumber}
               />
             </label>
           </div>
@@ -419,9 +421,9 @@ function AddEmployee() {
               <input
                 type="text"
                 className="add-employee-form-input employee-form--city-input"
-                id="employee-form--city-input"
-                name="employee-form--city-input"
-                onChange={(e) => setEmployeeAdress(e.target.value)}
+                id="employee-form--address-input"
+                name="employee-form--address-input"
+                ref={employeeAdress}
               />
             </label>
 
@@ -435,7 +437,7 @@ function AddEmployee() {
                 className="add-employee-form-input employee-form--city-input"
                 id="employee-form--city-input"
                 name="employee-form--city-input"
-                onChange={(e) => setEmployeeCity(e.target.value)}
+                ref={employeeCity}
               />
             </label>
 
@@ -449,7 +451,7 @@ function AddEmployee() {
                 className="add-employee-form-input employee-form--state-input"
                 id="employee-form--state-input"
                 name="employee-form--state-input"
-                onChange={(e) => setEmployeeState(e.target.value)}
+                ref={employeeState}
               />
             </label>
 
@@ -463,7 +465,7 @@ function AddEmployee() {
                 className="add-employee-form-input employee-form--country-input"
                 id="employee-form--country-input"
                 name="employee-form--country-input"
-                onChange={(e) => setEmployeeCountry(e.target.value)}
+                ref={employeeCountry}
               />
             </label>
 
@@ -475,9 +477,9 @@ function AddEmployee() {
               <input
                 type="text"
                 className="add-employee-form-input employee-form--country-input"
-                id="employee-form--country-input"
-                name="employee-form--country-input"
-                onChange={(e) => setEmployeeZip(e.target.value)}
+                id="employee-form--zipcode-input"
+                name="employee-form--zipcode-input"
+                ref={employeeZip}
               />
             </label>
             <label
@@ -488,9 +490,9 @@ function AddEmployee() {
               <input
                 type="text"
                 className="add-employee-form-input employee-form--country-input"
-                id="employee-form--country-input"
-                name="employee-form--country-input"
-                onChange={(e) => setEmployeeRoleType(e.target.value)}
+                id="employee-form--role-input"
+                name="employee-form--role-input"
+                ref={employeeRoleType}
               />
             </label>
 
@@ -502,9 +504,9 @@ function AddEmployee() {
               <input
                 type="text"
                 className="add-employee-form-input employee-form--country-input"
-                id="employee-form--country-input"
-                name="employee-form--country-input"
-                onChange={(e) => setContractorName(e.target.value)}
+                id="employee-form--contractor-name-input"
+                name="employee-form--contractor-name-input"
+                ref={contractorName}
               />
             </label>
           </div>
