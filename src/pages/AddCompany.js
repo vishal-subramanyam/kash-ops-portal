@@ -1,22 +1,110 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
 
 function AddCompany() {
+  let companyName;
+  let companyId;
+  let companyAddress;
+  let companyCity;
+  let companyState;
+  let companyZip;
+  let companyCountry;
+  let companyIdExistsArr = [];
+  let companyNameInput = useRef();
+  let companyAddressInput = useRef();
+  let companyIdInput = useRef();
+  let confirmModalCompanyName = useRef();
+  let confirmModalCompanyId = useRef();
+  let companySubmitDialoguePopup = useRef();
+  // let [companyIdExistsArr, setCompanyIdExistsArr] = useState([]);
+  let [allCompaniesArr, setAllCompaniesArr] = useState([]);
+  // function to check if company id is already created
+  useEffect(() => {
+    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ _keyword_: "KASH_OPERATIONS_COMPANY_TABLE" }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setAllCompaniesArr(res.data);
+      })
+      .catch((err) => alert(err));
+  }, []);
+
+  // SHOW MODAL FOR NEWLY ADDED COMPANY INFO
+  const onModalOpen = () => {
+    console.log(
+      "show added company modal function ",
+      companySubmitDialoguePopup
+    );
+
+    confirmModalCompanyName.current.innerHTML = companyName;
+    confirmModalCompanyId.current.innerHTML = companyId;
+    if (typeof companySubmitDialoguePopup.current.showModal === "function") {
+      companySubmitDialoguePopup.current.showModal();
+    } else {
+      alert("Sorry, the <dialog> API is not supported by this browser.");
+    }
+  };
+
+  const checkIfCompanyIdAlreadyExists = async () => {
+    console.log("does company id exists ", companyIdInput.current.value);
+    let companyIdFiltered = allCompaniesArr.filter((company, i) => {
+      return company.CompanyId === companyIdInput.current.value;
+    });
+    // console.log(companyIdFiltered);
+    companyIdExistsArr = companyIdFiltered;
+  };
+
   const validateRequiredInputs = () => {
     // check validitiy of inputs
     // run function to POST company to database
     // run function to open the confirmation modal
   };
 
+  const addCompanyToDatabase = (e) => {
+    e.preventDefault();
+    const newCompanyData = new FormData(e.target);
+    // console.log(newCompanyData.entries());
+    for (let [key, value] of newCompanyData.entries()) {
+      console.log(key, value);
+    }
+    companyName = newCompanyData.get("company-form--name-input");
+    companyId = newCompanyData.get("company-form--id-input");
+    companyAddress = newCompanyData.get("company-form--address-input");
+    companyCity = newCompanyData.get("company-form--city-input");
+    companyState = newCompanyData.get("company-form--state-input");
+    companyZip = newCompanyData.get("company-form--zip_code-input");
+    companyCountry = newCompanyData.get("company-form--country-input");
+    console.log(
+      `${companyName} ${companyId} ${companyAddress} ${companyCity} ${companyState} ${companyZip} ${companyCountry}`
+    );
+    // run function to check if company id exists
+    checkIfCompanyIdAlreadyExists();
+    console.log(companyIdExistsArr);
+    // if company id exists, set alert that company id exists
+    // else, add company to database
+    onModalOpen();
+  };
+
   return (
     <div>
-      <dialog class="database-submit-dialog" id="database-submit-dialog">
+      <dialog
+        class="database-submit-dialog"
+        id="database-submit-dialog"
+        ref={companySubmitDialoguePopup}
+      >
         <form method="dialog">
           <p>
             Company Added: <br />
-            <span id="company-name-span"></span>
-            <span id="company-id-span"></span>
+            <span id="company-name-span" ref={confirmModalCompanyName}></span>
+            <span id="company-id-span" ref={confirmModalCompanyId}></span>
           </p>
           <div>
             <button
@@ -59,7 +147,12 @@ function AddCompany() {
             />
           </div>
 
-          <form action="" id="add-company-form" className="add-company-form">
+          <form
+            action=""
+            onSubmit={addCompanyToDatabase}
+            id="add-company-form"
+            className="add-company-form"
+          >
             <div className="add-company-form--company-details">
               <label
                 for="company-form--name-input"
@@ -72,6 +165,7 @@ function AddCompany() {
                   className="add-company-form-input company-form--name-input"
                   id="company-form--name-input"
                   name="company-form--name-input"
+                  ref={companyNameInput}
                 />
               </label>
               <label
@@ -85,6 +179,7 @@ function AddCompany() {
                   className="add-company-form-input company-form--id-input"
                   id="company-form--id-input"
                   name="company-form--id-input"
+                  ref={companyIdInput}
                 />
               </label>
             </div>
@@ -100,6 +195,7 @@ function AddCompany() {
                   className="add-company-form-input company-form--address-input"
                   id="company-form--address-input"
                   name="company-form--address-input"
+                  ref={companyAddressInput}
                 />
               </label>
 
@@ -157,7 +253,7 @@ function AddCompany() {
             </div>
 
             <button
-              onClick={validateRequiredInputs}
+              // onClick={validateRequiredInputs}
               id="company-form--add-company-button"
               className="company-form--add-company-button"
             >
