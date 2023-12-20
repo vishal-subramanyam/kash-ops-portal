@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import "../assets/api/apiEndpoints.js";
 import "../assets/styles/HomePage.css";
 
 function AddEmployee() {
   //   // input value variables
+  let addEmployeeForm = useRef();
   let [firstNameInput, setFirstNameInput] = useState("");
   let [lastNameInput, setLastNameInput] = useState("");
   let [employeeIDInput, setEmployeeIDInput] = useState("");
@@ -206,6 +207,7 @@ function AddEmployee() {
         addEmployeeNotAdmin();
       }
       onModalOpen();
+      addEmployeeForm.current.reset();
     }
 
     // for (let input of requiredInputs) {
@@ -283,6 +285,7 @@ function AddEmployee() {
           onSubmit={validateRequiredInputs}
           id="add-employee-form"
           className="add-employee-form"
+          ref={addEmployeeForm}
         >
           <div className="add-employee-form--top-section">
             <div className="add-employee-img-holder">

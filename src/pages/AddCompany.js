@@ -16,6 +16,7 @@ function AddCompany() {
   let companyIdInput = useRef();
   let confirmModalCompanyName = useRef();
   let confirmModalCompanyId = useRef();
+  let addCompanyForm = useRef();
   let companySubmitDialoguePopup = useRef();
   // let [companyIdExistsArr, setCompanyIdExistsArr] = useState([]);
   let [allCompaniesArr, setAllCompaniesArr] = useState([]);
@@ -68,6 +69,43 @@ function AddCompany() {
     // run function to open the confirmation modal
   };
 
+  const fetchToAddCompany = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:4040/GenericTransactionService/processTransaction",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // your expected POST request payload goes here
+            data: [
+              {
+                CompanyName: companyName,
+                CompanyId: companyId,
+                CompanyAddress: companyAddress,
+                ExternalUsername: "-",
+                CompanyLocationState: companyState,
+                CompanyLocationCountry: companyCountry,
+                CompanyLocationCity: companyCity,
+                CompanyZipCode: companyZip,
+              },
+            ],
+            _keyword_: "KASH_OPERATIONS_COMPANY_TABLE",
+            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+          }),
+        }
+      );
+      const data = await response.json();
+      // enter you logic when the fetch is successful
+      console.log("Added to Company table" + data);
+    } catch (error) {
+      // enter your logic for when there is an error (ex. error toast)
+      console.log(error);
+    }
+  };
+
   const addCompanyToDatabase = (e) => {
     e.preventDefault();
     const newCompanyData = new FormData(e.target);
@@ -88,9 +126,16 @@ function AddCompany() {
     // run function to check if company id exists
     checkIfCompanyIdAlreadyExists();
     console.log(companyIdExistsArr);
-    // if company id exists, set alert that company id exists
-    // else, add company to database
-    onModalOpen();
+    // if company id exists (the array length is not 0), set alert that company id exists
+    if (companyIdExistsArr.length !== 0) {
+      alert("Company ID already exists.");
+    } else {
+      // else, add company to database
+      console.log("fetch to add company to database");
+      fetchToAddCompany();
+      onModalOpen();
+      addCompanyForm.current.reset();
+    }
   };
 
   return (
@@ -152,6 +197,7 @@ function AddCompany() {
             onSubmit={addCompanyToDatabase}
             id="add-company-form"
             className="add-company-form"
+            ref={addCompanyForm}
           >
             <div className="add-company-form--company-details">
               <label
