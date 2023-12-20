@@ -1,7 +1,7 @@
 import react from "react";
 import { Link } from "react-router-dom";
-import "../assets/styles/Styles.css";
 import "../assets/styles/HomePage.css";
+import "../assets/styles/Styles.css";
 import EditEmployeeInfo from "../components/EditEmployeeInfo";
 
 function EmployeeHub() {

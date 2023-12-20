@@ -1,7 +1,7 @@
 import react from "react";
 import { Link } from "react-router-dom";
-import "../assets/styles/Styles.css";
 import "../assets/styles/HomePage.css";
+import "../assets/styles/Styles.css";
 
 function HomePage() {
   // Get props from App.js to determine if logged in user is Admin Level or not
@@ -10,10 +10,27 @@ function HomePage() {
 
   // set up useEffect hook to pull in the admin data
 
+  /*   font-weight: 900;
+  font-size: 3rem;
+  text-align: center;
+  line-height: 1.06;
+  color: #356575; */
+
   return (
     <main class="kash-operations--home-page-main">
       <div class="kash_operations_home--top-banner">
-        <h1 class="kash_operations_home--title">KASH Tech Operations</h1>
+        <h1
+          class="kash_operations_home--title"
+          style={{
+            fontWeight: "900",
+            fontSize: "3rem",
+            textAlign: "center",
+            lineHeight: "1.06",
+            color: "#356575",
+          }}
+        >
+          KASH Tech Operations
+        </h1>
         <p class="kash_operations_home--user-welcome-msg">
           Welcome, <span id="kash_ops_user--first-name">USER</span>!
         </p>

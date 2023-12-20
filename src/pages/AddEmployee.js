@@ -503,11 +503,14 @@ function AddEmployee() {
           </button>
         </form>
 
-        {/* <iframe
-          src="http://52.167.226.44:8080/ibi_apps/WFServlet?IBIC_server=EDASERVE&IBIMR_drill=IBFS,RUNFEX,IBIF_ex,true&IBIF_ex=IBFS:/WFC/Repository/KashDemo_Files/KASH_Operations/html-pages/external_html_and_assets/html/dropdown-fex-files/get_active_wf_users.fex"
+        {/* <ol
           id="employee-list-summary_iframe"
           className="employee-list-summary_iframe"
-        ></iframe> */}
+        >
+          {allEmployeesArr.map((employee, i) => {
+            return <li key={i}>{employee.FirstName}</li>;
+          })}
+        </ol> */}
       </main>
     </div>
   );
