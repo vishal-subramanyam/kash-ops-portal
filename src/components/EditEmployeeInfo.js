@@ -266,6 +266,7 @@ function EditEmployeeInfo() {
                       name="admin-checkbox"
                       value=""
                       // ref={adminCheckbox}
+                      defaultChecked="false"
                       checked={isEmployeeAdmin ? "checked" : ""}
                     />
                   </label>
