@@ -190,6 +190,7 @@ function AddEmployee() {
     console.log("add employee form submitted" + e);
     console.log(firstNameInput);
     checkIfEmpIdAlreadyExistsInDB();
+    // if employee id exists, the response will be a array containing the employee object
     if (employeeIds.length !== 0) {
       alert("Duplicate employee IDs. Choose a different ID number.");
     } else {
@@ -202,7 +203,7 @@ function AddEmployee() {
       } else {
         console.log("only employee not admin created");
         // run the function that will run a fetch POST to add employee to database
-        // addEmployeeNotAdmin();
+        addEmployeeNotAdmin();
       }
       onModalOpen();
     }

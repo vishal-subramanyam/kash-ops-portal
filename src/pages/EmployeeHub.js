@@ -7,10 +7,10 @@ import EditEmployeeInfo from "../components/EditEmployeeInfo";
 function EmployeeHub() {
   var myUrl =
     "http://52.167.226.44:8080/ibi_apps/WFServlet?IBIC_server=EDASERVE&IBIMR_drill=IBFS,RUNFEX,IBIF_ex,true&IBIF_ex=IBFS:/WFC/Repository/KashDemo_Files/KASH_Operations/html-pages/external_html_and_assets/html/dropdown-fex-files/admin_links--employee_hub.fex";
-  const hideLightbox = () => {
-    document.getElementsByClassName("lightboxbackdrop")[0].style.display =
-      "none";
-  };
+  // const hideLightbox = () => {
+  //   document.getElementsByClassName("lightboxbackdrop")[0].style.display =
+  //     "none";
+  // };
 
   const showEditEmployeeModel = () => {
     document.getElementsByClassName("lightboxbackdrop")[0].style.display =
@@ -25,15 +25,15 @@ function EmployeeHub() {
       className="kash_operations--hub-page--main employees-hub-page-main max-width--main-container"
     >
       {/* Edit Employee Model */}
-      <div className="lightboxbackdrop">
+      {/* <div className="lightboxbackdrop">
         <div className="lightbox" style={{ overflow: "scroll" }}>
           <span onClick={hideLightbox} className="x-button">
             X
-          </span>
-          {/* <iframe id="editEmployeeFrame"></iframe> */}
-          <EditEmployeeInfo id="editEmployeeFrame" />
-        </div>
-      </div>
+          </span> */}
+      {/* <iframe id="editEmployeeFrame"></iframe> */}
+      <EditEmployeeInfo id="editEmployeeFrame" />
+      {/* </div>
+      </div> */}
 
       {/* END Edit Employee Model */}
 
