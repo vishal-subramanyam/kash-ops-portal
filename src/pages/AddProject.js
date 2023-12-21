@@ -1,26 +1,140 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../assets/styles/Styles.css";
-import { useRef } from "react";
 
 function AddProject() {
-  let projectType = useRef();
-  let statementOfWorkId = useRef();
-  let projectStatus = useRef();
-  let projectStartDate = useRef();
-  let projectEndDate = useRef();
-  let estimatedHours = useRef();
-  let selectedCompany = useRef();
+  // let projectNameInput = useRef();
+  let projectType;
+  let projectSOWId;
+  let projectStatus;
+  let projectStartDate;
+  let projectEndDate;
+  let projectEstimatedHours;
+  let selectedCompany;
+  let projectSOWIDEXistsArr = [];
+  let projectTypeInput = useRef();
+  let statementOfWorkIdInput = useRef();
+  let projectStatusInput = useRef();
+  let projectStartDateInput = useRef();
+  let projectEndDateInput = useRef();
+  let estimatedHoursInput = useRef();
+  let selectedCompanyInput = useRef();
   let confirmationSubmitDialoguePopup = useRef();
   let addProjectForm = useRef();
-  let confirmationProjectName = useRef();
+  let confirmationCompanyName = useRef();
   let confirmationProjectType = useRef();
   let confirmationProjectSOWId = useRef();
   let [allProjectsArr, setAllProjectsArr] = useState([]);
-  let [allCompanies, setAllCompanies] = useState([]);
+  let [allCompaniesArr, setAllCompaniesArr] = useState([]);
 
   // useEffect to get (POST) companies from database and add to allCompanies state array
-  // get companies from database and add allCompanies state arra
+  useEffect(() => {
+    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ _keyword_: "KASH_OPERATIONS_COMPANY_TABLE" }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setAllCompaniesArr(res.data);
+      })
+      .catch((err) => alert(err));
+  }, []);
+
+  // useEffect to get (POST) project from database and add to allProjects state array
+  useEffect(() => {
+    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "KASH_OPERATIONS_CREATED_PROJECTS_TABLE",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setAllProjectsArr(res.data);
+      })
+      .catch((err) => alert(err));
+  }, []);
+
+  // open project added confirmation modal
+  const onModalOpen = () => {
+    console.log(
+      "show added project modal function ",
+      confirmationSubmitDialoguePopup
+    );
+
+    confirmationCompanyName.current.innerHTML = selectedCompany;
+    confirmationProjectType.current.innerHTML = projectType;
+    confirmationProjectSOWId.current.innerHTML = projectSOWId;
+    if (
+      typeof confirmationSubmitDialoguePopup.current.showModal === "function"
+    ) {
+      confirmationSubmitDialoguePopup.current.showModal();
+    } else {
+      alert("Sorry, the <dialog> API is not supported by this browser.");
+    }
+  };
+
+  // function to check if SOW ID already exists
+  const checkIfSOWIdAlreadyExists = () => {
+    console.log(
+      "does company id exists ",
+      statementOfWorkIdInput.current.value
+    );
+    let projectSOWIdFiltered = allProjectsArr.filter((project, i) => {
+      return project.SowId === statementOfWorkIdInput.current.value;
+    });
+    console.log(projectSOWIdFiltered);
+    projectEstimatedHours = projectSOWIdFiltered;
+  };
+
+  const fetchToAddProject = () => {
+    console.log("add project to database fetch call");
+  };
+
+  const addProjectToDatabase = (e) => {
+    // get values from the form and assign to variables
+    e.preventDefault();
+    const newProjectData = new FormData(e.target);
+    // console.log(newCompanyData.entries());
+    for (let [key, value] of newProjectData.entries()) {
+      console.log(key, value);
+    }
+    selectedCompany = newProjectData.get(
+      "add-project-form--company-name-input"
+    );
+
+    projectType = newProjectData.get("add-project--type-input");
+    projectSOWId = newProjectData.get("add-project--sow-input");
+    projectStatus = newProjectData.get("add-project--project-status-input");
+    projectStartDate = newProjectData.get("add-project--start-date-input");
+    projectEndDate = newProjectData.get("add-project--end-date-input");
+    projectEstimatedHours = newProjectData.get(
+      "add-project--estimated-hours-input"
+    );
+    console.log(
+      `${selectedCompany} ${projectType} ${projectSOWId} ${projectStatus} ${projectStartDate} ${projectEndDate} ${projectEstimatedHours}`
+    );
+    checkIfSOWIdAlreadyExists();
+    if (projectSOWIDEXistsArr.length !== 0) {
+      alert("Project SOW ID already exists.");
+    } else {
+      // else, add company to database
+      console.log("fetch to add project to database");
+      fetchToAddProject();
+      onModalOpen();
+      addProjectForm.current.reset();
+    }
+  };
 
   const validateRequiredInputs = () => {
     // validate input fields
@@ -34,25 +148,26 @@ function AddProject() {
         id="database-submit-dialog"
         ref={confirmationSubmitDialoguePopup}
       >
-        <form method="dialog">
-          <p>
-            Project Created: <br />
-            <span
-              id="project-page-dialog--company-name-span"
-              class="project-page-dialog--company-name-span"
-              ref={confirmationProjectName}
-            ></span>
-            <span
-              class="project-page-dialog--project-type-span"
-              id="project-page-dialog--project-type-span"
-              ref={confirmationProjectType}
-            ></span>
-            <span
-              id="project-page-dialog--sow-id-span"
-              class="project-page-dialog--sow-id-span"
-              ref={confirmationProjectSOWId}
-            ></span>
-          </p>
+        <form
+          method="dialog"
+          style={{ display: "flex", flexDirection: "column" }}
+        >
+          <p>Project Created:</p>
+          <span
+            id="project-page-dialog--company-name-span"
+            class="project-page-dialog--company-name-span"
+            ref={confirmationCompanyName}
+          ></span>
+          <span
+            class="project-page-dialog--project-type-span"
+            id="project-page-dialog--project-type-span"
+            ref={confirmationProjectType}
+          ></span>
+          <span
+            id="project-page-dialog--sow-id-span"
+            class="project-page-dialog--sow-id-span"
+            ref={confirmationProjectSOWId}
+          ></span>
           <div>
             <button
               class="dialog-modal-confirm-button"
@@ -111,9 +226,16 @@ function AddProject() {
                   class="add-project-form--company-name-input"
                   id="add-project-form--company-name-input"
                   name="add-project-form--company-name-input"
-                  ref={selectedCompany}
+                  ref={selectedCompanyInput}
                 >
                   <option value="">- Choose A Company -</option>
+                  {allCompaniesArr.map((company, i) => {
+                    return (
+                      <option value={company.CompanyName}>
+                        {company.CompanyName}
+                      </option>
+                    );
+                  })}
                 </select>
               </label>
 
@@ -128,7 +250,7 @@ function AddProject() {
                   class="add-project-form--form-input add-project--type-input"
                   id="add-project--type-input"
                   name="add-project--type-input"
-                  ref={projectType}
+                  ref={projectTypeInput}
                 />
               </label>
 
@@ -145,7 +267,7 @@ function AddProject() {
                   class="add-project-form--form-input add-project--sow-input"
                   id="add-project--sow-input"
                   name="add-project--sow-input"
-                  ref={statementOfWorkId}
+                  ref={statementOfWorkIdInput}
                 />
               </label>
             </div>
@@ -161,7 +283,7 @@ function AddProject() {
                   class="add-project-form--form-input add-project--project-status-input"
                   id="add-project--project-status-input"
                   name="add-project--project-status-input"
-                  ref={projectStatus}
+                  ref={projectStatusInput}
                 />
               </label>
 
@@ -176,7 +298,7 @@ function AddProject() {
                     class="add-project-form--form-input add-project--start-date-input"
                     id="add-project--start-date-input"
                     name="add-project--start-date-input"
-                    ref={projectStartDate}
+                    ref={projectStartDateInput}
                   />
                 </label>
 
@@ -190,7 +312,7 @@ function AddProject() {
                     class="add-project-form--form-input add-project--end-date-input"
                     id="add-project--end-date-input"
                     name="add-project--end-date-input"
-                    ref={projectEndDate}
+                    ref={projectEndDateInput}
                   />
                 </label>
               </div>
@@ -207,7 +329,7 @@ function AddProject() {
                   class="add-project-form--form-input add-project--estimated-hours-input"
                   id="add-project--estimated-hours-input"
                   name="add-project--estimated-hours-input"
-                  ref={estimatedHours}
+                  ref={estimatedHoursInput}
                 />
               </label>
             </div>
