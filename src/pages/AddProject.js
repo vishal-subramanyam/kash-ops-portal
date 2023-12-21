@@ -1,19 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../assets/styles/Styles.css";
+import { useRef } from "react";
 
 function AddProject() {
-  let [projectType, setProjectType] = useState("");
-  let [statementOfWorkId, setStatementOfWorkId] = useState("");
-  let [projectStatus, setProjectStatus] = useState("");
-  let [startDate, setStartDate] = useState("");
-  let [endDate, setEndDate] = useState("");
-  let [estimatedHours, setEstimatedHours] = useState("");
-  let [selectedCompany, setSelectedCompany] = useState("");
+  let projectType = useRef();
+  let statementOfWorkId = useRef();
+  let projectStatus = useRef();
+  let projectStartDate = useRef();
+  let projectEndDate = useRef();
+  let estimatedHours = useRef();
+  let selectedCompany = useRef();
+  let confirmationSubmitDialoguePopup = useRef();
+  let addProjectForm = useRef();
+  let confirmationProjectName = useRef();
+  let confirmationProjectType = useRef();
+  let confirmationProjectSOWId = useRef();
   let [allProjectsArr, setAllProjectsArr] = useState([]);
   let [allCompanies, setAllCompanies] = useState([]);
 
-  // useEffect to get (POST) projects from database and add to allProjects state array
+  // useEffect to get (POST) companies from database and add to allCompanies state array
   // get companies from database and add allCompanies state arra
 
   const validateRequiredInputs = () => {
@@ -23,21 +29,28 @@ function AddProject() {
   };
   return (
     <div>
-      <dialog class="database-submit-dialog" id="database-submit-dialog">
+      <dialog
+        class="database-submit-dialog"
+        id="database-submit-dialog"
+        ref={confirmationSubmitDialoguePopup}
+      >
         <form method="dialog">
           <p>
             Project Created: <br />
             <span
               id="project-page-dialog--company-name-span"
               class="project-page-dialog--company-name-span"
+              ref={confirmationProjectName}
             ></span>
             <span
               class="project-page-dialog--project-type-span"
               id="project-page-dialog--project-type-span"
+              ref={confirmationProjectType}
             ></span>
             <span
               id="project-page-dialog--sow-id-span"
               class="project-page-dialog--sow-id-span"
+              ref={confirmationProjectSOWId}
             ></span>
           </p>
           <div>
@@ -80,7 +93,13 @@ function AddProject() {
               class="add-project-page--img"
             />
           </div>
-          <form action="" id="add-project--form" class="add-project--form">
+          <form
+            action=""
+            onSubmit={addProjectToDatabase}
+            id="add-project--form"
+            class="add-project--form"
+            ref={addProjectForm}
+          >
             <div class="add-project-form--project-details">
               <label
                 for="add-project-form--company-name-input"
@@ -92,7 +111,7 @@ function AddProject() {
                   class="add-project-form--company-name-input"
                   id="add-project-form--company-name-input"
                   name="add-project-form--company-name-input"
-                  onChange={(e) => setSelectedCompany(e.target.value)}
+                  ref={selectedCompany}
                 >
                   <option value="">- Choose A Company -</option>
                 </select>
@@ -109,7 +128,7 @@ function AddProject() {
                   class="add-project-form--form-input add-project--type-input"
                   id="add-project--type-input"
                   name="add-project--type-input"
-                  onChange={(e) => setProjectType(e.target.value)}
+                  ref={projectType}
                 />
               </label>
 
@@ -126,7 +145,7 @@ function AddProject() {
                   class="add-project-form--form-input add-project--sow-input"
                   id="add-project--sow-input"
                   name="add-project--sow-input"
-                  onChange={(e) => setStatementOfWorkId(e.target.value)}
+                  ref={statementOfWorkId}
                 />
               </label>
             </div>
@@ -142,7 +161,7 @@ function AddProject() {
                   class="add-project-form--form-input add-project--project-status-input"
                   id="add-project--project-status-input"
                   name="add-project--project-status-input"
-                  onChange={(e) => setProjectStatus(e.target.value)}
+                  ref={projectStatus}
                 />
               </label>
 
@@ -157,7 +176,7 @@ function AddProject() {
                     class="add-project-form--form-input add-project--start-date-input"
                     id="add-project--start-date-input"
                     name="add-project--start-date-input"
-                    onChange={(e) => setStartDate(e.target.value)}
+                    ref={projectStartDate}
                   />
                 </label>
 
@@ -171,7 +190,7 @@ function AddProject() {
                     class="add-project-form--form-input add-project--end-date-input"
                     id="add-project--end-date-input"
                     name="add-project--end-date-input"
-                    onChange={(e) => setEndDate(e.target.value)}
+                    ref={projectEndDate}
                   />
                 </label>
               </div>
@@ -188,13 +207,13 @@ function AddProject() {
                   class="add-project-form--form-input add-project--estimated-hours-input"
                   id="add-project--estimated-hours-input"
                   name="add-project--estimated-hours-input"
-                  onChange={(e) => setEstimatedHours(e.target.value)}
+                  ref={estimatedHours}
                 />
               </label>
             </div>
 
             <button
-              onClick={validateRequiredInputs}
+              // onClick={validateRequiredInputs}
               id="add-project-form--add-project-button"
               class="add-project-form--add-project-button"
             >
