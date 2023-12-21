@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
 
 function UpdateTimesheet() {
   let selectedEmployeeId;
-  let selectedProjectInput;
+  let selectedProjectId;
+  let subAssignmentTitleDescriptor = useRef();
   let [currentDate, setCurrentDate] = useState("");
   let [projectAndCompanyInfoArr, setProjectAndCompanyInfoArr] = useState([]);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
@@ -82,10 +83,16 @@ function UpdateTimesheet() {
     console.log(selectedEmployeeId);
   };
 
-  const getSelectedProject = (e) => {
-    selectedProjectInput =
+  const getSelectedProjectData = (e) => {
+    selectedProjectId =
       e.target[e.target.selectedIndex].getAttribute("data-projectid");
-    console.log(selectedProjectInput);
+    // console.log(selectedProjectId);
+    // console.log(e.target[e.target.selectedIndex].innerHTML);
+    let selectedProjectDetails = e.target[e.target.selectedIndex].innerHTML;
+    console.log(selectedProjectDetails);
+    // update sub assignments heading to show selected project details
+    subAssignmentTitleDescriptor.current.innerHTML = selectedProjectDetails;
+    // get sub projects for selected project ID
   };
 
   return (
@@ -197,7 +204,7 @@ function UpdateTimesheet() {
                     name="project-description__dropdown-input"
                     id="project-description__dropdown-input"
                     className="add-timesheet-entry--form-input project-description__dropdown-input"
-                    onChange={getSelectedProject}
+                    onChange={getSelectedProjectData}
                   >
                     <option value=""></option>
                     {projectAndCompanyInfoArr.map((project, i) => {
@@ -208,7 +215,7 @@ function UpdateTimesheet() {
                             project.ProjectCategory +
                             " (" +
                             project.SowId +
-                            ")"}{" "}
+                            ")"}
                         </option>
                       );
                     })}
@@ -267,7 +274,10 @@ function UpdateTimesheet() {
                 <p className="sub-assignment_title-text">
                   Project Sub-Assignments
                 </p>
-                <span id="sub-assignment-title-descriptor"></span>
+                <span
+                  id="sub-assignment-title-descriptor"
+                  ref={subAssignmentTitleDescriptor}
+                ></span>
               </div>
               <div id="sub-assignment-content">
                 <div className="w-10">
