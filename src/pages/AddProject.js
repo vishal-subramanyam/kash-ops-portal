@@ -11,6 +11,7 @@ function AddProject() {
   let projectEndDate;
   let projectEstimatedHours;
   let selectedCompany;
+  let selectedCompanyId;
   let projectSOWIDEXistsArr = [];
   let projectTypeInput = useRef();
   let statementOfWorkIdInput = useRef();
@@ -19,6 +20,7 @@ function AddProject() {
   let projectEndDateInput = useRef();
   let estimatedHoursInput = useRef();
   let selectedCompanyInput = useRef();
+  let selectedCompanyOption = useRef();
   let confirmationSubmitDialoguePopup = useRef();
   let addProjectForm = useRef();
   let confirmationCompanyName = useRef();
@@ -98,8 +100,49 @@ function AddProject() {
     projectSOWIDEXistsArr = projectSOWIdFiltered;
   };
 
-  const fetchToAddProject = () => {
+  const getSelectedCompanyId = (e) => {
+    selectedCompanyId =
+      e.target[e.target.selectedIndex].getAttribute("data-companyid");
+    console.log(selectedCompanyId);
+  };
+
+  const fetchToAddProject = async () => {
     console.log("add project to database fetch call");
+
+    try {
+      const response = await fetch(
+        "http://localhost:4040/GenericTransactionService/processTransaction",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // your expected POST request payload goes here
+            data: [
+              {
+                SowId: projectSOWId,
+                CompanyId: selectedCompanyId,
+                ProjectCategory: projectType,
+                OriginalEndDate: projectEndDate,
+                CurrentStatus: projectStatus,
+                OriginalStartDate: projectStartDate,
+                TotalProjectedHours: projectEstimatedHours,
+              },
+            ],
+            _keyword_: "KASH_OPERATIONS_CREATED_PROJECTS_TABLE",
+            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+          }),
+        }
+      );
+      const data = await response.json();
+      // enter you logic when the fetch is successful
+      console.log("Added to project table" + data);
+    } catch (error) {
+      // enter your logic for when there is an error (ex. error toast)
+      console.log(error);
+      alert(`Error adding project ${error}`);
+    }
   };
 
   const addProjectToDatabase = (e) => {
@@ -107,9 +150,9 @@ function AddProject() {
     e.preventDefault();
     const newProjectData = new FormData(e.target);
     // console.log(newCompanyData.entries());
-    for (let [key, value] of newProjectData.entries()) {
-      console.log(key, value);
-    }
+    // for (let [key, value] of newProjectData.entries()) {
+    //   console.log(key, value);
+    // }
     selectedCompany = newProjectData.get(
       "add-project-form--company-name-input"
     );
@@ -227,11 +270,17 @@ function AddProject() {
                   id="add-project-form--company-name-input"
                   name="add-project-form--company-name-input"
                   ref={selectedCompanyInput}
+                  onChange={getSelectedCompanyId}
                 >
                   <option value="">- Choose A Company -</option>
                   {allCompaniesArr.map((company, i) => {
                     return (
-                      <option value={company.CompanyName}>
+                      <option
+                        key={i}
+                        value={company.CompanyName}
+                        data-companyid={company.CompanyId}
+                        ref={selectedCompanyOption}
+                      >
                         {company.CompanyName}
                       </option>
                     );
