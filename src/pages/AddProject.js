@@ -187,7 +187,7 @@ function AddProject() {
   return (
     <div>
       <dialog
-        class="database-submit-dialog"
+        className="database-submit-dialog"
         id="database-submit-dialog"
         ref={confirmationSubmitDialoguePopup}
       >
@@ -198,22 +198,22 @@ function AddProject() {
           <p>Project Created:</p>
           <span
             id="project-page-dialog--company-name-span"
-            class="project-page-dialog--company-name-span"
+            className="project-page-dialog--company-name-span"
             ref={confirmationCompanyName}
           ></span>
           <span
-            class="project-page-dialog--project-type-span"
+            className="project-page-dialog--project-type-span"
             id="project-page-dialog--project-type-span"
             ref={confirmationProjectType}
           ></span>
           <span
             id="project-page-dialog--sow-id-span"
-            class="project-page-dialog--sow-id-span"
+            className="project-page-dialog--sow-id-span"
             ref={confirmationProjectSOWId}
           ></span>
           <div>
             <button
-              class="dialog-modal-confirm-button"
+              className="dialog-modal-confirm-button"
               id="dialog-modal-confirm-button"
               value="confirm"
             >
@@ -223,10 +223,12 @@ function AddProject() {
         </form>
       </dialog>
 
-      <main class="add-project-page__main-section max-width--main-container">
-        <h1 class="add-project-title form-page-title--lg-1">Add a Project</h1>
-        <div class="edit_page__return-link-holder">
-          <Link to="/clients-hub" class="return-link">
+      <main className="add-project-page__main-section max-width--main-container">
+        <h1 className="add-project-title form-page-title--lg-1">
+          Add a Project
+        </h1>
+        <div className="edit_page__return-link-holder">
+          <Link to="/clients-hub" className="return-link">
             <svg
               width="80"
               height="134"
@@ -239,34 +241,34 @@ function AddProject() {
                 fill="#255463"
               />
             </svg>
-            <p class="return-link-text">Return to Clients</p>
+            <p className="return-link-text">Return to Clients</p>
           </Link>
         </div>
-        <div class="add-project-page--content-holder">
-          {/* <!-- <div class="add-project--watermark"></div> --> */}
-          <div class="add-project-page--img-holder">
+        <div className="add-project-page--content-holder">
+          {/* <!-- <div className="add-project--watermark"></div> --> */}
+          <div className="add-project-page--img-holder">
             <img
               src="https://raw.githubusercontent.com/Alex-Gardner/KASH_Tech_Operations_Portal/main/kashtech-project-reporting-portal/assets/raster-assets/construction-tools--resize.webp"
               alt="Group of tools on dark background"
-              class="add-project-page--img"
+              className="add-project-page--img"
             />
           </div>
           <form
             action=""
             onSubmit={addProjectToDatabase}
             id="add-project--form"
-            class="add-project--form"
+            className="add-project--form"
             ref={addProjectForm}
           >
-            <div class="add-project-form--project-details">
+            <div className="add-project-form--project-details">
               <label
-                for="add-project-form--company-name-input"
-                class="add-project-form--company-name-label"
+                htmlFor="add-project-form--company-name-input"
+                className="add-project-form--company-name-label"
               >
                 Company Name
                 <select
                   required="required"
-                  class="add-project-form--company-name-input"
+                  className="add-project-form--company-name-input"
                   id="add-project-form--company-name-input"
                   name="add-project-form--company-name-input"
                   ref={selectedCompanyInput}
@@ -289,14 +291,14 @@ function AddProject() {
               </label>
 
               <label
-                for="add-project--type-input"
-                class="add-project--type-label"
+                htmlFor="add-project--type-input"
+                className="add-project--type-label"
               >
                 Project Type
                 <input
                   required="required"
                   type="text"
-                  class="add-project-form--form-input add-project--type-input"
+                  className="add-project-form--form-input add-project--type-input"
                   id="add-project--type-input"
                   name="add-project--type-input"
                   ref={projectTypeInput}
@@ -304,16 +306,16 @@ function AddProject() {
               </label>
 
               <label
-                for="add-project--sow-input"
-                class="add-project--sow-label"
+                htmlFor="add-project--sow-input"
+                className="add-project--sow-label"
               >
                 Statement of Work ID
                 <br />
-                <span class="parenthetical-sub-label">(SOW I.D.)</span>
+                <span className="parenthetical-sub-label">(SOW I.D.)</span>
                 <input
                   required="required"
                   type="text"
-                  class="add-project-form--form-input add-project--sow-input"
+                  className="add-project-form--form-input add-project--sow-input"
                   id="add-project--sow-input"
                   name="add-project--sow-input"
                   ref={statementOfWorkIdInput}
@@ -321,30 +323,30 @@ function AddProject() {
               </label>
             </div>
 
-            <div class="project-estimates">
+            <div className="project-estimates">
               <label
-                for="add-project--project-status-input"
-                class="add-project--project-status-label"
+                htmlFor="add-project--project-status-input"
+                className="add-project--project-status-label"
               >
                 Project Status
                 <input
                   type="text"
-                  class="add-project-form--form-input add-project--project-status-input"
+                  className="add-project-form--form-input add-project--project-status-input"
                   id="add-project--project-status-input"
                   name="add-project--project-status-input"
                   ref={projectStatusInput}
                 />
               </label>
 
-              <div class="date-estimates-holder">
+              <div className="date-estimates-holder">
                 <label
-                  for="add-project--start-date-input"
-                  class="add-project--start-date-label"
+                  htmlFor="add-project--start-date-input"
+                  className="add-project--start-date-label"
                 >
                   Start Date
                   <input
                     type="date"
-                    class="add-project-form--form-input add-project--start-date-input"
+                    className="add-project-form--form-input add-project--start-date-input"
                     id="add-project--start-date-input"
                     name="add-project--start-date-input"
                     ref={projectStartDateInput}
@@ -352,13 +354,13 @@ function AddProject() {
                 </label>
 
                 <label
-                  for="add-project--end-date-input"
-                  class="add-project--end-date-label"
+                  htmlFor="add-project--end-date-input"
+                  className="add-project--end-date-label"
                 >
                   End Date
                   <input
                     type="date"
-                    class="add-project-form--form-input add-project--end-date-input"
+                    className="add-project-form--form-input add-project--end-date-input"
                     id="add-project--end-date-input"
                     name="add-project--end-date-input"
                     ref={projectEndDateInput}
@@ -367,15 +369,15 @@ function AddProject() {
               </div>
 
               <label
-                for="add-project--estimated-hours-input"
-                class="add-project--estimated-hours-label"
+                htmlFor="add-project--estimated-hours-input"
+                className="add-project--estimated-hours-label"
               >
                 Estimated Hours
                 <input
                   required="required"
                   type="number"
                   step="1"
-                  class="add-project-form--form-input add-project--estimated-hours-input"
+                  className="add-project-form--form-input add-project--estimated-hours-input"
                   id="add-project--estimated-hours-input"
                   name="add-project--estimated-hours-input"
                   ref={estimatedHoursInput}
@@ -386,7 +388,7 @@ function AddProject() {
             <button
               // onClick={validateRequiredInputs}
               id="add-project-form--add-project-button"
-              class="add-project-form--add-project-button"
+              className="add-project-form--add-project-button"
             >
               Add Project
             </button>
@@ -397,7 +399,7 @@ function AddProject() {
         {/* <iframe
           src=""
           id="project-list-summary_iframe"
-          class="project-list-summary_iframe"
+          className="project-list-summary_iframe"
         ></iframe> */}
       </main>
     </div>
