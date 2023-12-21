@@ -83,6 +83,25 @@ function UpdateTimesheet() {
     console.log(selectedEmployeeId);
   };
 
+  const getProjectSubCategories = (projectId) => {
+    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "SUB_CATEGORIES_BY_PROJECT_ID",
+        SowId: projectId,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => alert(err));
+  };
+
   const getSelectedProjectData = (e) => {
     selectedProjectId =
       e.target[e.target.selectedIndex].getAttribute("data-projectid");
@@ -93,6 +112,7 @@ function UpdateTimesheet() {
     // update sub assignments heading to show selected project details
     subAssignmentTitleDescriptor.current.innerHTML = selectedProjectDetails;
     // get sub projects for selected project ID
+    getProjectSubCategories(selectedProjectId);
   };
 
   return (
