@@ -87,14 +87,15 @@ function AddProject() {
   // function to check if SOW ID already exists
   const checkIfSOWIdAlreadyExists = () => {
     console.log(
-      "does company id exists ",
+      "does project SOW Id exist ",
       statementOfWorkIdInput.current.value
     );
+    console.log(allProjectsArr);
     let projectSOWIdFiltered = allProjectsArr.filter((project, i) => {
       return project.SowId === statementOfWorkIdInput.current.value;
     });
     console.log(projectSOWIdFiltered);
-    projectEstimatedHours = projectSOWIdFiltered;
+    projectSOWIDEXistsArr = projectSOWIdFiltered;
   };
 
   const fetchToAddProject = () => {
@@ -112,7 +113,6 @@ function AddProject() {
     selectedCompany = newProjectData.get(
       "add-project-form--company-name-input"
     );
-
     projectType = newProjectData.get("add-project--type-input");
     projectSOWId = newProjectData.get("add-project--sow-input");
     projectStatus = newProjectData.get("add-project--project-status-input");
