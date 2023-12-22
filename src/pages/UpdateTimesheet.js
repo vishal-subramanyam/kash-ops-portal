@@ -13,7 +13,7 @@ function UpdateTimesheet() {
   let subAssignmentTitleDescriptor = useRef();
   let [currentDate, setCurrentDate] = useState("");
   let [projectAndCompanyInfoArr, setProjectAndCompanyInfoArr] = useState([]);
-  // let [subAssignmentByProject, setsubAssignmentByProjectArr] = useState([]);
+  let [subAssignmentByProject, setsubAssignmentByProjectArr] = useState([]);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
   let [allProjectsArr, setAllProjectsArr] = useState([]);
 
@@ -133,7 +133,7 @@ function UpdateTimesheet() {
         return c;
       }, {})
     );
-    console.log(subAssignmentByProjectFiltered);
+    setsubAssignmentByProjectArr(subAssignmentByProjectFiltered);
   };
 
   return (
@@ -332,11 +332,10 @@ function UpdateTimesheet() {
                   <select id="sub-assignment">
                     {console.log(subAssignmentByProjectFiltered)}
                     <option value=""></option>
-                    {subAssignmentByProjectFiltered.map((subProject, i) => {
+                    {subAssignmentByProject.map((subProject, i) => {
                       return (
                         <option
                           key={i}
-                          value={subProject.SubTaskTitle}
                           data-subprojectid={subProject.ProjectSubTaskId}
                         >
                           {subProject.SubTaskTitle}
