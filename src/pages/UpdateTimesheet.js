@@ -5,9 +5,12 @@ import { Link } from "react-router-dom";
 function UpdateTimesheet() {
   let selectedEmployeeId;
   let selectedProjectId;
+  let subAssignmentByProject = [];
+  let subAssignmentByProjectFiltered = [];
   let subAssignmentTitleDescriptor = useRef();
   let [currentDate, setCurrentDate] = useState("");
   let [projectAndCompanyInfoArr, setProjectAndCompanyInfoArr] = useState([]);
+  // let [subAssignmentByProject, setSubAssignmentByProject] = useState([]);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
   let [allProjectsArr, setAllProjectsArr] = useState([]);
 
@@ -83,26 +86,31 @@ function UpdateTimesheet() {
     console.log(selectedEmployeeId);
   };
 
-  const getProjectSubCategories = (projectId) => {
-    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
-      method: "POST",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        _keyword_: "SUB_CATEGORIES_BY_PROJECT_ID",
-        SowId: projectId,
-      }),
-    })
+  const getProjectSubCategories = async (projectId) => {
+    await fetch(
+      "http://localhost:4040/GenericResultBuilderService/buildResults",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          _keyword_: "SUB_CATEGORIES_BY_PROJECT_ID",
+          SowId: projectId,
+        }),
+      }
+    )
       .then((res) => res.json())
       .then((res) => {
         console.log(res.data);
+        subAssignmentByProject = res.data;
+        // setSubAssignmentByProject(res.data);
       })
       .catch((err) => alert(err));
   };
 
-  const getSelectedProjectData = (e) => {
+  const getSelectedProjectData = async (e) => {
     selectedProjectId =
       e.target[e.target.selectedIndex].getAttribute("data-projectid");
     // console.log(selectedProjectId);
@@ -112,7 +120,16 @@ function UpdateTimesheet() {
     // update sub assignments heading to show selected project details
     subAssignmentTitleDescriptor.current.innerHTML = selectedProjectDetails;
     // get sub projects for selected project ID
-    getProjectSubCategories(selectedProjectId);
+    await getProjectSubCategories(selectedProjectId);
+    console.log(subAssignmentByProject);
+    // filter sub assignments to remove duplicates and assign to filtered array
+    subAssignmentByProjectFiltered = Object.values(
+      await subAssignmentByProject.reduce((c, e) => {
+        if (!c[e.SubTaskTitle]) c[e.SubTaskTitle] = e;
+        return c;
+      }, {})
+    );
+    console.log(subAssignmentByProjectFiltered);
   };
 
   return (
@@ -254,7 +271,7 @@ function UpdateTimesheet() {
                                 No
                             </option>
                         </select>
-                    </div--> */}
+                    </div-->
 
                 <div className="non-billable-category--holder">
                   <label
@@ -286,6 +303,7 @@ function UpdateTimesheet() {
                     <option value="Other">Other</option>
                   </select>
                 </div>
+                */}
               </div>
             </div>
 
