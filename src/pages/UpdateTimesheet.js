@@ -5,12 +5,15 @@ import { Link } from "react-router-dom";
 function UpdateTimesheet() {
   let selectedEmployeeId;
   let selectedProjectId;
-  let subAssignmentByProject = [];
+  let subAssignmentByProjectArr = [];
   let subAssignmentByProjectFiltered = [];
+  let reportingPeriodStartDate = useRef();
+  let selectedEmployee = useRef();
+  let selectedProject = useRef();
   let subAssignmentTitleDescriptor = useRef();
   let [currentDate, setCurrentDate] = useState("");
   let [projectAndCompanyInfoArr, setProjectAndCompanyInfoArr] = useState([]);
-  // let [subAssignmentByProject, setSubAssignmentByProject] = useState([]);
+  // let [subAssignmentByProject, setsubAssignmentByProjectArr] = useState([]);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
   let [allProjectsArr, setAllProjectsArr] = useState([]);
 
@@ -81,6 +84,7 @@ function UpdateTimesheet() {
   }, []);
 
   const getSelectedEmployeeId = (e) => {
+    console.log(selectedEmployee.current.value);
     selectedEmployeeId =
       e.target[e.target.selectedIndex].getAttribute("data-employeeid");
     console.log(selectedEmployeeId);
@@ -104,8 +108,8 @@ function UpdateTimesheet() {
       .then((res) => res.json())
       .then((res) => {
         console.log(res.data);
-        subAssignmentByProject = res.data;
-        // setSubAssignmentByProject(res.data);
+        subAssignmentByProjectArr = res.data;
+        // setsubAssignmentByProject(res.data);
       })
       .catch((err) => alert(err));
   };
@@ -121,10 +125,10 @@ function UpdateTimesheet() {
     subAssignmentTitleDescriptor.current.innerHTML = selectedProjectDetails;
     // get sub projects for selected project ID
     await getProjectSubCategories(selectedProjectId);
-    console.log(subAssignmentByProject);
+    console.log(subAssignmentByProjectArr);
     // filter sub assignments to remove duplicates and assign to filtered array
     subAssignmentByProjectFiltered = Object.values(
-      await subAssignmentByProject.reduce((c, e) => {
+      await subAssignmentByProjectArr.reduce((c, e) => {
         if (!c[e.SubTaskTitle]) c[e.SubTaskTitle] = e;
         return c;
       }, {})
@@ -193,6 +197,7 @@ function UpdateTimesheet() {
                   id="employee-dropdown-input"
                   name="employee-dropdown-input"
                   onChange={getSelectedEmployeeId}
+                  ref={selectedEmployee}
                 >
                   <option value="">- Choose an Employee -</option>
                   {allEmployeesArr.map((employee, i) => {
@@ -220,6 +225,7 @@ function UpdateTimesheet() {
                     className="add-timesheet-entry--form-input timesheet-update--timesheet-start-date-input"
                     id="timesheet-update--timesheet-start-date-input"
                     name="timesheet-update--timesheet-start-date-input"
+                    ref={reportingPeriodStartDate}
                   />
 
                   {/* <!--<select name="reporting-start-date__dropdown-input" id="reporting-start-date__dropdown-input" className="reporting-start-date__dropdown-input">-->
@@ -242,6 +248,7 @@ function UpdateTimesheet() {
                     id="project-description__dropdown-input"
                     className="add-timesheet-entry--form-input project-description__dropdown-input"
                     onChange={getSelectedProjectData}
+                    ref={selectedProject}
                   >
                     <option value=""></option>
                     {projectAndCompanyInfoArr.map((project, i) => {
@@ -323,7 +330,19 @@ function UpdateTimesheet() {
                     <label htmlFor="sub-assignment">Work Area</label>
                   </div>
                   <select id="sub-assignment">
+                    {console.log(subAssignmentByProjectFiltered)}
                     <option value=""></option>
+                    {subAssignmentByProjectFiltered.map((subProject, i) => {
+                      return (
+                        <option
+                          key={i}
+                          value={subProject.SubTaskTitle}
+                          data-subprojectid={subProject.ProjectSubTaskId}
+                        >
+                          {subProject.SubTaskTitle}
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
                 <div className="w-15">
