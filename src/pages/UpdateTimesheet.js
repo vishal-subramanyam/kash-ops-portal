@@ -136,6 +136,14 @@ function UpdateTimesheet() {
     setsubAssignmentByProjectArr(subAssignmentByProjectFiltered);
   };
 
+  const selectSubAssignment = (e) => {
+    let subAssignmentId =
+      e.target[e.target.selectedIndex].getAttribute("data-subprojectid");
+    console.log("selected sub-assignment " + subAssignmentId);
+
+    // query the sub assignments table and filter output by SubTaskTitle to get the list of task areas
+  };
+
   return (
     <div>
       <dialog className="database-submit-dialog" id="database-submit-dialog">
@@ -329,7 +337,7 @@ function UpdateTimesheet() {
                   <div>
                     <label htmlFor="sub-assignment">Work Area</label>
                   </div>
-                  <select id="sub-assignment">
+                  <select id="sub-assignment" onClick={selectSubAssignment}>
                     {console.log(subAssignmentByProjectFiltered)}
                     <option value=""></option>
                     {subAssignmentByProject.map((subProject, i) => {
