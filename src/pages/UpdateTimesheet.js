@@ -3,17 +3,21 @@ import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
 
 function UpdateTimesheet() {
-  let selectedEmployeeId;
-  let selectedProjectId;
+  let selectedEmployeeId; // To add to Timesheets table - EmpId
+  let selectedProjectId; // To add to Timesheets table - SowId
+  let selectedSubAssignmentId;
+  let selectedSubAssignmentName; // To add to Timesheets table - SubAssignment
+  let selectedTaskBySubAssignmentName; // To add to Timesheets table - SubAssignmentSegment1
   let subAssignmentByProjectArr = [];
   let subAssignmentByProjectFiltered = [];
-  let reportingPeriodStartDate = useRef();
+  let reportingPeriodStartDate = useRef(); // To add to Timesheets table - PeriodStartDate
   let selectedEmployee = useRef();
   let selectedProject = useRef();
   let subAssignmentTitleDescriptor = useRef();
   let [currentDate, setCurrentDate] = useState("");
   let [projectAndCompanyInfoArr, setProjectAndCompanyInfoArr] = useState([]);
   let [subAssignmentByProject, setsubAssignmentByProjectArr] = useState([]);
+  let [tasksBySubAssignment, setTasksBySubAssignment] = useState([]);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
   let [allProjectsArr, setAllProjectsArr] = useState([]);
 
@@ -114,6 +118,33 @@ function UpdateTimesheet() {
       .catch((err) => alert(err));
   };
 
+  const getTasksBySubAssignment = async (selectedSubAssignmentId) => {
+    console.log(selectedSubAssignmentId);
+    await fetch(
+      "http://localhost:4040/GenericResultBuilderService/buildResults",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
+        }),
+      }
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res.data);
+        let filterTasks = res.data.filter((task) => {
+          return selectedSubAssignmentId === task.ProjectSubTaskId;
+        });
+        console.log(filterTasks);
+        setTasksBySubAssignment(filterTasks);
+      })
+      .catch((err) => alert(err));
+  };
+
   const getSelectedProjectData = async (e) => {
     selectedProjectId =
       e.target[e.target.selectedIndex].getAttribute("data-projectid");
@@ -137,12 +168,44 @@ function UpdateTimesheet() {
   };
 
   const selectSubAssignment = (e) => {
-    let subAssignmentId =
+    selectedSubAssignmentId =
       e.target[e.target.selectedIndex].getAttribute("data-subprojectid");
-    console.log("selected sub-assignment " + subAssignmentId);
+    selectedSubAssignmentName = e.target[e.target.selectedIndex].getAttribute(
+      "data-subprojectname"
+    );
+    console.log(
+      "selected sub-assignment " +
+        selectedSubAssignmentName +
+        "-" +
+        selectedSubAssignmentId
+    );
 
     // query the sub assignments table and filter output by SubTaskTitle to get the list of task areas
+    getTasksBySubAssignment(selectedSubAssignmentId);
   };
+
+  // Fields to add to Timesheets table
+  /*
+          {
+            "Billable": "TEST",
+            "SundayHours": "0.00",
+            "SubAssignmentSegment2": "TEST",
+            "SubAssignmentSegment1": "Existing report and dashboard fixes and enhancements",
+            "ThursdayHours": "0.00",
+            "PeriodStartDate": "2023-05-08",
+            "WednesdayHours": "3.50",
+            "SowId": "UNE2022050301",
+            "NonBillableReason": "n/a",
+            "FridayHours": "2.00",
+            "SubAssignmentTicketNum": "EP2-1778",
+            "SubAssignment": "Reports/Data/Integration",
+            "SaturdayHours": "0.00",
+            "TuesdayHours": "2.50",
+            "EmpId": "8844422",
+            "TimesheetStatusEntry": "TEST",
+            "MondayHours": "3.50"
+        },
+  */
 
   return (
     <div>
@@ -345,6 +408,7 @@ function UpdateTimesheet() {
                         <option
                           key={i}
                           data-subprojectid={subProject.ProjectSubTaskId}
+                          data-subprojectname={subProject.SubTaskTitle}
                         >
                           {subProject.SubTaskTitle}
                         </option>
