@@ -14,6 +14,9 @@ function UpdateTimesheet() {
   let selectedEmployee = useRef();
   let selectedProject = useRef();
   let subAssignmentTitleDescriptor = useRef();
+  let [timesheetRecordsByEmployee, setTimesheetRecordsByEmployee] = useState(
+    []
+  );
   let [currentDate, setCurrentDate] = useState("");
   let [projectAndCompanyInfoArr, setProjectAndCompanyInfoArr] = useState([]);
   let [subAssignmentByProject, setsubAssignmentByProjectArr] = useState([]);
@@ -22,14 +25,20 @@ function UpdateTimesheet() {
   let [allProjectsArr, setAllProjectsArr] = useState([]);
 
   const getCurrentDate = () => {
-    let tempDate = new Date();
-    let date =
-      tempDate.getFullYear() +
-      "-" +
-      (tempDate.getMonth() + 1) +
-      "-" +
-      tempDate.getDate();
-    setCurrentDate(date);
+    // let tempDate = new Date();
+    // let date =
+    //   tempDate.getFullYear() +
+    //   "-" +
+    //   (tempDate.getMonth() + 1) +
+    //   "-" +
+    //   tempDate.getDate();
+    // console.log(date);
+    let prevMonday = new Date();
+    prevMonday.setDate(prevMonday.getDate() - ((prevMonday.getDay() + 6) % 7));
+    console.log(prevMonday.toLocaleDateString("en-US"));
+    let prevMondayFormat = prevMonday.toISOString().split("T")[0];
+    console.log(prevMondayFormat);
+    setCurrentDate(prevMondayFormat);
   };
   useEffect(() => {
     getCurrentDate();
@@ -87,11 +96,36 @@ function UpdateTimesheet() {
       .catch((err) => alert(err));
   }, []);
 
+  const getTimesheetByEmployeeId = (id) => {
+    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "KASH_OPERATIONS_TIMESHEET_TABLE",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res.data);
+        let filteredTimesheet = res.data.filter((timesheet) => {
+          return id === timesheet.EmpId;
+        });
+        console.log(filteredTimesheet);
+      })
+      .catch((err) => alert(err));
+  };
+
   const getSelectedEmployeeId = (e) => {
     console.log(selectedEmployee.current.value);
     selectedEmployeeId =
       e.target[e.target.selectedIndex].getAttribute("data-employeeid");
     console.log(selectedEmployeeId);
+
+    // fetch timesheets table for selected employee Id and display in table
+    getTimesheetByEmployeeId(selectedEmployeeId);
   };
 
   const getProjectSubCategories = async (projectId) => {
@@ -183,6 +217,8 @@ function UpdateTimesheet() {
     // query the sub assignments table and filter output by SubTaskTitle to get the list of task areas
     getTasksBySubAssignment(selectedSubAssignmentId);
   };
+
+  const addToStagingSheet = () => {};
 
   // Fields to add to Timesheets table
   /*
@@ -292,6 +328,7 @@ function UpdateTimesheet() {
                   <input
                     // onchange="loadTableGen()"
                     defaultValue={currentDate}
+                    step={7}
                     type="date"
                     className="add-timesheet-entry--form-input timesheet-update--timesheet-start-date-input"
                     id="timesheet-update--timesheet-start-date-input"
@@ -422,6 +459,9 @@ function UpdateTimesheet() {
                   </div>
                   <select id="sub-assignment-seg-1">
                     <option value=""></option>
+                    {tasksBySubAssignment.map((subTask, i) => {
+                      return <option key={i}>{subTask.Segment1}</option>;
+                    })}
                   </select>
                 </div>
                 {/* <!--div className="w-15">
@@ -439,10 +479,7 @@ function UpdateTimesheet() {
 
                 <div className="w-5">
                   <div>
-                    <div
-                      className="addbutton"
-                      //  onclick="addToSheet()"
-                    >
+                    <div className="addbutton" onclick={addToStagingSheet}>
                       + Add to Sheet
                     </div>
                   </div>
