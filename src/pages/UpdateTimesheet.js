@@ -40,42 +40,13 @@ function UpdateTimesheet() {
   let [timesheetRecordsByEmployee, setTimesheetRecordsByEmployee] = useState(
     []
   );
-  // let [newTimesheetRecord, setNewTimesheetRecord] = useState({
-  //   Billable: "",
-  //   EmpId: "",
-  //   FridayHours: "0.00",
-  //   MondayHours: "0.00",
-  //   NonBillableReason: "",
-  //   PeriodStartDate: "",
-  //   SaturdayHours: "0.00",
-  //   SowId: "",
-  //   CompanyName: "",
-  //   SubAssignment: "",
-  //   SubAssignmentSegment1: "",
-  //   SubAssignmentSegment2: "",
-  //   SubAssignmentTicketNum: "",
-  //   SundayHours: "0.00",
-  //   ThursdayHours: "0.00",
-  //   TimesheetStatusEntry: "",
-  //   TuesdayHours: "0.00",
-  //   WednesdayHours: "0.00",
-  // });
   let [prevMonday, setPrevMonday] = useState("");
   let [projectAndCompanyInfoArr, setProjectAndCompanyInfoArr] = useState([]);
   let [subAssignmentByProject, setsubAssignmentByProjectArr] = useState([]);
   let [tasksBySubAssignment, setTasksBySubAssignment] = useState([]);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
-  let [allProjectsArr, setAllProjectsArr] = useState([]);
 
   const getPrevMonday = () => {
-    // let tempDate = new Date();
-    // let date =
-    //   tempDate.getFullYear() +
-    //   "-" +
-    //   (tempDate.getMonth() + 1) +
-    //   "-" +
-    //   tempDate.getDate();
-    // console.log(date);
     let prevMonday = new Date();
     prevMonday.setDate(prevMonday.getDate() - ((prevMonday.getDay() + 6) % 7));
     console.log(prevMonday.toLocaleDateString("en-US"));
@@ -97,25 +68,6 @@ function UpdateTimesheet() {
       .then((res) => {
         console.log(res);
         setAllEmployeesArr(res.data);
-      })
-      .catch((err) => alert(err));
-  }, []);
-
-  useEffect(() => {
-    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
-      method: "POST",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        _keyword_: "KASH_OPERATIONS_CREATED_PROJECTS_TABLE",
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        setAllProjectsArr(res.data);
       })
       .catch((err) => alert(err));
   }, []);
