@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
+import TimesheetTable from "../components/TimesheetTable";
 
 function UpdateTimesheet() {
   let selectedEmployeeId; // To add to Timesheets table - EmpId
@@ -17,14 +18,14 @@ function UpdateTimesheet() {
   let [timesheetRecordsByEmployee, setTimesheetRecordsByEmployee] = useState(
     []
   );
-  let [currentDate, setCurrentDate] = useState("");
+  let [prevMonday, setPrevMonday] = useState("");
   let [projectAndCompanyInfoArr, setProjectAndCompanyInfoArr] = useState([]);
   let [subAssignmentByProject, setsubAssignmentByProjectArr] = useState([]);
   let [tasksBySubAssignment, setTasksBySubAssignment] = useState([]);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
   let [allProjectsArr, setAllProjectsArr] = useState([]);
 
-  const getCurrentDate = () => {
+  const getPrevMonday = () => {
     // let tempDate = new Date();
     // let date =
     //   tempDate.getFullYear() +
@@ -38,10 +39,10 @@ function UpdateTimesheet() {
     console.log(prevMonday.toLocaleDateString("en-US"));
     let prevMondayFormat = prevMonday.toISOString().split("T")[0];
     console.log(prevMondayFormat);
-    setCurrentDate(prevMondayFormat);
+    setPrevMonday(prevMondayFormat);
   };
   useEffect(() => {
-    getCurrentDate();
+    getPrevMonday();
     fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
       method: "POST",
       headers: {
@@ -111,9 +112,12 @@ function UpdateTimesheet() {
       .then((res) => {
         console.log(res.data);
         let filteredTimesheet = res.data.filter((timesheet) => {
-          return id === timesheet.EmpId;
+          return (
+            id === timesheet.EmpId && prevMonday === timesheet.PeriodStartDate
+          );
         });
         console.log(filteredTimesheet);
+        setTimesheetRecordsByEmployee(filteredTimesheet);
       })
       .catch((err) => alert(err));
   };
@@ -327,7 +331,7 @@ function UpdateTimesheet() {
                   </label>
                   <input
                     // onchange="loadTableGen()"
-                    defaultValue={currentDate}
+                    defaultValue={prevMonday}
                     step={7}
                     type="date"
                     className="add-timesheet-entry--form-input timesheet-update--timesheet-start-date-input"
@@ -517,7 +521,9 @@ function UpdateTimesheet() {
                       <th>Total Hours</th>
                     </tr>
                   </thead>
-                  <tbody id="tabBod"></tbody>
+                  <tbody id="tabBod">
+                    {timesheetRecordsByEmployee.map((record, i) => {})}
+                  </tbody>
                 </table>
 
                 {/* <!---------------------------------------------------------------------YOU ARE WORKING HERE END ------------------------------------------------------------------------------------------------------->
