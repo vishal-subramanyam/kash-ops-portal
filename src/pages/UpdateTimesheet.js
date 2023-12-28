@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
-import TimesheetTable from "../components/TimesheetTable";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 function UpdateTimesheet() {
   let selectedEmployeeId; // To add to Timesheets table - EmpId
@@ -9,15 +10,56 @@ function UpdateTimesheet() {
   let selectedSubAssignmentId;
   let selectedSubAssignmentName; // To add to Timesheets table - SubAssignment
   let selectedTaskBySubAssignmentName; // To add to Timesheets table - SubAssignmentSegment1
+  let newTimesheetRecord = {
+    Billable: "",
+    EmpId: "",
+    FridayHours: "0.00",
+    MondayHours: "0.00",
+    NonBillableReason: "",
+    PeriodStartDate: "",
+    SaturdayHours: "0.00",
+    SowId: "",
+    CompanyName: "",
+    SubAssignment: "",
+    SubAssignmentSegment1: "",
+    SubAssignmentSegment2: "",
+    SubAssignmentTicketNum: "",
+    SundayHours: "0.00",
+    ThursdayHours: "0.00",
+    TimesheetStatusEntry: "",
+    TuesdayHours: "0.00",
+    WednesdayHours: "0.00",
+  };
   let subAssignmentByProjectArr = [];
   let subAssignmentByProjectFiltered = [];
   let reportingPeriodStartDate = useRef(); // To add to Timesheets table - PeriodStartDate
   let selectedEmployee = useRef();
   let selectedProject = useRef();
+  let [selectedEmployeeIdState, setSelectedEmployeeState] = useState("");
   let subAssignmentTitleDescriptor = useRef();
   let [timesheetRecordsByEmployee, setTimesheetRecordsByEmployee] = useState(
     []
   );
+  // let [newTimesheetRecord, setNewTimesheetRecord] = useState({
+  //   Billable: "",
+  //   EmpId: "",
+  //   FridayHours: "0.00",
+  //   MondayHours: "0.00",
+  //   NonBillableReason: "",
+  //   PeriodStartDate: "",
+  //   SaturdayHours: "0.00",
+  //   SowId: "",
+  //   CompanyName: "",
+  //   SubAssignment: "",
+  //   SubAssignmentSegment1: "",
+  //   SubAssignmentSegment2: "",
+  //   SubAssignmentTicketNum: "",
+  //   SundayHours: "0.00",
+  //   ThursdayHours: "0.00",
+  //   TimesheetStatusEntry: "",
+  //   TuesdayHours: "0.00",
+  //   WednesdayHours: "0.00",
+  // });
   let [prevMonday, setPrevMonday] = useState("");
   let [projectAndCompanyInfoArr, setProjectAndCompanyInfoArr] = useState([]);
   let [subAssignmentByProject, setsubAssignmentByProjectArr] = useState([]);
@@ -127,7 +169,7 @@ function UpdateTimesheet() {
     selectedEmployeeId =
       e.target[e.target.selectedIndex].getAttribute("data-employeeid");
     console.log(selectedEmployeeId);
-
+    setSelectedEmployeeState(selectedEmployeeId);
     // fetch timesheets table for selected employee Id and display in table
     getTimesheetByEmployeeId(selectedEmployeeId);
   };
@@ -190,6 +232,10 @@ function UpdateTimesheet() {
     // console.log(e.target[e.target.selectedIndex].innerHTML);
     let selectedProjectDetails = e.target[e.target.selectedIndex].innerHTML;
     console.log(selectedProjectDetails);
+    let selectedProjectCompanyName = selectedProjectDetails.split(" -")[0];
+    console.log(selectedProjectCompanyName);
+    let selectedProjectSOWID = selectedProjectDetails.match(/\((.*)\)/).pop();
+    console.log(selectedProjectSOWID);
     // update sub assignments heading to show selected project details
     subAssignmentTitleDescriptor.current.innerHTML = selectedProjectDetails;
     // get sub projects for selected project ID
@@ -222,7 +268,38 @@ function UpdateTimesheet() {
     getTasksBySubAssignment(selectedSubAssignmentId);
   };
 
-  const addToStagingSheet = () => {};
+  const addToStagingSheet = () => {
+    console.log(selectedEmployeeId);
+    newTimesheetRecord = {
+      Billable: "",
+      EmpId: selectedEmployeeIdState,
+      FridayHours: "0.00",
+      MondayHours: "0.00",
+      NonBillableReason: "",
+      PeriodStartDate: prevMonday,
+      SaturdayHours: "0.00",
+      SowId: "",
+      CompanyName: "",
+      SubAssignment: "",
+      SubAssignmentSegment1: "",
+      SubAssignmentSegment2: "",
+      SubAssignmentTicketNum: "",
+      SundayHours: "0.00",
+      ThursdayHours: "0.00",
+      TimesheetStatusEntry: "",
+      TuesdayHours: "0.00",
+      WednesdayHours: "0.00",
+    };
+    console.log("adding new record ", newTimesheetRecord);
+    setTimesheetRecordsByEmployee((prevState) => [
+      ...prevState,
+      newTimesheetRecord,
+    ]);
+  };
+
+  const deleteTimesheetRow = (rowId) => {
+    console.log("deleting row " + rowId);
+  };
 
   // Fields to add to Timesheets table
   /*
@@ -483,7 +560,7 @@ function UpdateTimesheet() {
 
                 <div className="w-5">
                   <div>
-                    <div className="addbutton" onclick={addToStagingSheet}>
+                    <div className="addbutton" onClick={addToStagingSheet}>
                       + Add to Sheet
                     </div>
                   </div>
@@ -498,33 +575,108 @@ function UpdateTimesheet() {
                 </h2>
                 {/* <!---------------------------------------------------------------------YOU ARE WORKING HERE BEGIN ------------------------------------------------------------------------------------------------------->
 <!--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------> */}
-                <table
-                  id="timeSheetTable"
-                  className="display"
-                  style={{ width: "100%" }}
-                >
-                  <thead>
-                    <tr>
-                      <th>Delete</th>
-                      <th>Project</th>
-                      <th>Work Area</th>
-                      <th>Task Area</th>
-                      {/* <!--th>Segment 2</th--> */}
-                      <th>Ticket #</th>
-                      <th>Mon</th>
-                      <th>Tue</th>
-                      <th>Wed</th>
-                      <th>Thu</th>
-                      <th>Fri</th>
-                      <th>Sat</th>
-                      <th>Sun</th>
-                      <th>Total Hours</th>
-                    </tr>
-                  </thead>
-                  <tbody id="tabBod">
-                    {timesheetRecordsByEmployee.map((record, i) => {})}
-                  </tbody>
-                </table>
+                <div className="table-responsive">
+                  <table
+                    id="timeSheetTable"
+                    className="display table"
+                    style={{ width: "100%" }}
+                  >
+                    <thead>
+                      <tr>
+                        <th scope="col">Delete</th>
+                        <th scope="col">Project</th>
+                        <th scope="col">Work Area</th>
+                        <th scope="col">Task Area</th>
+                        {/* <!--th>Segment 2</th--> */}
+                        <th scope="col">Ticket #</th>
+                        <th scope="col">Mon</th>
+                        <th scope="col">Tue</th>
+                        <th scope="col">Wed</th>
+                        <th scope="col">Thu</th>
+                        <th scope="col">Fri</th>
+                        <th scope="col">Sat</th>
+                        <th scope="col">Sun</th>
+                        <th scope="col">Total Hours</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tabBod">
+                      {console.log(timesheetRecordsByEmployee)}
+                      {timesheetRecordsByEmployee.map((record, i) => {
+                        return (
+                          <tr key={i}>
+                            <td>
+                              <FontAwesomeIcon
+                                icon={faTrashCan}
+                                onClick={deleteTimesheetRow}
+                              />
+                            </td>
+                            <td>{record.SowId}</td>
+                            <td>{record.SubAssignment}</td>
+                            <td>{record.SubAssignmentSegment1}</td>
+                            <td>{record.SubAssignmentTicketNum}</td>
+                            <td>
+                              <input
+                                className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                type="number"
+                                min="0"
+                                value={record.MondayHours}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                type="number"
+                                min="0"
+                                value={record.TuesdayHours}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                type="number"
+                                min="0"
+                                value={record.WednesdayHours}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                type="number"
+                                min="0"
+                                value={record.ThursdayHours}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                type="number"
+                                min="0"
+                                value={record.FridayHours}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                type="number"
+                                min="0"
+                                value={record.SaturdayHours}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                type="number"
+                                min="0"
+                                value={record.SundayHours}
+                              />
+                            </td>
+                            <td>0</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
 
                 {/* <!---------------------------------------------------------------------YOU ARE WORKING HERE END ------------------------------------------------------------------------------------------------------->
 <!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
@@ -588,13 +740,13 @@ function UpdateTimesheet() {
                 </svg>
         </button--> */}
 
-        <iframe
+        {/* <iframe
           src=""
           aria-hidden="true"
           title="Submitted Timesheet to Database"
           id="timesheet-to-database-fex--iframe"
           className="timesheet-to-database-fex--iframe"
-        ></iframe>
+        ></iframe> */}
       </main>
     </div>
   );
