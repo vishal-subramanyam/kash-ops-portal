@@ -32,15 +32,23 @@ function UpdateTimesheet() {
   };
   let subAssignmentByProjectArr = [];
   let subAssignmentByProjectFiltered = [];
-  let reportingPeriodStartDate = useRef(); // To add to Timesheets table - PeriodStartDate
+  let reportingPeriodStartDate = useRef();
   let selectedEmployee = useRef();
   let selectedProject = useRef();
-  let [selectedEmployeeIdState, setSelectedEmployeeState] = useState("");
+  let taskTicketNumber = useRef();
+  let [selectedProjectCompanyNameState, setSelectedProjectCompanyNameState] =
+    useState("");
+  let [selectedProjectSOWIDState, setSelectedProjectSOWIDState] = useState("");
+  let [selectedEmployeeIdState, setSelectedEmployeeIdState] = useState("");
+  let [selectedSubAssignmentNameState, setSelectedSubAssignmentNameState] =
+    useState("");
+  // let [taskBySubAssignmentState, setTaskBySubAssignmentState] = useState("");
+  let subAssignmentTask = useRef();
   let subAssignmentTitleDescriptor = useRef();
   let [timesheetRecordsByEmployee, setTimesheetRecordsByEmployee] = useState(
     []
   );
-  let [prevMonday, setPrevMonday] = useState("");
+  let [prevMonday, setPrevMonday] = useState(""); // To add to Timesheets table - PeriodStartDate
   let [projectAndCompanyInfoArr, setProjectAndCompanyInfoArr] = useState([]);
   let [subAssignmentByProject, setsubAssignmentByProjectArr] = useState([]);
   let [tasksBySubAssignment, setTasksBySubAssignment] = useState([]);
@@ -99,7 +107,7 @@ function UpdateTimesheet() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        _keyword_: "KASH_OPERATIONS_TIMESHEET_TABLE",
+        _keyword_: "TIMESHEETS_AND_COMPANY_INFO_TABLE",
       }),
     })
       .then((res) => res.json())
@@ -121,7 +129,7 @@ function UpdateTimesheet() {
     selectedEmployeeId =
       e.target[e.target.selectedIndex].getAttribute("data-employeeid");
     console.log(selectedEmployeeId);
-    setSelectedEmployeeState(selectedEmployeeId);
+    setSelectedEmployeeIdState(selectedEmployeeId);
     // fetch timesheets table for selected employee Id and display in table
     getTimesheetByEmployeeId(selectedEmployeeId);
   };
@@ -184,10 +192,17 @@ function UpdateTimesheet() {
     // console.log(e.target[e.target.selectedIndex].innerHTML);
     let selectedProjectDetails = e.target[e.target.selectedIndex].innerHTML;
     console.log(selectedProjectDetails);
-    let selectedProjectCompanyName = selectedProjectDetails.split(" -")[0];
-    console.log(selectedProjectCompanyName);
-    let selectedProjectSOWID = selectedProjectDetails.match(/\((.*)\)/).pop();
-    console.log(selectedProjectSOWID);
+    // Get Company name and save to state
+    if (selectedProjectDetails) {
+      let selectedProjectCompanyName = selectedProjectDetails.split(" -")[0];
+      console.log(selectedProjectCompanyName);
+      setSelectedProjectCompanyNameState(selectedProjectCompanyName);
+      // Get SOW ID and save to state variable
+      let selectedProjectSOWID = selectedProjectDetails.match(/\((.*)\)/).pop();
+      console.log(selectedProjectSOWID);
+      setSelectedProjectSOWIDState(selectedProjectSOWID);
+    }
+
     // update sub assignments heading to show selected project details
     subAssignmentTitleDescriptor.current.innerHTML = selectedProjectDetails;
     // get sub projects for selected project ID
@@ -215,38 +230,56 @@ function UpdateTimesheet() {
         "-" +
         selectedSubAssignmentId
     );
+    // Add sub assignment name to state array
+    setSelectedSubAssignmentNameState(selectedSubAssignmentName);
 
     // query the sub assignments table and filter output by SubTaskTitle to get the list of task areas
     getTasksBySubAssignment(selectedSubAssignmentId);
   };
 
   const addToStagingSheet = () => {
-    console.log(selectedEmployeeId);
-    newTimesheetRecord = {
-      Billable: "",
-      EmpId: selectedEmployeeIdState,
-      FridayHours: "0.00",
-      MondayHours: "0.00",
-      NonBillableReason: "",
-      PeriodStartDate: prevMonday,
-      SaturdayHours: "0.00",
-      SowId: "",
-      CompanyName: "",
-      SubAssignment: "",
-      SubAssignmentSegment1: "",
-      SubAssignmentSegment2: "",
-      SubAssignmentTicketNum: "",
-      SundayHours: "0.00",
-      ThursdayHours: "0.00",
-      TimesheetStatusEntry: "",
-      TuesdayHours: "0.00",
-      WednesdayHours: "0.00",
-    };
-    console.log("adding new record ", newTimesheetRecord);
-    setTimesheetRecordsByEmployee((prevState) => [
-      ...prevState,
-      newTimesheetRecord,
-    ]);
+    console.log(`${selectedEmployeeIdState} 
+    ${prevMonday} 
+    ${selectedProjectSOWIDState}
+    ${selectedProjectCompanyNameState} 
+    ${subAssignmentTask.current.value}
+    ${taskTicketNumber.current.value}`);
+    if (
+      selectedEmployeeIdState &&
+      prevMonday &&
+      selectedProjectSOWIDState &&
+      selectedProjectCompanyNameState &&
+      subAssignmentTask.current.value &&
+      taskTicketNumber.current.value
+    ) {
+      newTimesheetRecord = {
+        Billable: "",
+        EmpId: selectedEmployeeIdState,
+        FridayHours: "0.00",
+        MondayHours: "0.00",
+        NonBillableReason: "",
+        PeriodStartDate: prevMonday,
+        SaturdayHours: "0.00",
+        SowId: selectedProjectSOWIDState,
+        CompanyName: selectedProjectCompanyNameState,
+        SubAssignment: selectedSubAssignmentNameState,
+        SubAssignmentSegment1: subAssignmentTask.current.value,
+        SubAssignmentSegment2: "",
+        SubAssignmentTicketNum: taskTicketNumber.current.value,
+        SundayHours: "0.00",
+        ThursdayHours: "0.00",
+        TimesheetStatusEntry: "",
+        TuesdayHours: "0.00",
+        WednesdayHours: "0.00",
+      };
+      console.log("adding new record ", newTimesheetRecord);
+      setTimesheetRecordsByEmployee((prevState) => [
+        ...prevState,
+        newTimesheetRecord,
+      ]);
+    } else {
+      alert("Fill in the ALL of the above fields.");
+    }
   };
 
   const deleteTimesheetRow = (rowId) => {
@@ -471,7 +504,6 @@ function UpdateTimesheet() {
                     <label htmlFor="sub-assignment">Work Area</label>
                   </div>
                   <select id="sub-assignment" onClick={selectSubAssignment}>
-                    {console.log(subAssignmentByProjectFiltered)}
                     <option value=""></option>
                     {subAssignmentByProject.map((subProject, i) => {
                       return (
@@ -490,7 +522,7 @@ function UpdateTimesheet() {
                   <div>
                     <label htmlFor="sub-assignment-seg-1">Task Area</label>
                   </div>
-                  <select id="sub-assignment-seg-1">
+                  <select id="sub-assignment-seg-1" ref={subAssignmentTask}>
                     <option value=""></option>
                     {tasksBySubAssignment.map((subTask, i) => {
                       return <option key={i}>{subTask.Segment1}</option>;
@@ -507,7 +539,11 @@ function UpdateTimesheet() {
                   <div>
                     <label htmlFor="sub-assignment-ticket-num">Ticket #</label>
                   </div>
-                  <input type="text" id="sub-assignment-ticket-num" />
+                  <input
+                    type="text"
+                    id="sub-assignment-ticket-num"
+                    ref={taskTicketNumber}
+                  />
                 </div>
 
                 <div className="w-5">
@@ -562,7 +598,9 @@ function UpdateTimesheet() {
                                 onClick={deleteTimesheetRow}
                               />
                             </td>
-                            <td>{record.SowId}</td>
+                            <td>
+                              {record.CompanyName} - {record.SowId}
+                            </td>
                             <td>{record.SubAssignment}</td>
                             <td>{record.SubAssignmentSegment1}</td>
                             <td>{record.SubAssignmentTicketNum}</td>
@@ -571,7 +609,8 @@ function UpdateTimesheet() {
                                 className="weekly-hours-input add-timesheet-entry--form-input hours-input"
                                 type="number"
                                 min="0"
-                                value={record.MondayHours}
+                                step={0.25}
+                                defaultValue={record.MondayHours}
                               />
                             </td>
                             <td>
@@ -579,7 +618,8 @@ function UpdateTimesheet() {
                                 className="weekly-hours-input add-timesheet-entry--form-input hours-input"
                                 type="number"
                                 min="0"
-                                value={record.TuesdayHours}
+                                step={0.25}
+                                defaultValue={record.TuesdayHours}
                               />
                             </td>
                             <td>
@@ -587,7 +627,8 @@ function UpdateTimesheet() {
                                 className="weekly-hours-input add-timesheet-entry--form-input hours-input"
                                 type="number"
                                 min="0"
-                                value={record.WednesdayHours}
+                                step={0.25}
+                                defaultValue={record.WednesdayHours}
                               />
                             </td>
                             <td>
@@ -595,7 +636,8 @@ function UpdateTimesheet() {
                                 className="weekly-hours-input add-timesheet-entry--form-input hours-input"
                                 type="number"
                                 min="0"
-                                value={record.ThursdayHours}
+                                step={0.25}
+                                defaultValue={record.ThursdayHours}
                               />
                             </td>
                             <td>
@@ -603,7 +645,8 @@ function UpdateTimesheet() {
                                 className="weekly-hours-input add-timesheet-entry--form-input hours-input"
                                 type="number"
                                 min="0"
-                                value={record.FridayHours}
+                                step={0.25}
+                                defaultValue={record.FridayHours}
                               />
                             </td>
                             <td>
@@ -611,7 +654,8 @@ function UpdateTimesheet() {
                                 className="weekly-hours-input add-timesheet-entry--form-input hours-input"
                                 type="number"
                                 min="0"
-                                value={record.SaturdayHours}
+                                step={0.25}
+                                defaultValue={record.SaturdayHours}
                               />
                             </td>
                             <td>
@@ -619,7 +663,8 @@ function UpdateTimesheet() {
                                 className="weekly-hours-input add-timesheet-entry--form-input hours-input"
                                 type="number"
                                 min="0"
-                                value={record.SundayHours}
+                                step={0.25}
+                                defaultValue={record.SundayHours}
                               />
                             </td>
                             <td>0</td>
