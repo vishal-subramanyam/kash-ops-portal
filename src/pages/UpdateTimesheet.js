@@ -287,11 +287,6 @@ function UpdateTimesheet() {
   };
 
   const updateTimesheetRecord = (name, index) => (e) => {
-    console.log("changing the time spent value");
-    console.log(index);
-    console.log(name);
-    console.log(e.target.value);
-
     let newArr = [...timesheetRecordsByEmployee];
     newArr[index][name] = e.target.value;
     setTimesheetRecordsByEmployee(newArr);
@@ -640,6 +635,10 @@ function UpdateTimesheet() {
                                 min="0"
                                 step={0.25}
                                 defaultValue={record.TuesdayHours}
+                                onChange={updateTimesheetRecord(
+                                  "TuesdayHours",
+                                  i
+                                )}
                               />
                             </td>
                             <td>
@@ -649,6 +648,10 @@ function UpdateTimesheet() {
                                 min="0"
                                 step={0.25}
                                 defaultValue={record.WednesdayHours}
+                                onChange={updateTimesheetRecord(
+                                  "WednesdayHours",
+                                  i
+                                )}
                               />
                             </td>
                             <td>
@@ -658,6 +661,10 @@ function UpdateTimesheet() {
                                 min="0"
                                 step={0.25}
                                 defaultValue={record.ThursdayHours}
+                                onChange={updateTimesheetRecord(
+                                  "ThursdayHours",
+                                  i
+                                )}
                               />
                             </td>
                             <td>
@@ -667,6 +674,10 @@ function UpdateTimesheet() {
                                 min="0"
                                 step={0.25}
                                 defaultValue={record.FridayHours}
+                                onChange={updateTimesheetRecord(
+                                  "FridayHours",
+                                  i
+                                )}
                               />
                             </td>
                             <td>
@@ -676,6 +687,10 @@ function UpdateTimesheet() {
                                 min="0"
                                 step={0.25}
                                 defaultValue={record.SaturdayHours}
+                                onChange={updateTimesheetRecord(
+                                  "SaturdayHours",
+                                  i
+                                )}
                               />
                             </td>
                             <td>
@@ -685,6 +700,10 @@ function UpdateTimesheet() {
                                 min="0"
                                 step={0.25}
                                 defaultValue={record.SundayHours}
+                                onChange={updateTimesheetRecord(
+                                  "SundayHours",
+                                  i
+                                )}
                               />
                             </td>
                             <td>0</td>
