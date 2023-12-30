@@ -292,6 +292,32 @@ function UpdateTimesheet() {
     setTimesheetRecordsByEmployee(newArr);
   };
 
+  const sendUploadTimesheetToDatabase = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:4040/GenericTransactionService/processTransaction",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // your expected POST request payload goes here
+            data: timesheetRecordsByEmployee,
+            _keyword_: "KASH_OPERATIONS_TIMESHEET_TABLE",
+            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+          }),
+        }
+      );
+      const data = await response.json();
+      // enter you logic when the fetch is successful
+      console.log("Added to Timesheets table" + data);
+    } catch (error) {
+      // enter your logic for when there is an error (ex. error toast)
+      console.log(error);
+    }
+  };
+
   const deleteTimesheetRow = (rowId) => {
     console.log("deleting row " + rowId);
   };
@@ -749,7 +775,7 @@ function UpdateTimesheet() {
         <button
           id="submit-to-database-button"
           type="button"
-          // onclick="sendUploadTimesheetToDatabase()"
+          onClick={sendUploadTimesheetToDatabase}
           className="submit-timesheet--to-server_button"
         >
           Save Timesheet
