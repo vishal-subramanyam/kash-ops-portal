@@ -33,6 +33,7 @@ function UpdateTimesheet() {
   let subAssignmentByProjectArr = [];
   let subAssignmentByProjectFiltered = [];
   let reportingPeriodStartDate = useRef();
+  let mondayHours = useRef();
   let selectedEmployee = useRef();
   let selectedProject = useRef();
   let taskTicketNumber = useRef();
@@ -46,6 +47,9 @@ function UpdateTimesheet() {
   let subAssignmentTask = useRef();
   let subAssignmentTitleDescriptor = useRef();
   let [timesheetRecordsByEmployee, setTimesheetRecordsByEmployee] = useState(
+    []
+  );
+  let [timesheetRecordsToDatabase, setTimesheetRecordsToDatabase] = useState(
     []
   );
   let [prevMonday, setPrevMonday] = useState(""); // To add to Timesheets table - PeriodStartDate
@@ -280,6 +284,17 @@ function UpdateTimesheet() {
     } else {
       alert("Fill in the ALL of the above fields.");
     }
+  };
+
+  const updateTimesheetRecord = (name, index) => (e) => {
+    console.log("changing the time spent value");
+    console.log(index);
+    console.log(name);
+    console.log(e.target.value);
+
+    let newArr = [...timesheetRecordsByEmployee];
+    newArr[index][name] = e.target.value;
+    setTimesheetRecordsByEmployee(newArr);
   };
 
   const deleteTimesheetRow = (rowId) => {
@@ -610,7 +625,12 @@ function UpdateTimesheet() {
                                 type="number"
                                 min="0"
                                 step={0.25}
+                                ref={mondayHours}
                                 defaultValue={record.MondayHours}
+                                onChange={updateTimesheetRecord(
+                                  "MondayHours",
+                                  i
+                                )}
                               />
                             </td>
                             <td>
