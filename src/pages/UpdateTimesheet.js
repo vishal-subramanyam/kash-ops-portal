@@ -269,7 +269,7 @@ function UpdateTimesheet() {
         SubAssignment: selectedSubAssignmentNameState,
         SubAssignmentSegment1: subAssignmentTask.current.value,
         SubAssignmentSegment2: "",
-        SubAssignmentTicketNum: taskTicketNumber.current.value,
+        TicketNum: taskTicketNumber.current.value,
         SundayHours: "0.00",
         ThursdayHours: "0.00",
         TimesheetStatusEntry: "",
@@ -320,30 +320,9 @@ function UpdateTimesheet() {
 
   const deleteTimesheetRow = (rowId) => {
     console.log("deleting row " + rowId);
+    // If timesheet_entry_id is present, then run a fetch to delete record from database,
+    // If timesheet_entry_id is not present, the record does not yet exist in database and remove record from state array
   };
-
-  // Fields to add to Timesheets table
-  /*
-          {
-            "Billable": "TEST",
-            "SundayHours": "0.00",
-            "SubAssignmentSegment2": "TEST",
-            "SubAssignmentSegment1": "Existing report and dashboard fixes and enhancements",
-            "ThursdayHours": "0.00",
-            "PeriodStartDate": "2023-05-08",
-            "WednesdayHours": "3.50",
-            "SowId": "UNE2022050301",
-            "NonBillableReason": "n/a",
-            "FridayHours": "2.00",
-            "SubAssignmentTicketNum": "EP2-1778",
-            "SubAssignment": "Reports/Data/Integration",
-            "SaturdayHours": "0.00",
-            "TuesdayHours": "2.50",
-            "EmpId": "8844422",
-            "TimesheetStatusEntry": "TEST",
-            "MondayHours": "3.50"
-        },
-  */
 
   return (
     <div>
@@ -436,6 +415,7 @@ function UpdateTimesheet() {
                     id="timesheet-update--timesheet-start-date-input"
                     name="timesheet-update--timesheet-start-date-input"
                     ref={reportingPeriodStartDate}
+                    onChange={getTimesheetByEmployeeId(selectedEmployeeId)}
                   />
 
                   {/* <!--<select name="reporting-start-date__dropdown-input" id="reporting-start-date__dropdown-input" className="reporting-start-date__dropdown-input">-->
@@ -476,6 +456,12 @@ function UpdateTimesheet() {
                   </select>
                 </div>
 
+                <div className="w-10">
+                  <div>
+                    <label htmlFor="ticket-num">Ticket #</label>
+                  </div>
+                  <input type="text" id="ticket-num" ref={taskTicketNumber} />
+                </div>
                 {/* <!--div className="time-billable--holder">
                         <label htmlFor="time-billable__dropdown-input" className="time-billable__label">
                             Time Billable?
@@ -571,16 +557,6 @@ function UpdateTimesheet() {
         					<option value=""></option>
         				</select>
         			</div--> */}
-                <div className="w-10">
-                  <div>
-                    <label htmlFor="sub-assignment-ticket-num">Ticket #</label>
-                  </div>
-                  <input
-                    type="text"
-                    id="sub-assignment-ticket-num"
-                    ref={taskTicketNumber}
-                  />
-                </div>
 
                 <div className="w-5">
                   <div>
