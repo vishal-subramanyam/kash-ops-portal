@@ -23,7 +23,7 @@ function UpdateTimesheet() {
     SubAssignment: "",
     SubAssignmentSegment1: "",
     SubAssignmentSegment2: "",
-    SubAssignmentTicketNum: "",
+    TicketNum: "",
     SundayHours: "0.00",
     ThursdayHours: "0.00",
     TimesheetStatusEntry: "",
@@ -40,34 +40,41 @@ function UpdateTimesheet() {
   let [selectedProjectCompanyNameState, setSelectedProjectCompanyNameState] =
     useState("");
   let [selectedProjectSOWIDState, setSelectedProjectSOWIDState] = useState("");
-  let [selectedEmployeeIdState, setSelectedEmployeeIdState] = useState("");
+  let [selectedEmployeeIdState, setSelectedEmployeeIdState] = useState(null);
   let [selectedSubAssignmentNameState, setSelectedSubAssignmentNameState] =
     useState("");
   // let [taskBySubAssignmentState, setTaskBySubAssignmentState] = useState("");
   let subAssignmentTask = useRef();
   let subAssignmentTitleDescriptor = useRef();
+  let [allTimesheetRecords, setAlllTimesheetRecords] = useState([]);
   let [timesheetRecordsByEmployee, setTimesheetRecordsByEmployee] = useState(
     []
   );
   let [timesheetRecordsToDatabase, setTimesheetRecordsToDatabase] = useState(
     []
   );
-  let [prevMonday, setPrevMonday] = useState(""); // To add to Timesheets table - PeriodStartDate
+  let [currentPrevMonday, setCurrentPrevMonday] = useState(() => {
+    let todayDate = new Date();
+    todayDate.setDate(todayDate.getDate() - ((todayDate.getDay() + 6) % 7));
+    let prevMondayFormat = todayDate.toISOString().split("T")[0];
+    return prevMondayFormat;
+  }); // To add to Timesheets table - PeriodStartDate
   let [projectAndCompanyInfoArr, setProjectAndCompanyInfoArr] = useState([]);
   let [subAssignmentByProject, setsubAssignmentByProjectArr] = useState([]);
   let [tasksBySubAssignment, setTasksBySubAssignment] = useState([]);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
 
-  const getPrevMonday = () => {
-    let prevMonday = new Date();
-    prevMonday.setDate(prevMonday.getDate() - ((prevMonday.getDay() + 6) % 7));
-    console.log(prevMonday.toLocaleDateString("en-US"));
-    let prevMondayFormat = prevMonday.toISOString().split("T")[0];
+  const getCurrentPrevMonday = () => {
+    let todayDate = new Date();
+    todayDate.setDate(todayDate.getDate() - ((todayDate.getDay() + 6) % 7));
+    console.log(todayDate.toLocaleDateString("en-US"));
+    let prevMondayFormat = todayDate.toISOString().split("T")[0];
     console.log(prevMondayFormat);
-    setPrevMonday(prevMondayFormat);
+    return prevMondayFormat;
+    // setCurrentPrevMonday(prevMondayFormat);
   };
   useEffect(() => {
-    getPrevMonday();
+    // getCurrentPrevMonday();
     fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
       method: "POST",
       headers: {
@@ -104,6 +111,8 @@ function UpdateTimesheet() {
   }, []);
 
   const getTimesheetByEmployeeId = (id) => {
+    console.log(reportingPeriodStartDate.current.value);
+    console.log(id);
     fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
       method: "POST",
       headers: {
@@ -117,15 +126,23 @@ function UpdateTimesheet() {
       .then((res) => res.json())
       .then((res) => {
         console.log(res.data);
+        // save all timesheet records to state
+        setAlllTimesheetRecords(res.data);
         let filteredTimesheet = res.data.filter((timesheet) => {
           return (
-            id === timesheet.EmpId && prevMonday === timesheet.PeriodStartDate
+            id === timesheet.EmpId &&
+            reportingPeriodStartDate.current.value === timesheet.PeriodStartDate
           );
         });
         console.log(filteredTimesheet);
         setTimesheetRecordsByEmployee(filteredTimesheet);
       })
       .catch((err) => alert(err));
+  };
+
+  const changeTimesheetRecordByDate = (id) => {
+    console.log("reporting date selected");
+    console.log(id);
   };
 
   const getSelectedEmployeeId = (e) => {
@@ -243,14 +260,14 @@ function UpdateTimesheet() {
 
   const addToStagingSheet = () => {
     console.log(`${selectedEmployeeIdState} 
-    ${prevMonday} 
+    ${reportingPeriodStartDate.current.value} 
     ${selectedProjectSOWIDState}
     ${selectedProjectCompanyNameState} 
     ${subAssignmentTask.current.value}
     ${taskTicketNumber.current.value}`);
     if (
       selectedEmployeeIdState &&
-      prevMonday &&
+      reportingPeriodStartDate.current.value &&
       selectedProjectSOWIDState &&
       selectedProjectCompanyNameState &&
       subAssignmentTask.current.value &&
@@ -262,7 +279,7 @@ function UpdateTimesheet() {
         FridayHours: "0.00",
         MondayHours: "0.00",
         NonBillableReason: "",
-        PeriodStartDate: prevMonday,
+        PeriodStartDate: reportingPeriodStartDate.current.value,
         SaturdayHours: "0.00",
         SowId: selectedProjectSOWIDState,
         CompanyName: selectedProjectCompanyNameState,
@@ -318,8 +335,9 @@ function UpdateTimesheet() {
     }
   };
 
-  const deleteTimesheetRow = (rowId) => {
-    console.log("deleting row " + rowId);
+  const deleteTimesheetRow = (databaseRowId, index) => {
+    console.log("deleting row " + databaseRowId);
+    console.log(index);
     // If timesheet_entry_id is present, then run a fetch to delete record from database,
     // If timesheet_entry_id is not present, the record does not yet exist in database and remove record from state array
   };
@@ -408,14 +426,16 @@ function UpdateTimesheet() {
                   </label>
                   <input
                     // onchange="loadTableGen()"
-                    defaultValue={prevMonday}
+                    defaultValue={currentPrevMonday}
                     step={7}
                     type="date"
                     className="add-timesheet-entry--form-input timesheet-update--timesheet-start-date-input"
                     id="timesheet-update--timesheet-start-date-input"
                     name="timesheet-update--timesheet-start-date-input"
                     ref={reportingPeriodStartDate}
-                    onChange={getTimesheetByEmployeeId(selectedEmployeeId)}
+                    onChange={() =>
+                      getTimesheetByEmployeeId(selectedEmployeeIdState)
+                    }
                   />
 
                   {/* <!--<select name="reporting-start-date__dropdown-input" id="reporting-start-date__dropdown-input" className="reporting-start-date__dropdown-input">-->
@@ -606,8 +626,11 @@ function UpdateTimesheet() {
                           <tr key={i}>
                             <td>
                               <FontAwesomeIcon
+                                className="delete-timesheet-record-id"
                                 icon={faTrashCan}
-                                onClick={deleteTimesheetRow}
+                                onClick={() =>
+                                  deleteTimesheetRow(record.TimesheetEntryId, i)
+                                }
                               />
                             </td>
                             <td>
@@ -615,7 +638,7 @@ function UpdateTimesheet() {
                             </td>
                             <td>{record.SubAssignment}</td>
                             <td>{record.SubAssignmentSegment1}</td>
-                            <td>{record.SubAssignmentTicketNum}</td>
+                            <td>{record.TicketNum}</td>
                             <td>
                               <input
                                 className="weekly-hours-input add-timesheet-entry--form-input hours-input"

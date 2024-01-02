@@ -140,6 +140,11 @@ input[type="text"] {
   flex-wrap: wrap;
   align-items: flex-end;
 }
+
+.delete-timesheet-record-id:hover {
+  cursor: pointer;
+}
+
 .employee-input_holder {
   max-width: 260px;
   display: flex;
