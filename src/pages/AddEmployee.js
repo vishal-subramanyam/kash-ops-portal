@@ -5,7 +5,7 @@ import "../assets/styles/HomePage.css";
 
 function AddEmployee() {
   //   // input value variables
-  let adminLevelDesignation = "";
+  let adminLevelDesignation = useRef();
   let addEmployeeForm = useRef();
   let firstNameInput = useRef();
   let lastNameInput = useRef();
@@ -25,7 +25,6 @@ function AddEmployee() {
   let modalEmployeeId = useRef();
   let submitEmployeeToDBDialog = useRef();
   let [adminCheckbox, setAdminCheckbox] = useState(false);
-  // let [adminLevelDesignation, setAdminLevelDesignation] = useState("");
   let [allUsersArr, setAllUsersArr] = useState([]);
 
   let requiredInputs = [
@@ -35,7 +34,7 @@ function AddEmployee() {
     usernameInput,
   ];
 
-  const addUserNotAdmin = async () => {
+  const addUser = async () => {
     try {
       const response = await fetch(
         "http://localhost:4040/GenericTransactionService/processTransaction",
@@ -56,53 +55,8 @@ function AddEmployee() {
                 EmpLocationCity: employeeCity.current.value,
                 EmpLocationState: employeeState.current.value,
                 EmpLocationCountry: employeeCountry.current.value,
-                AdminLevel: 'BasicUser',
-                WfInternalUsn: usernameInput.current.value,
-                EmployeeAddress: employeeAdress.current.value,
-                EmployeeZipCode: employeeZip.current.value,
-                EmployeeType: employeeRoleType.current.value,
-                EmployeeContractorName: contractorName.current.value
-              },
-            ],
-            _keyword_: "KASH_OPERATIONS_USER_TABLE",
-            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
-          }),
-        }
-      );
-      const data = await response.json();
-      // enter you logic when the fetch is successful
-      console.log("Added to user table" + data);
-    } catch (error) {
-      // enter your logic for when there is an error (ex. error toast)
-      console.log(error);
-      alert("Unable to add admin level user.")
-    }
-  };
-
-  const addUserIfAdmin = async (adminLevelDesignation) => {
-    console.log(adminLevelDesignation);
-    try {
-      const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransaction",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            // your expected POST request payload goes here
-            data: [
-              {
-                EmpId: userIDInput.current.value,
-                FirstName: firstNameInput.current.value,
-                LastName: lastNameInput.current.value,
-                EmailAddress: employeeEmail.current.value,
-                PhoneNumber: employeePhoneNumber.current.value,
-                EmpLocationCity: employeeCity.current.value,
-                EmpLocationState: employeeState.current.value,
-                EmpLocationCountry: employeeCountry.current.value,
-                AdminLevel: adminLevelDesignation,
-                WfInternalUsn: usernameInput.current.value,
+                AdminLevel: adminLevelDesignation.current.value,
+                KashOperationsUsn: usernameInput.current.value,
                 EmployeeAddress: employeeAdress.current.value,
                 EmployeeZipCode: employeeZip.current.value,
                 EmployeeType: employeeRoleType.current.value,
@@ -120,10 +74,9 @@ function AddEmployee() {
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
       console.log(error);
-      alert("Unable to add admin level user.")
+      alert("Unable to add user.")
     }
-  };
-
+  }
 
   // SHOW MODAL FOR NEWLY ADDED EMPLOYEE INFO
   const onModalOpen = () => {
@@ -151,7 +104,7 @@ function AddEmployee() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        _keyword_: "KASH_OPERATIONS_EMPLOYEE_TABLE"
+        _keyword_: "KASH_OPERATIONS_USER_TABLE"
       }),
     })
       .then((res) => res.json())
@@ -164,8 +117,6 @@ function AddEmployee() {
       .catch((err) => alert(err));
   }
 
-
-
   const validateRequiredInputs = async (e) => {
     e.preventDefault();
     console.log("add employee form submitted", e);
@@ -176,7 +127,7 @@ function AddEmployee() {
       // await checkIfEmpIdAlreadyExistsInDB();
       await checkIfUsernameIdExists();
       console.log(allUsersArr)
-      let userNameExistsArr = allUsersArr.filter((userName) => userName.WfInternalUsn === usernameInput.current.value);
+      let userNameExistsArr = allUsersArr.filter((userName) => userName.KashOperationsUsn === usernameInput.current.value);
       let userIdExistsArr = allUsersArr.filter((userId) => userId.EmpId === userIDInput.current.value)
       console.log(userNameExistsArr)
       console.log(userIdExistsArr)
@@ -187,17 +138,7 @@ function AddEmployee() {
       } else if (userNameExistsArr.length !== 0) {
         alert("Username already exists. Choose a different username.");
       } else {
-        if (adminCheckbox === true) {
-          // perform two fetch POST calls - one to the employee table and another to admin table
-          console.log("admin checkbox checked");
-          adminLevelDesignation = "Admin";
-          console.log(adminLevelDesignation);
-          // addEmployeeToDatabaseIfAdmin();
-        } else {
-          console.log("only employee not admin created");
-          // run the function that will run a fetch POST to add employee to database
-          // addEmployeeNotAdmin();
-        }
+        addUser()
         onModalOpen();
         addEmployeeForm.current.reset();
       }
@@ -336,18 +277,25 @@ function AddEmployee() {
                   name="employee-form--wf-name-select"
                   ref={usernameInput}
                 />
-                <div className="checkBoxLabel">
+                </label>
+                <div className="admin-designation-container checkBoxLabel">
                   <span className="employee--form--id-label">
                     Add as admin?
                   </span>
-                  <input
+                  <select name="admin-level-designation" id="admin-designation" className="admin-designation" ref={adminLevelDesignation} required>
+                    <option value=""></option>
+                    <option value="SuperAdmin">Super Admin</option>
+                    <option value="Admin">Admin</option>
+                    <option value="BasicUser">Basic User</option>
+                  </select>
+                  {/* <input
                     id="adminCheck"
                     defaultChecked={adminCheckbox}
                     type="checkbox"
                     onChange={() => setAdminCheckbox((state) => !state)}
-                  />
+                  /> */}
                 </div>
-              </label>
+              
             </div>
           </div>
 

@@ -559,11 +559,14 @@ input[type="text"] {
       var(--kashtech_operations--characteristic-orange-1)
   );
 }
+.admin-designation-container,
 .add-employee-form label {
   display: flex;
   flex-direction: column;
   font-weight: 200;
 }
+
+.admin-designation,
 .add-employee-form label > input,
 .add-employee-form label > select {
   margin-top: 10px;
@@ -575,7 +578,7 @@ input[type="text"] {
 .checkBoxLabel {
   margin-top: 0.4rem;
 }
-.add-employee-form label > input:focus {
+.admin-designation:focus, .add-employee-form label > input:focus {
   outline: 3px solid var(--kashtech_operations--characteristic-orange-1);
 }
 .add-employee-form--top-section {
