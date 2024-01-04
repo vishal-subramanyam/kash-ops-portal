@@ -9,8 +9,8 @@ function AddEmployee() {
   let addEmployeeForm = useRef();
   let firstNameInput = useRef();
   let lastNameInput = useRef();
-  let employeeIDInput = useRef();
-  let employeeUsername = useRef();
+  let userIDInput = useRef();
+  let usernameInput = useRef();
   let employeeEmail = useRef();
   let employeePhoneNumber = useRef();
   let employeeCity = useRef();
@@ -24,37 +24,18 @@ function AddEmployee() {
   let modalEmployeeLastName = useRef();
   let modalEmployeeId = useRef();
   let submitEmployeeToDBDialog = useRef();
-  // let [firstNameInput, setFirstNameInput] = useState("");
-  // let [lastNameInput, setLastNameInput] = useState("");
-  // let [employeeIDInput, setEmployeeIDInput] = useState("");
-  // let [employeeUsername, setEmployeeUsername] = useState("");
-  // let [employeeEmail, setEmployeeEmail] = useState("");
-  // let [employeePhoneNumber, setEmployeePhoneNumber] = useState("");
-  // let [employeeCity, setEmployeeCity] = useState("");
-  // let [emplyeeState, setEmployeeState] = useState("");
-  // let [employeeCountry, setEmployeeCountry] = useState("");
-  // let [employeeAdress, setEmployeeAdress] = useState("");
-  // let [employeeZip, setEmployeeZip] = useState("");
-  // let [employeeRoleType, setEmployeeRoleType] = useState("");
-  // let [contractorName, setContractorName] = useState("");
   let [adminCheckbox, setAdminCheckbox] = useState(false);
   // let [adminLevelDesignation, setAdminLevelDesignation] = useState("");
-  let [employeeIds, setEmployeeIds] = useState([]);
-  let [employeeUsernames, setEmployeeUsernames] = useState([]);
-  let [adminUsernames, setAdminUsernames] = useState([]);
-  let [allEmployeesArr, setAllEmployeesArr] = useState([]);
-  let [allEmployeeUsernames, setAllEmployeeUsernames] = useState([]);
+  let [allUsersArr, setAllUsersArr] = useState([]);
 
   let requiredInputs = [
     firstNameInput,
     lastNameInput,
-    employeeIDInput,
-    employeeUsername,
+    userIDInput,
+    usernameInput,
   ];
 
-
-
-  const addEmployeeNotAdmin = async () => {
+  const addUserNotAdmin = async () => {
     try {
       const response = await fetch(
         "http://localhost:4040/GenericTransactionService/processTransaction",
@@ -67,7 +48,7 @@ function AddEmployee() {
             // your expected POST request payload goes here
             data: [
               {
-                EmpId: employeeIDInput.current.value,
+                EmpId: userIDInput.current.value,
                 FirstName: firstNameInput.current.value,
                 LastName: lastNameInput.current.value,
                 EmailAddress: employeeEmail.current.value,
@@ -75,29 +56,30 @@ function AddEmployee() {
                 EmpLocationCity: employeeCity.current.value,
                 EmpLocationState: employeeState.current.value,
                 EmpLocationCountry: employeeCountry.current.value,
-                KashOperationsEmpId: employeeIDInput.current.value,
-                WfInternalUsn: employeeUsername.current.value,
+                AdminLevel: 'BasicUser',
+                WfInternalUsn: usernameInput.current.value,
                 EmployeeAddress: employeeAdress.current.value,
                 EmployeeZipCode: employeeZip.current.value,
                 EmployeeType: employeeRoleType.current.value,
-                EmployeeContractorName: contractorName.current.value,
+                EmployeeContractorName: contractorName.current.value
               },
             ],
-            _keyword_: "KASH_OPERATIONS_EMPLOYEE_TABLE",
+            _keyword_: "KASH_OPERATIONS_USER_TABLE",
             secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
           }),
         }
       );
       const data = await response.json();
       // enter you logic when the fetch is successful
-      console.log("Added to Employee table" + data);
+      console.log("Added to user table" + data);
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
       console.log(error);
+      alert("Unable to add admin level user.")
     }
   };
 
-  const addToAdminTable = async () => {
+  const addUserIfAdmin = async (adminLevelDesignation) => {
     console.log(adminLevelDesignation);
     try {
       const response = await fetch(
@@ -111,31 +93,37 @@ function AddEmployee() {
             // your expected POST request payload goes here
             data: [
               {
-                EmpId: employeeIDInput.current.value,
-                WfInternalUsn: employeeUsername.current.value,
+                EmpId: userIDInput.current.value,
+                FirstName: firstNameInput.current.value,
+                LastName: lastNameInput.current.value,
+                EmailAddress: employeeEmail.current.value,
+                PhoneNumber: employeePhoneNumber.current.value,
+                EmpLocationCity: employeeCity.current.value,
+                EmpLocationState: employeeState.current.value,
+                EmpLocationCountry: employeeCountry.current.value,
                 AdminLevel: adminLevelDesignation,
+                WfInternalUsn: usernameInput.current.value,
+                EmployeeAddress: employeeAdress.current.value,
+                EmployeeZipCode: employeeZip.current.value,
+                EmployeeType: employeeRoleType.current.value,
+                EmployeeContractorName: contractorName.current.value,
               },
             ],
-            _keyword_: "KASH_OPERATIONS_ADMIN_TABLE",
+            _keyword_: "KASH_OPERATIONS_USER_TABLE",
             secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
           }),
         }
       );
       const data = await response.json();
       // enter you logic when the fetch is successful
-      console.log("Added to Admin table", data);
+      console.log("Added to User table", data);
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
       console.log(error);
+      alert("Unable to add admin level user.")
     }
   };
 
-  //   Create a fetch POST to add employee input fields to KASH_OPERATIONS_EMPLOYEE_TABLE
-  const addEmployeeToDatabaseIfAdmin =  () => {
-    console.log("Admin is checked")
-    addEmployeeNotAdmin();
-    addToAdminTable();
-  };
 
   // SHOW MODAL FOR NEWLY ADDED EMPLOYEE INFO
   const onModalOpen = () => {
@@ -143,7 +131,7 @@ function AddEmployee() {
     console.log("first name ref", firstNameInput.current.value)
     modalEmployeeFirstName.current.innerHTML = firstNameInput.current.value;
     modalEmployeeLastName.current.innerHTML = lastNameInput.current.value;
-    modalEmployeeId.current.innerHTML = employeeIDInput.current.value;
+    modalEmployeeId.current.innerHTML = userIDInput.current.value;
 
     console.log("show modal function");
     if (typeof submitEmployeeToDBDialog.current.showModal === "function") {
@@ -153,28 +141,8 @@ function AddEmployee() {
     }
   };
 
-  // const checkIfEmpIdAlreadyExistsInDB = async () => {
-  //   console.log("check if Emp ID already exists");
-  //   await fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
-  //     method: "POST",
-  //     headers: {
-  //       Accept: "application/json, text/plain, */*",
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       _keyword_: "EMPLOYEE_BY_ID",
-  //       EmpId: employeeIDInput.current.value,
-  //     }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       console.log("response from the employee id fetch", res);
-  //      setEmployeeIds(res.data);
-  //     })
-  //     .catch((err) => alert(err));
-  // };
 
-  const checkIfUsernameIdExistsInEmployeeTable = async () => {
+  const checkIfUsernameIdExists = async () => {
     console.log("check if Emp Username already exists");
     await fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
       method: "POST",
@@ -188,61 +156,36 @@ function AddEmployee() {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log("response from the employee username fetch", res);
-        console.log(employeeUsername.current.value)
-        console.log(employeeIDInput.current.value)
-        let usernameFiltered = res.data.filter((employee) => {
-          return employee.WfInternalUsn === employeeUsername.current.value
-        })
-        let idsFiltered = res.data.filter((employee) => {
-          return employee.EmpId === employeeIDInput.current.value
-        })
-       console.log(usernameFiltered)
-       console.log(idsFiltered)
-       setEmployeeUsernames(usernameFiltered);
-       setEmployeeIds(idsFiltered)
+        console.log("response from the users fetch", res);
+        console.log(usernameInput.current.value)
+        console.log(userIDInput.current.value)
+        setAllUsersArr(res.data)
       })
       .catch((err) => alert(err));
   }
 
-  const checkIfUsernameExistsInAdminTable = async () => {
-    console.log("check if Emp ID already exists");
-    await fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
-      method: "POST",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        _keyword_: "KASH_OPERATIONS_ADMIN_TABLE"
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("response from the admin fetch", res);
-        let adminsFiltered = res.data.filter((admin) => {
-          return admin.WfInternalUsn === res.data.WfInternalUsn
-        })
-       setAdminUsernames(adminsFiltered);
-      })
-      .catch((err) => alert(err));
-  }
+
 
   const validateRequiredInputs = async (e) => {
     e.preventDefault();
     console.log("add employee form submitted", e);
     console.log(firstNameInput.current.value);
 
-    if(firstNameInput && lastNameInput && employeeIDInput && employeeUsername) {
+    // if(firstNameInput && lastNameInput && userIDInput && usernameInput) {
       console.log("Fields filled out")
       // await checkIfEmpIdAlreadyExistsInDB();
-      await checkIfUsernameIdExistsInEmployeeTable();
-      await checkIfUsernameExistsInAdminTable();
-      console.log(employeeIds)
-      console.log(employeeUsernames)
+      await checkIfUsernameIdExists();
+      console.log(allUsersArr)
+      let userNameExistsArr = allUsersArr.filter((userName) => userName.WfInternalUsn === usernameInput.current.value);
+      let userIdExistsArr = allUsersArr.filter((userId) => userId.EmpId === userIDInput.current.value)
+      console.log(userNameExistsArr)
+      console.log(userIdExistsArr)
+      console.log(usernameInput.current.value)
       // if employee id exists, the response will be a array containing the employee object
-      if (employeeIds.length !== 0 ) {
-        alert("Duplicate employee IDs. Choose a different ID number.");
+     if (userIdExistsArr.length !== 0 ) {
+        alert("User ID already exists. Choose a different ID number.");
+      } else if (userNameExistsArr.length !== 0) {
+        alert("Username already exists. Choose a different username.");
       } else {
         if (adminCheckbox === true) {
           // perform two fetch POST calls - one to the employee table and another to admin table
@@ -258,9 +201,9 @@ function AddEmployee() {
         onModalOpen();
         addEmployeeForm.current.reset();
       }
-    } else {
-      alert("Please fill out First Name, Last Name, Employee ID and Username fields.")
-    }
+    // } else {
+    //   alert("Please fill out First Name, Last Name, Employee ID and Username fields.")
+    // }
 
   };
 
@@ -377,8 +320,7 @@ function AddEmployee() {
                   className="add-employee-form-input employee-form--id-input"
                   id="employee-form--id-input"
                   name="employee-form--id-input"
-                  ref={employeeIDInput}
-                  // onChange={checkIfEmpIdAlreadyExistsInDB}
+                  ref={userIDInput}
                 />
               </label>
 
@@ -386,13 +328,13 @@ function AddEmployee() {
                 htmlFor="employee-form--wf-name-select"
                 className="employee-form--wf-name-label"
               >
-                WebFOCUS Username
+                Username
                 <input
                   required
                   className="employee-form--wf-name-select"
                   id="employee-form--wf-name-select"
                   name="employee-form--wf-name-select"
-                  ref={employeeUsername}
+                  ref={usernameInput}
                 />
                 <div className="checkBoxLabel">
                   <span className="employee--form--id-label">
