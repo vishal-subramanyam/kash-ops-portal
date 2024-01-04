@@ -141,7 +141,10 @@ input[type="text"] {
   align-items: flex-end;
 }
 
-.delete-timesheet-record-id:hover {
+.delete-timesheet-record {
+  color: red;
+}
+.delete-timesheet-record:hover {
   cursor: pointer;
 }
 

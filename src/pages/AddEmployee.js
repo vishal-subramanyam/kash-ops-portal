@@ -23,6 +23,7 @@ function AddEmployee() {
   let modalEmployeeFirstName = useRef();
   let modalEmployeeLastName = useRef();
   let modalEmployeeId = useRef();
+  let submitEmployeeToDBDialog = useRef();
   // let [firstNameInput, setFirstNameInput] = useState("");
   // let [lastNameInput, setLastNameInput] = useState("");
   // let [employeeIDInput, setEmployeeIDInput] = useState("");
@@ -39,6 +40,8 @@ function AddEmployee() {
   let [adminCheckbox, setAdminCheckbox] = useState(false);
   // let [adminLevelDesignation, setAdminLevelDesignation] = useState("");
   let [employeeIds, setEmployeeIds] = useState([]);
+  let [employeeUsernames, setEmployeeUsernames] = useState([]);
+  let [adminUsernames, setAdminUsernames] = useState([]);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
   let [allEmployeeUsernames, setAllEmployeeUsernames] = useState([]);
 
@@ -49,32 +52,7 @@ function AddEmployee() {
     employeeUsername,
   ];
 
-  // Reference to the modal div
-  let submitEmployeeToDBDialog = document.querySelector(
-    "#database-submit-dialog"
-  );
-  let submitEmployeeBtn = document.querySelector(
-    "#employee-form--add-employee-button"
-  );
 
-  //   write useEffect function to fetch the usernames from correct data api endpoint and set to state
-  // then populate the username dropdown selection
-  useEffect(() => {
-    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
-      method: "POST",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ _keyword_: "KASH_OPERATIONS_EMPLOYEE_TABLE" }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        setAllEmployeesArr(res.data);
-      })
-      .catch((err) => alert(err));
-  }, []);
 
   const addEmployeeNotAdmin = async () => {
     try {
@@ -145,7 +123,7 @@ function AddEmployee() {
       );
       const data = await response.json();
       // enter you logic when the fetch is successful
-      console.log("Added to Admin table" + data);
+      console.log("Added to Admin table", data);
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
       console.log(error);
@@ -153,96 +131,143 @@ function AddEmployee() {
   };
 
   //   Create a fetch POST to add employee input fields to KASH_OPERATIONS_EMPLOYEE_TABLE
-  const addEmployeeToDatabaseIfAdmin = () => {
+  const addEmployeeToDatabaseIfAdmin =  () => {
+    console.log("Admin is checked")
     addEmployeeNotAdmin();
     addToAdminTable();
   };
 
   // SHOW MODAL FOR NEWLY ADDED EMPLOYEE INFO
   const onModalOpen = () => {
-    let employeeFirstNameSpan = document.querySelector(
-      "#employee-page-dialog--first_name-span"
-    );
-    let employeeLastNameSpan = document.querySelector(
-      "#employee-page-dialog--last_name-span"
-    );
-    let employeeIDSpan = document.querySelector(
-      "#employee-page-dialog--id-span"
-    );
-
-    employeeFirstNameSpan.innerHTML = firstNameInput;
-    employeeLastNameSpan.innerHTML = lastNameInput;
-    employeeIDSpan.innerHTML = employeeIDInput;
+    console.log("modal first name", modalEmployeeFirstName.current.value)
+    console.log("first name ref", firstNameInput.current.value)
+    modalEmployeeFirstName.current.innerHTML = firstNameInput.current.value;
+    modalEmployeeLastName.current.innerHTML = lastNameInput.current.value;
+    modalEmployeeId.current.innerHTML = employeeIDInput.current.value;
 
     console.log("show modal function");
-    if (typeof submitEmployeeToDBDialog.showModal === "function") {
-      submitEmployeeToDBDialog.showModal();
+    if (typeof submitEmployeeToDBDialog.current.showModal === "function") {
+      submitEmployeeToDBDialog.current.showModal();
     } else {
       alert("Sorry, the <dialog> API is not supported by this browser.");
     }
   };
 
-  const checkIfEmpIdAlreadyExistsInDB = () => {
-    console.log("check if Emp ID already exists");
+  // const checkIfEmpIdAlreadyExistsInDB = async () => {
+  //   console.log("check if Emp ID already exists");
+  //   await fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json, text/plain, */*",
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       _keyword_: "EMPLOYEE_BY_ID",
+  //       EmpId: employeeIDInput.current.value,
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       console.log("response from the employee id fetch", res);
+  //      setEmployeeIds(res.data);
+  //     })
+  //     .catch((err) => alert(err));
+  // };
 
-    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+  const checkIfUsernameIdExistsInEmployeeTable = async () => {
+    console.log("check if Emp Username already exists");
+    await fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        _keyword_: "EMPLOYEE_BY_ID",
-        EmpId: employeeIDInput.current.value,
+        _keyword_: "KASH_OPERATIONS_EMPLOYEE_TABLE"
       }),
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log("response from the employee id fetch" + res);
-        setEmployeeIds(res.data);
+        console.log("response from the employee username fetch", res);
+        console.log(employeeUsername.current.value)
+        console.log(employeeIDInput.current.value)
+        let usernameFiltered = res.data.filter((employee) => {
+          return employee.WfInternalUsn === employeeUsername.current.value
+        })
+        let idsFiltered = res.data.filter((employee) => {
+          return employee.EmpId === employeeIDInput.current.value
+        })
+       console.log(usernameFiltered)
+       console.log(idsFiltered)
+       setEmployeeUsernames(usernameFiltered);
+       setEmployeeIds(idsFiltered)
       })
       .catch((err) => alert(err));
-  };
+  }
 
-  const validateRequiredInputs = (e) => {
+  const checkIfUsernameExistsInAdminTable = async () => {
+    console.log("check if Emp ID already exists");
+    await fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "KASH_OPERATIONS_ADMIN_TABLE"
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("response from the admin fetch", res);
+        let adminsFiltered = res.data.filter((admin) => {
+          return admin.WfInternalUsn === res.data.WfInternalUsn
+        })
+       setAdminUsernames(adminsFiltered);
+      })
+      .catch((err) => alert(err));
+  }
+
+  const validateRequiredInputs = async (e) => {
     e.preventDefault();
-    console.log("add employee form submitted" + e);
-    console.log(firstNameInput);
-    checkIfEmpIdAlreadyExistsInDB();
-    // if employee id exists, the response will be a array containing the employee object
-    if (employeeIds.length !== 0) {
-      alert("Duplicate employee IDs. Choose a different ID number.");
-    } else {
-      if (adminCheckbox === true) {
-        // perform two fetch POST calls - one to the employee table and another to admin table
-        console.log("admin checkbox checked");
-        adminLevelDesignation = "Admin";
-        console.log(adminLevelDesignation);
-        addEmployeeToDatabaseIfAdmin();
+    console.log("add employee form submitted", e);
+    console.log(firstNameInput.current.value);
+
+    if(firstNameInput && lastNameInput && employeeIDInput && employeeUsername) {
+      console.log("Fields filled out")
+      // await checkIfEmpIdAlreadyExistsInDB();
+      await checkIfUsernameIdExistsInEmployeeTable();
+      await checkIfUsernameExistsInAdminTable();
+      console.log(employeeIds)
+      console.log(employeeUsernames)
+      // if employee id exists, the response will be a array containing the employee object
+      if (employeeIds.length !== 0 ) {
+        alert("Duplicate employee IDs. Choose a different ID number.");
       } else {
-        console.log("only employee not admin created");
-        // run the function that will run a fetch POST to add employee to database
-        addEmployeeNotAdmin();
+        if (adminCheckbox === true) {
+          // perform two fetch POST calls - one to the employee table and another to admin table
+          console.log("admin checkbox checked");
+          adminLevelDesignation = "Admin";
+          console.log(adminLevelDesignation);
+          // addEmployeeToDatabaseIfAdmin();
+        } else {
+          console.log("only employee not admin created");
+          // run the function that will run a fetch POST to add employee to database
+          // addEmployeeNotAdmin();
+        }
+        onModalOpen();
+        addEmployeeForm.current.reset();
       }
-      onModalOpen();
-      addEmployeeForm.current.reset();
+    } else {
+      alert("Please fill out First Name, Last Name, Employee ID and Username fields.")
     }
 
-    // for (let input of requiredInputs) {
-    //   if (input.checkValidity() === false) {
-    //     //validInputs = false
-    //     console.log("inputs not validated" + input);
-    //     alert(`Please check the validity of ${input.labels[0].innerText}`);
-    //     return;
-    //     //throw new Error(`Please check the validity of ${input.labels[0].innerText}`)
-    //   }
-    // }
   };
 
   // run function for employee usernames
   return (
     <div>
-      <dialog className="database-submit-dialog" id="database-submit-dialog">
+      <dialog className="database-submit-dialog" id="database-submit-dialog" ref={submitEmployeeToDBDialog}>
         <form method="dialog">
           <p>
             Employee Added: <br />
@@ -353,6 +378,7 @@ function AddEmployee() {
                   id="employee-form--id-input"
                   name="employee-form--id-input"
                   ref={employeeIDInput}
+                  // onChange={checkIfEmpIdAlreadyExistsInDB}
                 />
               </label>
 

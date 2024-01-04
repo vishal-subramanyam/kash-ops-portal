@@ -33,6 +33,8 @@ function UpdateTimesheet() {
   let subAssignmentByProjectArr = [];
   let subAssignmentByProjectFiltered = [];
   let reportingPeriodStartDate = useRef();
+  let submittedTimesheetToDBDialogue = useRef();
+  let confirmationModalEmployeeName = useRef();
   let mondayHours = useRef();
   let selectedEmployee = useRef();
   let selectedProject = useRef();
@@ -74,7 +76,14 @@ function UpdateTimesheet() {
     // setCurrentPrevMonday(prevMondayFormat);
   };
   useEffect(() => {
-    // getCurrentPrevMonday();
+    getAllEmployees();
+  }, []);
+
+  useEffect(() => {
+    getAllProjects();
+  }, []);
+
+  const getAllEmployees = () => {
     fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
       method: "POST",
       headers: {
@@ -89,9 +98,9 @@ function UpdateTimesheet() {
         setAllEmployeesArr(res.data);
       })
       .catch((err) => alert(err));
-  }, []);
+  };
 
-  useEffect(() => {
+  const getAllProjects = () => {
     fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
       method: "POST",
       headers: {
@@ -108,7 +117,7 @@ function UpdateTimesheet() {
         setProjectAndCompanyInfoArr(res.data);
       })
       .catch((err) => alert(err));
-  }, []);
+  };
 
   const getTimesheetByEmployeeId = (id) => {
     console.log(reportingPeriodStartDate.current.value);
@@ -269,9 +278,7 @@ function UpdateTimesheet() {
       selectedEmployeeIdState &&
       reportingPeriodStartDate.current.value &&
       selectedProjectSOWIDState &&
-      selectedProjectCompanyNameState &&
-      subAssignmentTask.current.value &&
-      taskTicketNumber.current.value
+      selectedProjectCompanyNameState
     ) {
       newTimesheetRecord = {
         Billable: "",
@@ -303,6 +310,7 @@ function UpdateTimesheet() {
     }
   };
 
+  // update the timesheet by employee state array when the days of the week are changed in table
   const updateTimesheetRecord = (name, index) => (e) => {
     let newArr = [...timesheetRecordsByEmployee];
     newArr[index][name] = e.target.value;
@@ -310,6 +318,47 @@ function UpdateTimesheet() {
   };
 
   const sendUploadTimesheetToDatabase = async () => {
+    console.log(timesheetRecordsByEmployee);
+    let currentRecords = timesheetRecordsByEmployee.filter((record) => {
+      return Boolean(record.TimesheetEntryId);
+    });
+    let newRecords = timesheetRecordsByEmployee.filter((record) => {
+      return !Boolean(record.TimesheetEntryId);
+    });
+    await updateCurrentTimesheetRecord(currentRecords);
+    await addNewTimesheetRecord(newRecords);
+    getTimesheetByEmployeeId(selectedEmployeeIdState);
+    showConfirmationModal();
+  };
+
+  const updateCurrentTimesheetRecord = async (currentRecordArr) => {
+    try {
+      const response = await fetch(
+        "http://localhost:4040/GenericTransactionService/processTransactionForUpdate",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // your expected POST request payload goes here
+            data: currentRecordArr,
+            _keyword_: "KASH_OPERATIONS_TIMESHEET_TABLE",
+            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+          }),
+        }
+      );
+      const data = await response.json();
+      // enter you logic when the fetch is successful
+      console.log("Updated record in Timesheets table", data);
+    } catch (error) {
+      // enter your logic for when there is an error (ex. error toast)
+      console.log(error);
+      alert("unable to update record");
+    }
+  };
+
+  const addNewTimesheetRecord = async (newRecordArr) => {
     try {
       const response = await fetch(
         "http://localhost:4040/GenericTransactionService/processTransaction",
@@ -320,7 +369,7 @@ function UpdateTimesheet() {
           },
           body: JSON.stringify({
             // your expected POST request payload goes here
-            data: timesheetRecordsByEmployee,
+            data: newRecordArr,
             _keyword_: "KASH_OPERATIONS_TIMESHEET_TABLE",
             secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
           }),
@@ -328,27 +377,92 @@ function UpdateTimesheet() {
       );
       const data = await response.json();
       // enter you logic when the fetch is successful
-      console.log("Added to Timesheets table" + data);
+      console.log("Added to Timesheets table", data);
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
       console.log(error);
+      alert("Unable to add record to timesheets table.");
     }
   };
 
-  const deleteTimesheetRow = (databaseRowId, index) => {
+  const deleteTimesheetRow = async (databaseRowId, index) => {
     console.log("deleting row " + databaseRowId);
     console.log(index);
-    // If timesheet_entry_id is present, then run a fetch to delete record from database,
+    // If timesheet_entry_id is present, then run a fetch to delete record from database and remove from state array
     // If timesheet_entry_id is not present, the record does not yet exist in database and remove record from state array
+    
+    if(!window.confirm("Are you sure you want to delete this timesheet record?")) {
+      console.log("Confirm delete regected")
+      return
+    } else {
+      let recordsAfterDelete = timesheetRecordsByEmployee.filter((record, i) => {
+        return i !== index;
+      });
+      console.log(recordsAfterDelete);
+      setTimesheetRecordsByEmployee(recordsAfterDelete);
+  
+      if (databaseRowId) {
+        console.log("fetch to delete record from timesheets table");
+        try {
+          const response = await fetch(
+            "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                // your expected POST request payload goes here
+                data: [
+                  {
+                    TimesheetEntryId: databaseRowId,
+                  },
+                ],
+                _keyword_: "KASH_OPERATIONS_TIMESHEET_TABLE",
+                secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+              }),
+            }
+          );
+          const data = await response.json();
+          // enter you logic when the fetch is successful
+          console.log(`Deleted record ${databaseRowId} from timesheets table`);
+        } catch (error) {
+          // enter your logic for when there is an error (ex. error toast)
+          console.log(error);
+          alert(`Cound not delete record ${databaseRowId}`);
+        }
+      }
+      getTimesheetByEmployeeId(selectedEmployeeIdState);
+    }
+    
+  };
+
+  const showConfirmationModal = () => {
+    confirmationModalEmployeeName.current.innerHTML =
+      selectedEmployee.current.value;
+    if (
+      typeof submittedTimesheetToDBDialogue.current.showModal === "function"
+    ) {
+      submittedTimesheetToDBDialogue.current.showModal();
+    } else {
+      alert("Sorry, the <dialog> API is not supported by this browser.");
+    }
   };
 
   return (
     <div>
-      <dialog className="database-submit-dialog" id="database-submit-dialog">
+      <dialog
+        className="database-submit-dialog"
+        id="database-submit-dialog"
+        ref={submittedTimesheetToDBDialogue}
+      >
         <form method="dialog">
           <p>
             Timesheet Saved for <br />
-            <span id="employee-name-span"></span>
+            <span
+              id="employee-name-span"
+              ref={confirmationModalEmployeeName}
+            ></span>
           </p>
           <div>
             <button
@@ -578,14 +692,16 @@ function UpdateTimesheet() {
         				</select>
         			</div--> */}
 
-                <div className="w-5">
+
+              </div>
+            </div>
+
+            <div className="w-5">
                   <div>
                     <div className="addbutton" onClick={addToStagingSheet}>
                       + Add to Sheet
                     </div>
                   </div>
-                </div>
-              </div>
             </div>
 
             <div className="hours_and_text-status">
@@ -626,7 +742,7 @@ function UpdateTimesheet() {
                           <tr key={i}>
                             <td>
                               <FontAwesomeIcon
-                                className="delete-timesheet-record-id"
+                                className="delete-timesheet-record"
                                 icon={faTrashCan}
                                 onClick={() =>
                                   deleteTimesheetRow(record.TimesheetEntryId, i)
