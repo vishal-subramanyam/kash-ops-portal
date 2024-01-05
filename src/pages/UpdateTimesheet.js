@@ -97,7 +97,7 @@ function UpdateTimesheet() {
         console.log(res);
         setAllEmployeesArr(res.data);
       })
-      .catch((err) => alert(err));
+      .catch((err) => alert("Unable to get users from database.", err));
   };
 
   const getAllProjects = () => {
@@ -116,7 +116,7 @@ function UpdateTimesheet() {
         console.log(res);
         setProjectAndCompanyInfoArr(res.data);
       })
-      .catch((err) => alert(err));
+      .catch((err) => alert("Unable to get projects from database.", err));
   };
 
   const getTimesheetByEmployeeId = (id) => {

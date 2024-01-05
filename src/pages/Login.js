@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/Login.css";
-// import "../assets/styles/Styles.css";
+import LoginForm from "../components/LoginForm";
+import SignUpForm from "../components/SignUpForm";
 
 function Login() {
   const navigate = useNavigate();
+  const [showSignUpForm, setShowSignUpForm] = useState(false);
+
+  useEffect(()=> {
+      document.body.classList.add('remove-body-padding');
+
+      return () => {
+        document.body.classList.remove('remove-body-padding')
+      }
+  }, [])
+
   const userLogin = (e) => {
     e.preventDefault();
     // find out if user is an Admin level
@@ -30,6 +41,10 @@ function Login() {
     // }
     navigate("/home");
   };
+
+  const userSignUp = () => {
+    console.log("Sign Up Form Triggered")
+  }
   return (
     <main className="kash-operations-login">
       <div className="kash_operations_home--hero-section">
@@ -42,45 +57,18 @@ function Login() {
             type="submit"
             value="Submit"
             className="button sign_up-button"
+            onClick={() => setShowSignUpForm(!showSignUpForm)}
           >
-            <p className="sign_up-button-text">Sign Up</p>
+            <p className="sign_up-button-text">{showSignUpForm ? 'Login' : 'Sign Up'}</p>
           </button>
         </div>
-        <form action="" className="login-form">
-          <div className="login-field">
-            <label
-              className="login-form--input_label"
-              htmlFor="login--username-input"
-            >
-              <p className="login-form--username-label">Username</p>
-              <input
-                type="text"
-                className="login-input"
-                id="login--username-input"
-                name="login--username-input"
-              />
-            </label>
-          </div>
-          <div className="login-field">
-            <label className="login-form--input_label" htmlFor="">
-              <p className="login-form--password-label">Password</p>
-              <input
-                type="password"
-                className="login-input"
-                id="login--password-input"
-                name="login--password-input"
-              />
-            </label>
-          </div>
-          <button
-            type="submit"
-            value="Submit"
-            className="button signin-button"
-            onClick={userLogin}
-          >
-            <div className="signin-text">Sign In</div>
-          </button>
-        </form>
+      {
+      showSignUpForm 
+      ? 
+      <SignUpForm userSignUp={userSignUp} />
+      :
+      <LoginForm userLogin={userLogin} />
+    }
       </div>
     </main>
   );

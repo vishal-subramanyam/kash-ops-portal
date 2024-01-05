@@ -91,6 +91,11 @@ body {
   padding: 1rem;
   margin: 0;
 }
+
+.remove-body-padding {
+  padding: 0rem;
+}
+
 input[type="text"] {
   text-indent: 0.3rem;
 }
@@ -1610,7 +1615,7 @@ Specify # of total sub-levels?
   display: inline;
 }
 
-@media screen and (min-width: 900px) {
+@media screen and (max-width: 900px) {
   .add-sub-assignment-page--content-holder {
     flex-direction: column;
     align-items: flex-start;
@@ -1628,6 +1633,7 @@ Specify # of total sub-levels?
     flex-direction: column;
     display: flex;
     gap: 1rem;
+    align-items: flex-start;
   }
   #addWorkspaceBtn {
     display: none;

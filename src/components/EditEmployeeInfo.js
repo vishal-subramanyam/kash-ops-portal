@@ -3,7 +3,7 @@ import "../assets/styles/Styles.css";
 import "../assets/styles/EditEmployeeInfo.css";
 
 function EditEmployeeInfo() {
-  let adminSelected;
+  let selectedEmployeeFromDropdown;
   let adminLevelDesignation = useRef();
   let firstNameInput = useRef();
   let lastNameInput = useRef();
@@ -45,11 +45,28 @@ function EditEmployeeInfo() {
       .catch((err) => alert(err));
   }, [selectedCurrentUser]);
 
-  // useEffect(() => {
-  //   console.log(allUsersArr[0].AdminLevel)
+  useEffect(() => {
+    for(let i = 0; i < adminLevelDesignation.current.childNodes.length; i++ ) {
+      let adminSelectionChoice = adminLevelDesignation.current.childNodes[i].getAttribute('value')
+      // if (adminSelectionChoice === selectedEmployeeFromDropdown[0].AdminLevel) {
+        console.log("seleted admin", adminSelectionChoice)
+        adminLevelDesignation.current.childNodes[0].setAttribute('selected', true)
+        return
+      // } else {
+        // adminLevelDesignation.current.childNodes[i].setAttribute('selected', false)
+      // }
+    }
+  }, [selectedCurrentUser])
 
-  // }, [allUsersArr])
-
+  const selectAdminOption = (selectedUser) => {
+    for(let i = 0; i < adminLevelDesignation.current.childNodes.length; i++ ) {
+      let adminSelectionChoice = adminLevelDesignation.current.childNodes[i].getAttribute('value')
+      if (adminSelectionChoice === selectedUser[0].AdminLevel) {
+        console.log("seleted admin", adminSelectionChoice)
+        adminLevelDesignation.current.childNodes[i].setAttribute('selected', true)
+      } 
+    }
+  }
   const onNameChange = async (e, i) => {
     // fetch employee name from database
     // populate the input fields with relevant data from api call
@@ -63,17 +80,10 @@ function EditEmployeeInfo() {
     let selectedEmployeeId =
       e.target.children[e.target.selectedIndex].getAttribute("data-employeeid");
     // set state array for selected employee if the employee Ids match
-    let selectedEmployeeFromDropdown = allUsersArr.filter((employee, i) => {
-      return selectedEmployeeId === employee.EmpId;
+    selectedEmployeeFromDropdown = allUsersArr.filter((user, i) => {
+      return selectedEmployeeId === user.EmpId;
     });
-    for(let i = 0; i < adminLevelDesignation.current.childNodes.length; i++ ) {
-      let adminSelectionChoice = adminLevelDesignation.current.childNodes[i].getAttribute('value')
-      if (adminSelectionChoice === selectedEmployeeFromDropdown[0].AdminLevel) {
-        console.log("seleted admin", adminSelectionChoice)
-        adminLevelDesignation.current.childNodes[i].setAttribute('selected', true)
-        
-      }
-    } 
+    selectAdminOption(selectedEmployeeFromDropdown)
     setSelectedCurrentUser(...selectedEmployeeFromDropdown);
   };
 
@@ -132,7 +142,7 @@ function EditEmployeeInfo() {
     e.preventDefault();
     // check if selected employee is admin, delete from admin and employee tables
     // make a fetch call to the delete user endpoint
-     try {
+    /* try {
       const response = await fetch(
         "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
         {
@@ -161,9 +171,9 @@ function EditEmployeeInfo() {
       // enter your logic for when there is an error (ex. error toast)
       console.log(error);
       alert("Unable to delete user.")
-    }
+    } */
     editUserForm.current.reset()
-    adminLevelDesignation.current.value = ""
+    // adminLevelDesignation.current.value = ""
     setSelectedCurrentUser({})
     alert("User Deleted");
   };
@@ -206,7 +216,7 @@ function EditEmployeeInfo() {
                   <div className="left_group_inputs">
                     <br />
                     <label htmlFor="admin-checkbox">
-                      Admin
+                      Admin Level
                     </label>
                     <select name="admin-level-designation" id="admin-designation" className="admin-designation" ref={adminLevelDesignation}>
                       <option value="" ></option>
