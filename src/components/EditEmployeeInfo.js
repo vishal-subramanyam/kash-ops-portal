@@ -4,7 +4,7 @@ import "../assets/styles/EditEmployeeInfo.css";
 
 function EditEmployeeInfo() {
   let adminSelected;
-  let adminCheckbox = useRef();
+  let adminLevelDesignation = useRef();
   let firstNameInput = useRef();
   let lastNameInput = useRef();
   let emailAddressInput = useRef();
@@ -12,10 +12,12 @@ function EditEmployeeInfo() {
   let employeeLocationCity = useRef();
   let employeeLocationState = useRef();
   let employeeLocationCountry = useRef();
-  let addEmployeeForm = useRef();
+  let editUserForm = useRef();
+  let adminOptionChoice = useRef();
   let [isEmployeeAdmin, setEmployeeAsAdmin] = useState(false);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
-  let [selectedCurrentEmployee, setSelectedCurrentEmployee] = useState({});
+  let [allUsersArr, setAllUsers] = useState([]);
+  let [selectedCurrentUser, setSelectedCurrentUser] = useState({});
 
   const hideLightbox = () => {
     document.getElementsByClassName("lightboxbackdrop")[0].style.display =
@@ -33,43 +35,25 @@ function EditEmployeeInfo() {
         Accept: "application/json, text/plain, */*",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ _keyword_: "KASH_OPERATIONS_EMPLOYEE_TABLE" }),
+      body: JSON.stringify({ _keyword_: "KASH_OPERATIONS_USER_TABLE" }),
     })
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
-        setAllEmployeesArr(res.data);
+        setAllUsers(res.data);
       })
       .catch((err) => alert(err));
-  }, []);
+  }, [selectedCurrentUser]);
 
-  const checkIfEmployeeAdmin = async (id) => {
-    await fetch(
-      "http://localhost:4040/GenericResultBuilderService/buildResults",
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ _keyword_: "KASH_OPERATIONS_ADMIN_TABLE" }),
-      }
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        console.log(id);
-        // return res.data;
-        // check if id matches and id in the response
-        adminSelected = res.data.filter((admin, i) => admin.EmpId === id);
-        // if admin selected, return true else return false
-      })
-      .catch((err) => alert(err));
-  };
+  // useEffect(() => {
+  //   console.log(allUsersArr[0].AdminLevel)
 
-  const onNameChange = async (e) => {
+  // }, [allUsersArr])
+
+  const onNameChange = async (e, i) => {
     // fetch employee name from database
     // populate the input fields with relevant data from api call
+
     console.log(
       "selected employee from dropdown " +
         e.target.children[e.target.selectedIndex].getAttribute(
@@ -79,27 +63,23 @@ function EditEmployeeInfo() {
     let selectedEmployeeId =
       e.target.children[e.target.selectedIndex].getAttribute("data-employeeid");
     // set state array for selected employee if the employee Ids match
-    let selectedEmployeeFromDropdown = allEmployeesArr.filter((employee, i) => {
+    let selectedEmployeeFromDropdown = allUsersArr.filter((employee, i) => {
       return selectedEmployeeId === employee.EmpId;
     });
-    console.log(selectedEmployeeFromDropdown);
-    setSelectedCurrentEmployee(...selectedEmployeeFromDropdown);
-
-    // if selected user employee id in admin table, set attrribute checked to admin checkbox input
-    await checkIfEmployeeAdmin(selectedEmployeeFromDropdown[0].EmpId);
-    console.log(adminSelected);
-    if (adminSelected.length !== 0) {
-      setEmployeeAsAdmin(true);
-    } else {
-      setEmployeeAsAdmin(false);
-    }
+    for(let i = 0; i < adminLevelDesignation.current.childNodes.length; i++ ) {
+      let adminSelectionChoice = adminLevelDesignation.current.childNodes[i].getAttribute('value')
+      if (adminSelectionChoice === selectedEmployeeFromDropdown[0].AdminLevel) {
+        console.log("seleted admin", adminSelectionChoice)
+        adminLevelDesignation.current.childNodes[i].setAttribute('selected', true)
+        
+      }
+    } 
+    setSelectedCurrentUser(...selectedEmployeeFromDropdown);
   };
-  console.log(isEmployeeAdmin);
-  // console.log(selectedCurrentEmployee);
 
   const updateUser = async (e) => {
     e.preventDefault();
-    console.log(selectedCurrentEmployee);
+    console.log(selectedCurrentUser);
 
     // make a fetch post call to update employee info given field values
     console.log(firstNameInput.current.value);
@@ -126,105 +106,66 @@ function EditEmployeeInfo() {
                 EmpLocationState: employeeLocationState.current.value,
                 PhoneNumber: employeePhoneNumber.current.value,
                 LastName: lastNameInput.current.value,
-                EmpId: selectedCurrentEmployee.EmpId,
+                EmpId: selectedCurrentUser.EmpId,
+                AdminLevel: adminLevelDesignation.current.value
               },
             ],
-            _keyword_: "KASH_OPERATIONS_EMPLOYEE_TABLE",
+            _keyword_: "KASH_OPERATIONS_USER_TABLE",
             secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
           }),
         }
       );
       const data = await response.json();
       // enter you logic when the fetch is successful
-      console.log("Updated employee");
+      console.log("Updated User");
       console.log(data);
-      alert("Employee Updated");
+      alert("User Updated");
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
       console.log(error);
+      alert("Unable to update user.")
     }
   };
 
-  const deleteAdminEmployee = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            // your expected POST request payload goes here
-            data: [
-              {
-                EmpId: selectedCurrentEmployee.EmpId,
-              },
-            ],
-            _keyword_: "KASH_OPERATIONS_ADMIN_TABLE",
-            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
-          }),
-        }
-      );
-      const data = await response.json();
-      // enter you logic when the fetch is successful
-      console.log("Deleted employee" + data);
-      setSelectedCurrentEmployee({});
-      console.log(selectedCurrentEmployee);
-    } catch (error) {
-      // enter your logic for when there is an error (ex. error toast)
-      console.log(error);
-    }
-  };
-
-  const deleteEmployeeNotAdmin = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            // your expected POST request payload goes here
-            data: [
-              {
-                EmpId: selectedCurrentEmployee.EmpId,
-              },
-            ],
-            _keyword_: "KASH_OPERATIONS_EMPLOYEE_TABLE",
-            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
-          }),
-        }
-      );
-      const data = await response.json();
-      // enter you logic when the fetch is successful
-      console.log("Deleted employee" + data);
-      // setSelectedCurrentEmployee({});
-      // console.log(selectedCurrentEmployee);
-    } catch (error) {
-      // enter your logic for when there is an error (ex. error toast)
-      console.log(error);
-    }
-  };
 
   const deleteUser = async (e) => {
     e.preventDefault();
     // check if selected employee is admin, delete from admin and employee tables
     // make a fetch call to the delete user endpoint
-    console.log(isEmployeeAdmin);
-    if (isEmployeeAdmin === true) {
-      console.log(
-        "employee is admin. delete from both admin and employee tables"
+     try {
+      const response = await fetch(
+        "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // your expected POST request payload goes here
+            data: [
+              {
+                EmpId: selectedCurrentUser.EmpId,
+              },
+            ],
+            _keyword_: "KASH_OPERATIONS_USER_TABLE",
+            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+          }),
+        }
       );
-      deleteAdminEmployee();
-      deleteEmployeeNotAdmin();
-    } else {
-      console.log("employee is not admin. just delete from employee table");
-      deleteEmployeeNotAdmin();
+      const data = await response.json();
+      // enter you logic when the fetch is successful
+      console.log("Deleted user", data);
+      // setselectedCurrentUser({});
+      // console.log(selectedCurrentUser);
+    } catch (error) {
+      // enter your logic for when there is an error (ex. error toast)
+      console.log(error);
+      alert("Unable to delete user.")
     }
-    alert("Employee Deleted");
+    editUserForm.current.reset()
+    adminLevelDesignation.current.value = ""
+    setSelectedCurrentUser({})
+    alert("User Deleted");
   };
 
   return (
@@ -240,14 +181,14 @@ function EditEmployeeInfo() {
           >
             <div className="roles_and_responsibilities--mini-form manage_roles_and_tasks--form">
               <h2>Edit Employee Information</h2>
-
+              <form ref={editUserForm}>
               <label className="manage_roles--employee_label" htmlFor="EMP_ID">
                 Employee
                 <select name="EMP_ID" id="EMP_ID" onChange={onNameChange}>
                   <option value="Select an Employee">
                     -Select an Employee-
                   </option>
-                  {allEmployeesArr.map((employee, i) => {
+                  {allUsersArr.map((employee, i) => {
                     return (
                       <option
                         data-employeeid={employee.EmpId}
@@ -260,22 +201,19 @@ function EditEmployeeInfo() {
                   })}
                 </select>
               </label>
-              <form ref={addEmployeeForm}>
+              {/* <form ref={addEmployeeForm}> */}
                 <div className="employee-info-form">
                   <div className="left_group_inputs">
                     <br />
                     <label htmlFor="admin-checkbox">
                       Admin
-                      <input
-                        type="checkbox"
-                        id="admin-checkbox"
-                        name="admin-checkbox"
-                        value=""
-                        // ref={adminCheckbox}
-                        defaultChecked="false"
-                        checked={isEmployeeAdmin ? "checked" : ""}
-                      />
                     </label>
+                    <select name="admin-level-designation" id="admin-designation" className="admin-designation" ref={adminLevelDesignation}>
+                      <option value="" ></option>
+                      <option value="SuperAdmin">Super Admin</option>
+                      <option value="Admin">Admin</option>
+                      <option value="BasicUser">Basic User</option>
+                    </select>
                     <br />
                     {/* <label htmlFor="userName">
                 Username
@@ -283,7 +221,7 @@ function EditEmployeeInfo() {
                   // style={{ display: "none" }}
                   id="userName"
                   className="form-control"
-                  value={selectedCurrentEmployee.WfInternalUsn}
+                  value={selectedCurrentUser.KashOperationsUsn}
                   readOnly
                 />
               </label> */}
@@ -297,7 +235,7 @@ function EditEmployeeInfo() {
                         id="firstnamebox"
                         name="FIRSTNAME"
                         className="form-control"
-                        defaultValue={selectedCurrentEmployee.FirstName}
+                        defaultValue={selectedCurrentUser.FirstName}
                         ref={firstNameInput}
                       ></input>
                     </label>
@@ -311,7 +249,7 @@ function EditEmployeeInfo() {
                         id="lastnamebox"
                         name="LASTNAME"
                         className="form-control"
-                        defaultValue={selectedCurrentEmployee.LastName}
+                        defaultValue={selectedCurrentUser.LastName}
                         ref={lastNameInput}
                       ></input>
                     </label>
@@ -325,7 +263,7 @@ function EditEmployeeInfo() {
                         id="emailbox"
                         name="EMAIL"
                         className="form-control"
-                        defaultValue={selectedCurrentEmployee.EmailAddress}
+                        defaultValue={selectedCurrentUser.EmailAddress}
                         ref={emailAddressInput}
                       ></input>
                     </label>
@@ -339,7 +277,7 @@ function EditEmployeeInfo() {
                         id="phonebox"
                         name="PHONE"
                         className="form-control"
-                        defaultValue={selectedCurrentEmployee.PhoneNumber}
+                        defaultValue={selectedCurrentUser.PhoneNumber}
                         ref={employeePhoneNumber}
                       ></input>
                     </label>
@@ -355,7 +293,7 @@ function EditEmployeeInfo() {
                         id="citybox"
                         name="manage_employees--city"
                         className="form-control"
-                        defaultValue={selectedCurrentEmployee.EmpLocationCity}
+                        defaultValue={selectedCurrentUser.EmpLocationCity}
                         ref={employeeLocationCity}
                       ></input>
                     </label>
@@ -369,7 +307,7 @@ function EditEmployeeInfo() {
                         id="statebox"
                         name="manage_employees--state"
                         className="form-control"
-                        defaultValue={selectedCurrentEmployee.EmpLocationState}
+                        defaultValue={selectedCurrentUser.EmpLocationState}
                         ref={employeeLocationState}
                       ></input>
                     </label>
@@ -384,7 +322,7 @@ function EditEmployeeInfo() {
                         name="manage_employees--email"
                         className="form-control"
                         defaultValue={
-                          selectedCurrentEmployee.EmpLocationCountry
+                          selectedCurrentUser.EmpLocationCountry
                         }
                         ref={employeeLocationCountry}
                       ></input>

@@ -288,12 +288,6 @@ function AddEmployee() {
                     <option value="Admin">Admin</option>
                     <option value="BasicUser">Basic User</option>
                   </select>
-                  {/* <input
-                    id="adminCheck"
-                    defaultChecked={adminCheckbox}
-                    type="checkbox"
-                    onChange={() => setAdminCheckbox((state) => !state)}
-                  /> */}
                 </div>
               
             </div>
