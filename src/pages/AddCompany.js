@@ -103,6 +103,7 @@ function AddCompany() {
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
       console.log(error);
+      alert("Unable to add company.")
     }
   };
 

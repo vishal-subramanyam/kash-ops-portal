@@ -4,6 +4,7 @@ import "../assets/styles/EditEmployeeInfo.css";
 
 function EditEmployeeInfo() {
   let selectedEmployeeFromDropdown;
+  let initialAdminOption = [{"AdminLevel": ""}];
   let adminLevelDesignation = useRef();
   let firstNameInput = useRef();
   let lastNameInput = useRef();
@@ -29,6 +30,24 @@ function EditEmployeeInfo() {
   // if Admin level user, check the admin checkbox
 
   useEffect(() => {
+    getAllUsers()
+  }, [selectedCurrentUser]);
+
+  // useEffect(() => {
+  //   for(let i = 0; i < adminLevelDesignation.current.childNodes.length; i++ ) {
+  //     let adminSelectionChoice = adminLevelDesignation.current.childNodes[i].getAttribute('value')
+  //     // if (adminSelectionChoice === selectedEmployeeFromDropdown[0].AdminLevel) {
+  //       console.log("seleted admin", adminSelectionChoice)
+  //       adminLevelDesignation.current.childNodes[0].setAttribute('selected', true)
+  //       return
+  //     // } else {
+  //       // adminLevelDesignation.current.childNodes[i].setAttribute('selected', false)
+  //     // }
+  //   }
+  // }, [selectedCurrentUser])
+
+  const getAllUsers = () => {
+    console.log("Use effect to query user table")
     fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
       method: "POST",
       headers: {
@@ -43,28 +62,18 @@ function EditEmployeeInfo() {
         setAllUsers(res.data);
       })
       .catch((err) => alert(err));
-  }, [selectedCurrentUser]);
+  }
 
-  useEffect(() => {
-    for(let i = 0; i < adminLevelDesignation.current.childNodes.length; i++ ) {
-      let adminSelectionChoice = adminLevelDesignation.current.childNodes[i].getAttribute('value')
-      // if (adminSelectionChoice === selectedEmployeeFromDropdown[0].AdminLevel) {
-        console.log("seleted admin", adminSelectionChoice)
-        adminLevelDesignation.current.childNodes[0].setAttribute('selected', true)
-        return
-      // } else {
-        // adminLevelDesignation.current.childNodes[i].setAttribute('selected', false)
-      // }
-    }
-  }, [selectedCurrentUser])
-
-  const selectAdminOption = (selectedUser) => {
+  const setAdminOption = (selectedUser) => {
+    console.log(selectedUser)
     for(let i = 0; i < adminLevelDesignation.current.childNodes.length; i++ ) {
       let adminSelectionChoice = adminLevelDesignation.current.childNodes[i].getAttribute('value')
       if (adminSelectionChoice === selectedUser[0].AdminLevel) {
         console.log("seleted admin", adminSelectionChoice)
         adminLevelDesignation.current.childNodes[i].setAttribute('selected', true)
-      } 
+      } else if (adminSelectionChoice !== selectedUser[0].AdminLevel) {
+        adminLevelDesignation.current.childNodes[i].removeAttribute('selected')
+      }
     }
   }
   const onNameChange = async (e, i) => {
@@ -83,9 +92,21 @@ function EditEmployeeInfo() {
     selectedEmployeeFromDropdown = allUsersArr.filter((user, i) => {
       return selectedEmployeeId === user.EmpId;
     });
-    selectAdminOption(selectedEmployeeFromDropdown)
+    setUserDetailInputs(selectedEmployeeFromDropdown)
+    setAdminOption(selectedEmployeeFromDropdown)
     setSelectedCurrentUser(...selectedEmployeeFromDropdown);
   };
+
+  const setUserDetailInputs = (user) => {
+    console.log(user)
+    firstNameInput.current.value = user[0].FirstName
+    lastNameInput.current.value = user[0].LastName
+    emailAddressInput.current.value = user[0].EmailAddress
+    employeePhoneNumber.current.value = user[0].PhoneNumber
+    employeeLocationCity.current.value = user[0].EmpLocationCity
+    employeeLocationState.current.value = user[0].EmpLocationState
+    employeeLocationCountry.current.value = user[0].EmpLocationCountry
+  }
 
   const updateUser = async (e) => {
     e.preventDefault();
@@ -142,7 +163,8 @@ function EditEmployeeInfo() {
     e.preventDefault();
     // check if selected employee is admin, delete from admin and employee tables
     // make a fetch call to the delete user endpoint
-    /* try {
+    console.log("Delete button clicked", selectedCurrentUser)
+   try {
       const response = await fetch(
         "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
         {
@@ -171,9 +193,10 @@ function EditEmployeeInfo() {
       // enter your logic for when there is an error (ex. error toast)
       console.log(error);
       alert("Unable to delete user.")
-    } */
+    }
+    console.log(editUserForm.current)
     editUserForm.current.reset()
-    // adminLevelDesignation.current.value = ""
+    setAdminOption(initialAdminOption)
     setSelectedCurrentUser({})
     alert("User Deleted");
   };
@@ -215,7 +238,7 @@ function EditEmployeeInfo() {
                 <div className="employee-info-form">
                   <div className="left_group_inputs">
                     <br />
-                    <label htmlFor="admin-checkbox">
+                    <label htmlFor="admin-level-designation">
                       Admin Level
                     </label>
                     <select name="admin-level-designation" id="admin-designation" className="admin-designation" ref={adminLevelDesignation}>
@@ -238,14 +261,14 @@ function EditEmployeeInfo() {
 
                     <label
                       className="manage_roles--employee_label"
-                      htmlFor="FIRSTNAME"
+                      htmlFor="manage_employees--first-name"
                     >
                       First name
                       <input
                         id="firstnamebox"
-                        name="FIRSTNAME"
+                        name="manage_employees--first-name"
                         className="form-control"
-                        defaultValue={selectedCurrentUser.FirstName}
+                        // defaultValue={selectedCurrentUser.FirstName}
                         ref={firstNameInput}
                       ></input>
                     </label>
@@ -257,37 +280,37 @@ function EditEmployeeInfo() {
                       Last name
                       <input
                         id="lastnamebox"
-                        name="LASTNAME"
+                        name="manage_employees--last_name"
                         className="form-control"
-                        defaultValue={selectedCurrentUser.LastName}
+                        // defaultValue={selectedCurrentUser.LastName}
                         ref={lastNameInput}
                       ></input>
                     </label>
 
                     <label
                       className="manage_roles--employee_label"
-                      htmlFor="EMAIL"
+                      htmlFor="manage_employees--email"
                     >
                       Email Address
                       <input
                         id="emailbox"
-                        name="EMAIL"
+                        name="manage_employees--email"
                         className="form-control"
-                        defaultValue={selectedCurrentUser.EmailAddress}
+                        // defaultValue={selectedCurrentUser.EmailAddress}
                         ref={emailAddressInput}
                       ></input>
                     </label>
 
                     <label
                       className="manage_roles--employee_label"
-                      htmlFor="PHONE"
+                      htmlFor="manage_employees--phone"
                     >
                       Phone Number
                       <input
                         id="phonebox"
-                        name="PHONE"
+                        name="manage_employees--phone"
                         className="form-control"
-                        defaultValue={selectedCurrentUser.PhoneNumber}
+                        // defaultValue={selectedCurrentUser.PhoneNumber}
                         ref={employeePhoneNumber}
                       ></input>
                     </label>
@@ -296,44 +319,42 @@ function EditEmployeeInfo() {
                   <div className=" left_group_inputs">
                     <label
                       className="manage_roles--employee_label"
-                      htmlFor="CITY"
+                      htmlFor="manage_employees--city"
                     >
                       Location City
                       <input
                         id="citybox"
                         name="manage_employees--city"
                         className="form-control"
-                        defaultValue={selectedCurrentUser.EmpLocationCity}
+                        // defaultValue={selectedCurrentUser.EmpLocationCity}
                         ref={employeeLocationCity}
                       ></input>
                     </label>
 
                     <label
                       className="manage_roles--employee_label"
-                      htmlFor="STATE"
+                      htmlFor="manage_employees--state"
                     >
                       State/Province/Territory
                       <input
                         id="statebox"
                         name="manage_employees--state"
                         className="form-control"
-                        defaultValue={selectedCurrentUser.EmpLocationState}
+                        // defaultValue={selectedCurrentUser.EmpLocationState}
                         ref={employeeLocationState}
                       ></input>
                     </label>
 
                     <label
                       className="manage_roles--employee_label"
-                      htmlFor="COUNTRY"
+                      htmlFor="manage_employees--email"
                     >
                       Country
                       <input
                         id="countrybox"
                         name="manage_employees--email"
                         className="form-control"
-                        defaultValue={
-                          selectedCurrentUser.EmpLocationCountry
-                        }
+                        // defaultValue={selectedCurrentUser.EmpLocationCountry}
                         ref={employeeLocationCountry}
                       ></input>
                     </label>
