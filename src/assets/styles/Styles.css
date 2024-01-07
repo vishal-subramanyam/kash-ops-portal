@@ -153,6 +153,20 @@ input[type="text"] {
   cursor: pointer;
 }
 
+.delete-task {
+  background-color: transparent;
+}
+
+.delete-sub-category {
+  background-color: transparent;
+}
+
+.delete-sub-category:hover {
+  color: hsl(0 85% 30%);
+    background-color: hsla(0 87% 81% / 100%);
+    cursor: pointer;
+}
+
 .employee-input_holder {
   max-width: 260px;
   display: flex;

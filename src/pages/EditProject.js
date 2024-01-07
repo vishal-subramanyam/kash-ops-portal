@@ -301,7 +301,7 @@ function EditProject() {
                       </div>
                       <div className="modal-footer justify-content-center">
                           <button onClick={closeConfirmationModal} type="button" className="modal-btn btn-secondary" data-dismiss="modal">Cancel</button>
-                          <button type="button" className="modal-btn btn-danger" onClick={deleteWorkArea(sowId, subTaskId)}>Delete</button>
+                          <button type="button" className="modal-btn btn-danger" onClick={deleteWorkArea()}>Delete</button>
                       </div>
                   </div>
               </div>
