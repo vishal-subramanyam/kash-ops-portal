@@ -1,23 +1,33 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/Styles.css";
 import AddSubCategoryForm from "../components/AddSubCategoryForm";
+import ProjectSubCategory from "../components/ProjectSubCategory";
 
 function EditProject() {
   let companyName = useRef();
   let newWorkAreaInput = useRef();
   let newWorkAreaIdInput = useRef();
-  let myModal = useRef();
-  let [allCompaniesArr, setAllCompaniesArr] = useState([]);
+  let confirmationModal = useRef();
+  let projectDescription = useRef();
+  let selectedProjectSowId;
+  let subCategoriesByProject = [];
+  let allTasksBySubCategory = [];
+  let [subCategoriesByProjectState, setSubCategoriesByProjectState] = useState([]);
+  let [allCompaniesRemoveDuplicateArr, setAllCompaniesRemoveDuplicateArr] = useState([]);
+  let [allProjectsByCompany, setAllProjectsByCompany] = useState([]);
+  let [allSubCategories, setAllSubCategories] = useState([]);
+  let [consolidatedSubCategories, setConsolidatedSubCategories] = useState([]);
   let [allCompaniesProjectsArr, setAllCompaniesProjectsArr] = useState([]);
   let requiredInputs = [companyName, newWorkAreaInput, newWorkAreaIdInput];
 
   //   on page load, fetch companies from DB
   useEffect(() => {
-    console.log("use effect to get all companies")
+    console.log("use effect to get all companies, projects and subcategories")
     getAllCompaniesProjects();
+    getProjectAndSubcategories()
   }, [])
 
   const getAllCompaniesProjects = async () => {
@@ -41,27 +51,82 @@ function EditProject() {
             return c;
           }, {})
         );
-        setAllCompaniesArr(removeDuplicateCompany);
+        setAllCompaniesRemoveDuplicateArr(removeDuplicateCompany);
       })
       .catch((err) => alert("Unable to get companies from database.", err));
   };
 
   const getProjectsByCompany = (id) => {
     console.log(id)
-    let projectsByCompanyId 
-  }
+    let projectsByCompanyId = allCompaniesProjectsArr.filter((project) => {
+      return id === project.CompanyId
+    }) 
+    console.log(projectsByCompanyId)
+    setAllProjectsByCompany(projectsByCompanyId)
+  };
 
   const selectCompanyLoadProjectDescription = (e) => {
+    setConsolidatedSubCategories([])
     console.log("company selected", e.target[e.target.selectedIndex].getAttribute("data-companyid"));
     let selectedCompanyId = e.target[e.target.selectedIndex].getAttribute("data-companyid")
     console.log(allCompaniesProjectsArr)
     getProjectsByCompany(selectedCompanyId)
-    // fetch from projects table and list project descriptions by company
   };
 
-  const populateSubAssignmentsWorkArea = (selectedProject) => {
-    console.log("project sub assignments" + selectedProject);
+  const getProjectAndSubcategories = async () =>{
+      await fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res.data);
+        setAllSubCategories(res.data)
+      })
+      .catch((err) => alert("Unable to get project subcategories from database.", err));
+  }
+
+  const filterTasksBySubCategory = (subCategories) => {
+    allTasksBySubCategory = subCategories.filter((task) => {
+      return task.ProjectSubTaskId 
+    })
+  }
+
+
+  const populateSubAssignmentsWorkArea = (e) => {
+    console.log("project sub assignments", e.target[e.target.selectedIndex].getAttribute("data-sowid"));
+    selectedProjectSowId = e.target[e.target.selectedIndex].getAttribute("data-sowid");
+    console.log(allSubCategories)
+    let subCatBySowId  = allSubCategories.filter((subCat) => {
+      return selectedProjectSowId === subCat.SowId
+    })
+    subCategoriesByProject = subCatBySowId
+    setSubCategoriesByProjectState(subCatBySowId)
+    // filterTasksBySubCategory(subCategoriesByProject)
+    console.log(subCategoriesByProject)
+    // console.log(allTasksBySubCategory)
+    let filteredSubCats = Object.values(
+      subCategoriesByProject.reduce((c, e) => {
+        if (!c[e.SubTaskTitle]) c[e.SubTaskTitle] = e;
+        return c;
+      }, {})
+    );
+    setConsolidatedSubCategories(filteredSubCats)
   };
+
+  const addProjectSubCategory = (e) => {
+    console.log("Add sub category to selected project by SOW ID", e.target)
+  }
+
+  const addTaskToSubCategory = (e) => {
+    console.log("Add task to sub category", e.target)
+  }
 
   const validateRequiredInputs = () => {
     // validate inputs
@@ -70,9 +135,18 @@ function EditProject() {
     // open confirmation portal function
   };
 
-   const areYouSure = (x,t,u) => {
-//                 document.getElementById('removeconfirmpopup').value = "";
-    document.getElementById('myModal').showModal();
+   const areYouSure = (e) => {
+    console.log("delete confirmation", e.target)
+    //                 document.getElementById('removeconfirmpopup').value = "";
+    confirmationModal.current.showModal();
+   }
+
+   const closeConfirmationModal = () => {
+    confirmationModal.current.close()
+   }
+
+   const deleteWorkArea = (sowId, taskId) => {
+    console.log("delete button clicked")
    }
 
   return (
@@ -115,7 +189,7 @@ function EditProject() {
                   required
                 >
                   <option value="">- Choose A Company -</option>
-                  {allCompaniesArr.map((companyProject, i) => {
+                  {allCompaniesRemoveDuplicateArr.map((companyProject, i) => {
                     return <option key={i} value={companyProject.CompanyName} data-companyid={companyProject.CompanyId} data-sowid={companyProject.SowId}>{companyProject.CompanyName}</option>
                   })}
                 </select>
@@ -127,12 +201,17 @@ function EditProject() {
               >
                 Project Description
                 <select
-                  // onChange={populateSubAssignmentsWorkArea(this)}
+                  onChange={populateSubAssignmentsWorkArea}
                   className="add-sub-assignment-form--project-description-input"
                   id="add-sub-assignment-form--project-description-input"
                   name="add-sub-assignment-form--project-description-input"
+                  ref={projectDescription}
                 >
+
                   <option value=""></option>
+                  {allProjectsByCompany.map((project) => {
+                    return <option data-sowid={project.SowId}>{project.CompanyName} - {project.ProjectCategory} ({project.SowId})</option>
+                  })}
                 </select>
               </label>
             </div>
@@ -195,69 +274,34 @@ function EditProject() {
               </span>
             </h2>
             <div className="add-sub-assignment-details-form--add-sub-assignment-details">
-              <AddSubCategoryForm />
+              <AddSubCategoryForm addSubCategory={addProjectSubCategory}/>
               <div
                 className="add-sub-assignment-view-workspace-task-area"
                 id="workspacetaskarea"
               >
-               <details className="main-grouping">
-                    <summary>
-                      <p>
-                      Project (SOW ID) Sub Category
-                      </p>
+                {
+                  consolidatedSubCategories.map((subCat) => {
+                    return <ProjectSubCategory subCategory={subCat} allTasksBySubCategory={subCategoriesByProjectState} addTaskToSubCat={addTaskToSubCategory} deleteSubCatConfirmation={areYouSure}/>
+                  })
 
-                    <button onClick="areYouSure('${workspace[0]}', '${t}', '${u}')" className="trash-btn btn-delete">
-                      <span className="material-symbols-outlined">delete</span>
-                    </button>
-                    </summary>
-                    <div className="workspace-add-task-to-workarea-input">
-                      <form className="workspace-add-task-input-area">
-                  
-                          <div className="workspace-add-task-plus">
-                              <svg id="addWorkspaceBtn"className="add-sub-assignment-details-form--add-sub-assignment-button-svg"  xmlns="http://www.w3.org/2000/svg" viewBox="0,0,256,256" width="25" height="25" fill-rule="nonzero"><g fill="#e7549a" fillRule="nonzero" stroke="none" strokeWidth="1" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" strokeDasharray="" strokeDashoffset="0" font-family="none" fontWeight="none" fontSize="none" textAnchor="none" style={{mixBlendMode: "normal"}}><path d="M0,256v-256h256v256z" id="bgRectangle"></path></g><g fill="#ffffff" fill-rule="evenodd" stroke="none" strokeWidth="1" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" strokeDasharray="" strokeDashoffset="0" fontFamily="none" fontWeight="none" fontSize="none" textAnchor="none" style={{mixBlendMode: "normal"}}><g transform="scale(10.66667,10.66667)"><path d="M11,2v9h-9v2h9v9h2v-9h9v-2h-9v-9z"></path></g></g></svg>
-                          </div>
-                              
-                          
-                          <div className="workspace-add-task-text-input">
-                              <input id="addtaskid" className="add-new-sub-task-input add-workspace" type="text" placeholder="New Task Name" />
-                          </div>
-                          
-                          <button className="workspace-add-task-btn" type="button" onClick="addTaskToWorkArea('${workspace[0]}',${i}, ${segment1id})">Add Task</button>
-                      </form>
-                    </div>
-                    <div id="segment1id">
-                       <details className="sub-grouping">
-                          <summary>
-                            <p>Segment 1</p>
-                          <button onClick="areYouSure('${subtask.SEGMENT_1}', '${t}', '${subtask.PROJECT_SUB_TASK_ID}')" className="trash-btn btn-delete">
-                            <span className="material-symbols-outlined">
-                              <FontAwesomeIcon
-                                className="delete-timesheet-record"
-                                icon={faTrashCan}
-                              />
-                            </span>
-                          </button>
-                          </summary>
-                        </details>
-                    </div>
-                  </details>
+                }
               </div>
             </div>
           </div>
 
-          <dialog id="myModal" className="confirm-delete-dialog-box" ref={myModal}>
+          <dialog id="myModal" className="confirm-delete-dialog-box" ref={confirmationModal}>
              <div id="confirmmsgdiv" className="modal-dialog modal-confirm">
                   <div className="modal-content">
                       <div className="modal-header flex-column">						
                           <h4 className="modal-title w-100">Confirm Delete</h4>	
-                          <button onClick="closeModal()" type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                          <button onClick={closeConfirmationModal} type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
                       <div id="removeconfirmpopup" className="modal-body">
                           <p>Are you sure you want to delete <b>Sub Category or Segment</b>? </p>    				
                       </div>
                       <div className="modal-footer justify-content-center">
-                          <button onClick="closeModal()" type="button" className="modal-btn btn-secondary" data-dismiss="modal">Cancel</button>
-                          <button type="button" className="modal-btn btn-danger" onClick="deleteWorkArea('${x}', '${t}', '${u}')">Delete</button>
+                          <button onClick={closeConfirmationModal} type="button" className="modal-btn btn-secondary" data-dismiss="modal">Cancel</button>
+                          <button type="button" className="modal-btn btn-danger" onClick={deleteWorkArea(sowId, subTaskId)}>Delete</button>
                       </div>
                   </div>
               </div>
