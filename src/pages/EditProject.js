@@ -263,8 +263,8 @@ function EditProject() {
       addProjectSubCategory();
   };
 
-   const areYouSure = (e) => {
-    console.log("delete confirmation", e.target)
+   const areYouSure = (projectId, subCatId, subCatTask) => {
+    console.log("delete confirmation", projectId, subCatId, subCatTask)
     //                 document.getElementById('removeconfirmpopup').value = "";
     confirmationModal.current.showModal();
    }
@@ -531,6 +531,7 @@ function EditProject() {
             </div>
           </div>
           </form>
+          
           <dialog id="myModal" className="confirm-delete-dialog-box" ref={confirmationModal}>
              <div id="confirmmsgdiv" className="modal-dialog modal-confirm">
                   <div className="modal-content">
@@ -548,6 +549,7 @@ function EditProject() {
                   </div>
               </div>
           </dialog>
+          
         </div>
       </main>
     </div>

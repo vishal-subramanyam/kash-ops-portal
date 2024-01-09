@@ -17,7 +17,7 @@ function ProjectSubCategory(props) {
                       {props.subCategory.SubTaskTitle}
                       </p>
 
-                    <button onClick={props.deleteSubCatConfirmation} className="delete-sub-category">
+                    <button onClick={() => props.deleteSubCatConfirmation(props.projectId, props.subCatId)} className="delete-sub-category">
                       
                       <span className="material-symbols-outlined">
                         <FontAwesomeIcon

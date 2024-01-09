@@ -9,7 +9,7 @@ function SubCategoryTask(props) {
                 {console.log(props.subCategoryTask)}
                 <summary>
                     <p>{props.subCategoryTask.Segment1}</p>
-                <button onClick={props.deleteTaskConfirmation} className="delete-task">
+                <button onClick={() => props.deleteTaskConfirmation(props.subCategoryTask.SowId, props.subCategoryTask.ProjectSubTaskId, props.subCategoryTask.Segment1)} className="delete-task">
                     <span className="material-symbols-outlined">
                     <FontAwesomeIcon
                         className="delete-timesheet-record"
