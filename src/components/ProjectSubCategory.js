@@ -5,7 +5,7 @@ import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import SubCategoryTask from "./SubCategoryTask";
 
 function ProjectSubCategory(props) {
-  let taskSegment1 = useRef("");
+  let taskSegment1 = useRef();
   // Show the tasks per sub category and filter out segments with no value
   let tasksBySubCategory = props.allTasksBySubCategory.filter((task) => {
     return task.ProjectSubTaskId === props.subCategory.ProjectSubTaskId && task.Segment1 !== ""
@@ -37,10 +37,11 @@ function ProjectSubCategory(props) {
                               <input id="addtaskid" className="add-new-sub-task-input add-workspace" type="text" placeholder="New Task Name" 
                               defaultValue={""}
                               ref={taskSegment1}
+                              required
                               />
                           </div>
                           
-                          <button className="workspace-add-task-btn" type="button" onClick={() => props.addTaskToSubCat(props.projectId, taskSegment1.current.value, props.subCatId)}>Add Task</button>
+                          <button className="workspace-add-task-btn" type="button" onClick={() => props.addTaskToSubCat(props.projectId, props.subCatTitle, props.subCatId, taskSegment1.current.value)}>Add Task</button>
                       </form>
                     </div>
                     <div id="segment1id">

@@ -7,6 +7,7 @@ import AddSubCategoryForm from "../components/AddSubCategoryForm";
 import ProjectSubCategory from "../components/ProjectSubCategory";
 import SaveNewSubCategory from "../components/SaveNewSubCategory";
 
+
 function EditProject() {
   let companyName = useRef();
   let newWorkAreaInput = useRef();
@@ -15,7 +16,6 @@ function EditProject() {
   let projectDescription = useRef();
   let subCategoryContainer = useRef();
   let editAddSubCat = useRef();
-  let selectedProjectSowId;
   let [selectedCompanyIdState, setSelectedCompanyIdState] = useState();
   let subCategoriesByProject = [];
   let allTasksBySubCategory = [];
@@ -116,7 +116,7 @@ function EditProject() {
 
   const populateSubAssignmentsWorkArea = (e) => {
     console.log("project sub assignments", e.target[e.target.selectedIndex].getAttribute("data-value"));
-    selectedProjectSowId = e.target[e.target.selectedIndex].getAttribute("data-sowid");
+    let selectedProjectSowId = e.target[e.target.selectedIndex].getAttribute("data-sowid");
     setSelectedProjectSowIdState(selectedProjectSowId)
     console.log(allSubCategories)
     let subCatBySowId  = allSubCategories.filter((subCat) => {
@@ -133,6 +133,7 @@ function EditProject() {
         return c;
       }, {})
     );
+    console.log(filteredSubCats)
     setConsolidatedSubCategories(filteredSubCats)
   };
 
@@ -146,59 +147,68 @@ function EditProject() {
     setShowCreateNewSubCategory(true)
   }
 
-  const saveProjectSubCategory = async (sowId, subCatId, subCatTitle) => {
-   console.log("save project sub category", sowId, subCatId, subCatTitle)
-   /* try {
-      const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransaction",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            // your expected POST request payload goes here
-            data: [
-              {
-                  SowId: sowId,
-                  ProjectSubTaskId: subCatId,
-                  SubTaskTitle: subCatTitle,
-                  Segment2: "",
-                  Segment1: "",
-                  Segment3: ""
-              }
-            ],
-            _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
-            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
-          }),
+  const saveProjectSubCategory = async (newSubCategory) => {
+   console.log("save project sub category", newSubCategory)
+  }
+
+  const addTaskToSubCategory = async (projectId,subCatTitle, subCatId, segment1) => {
+    console.log("Add task to sub category",  projectId, subCatTitle, subCatId, segment1)
+    // add task to existing sub category. Validate if task name field is filled out
+    if (segment1 === undefined || segment1 === "") {
+      alert("Add a task name to add to sub category.")
+    } else {
+      console.log("run fetch to add task to sub cat")
+          try {
+          const response = await fetch(
+            "http://localhost:4040/GenericTransactionService/processTransaction",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                // your expected POST request payload goes here
+                data: [
+                    {
+                    SowId: projectId,
+                    ProjectSubTaskId: subCatId,
+                    SubTaskTitle: subCatTitle,
+                    Segment2: "",
+                    Segment1: segment1,
+                    Segment3: ""
+                  },
+                ],
+                _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
+                secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+              }),
+            }
+          );
+          const data = await response.json();
+          // enter you logic when the fetch is successful
+          console.log("Added to task to sub category table", data);
+        } catch (error) {
+          // enter your logic for when there is an error (ex. error toast)
+          console.log(error);
+          alert("Unable to add task.")
         }
-      );
-      const data = await response.json();
-      // enter you logic when the fetch is successful
-      console.log("Added to Sub Category table", data);
-    } catch (error) {
-      // enter your logic for when there is an error (ex. error toast)
-      console.log(error);
-      alert("Unable to add sub category.");
-    }*/
+    }
   }
 
-  const addTaskToSubCategory = (projectId, title, subCatId) => {
-    console.log("Add task to sub category", projectId, title, subCatId)
-
-    // update current sub cate
-  }
-
-  const validateRequiredInputs = () => {
+  const validateRequiredInputs = (e) => {
+    // e.preventDefault()
     // validate inputs
     console.log("Validate inputs")
+    console.log("company name", companyName.current.value)
+    console.log("sub cat Id", newWorkAreaIdInput.current.value)
+    console.log("sub cat name", newWorkAreaInput.current.value)
+    console.log("project", projectDescription.current.value)
     // run function to edit project details
     // create sub-assignment for project
     // open confirmation portal function
-    if(!companyName || !newWorkAreaIdInput || !newWorkAreaInput || !projectDescription) {
+    if(companyName.current.value && newWorkAreaIdInput.current.value && newWorkAreaInput.current.value && projectDescription.current.value) {
       alert("Fill out all of the above fields")
     } else {
-      addProjectSubCategory()
+      addProjectSubCategory(selectedProjectSowIdState,newWorkAreaIdInput.current.value,newWorkAreaInput.current.value )
     }
   };
 
@@ -240,7 +250,9 @@ function EditProject() {
           </Link>
         </div>
         <div className="add-sub-assignment--content-holder">
-          <form className="add-sub-assignment--form">
+          <form className="add-sub-assignment--form"
+          // onSubmit={validateRequiredInputs}
+          >
             <div className="add-sub-assignment--form--edit-project-details">
               <label
                 for="add-sub-assignment-form--company-name-input"
@@ -253,7 +265,7 @@ function EditProject() {
                   className="add-sub-assignment-form--company-name-input"
                   id="add-sub-assignment-form--company-name-input"
                   name="add-sub-assignment-form--company-name-input"
-                  required
+                  required="required"
                 >
                   <option value="">- Choose A Company -</option>
                   {allCompaniesRemoveDuplicateArr.map((companyProject, i) => {
@@ -273,10 +285,10 @@ function EditProject() {
                   id="add-sub-assignment-form--project-description-input"
                   name="add-sub-assignment-form--project-description-input"
                   ref={projectDescription}
-                  required
+                  required="required"
                 >
 
-                  <option value="" selected></option>
+                  <option value="" selected="true"></option>
                   {allProjectsByCompany.map((project) => {
                     return <option data-sowid={project.SowId}>{project.CompanyName} - {project.ProjectCategory} ({project.SowId})</option>
                   })}
@@ -422,9 +434,10 @@ function EditProject() {
                 <button
                   id="createWorkAreaBtn"
                   className="add-sub-assignment-workspace-form--add-button"
-                  type="button"
+                  type="submit"
                   // disabled={props.createBtnDisabled}
                   onClick={validateRequiredInputs}
+                  // onSubmit={validateRequiredInputs}
                 >
                   Create Work Area
                 </button>
@@ -438,7 +451,7 @@ function EditProject() {
                 <div>
                 {/* Conditionally Show the create new sub category UI */}
                 {showNewSubCategory ? 
-                  <SaveNewSubCategory close={closeEditWorkArea} subCatName={newWorkAreaIdInput.current.value}/>
+                  <SaveNewSubCategory close={closeEditWorkArea} subCatName={newWorkAreaInput.current.value}/>
                   :
                   ""
                 }
