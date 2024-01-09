@@ -142,23 +142,68 @@ function EditProject() {
     setShowCreateNewSubCategory(false)
   }
 
+  // open the create new sub cat component
   const addProjectSubCategory = async (sowId, subCatId, subCatTitle) => {
     console.log("Add sub category to selected project by SOW ID", sowId, subCatId, subCatTitle)
     setShowCreateNewSubCategory(true)
   }
 
+  // create new sub cat (and tasks) record
   const saveProjectSubCategory = async (newSubCategory) => {
    console.log("save project sub category", newSubCategory)
+
+        try {
+          const response = await fetch(
+            "http://localhost:4040/GenericTransactionService/processTransaction",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                // your expected POST request payload goes here
+                data: newSubCategory,
+                _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
+                secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+              }),
+            }
+          );
+          const data = await response.json();
+          // enter you logic when the fetch is successful
+          console.log("Added new sub category", data);
+          // add new sub cat to state array to update UI
+          for (let i = 0; i < newSubCategory.length; i++) {
+            setConsolidatedSubCategories((prevState) => [
+              ...prevState, newSubCategory[i]
+            ])
+          }
+
+        } catch (error) {
+          // enter your logic for when there is an error (ex. error toast)
+          console.log(error);
+          alert("Unable to add sub category.")
+        }
+
+
   }
 
+  // add task to existing sub category
   const addTaskToSubCategory = async (projectId,subCatTitle, subCatId, segment1) => {
+    // e.preventDefault()
     console.log("Add task to sub category",  projectId, subCatTitle, subCatId, segment1)
+    let newSubCatTask = {
+                    SowId: projectId,
+                    ProjectSubTaskId: subCatId,
+                    SubTaskTitle: subCatTitle,
+                    Segment2: "",
+                    Segment1: segment1,
+                    Segment3: "" }
     // add task to existing sub category. Validate if task name field is filled out
     if (segment1 === undefined || segment1 === "") {
       alert("Add a task name to add to sub category.")
     } else {
       console.log("run fetch to add task to sub cat")
-          try {
+      try {
           const response = await fetch(
             "http://localhost:4040/GenericTransactionService/processTransaction",
             {
@@ -184,18 +229,20 @@ function EditProject() {
             }
           );
           const data = await response.json();
-          // enter you logic when the fetch is successful
-          console.log("Added to task to sub category table", data);
+          console.log("Added task to sub category table", data);
+
+          // update the array that is passed to project sub cat component that then filters to show sub cat tasks (segment1s)
+          setSubCategoriesByProjectState((prevState) => [...prevState, newSubCatTask])
         } catch (error) {
-          // enter your logic for when there is an error (ex. error toast)
           console.log(error);
           alert("Unable to add task.")
         }
+  
     }
   }
 
   const validateRequiredInputs = (e) => {
-    // e.preventDefault()
+    e.preventDefault()
     // validate inputs
     console.log("Validate inputs")
     console.log("company name", companyName.current.value)
@@ -205,11 +252,15 @@ function EditProject() {
     // run function to edit project details
     // create sub-assignment for project
     // open confirmation portal function
-    if(companyName.current.value && newWorkAreaIdInput.current.value && newWorkAreaInput.current.value && projectDescription.current.value) {
-      alert("Fill out all of the above fields")
-    } else {
-      addProjectSubCategory(selectedProjectSowIdState,newWorkAreaIdInput.current.value,newWorkAreaInput.current.value )
-    }
+
+      for(let input of requiredInputs) {
+          if(input.current.value === "") {
+            alert("Fill out all of the above fields")
+            return
+          }
+        }
+      // show component to run function to save new sub cat record
+      addProjectSubCategory();
   };
 
    const areYouSure = (e) => {
@@ -451,7 +502,13 @@ function EditProject() {
                 <div>
                 {/* Conditionally Show the create new sub category UI */}
                 {showNewSubCategory ? 
-                  <SaveNewSubCategory close={closeEditWorkArea} subCatName={newWorkAreaInput.current.value}/>
+                  <SaveNewSubCategory 
+                  saveRecord={saveProjectSubCategory}
+                  close={closeEditWorkArea}
+                  projectId={selectedProjectSowIdState}
+                  subCatName={newWorkAreaInput.current.value}
+                  subCatId={newWorkAreaIdInput.current.value}
+                  />
                   :
                   ""
                 }

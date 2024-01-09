@@ -8,7 +8,7 @@ function ProjectSubCategory(props) {
   let taskSegment1 = useRef();
   // Show the tasks per sub category and filter out segments with no value
   let tasksBySubCategory = props.allTasksBySubCategory.filter((task) => {
-    return task.ProjectSubTaskId === props.subCategory.ProjectSubTaskId && task.Segment1 !== ""
+    return task.ProjectSubTaskId === props.subCategory.ProjectSubTaskId && task.Segment1 !== "" && task.Segment1 !== "-"
   })
     return (      
                 <details className="main-grouping">
@@ -41,11 +41,12 @@ function ProjectSubCategory(props) {
                               />
                           </div>
                           
-                          <button className="workspace-add-task-btn" type="button" onClick={() => props.addTaskToSubCat(props.projectId, props.subCatTitle, props.subCatId, taskSegment1.current.value)}>Add Task</button>
+                          <button className="workspace-add-task-btn"
+                          type="button"
+                          onClick={() => props.addTaskToSubCat(props.projectId, props.subCatTitle, props.subCatId, taskSegment1.current.value)}>Add Task</button>
                       </form>
                     </div>
                     <div id="segment1id">
-                       
                         {tasksBySubCategory.map((task) => {
                             return <SubCategoryTask subCategoryTask={task} deleteTaskConfirmation={props.deleteSubCatConfirmation}/>
                         })}
