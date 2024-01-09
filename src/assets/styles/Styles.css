@@ -155,16 +155,28 @@ input[type="text"] {
 
 .delete-task {
   background-color: transparent;
+  height: 2rem;
+  width: 2rem;
+}
+
+.delete-task:hover {
+  background-color: hsla(0 87% 81% / 100%);
+  cursor: pointer;
+  border-radius: 50%;
 }
 
 .delete-sub-category {
   background-color: transparent;
+  height: 2rem;
+  width: 2rem;
 }
 
 .delete-sub-category:hover {
-  color: hsl(0 85% 30%);
-    background-color: hsla(0 87% 81% / 100%);
-    cursor: pointer;
+  background-color: hsla(0 87% 81% / 100%);
+  cursor: pointer;
+
+  border-radius: 50%;
+  
 }
 
 .employee-input_holder {

@@ -1,10 +1,11 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
-import { Link } from "react-router-dom";
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import { Link, useAsyncError } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/Styles.css";
 import AddSubCategoryForm from "../components/AddSubCategoryForm";
 import ProjectSubCategory from "../components/ProjectSubCategory";
+import SaveNewSubCategory from "../components/SaveNewSubCategory";
 
 function EditProject() {
   let companyName = useRef();
@@ -12,23 +13,35 @@ function EditProject() {
   let newWorkAreaIdInput = useRef();
   let confirmationModal = useRef();
   let projectDescription = useRef();
+  let subCategoryContainer = useRef();
+  let editAddSubCat = useRef();
   let selectedProjectSowId;
+  let [selectedCompanyIdState, setSelectedCompanyIdState] = useState();
   let subCategoriesByProject = [];
   let allTasksBySubCategory = [];
+  let [selectedCompanyName, setSelectedCompanyName] = useState("");
+  let [showNewSubCategory, setShowCreateNewSubCategory] = useState(false);
+  let [createBtnDisabled, setCreateBtnDisabled] = useState(true)
+  let [selectedProjectSowIdState, setSelectedProjectSowIdState] = useState();
   let [subCategoriesByProjectState, setSubCategoriesByProjectState] = useState([]);
   let [allCompaniesRemoveDuplicateArr, setAllCompaniesRemoveDuplicateArr] = useState([]);
   let [allProjectsByCompany, setAllProjectsByCompany] = useState([]);
   let [allSubCategories, setAllSubCategories] = useState([]);
   let [consolidatedSubCategories, setConsolidatedSubCategories] = useState([]);
   let [allCompaniesProjectsArr, setAllCompaniesProjectsArr] = useState([]);
-  let requiredInputs = [companyName, newWorkAreaInput, newWorkAreaIdInput];
+  let requiredInputs = [companyName, projectDescription, newWorkAreaInput, newWorkAreaIdInput];
 
   //   on page load, fetch companies from DB
   useEffect(() => {
-    console.log("use effect to get all companies, projects and subcategories")
+    console.log("use effect to get all companies")
     getAllCompaniesProjects();
     getProjectAndSubcategories()
   }, [])
+
+  useEffect(() => {
+    console.log("Use effect to get all projects and subcategories", selectedCompanyIdState)
+    getProjectsByCompany(selectedCompanyIdState)
+  }, [selectedCompanyName])
 
   const getAllCompaniesProjects = async () => {
     await fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
@@ -56,21 +69,24 @@ function EditProject() {
       .catch((err) => alert("Unable to get companies from database.", err));
   };
 
+  const selectCompanyLoadProjectDescription = (e) => {
+    setConsolidatedSubCategories([])
+    let selCompanyName = e.target[e.target.selectedIndex].getAttribute("value")
+    setSelectedCompanyName(selCompanyName)
+    console.log("company selected", e.target[e.target.selectedIndex].getAttribute("data-companyid"));
+    let selectedCompanyId = e.target[e.target.selectedIndex].getAttribute("data-companyid")
+    console.log(selectedCompanyId)
+    setSelectedCompanyIdState(selectedCompanyId)
+    getProjectsByCompany(selectedCompanyId)
+  };
+
   const getProjectsByCompany = (id) => {
-    console.log(id)
+    console.log("Getting projects by company", allProjectsByCompany)
     let projectsByCompanyId = allCompaniesProjectsArr.filter((project) => {
       return id === project.CompanyId
     }) 
     console.log(projectsByCompanyId)
     setAllProjectsByCompany(projectsByCompanyId)
-  };
-
-  const selectCompanyLoadProjectDescription = (e) => {
-    setConsolidatedSubCategories([])
-    console.log("company selected", e.target[e.target.selectedIndex].getAttribute("data-companyid"));
-    let selectedCompanyId = e.target[e.target.selectedIndex].getAttribute("data-companyid")
-    console.log(allCompaniesProjectsArr)
-    getProjectsByCompany(selectedCompanyId)
   };
 
   const getProjectAndSubcategories = async () =>{
@@ -98,10 +114,10 @@ function EditProject() {
     })
   }
 
-
   const populateSubAssignmentsWorkArea = (e) => {
-    console.log("project sub assignments", e.target[e.target.selectedIndex].getAttribute("data-sowid"));
+    console.log("project sub assignments", e.target[e.target.selectedIndex].getAttribute("data-value"));
     selectedProjectSowId = e.target[e.target.selectedIndex].getAttribute("data-sowid");
+    setSelectedProjectSowIdState(selectedProjectSowId)
     console.log(allSubCategories)
     let subCatBySowId  = allSubCategories.filter((subCat) => {
       return selectedProjectSowId === subCat.SowId
@@ -120,19 +136,70 @@ function EditProject() {
     setConsolidatedSubCategories(filteredSubCats)
   };
 
-  const addProjectSubCategory = (e) => {
-    console.log("Add sub category to selected project by SOW ID", e.target)
+  const closeEditWorkArea = () => {
+    console.log(editAddSubCat.current)
+    setShowCreateNewSubCategory(false)
   }
 
-  const addTaskToSubCategory = (e) => {
-    console.log("Add task to sub category", e.target)
+  const addProjectSubCategory = async (sowId, subCatId, subCatTitle) => {
+    console.log("Add sub category to selected project by SOW ID", sowId, subCatId, subCatTitle)
+    setShowCreateNewSubCategory(true)
+  }
+
+  const saveProjectSubCategory = async (sowId, subCatId, subCatTitle) => {
+   console.log("save project sub category", sowId, subCatId, subCatTitle)
+   /* try {
+      const response = await fetch(
+        "http://localhost:4040/GenericTransactionService/processTransaction",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // your expected POST request payload goes here
+            data: [
+              {
+                  SowId: sowId,
+                  ProjectSubTaskId: subCatId,
+                  SubTaskTitle: subCatTitle,
+                  Segment2: "",
+                  Segment1: "",
+                  Segment3: ""
+              }
+            ],
+            _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
+            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+          }),
+        }
+      );
+      const data = await response.json();
+      // enter you logic when the fetch is successful
+      console.log("Added to Sub Category table", data);
+    } catch (error) {
+      // enter your logic for when there is an error (ex. error toast)
+      console.log(error);
+      alert("Unable to add sub category.");
+    }*/
+  }
+
+  const addTaskToSubCategory = (projectId, title, subCatId) => {
+    console.log("Add task to sub category", projectId, title, subCatId)
+
+    // update current sub cate
   }
 
   const validateRequiredInputs = () => {
     // validate inputs
+    console.log("Validate inputs")
     // run function to edit project details
     // create sub-assignment for project
     // open confirmation portal function
+    if(!companyName || !newWorkAreaIdInput || !newWorkAreaInput || !projectDescription) {
+      alert("Fill out all of the above fields")
+    } else {
+      addProjectSubCategory()
+    }
   };
 
    const areYouSure = (e) => {
@@ -206,9 +273,10 @@ function EditProject() {
                   id="add-sub-assignment-form--project-description-input"
                   name="add-sub-assignment-form--project-description-input"
                   ref={projectDescription}
+                  required
                 >
 
-                  <option value=""></option>
+                  <option value="" selected></option>
                   {allProjectsByCompany.map((project) => {
                     return <option data-sowid={project.SowId}>{project.CompanyName} - {project.ProjectCategory} ({project.SowId})</option>
                   })}
@@ -260,7 +328,7 @@ function EditProject() {
 <!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 <!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
  */}
-          </form>
+          {/* </form> */}
 
           <div className="add-sub-assignment-details-holder-container">
             <h2 className="sub-assignment-title form-page-title--md-1">
@@ -274,21 +342,125 @@ function EditProject() {
               </span>
             </h2>
             <div className="add-sub-assignment-details-form--add-sub-assignment-details">
-              <AddSubCategoryForm addSubCategory={addProjectSubCategory}/>
+              {/* <AddSubCategoryForm addSubCategory={addProjectSubCategory} sowId={selectedProjectSowIdState} createBtnDisabled={createBtnDisabled}/> */}
+                
+                <form className="add-sub-assignment-input-area">
+                <div className="add-sub-assignment-workspace-form--form-input--plus">
+                  <svg
+                    id="addWorkspaceBtn"
+                    className="add-sub-assignment-details-form--add-sub-assignment-button-svg"
+                    xmlns="http://www.w3.org/2000/svg"
+                    // xmlns:xlink="http://www.w3.org/1999/xlink"
+                    viewBox="0,0,256,256"
+                    width="25"
+                    height="25"
+                    fillRule="nonzero"
+                  >
+                    <g
+                      fill="#e7549a"
+                      fillRule="nonzero"
+                      stroke="none"
+                      strokeWidth="1"
+                      strokeLinecap="butt"
+                      strokeLinejoin="miter"
+                      strokeMiterlimit="10"
+                      strokeDasharray=""
+                      strokeDashoffset="0"
+                      fontFamily="none"
+                      fontWeight="none"
+                      fontSize="none"
+                      textAnchor="none"
+                      style={{ mixBlendMode: "normal" }}
+                    >
+                      <path d="M0,256v-256h256v256z" id="bgRectangle"></path>
+                    </g>
+                    <g
+                      fill="#ffffff"
+                      fill-rule="evenodd"
+                      stroke="none"
+                      strokeWidth="1"
+                      strokeLinecap="butt"
+                      strokeLinejoin="miter"
+                      strokeMiterlimit="10"
+                      strokeDasharray=""
+                      strokeDashoffset="0"
+                      fontFamily="none"
+                      fontWeight="none"
+                      fontSize="none"
+                      textAnchor="none"
+                      style={{ mixBlendMode: "normal" }}
+                    >
+                      <g transform="scale(10.66667,10.66667)">
+                        <path d="M11,2v9h-9v2h9v9h2v-9h9v-2h-9v-9z"></path>
+                      </g>
+                    </g>
+                  </svg>
+                </div>
+
+                <div className="add-sub-assignment-workspace-form--form-input--workspace-input">
+                  <input
+                    id="newWorkAreaInput"
+                    className="add-sub-assignment-details-form--form-input add-workspace"
+                    type="text"
+                    placeholder="Work Area"
+                    required
+                    ref={newWorkAreaInput}
+                  />
+                </div>
+
+                <div className="add-sub-assignment-workspace-form--form-input--task-area-input">
+                  <input
+                    id="newWorkAreaIdInput"
+                    className="add-sub-assignment-details-form--form-input add-task-area"
+                    type="text"
+                    placeholder="Work Area ID"
+                    required
+                    ref={newWorkAreaIdInput}
+                  />
+                </div>
+
+                <button
+                  id="createWorkAreaBtn"
+                  className="add-sub-assignment-workspace-form--add-button"
+                  type="button"
+                  // disabled={props.createBtnDisabled}
+                  onClick={validateRequiredInputs}
+                >
+                  Create Work Area
+                </button>
+              </form> 
+
               <div
                 className="add-sub-assignment-view-workspace-task-area"
                 id="workspacetaskarea"
+                ref={subCategoryContainer}
               >
+                <div>
+                {/* Conditionally Show the create new sub category UI */}
+                {showNewSubCategory ? 
+                  <SaveNewSubCategory close={closeEditWorkArea} subCatName={newWorkAreaIdInput.current.value}/>
+                  :
+                  ""
+                }
+                </div>
+                {console.log(consolidatedSubCategories)}
                 {
                   consolidatedSubCategories.map((subCat) => {
-                    return <ProjectSubCategory subCategory={subCat} allTasksBySubCategory={subCategoriesByProjectState} addTaskToSubCat={addTaskToSubCategory} deleteSubCatConfirmation={areYouSure}/>
+                    return <ProjectSubCategory 
+                    subCategory={subCat} 
+                    allTasksBySubCategory={subCategoriesByProjectState} addTaskToSubCat={addTaskToSubCategory}
+                    deleteSubCatConfirmation={areYouSure}
+                    projectId= {subCat.SowId}
+                    subCatTitle={subCat.SubTaskTitle}
+                    subCatId={subCat.ProjectSubTaskId}
+                    />
                   })
 
                 }
               </div>
             </div>
           </div>
-
+          </form>
           <dialog id="myModal" className="confirm-delete-dialog-box" ref={confirmationModal}>
              <div id="confirmmsgdiv" className="modal-dialog modal-confirm">
                   <div className="modal-content">
@@ -301,7 +473,7 @@ function EditProject() {
                       </div>
                       <div className="modal-footer justify-content-center">
                           <button onClick={closeConfirmationModal} type="button" className="modal-btn btn-secondary" data-dismiss="modal">Cancel</button>
-                          <button type="button" className="modal-btn btn-danger" onClick={deleteWorkArea()}>Delete</button>
+                          <button type="button" className="modal-btn btn-danger" onClick={deleteWorkArea}>Delete</button>
                       </div>
                   </div>
               </div>

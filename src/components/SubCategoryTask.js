@@ -6,7 +6,7 @@ import "../assets/styles/Styles.css";
 function SubCategoryTask(props) {
     return ( 
         <details className="sub-grouping">
-                {console.log(props.subCategoryTask.Segment1)}
+                {console.log(props.subCategoryTask)}
                 <summary>
                     <p>{props.subCategoryTask.Segment1}</p>
                 <button onClick={props.deleteTaskConfirmation} className="delete-task">

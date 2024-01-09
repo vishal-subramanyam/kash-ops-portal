@@ -7,6 +7,11 @@ function AddSubCategoryForm(props) {
 
     const validateRequiredInputs = () => {
         console.log("Validate Inputs")
+
+        //  check to make sure that the newWorkAreaId doesn't already match an existing ProjectSubTaskId
+
+        // call
+        props.addSubCategory(props.sowId, newWorkAreaIdInput.current.value, newWorkAreaIdInput.current.value)
     }
  
     return (
@@ -70,7 +75,7 @@ function AddSubCategoryForm(props) {
                     className="add-sub-assignment-details-form--form-input add-workspace"
                     type="text"
                     placeholder="Work Area"
-                    required="required"
+                    required
                     ref={newWorkAreaInput}
                   />
                 </div>
@@ -81,7 +86,7 @@ function AddSubCategoryForm(props) {
                     className="add-sub-assignment-details-form--form-input add-task-area"
                     type="text"
                     placeholder="Work Area ID"
-                    required="required"
+                    required
                     ref={newWorkAreaIdInput}
                   />
                 </div>
@@ -90,6 +95,7 @@ function AddSubCategoryForm(props) {
                   id="createWorkAreaBtn"
                   className="add-sub-assignment-workspace-form--add-button"
                   type="button"
+                  // disabled={props.createBtnDisabled}
                   onClick={validateRequiredInputs}
                 >
                   Create Work Area
