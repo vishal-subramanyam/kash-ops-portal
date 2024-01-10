@@ -11,13 +11,14 @@ function ProjectSubCategory(props) {
   let [tasksBySubCategory, setTaskBySubCategory] = useState(
     props.allSubCategories.filter((task) => {
       return (
+        task.SowId === props.subCategory.SowId &&
         task.ProjectSubTaskId === props.subCategory.ProjectSubTaskId &&
         task.Segment1 !== "" &&
         task.Segment1 !== "-"
       );
     })
   );
-
+  console.log(props.allSubCategories);
   console.log(tasksBySubCategory);
 
   // add task to existing sub category
@@ -97,6 +98,7 @@ function ProjectSubCategory(props) {
 
   const deleteSubCategory = async (sowId, subCatId) => {
     console.log("delete button clicked", sowId, subCatId);
+
     try {
       const response = await fetch(
         "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
@@ -125,11 +127,18 @@ function ProjectSubCategory(props) {
         data
       );
       closeConfirmationModal();
+      // props.reset();
     } catch (error) {
       alert(`Unable to delete ${props.subCategory.SubTaskTitle}. ${error}`);
     }
-    // call function to fetch all sub categories from database that is filtered on this component
-    props.refetchProjectSubCats();
+
+    // need to update the state array - consolidatedSubCategories
+    console.log(props.subCats);
+    let deleteSubCat = props.subCats.filter((cat) => {
+      return cat.SubTaskTitle !== props.subCategory.SubTaskTitle;
+    });
+    props.resetConsolidatedSubCatArr(deleteSubCat);
+    props.reset();
   };
 
   return (
@@ -234,7 +243,8 @@ function ProjectSubCategory(props) {
               <SubCategoryTask
                 key={i}
                 subCategoryTask={task}
-                // deleteTaskConfirmation={props.deleteSubCatConfirmation}
+                refetchAll={props.reset()}
+                allTasks={tasksBySubCategory}
               />
             );
           })}

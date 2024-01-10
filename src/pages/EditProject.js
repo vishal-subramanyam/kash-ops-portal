@@ -113,6 +113,7 @@ function EditProject() {
   };
 
   const getProjectAndSubcategories = async () => {
+    console.log("fetching all projects and sub categories");
     await fetch(
       "http://localhost:4040/GenericResultBuilderService/buildResults",
       {
@@ -203,76 +204,22 @@ function EditProject() {
       // enter you logic when the fetch is successful
       console.log("Added new sub category", data);
       // add new sub cat to state array to update UI
-      for (let i = 0; i < newSubCategory.length; i++) {
-        setConsolidatedSubCategories((prevState) => [
-          ...prevState,
-          newSubCategory[i],
-        ]);
-      }
+
+      setConsolidatedSubCategories((prevState) => [
+        ...prevState,
+        newSubCategory[0],
+      ]);
       newWorkAreaInput.current.value = "";
       newWorkAreaIdInput.current.value = "";
       // hide the add new sub cat component
       closeEditWorkArea();
+      getProjectAndSubcategories();
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
       console.log(error);
       alert("Unable to add sub category.");
     }
   };
-
-  // // add task to existing sub category
-  // const addTaskToSubCategory = async (projectId,subCatTitle, subCatId, segment1) => {
-  //   // e.preventDefault()
-  //   console.log("Add task to sub category",  projectId, subCatTitle, subCatId, segment1)
-  //   let newSubCatTask = {
-  //                   SowId: projectId,
-  //                   ProjectSubTaskId: subCatId,
-  //                   SubTaskTitle: subCatTitle,
-  //                   Segment2: "",
-  //                   Segment1: segment1,
-  //                   Segment3: "" }
-  //   // add task to existing sub category. Validate if task name field is filled out
-  //   if (segment1 === undefined || segment1 === "") {
-  //     alert("Fill in a task name.")
-  //   } else {
-  //     console.log("run fetch to add task to sub cat")
-  //     try {
-  //         const response = await fetch(
-  //           "http://localhost:4040/GenericTransactionService/processTransaction",
-  //           {
-  //             method: "POST",
-  //             headers: {
-  //               "Content-Type": "application/json",
-  //             },
-  //             body: JSON.stringify({
-  //               // your expected POST request payload goes here
-  //               data: [
-  //                   {
-  //                   SowId: projectId,
-  //                   ProjectSubTaskId: subCatId,
-  //                   SubTaskTitle: subCatTitle,
-  //                   Segment2: "",
-  //                   Segment1: segment1,
-  //                   Segment3: ""
-  //                 },
-  //               ],
-  //               _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
-  //               secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
-  //             }),
-  //           }
-  //         );
-  //         const data = await response.json();
-  //         console.log("Added task to sub category table", data);
-
-  //         // update the array that is passed to project sub cat component that then filters to show sub cat tasks (segment1s)
-  //         setSubCategoriesByProjectState((prevState) => [...prevState, newSubCatTask])
-  //       } catch (error) {
-  //         console.log(error);
-  //         alert("Unable to add task.")
-  //       }
-
-  //   }
-  // }
 
   const validateRequiredInputs = (e) => {
     e.preventDefault();
@@ -574,7 +521,9 @@ function EditProject() {
                   allSubCategories={allSubCategories}
                   // addTaskToSubCat={addTaskToSubCategory}
                   // deleteSubCatConfirmation={areYouSure}
-                  refetchProjectSubCats={getProjectAndSubcategories}
+                  reset={getProjectAndSubcategories}
+                  subCats={consolidatedSubCategories}
+                  resetConsolidatedSubCatArr={setConsolidatedSubCategories}
                   projectId={subCat.SowId}
                   subCatTitle={subCat.SubTaskTitle}
                   subCatId={subCat.ProjectSubTaskId}

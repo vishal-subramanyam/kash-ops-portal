@@ -45,6 +45,11 @@ function SubCategoryTask(props) {
         data
       );
       closeConfirmationModal();
+      // console.log(props.allTasks);
+      // let deleteTask = props.allTasks.filter((task) => {
+      //   return task.Segment1 !== props.subCategoryTask.Segment1;
+      // });
+      props.reset();
     } catch (error) {
       alert(`Unable to delete ${props.subCategoryTask.Segment1}. ${error}`);
     }
@@ -87,8 +92,8 @@ function SubCategoryTask(props) {
             </div>
             <div id="removeconfirmpopup" className="modal-body">
               <p>
-                Are you sure you want to delete{" "}
-                <b>{props.subCategoryTask.Segment1}</b>?{" "}
+                Are you sure you want to delete
+                <b>{props.subCategoryTask.Segment1}</b>?
               </p>
             </div>
             <div className="modal-footer justify-content-center">
