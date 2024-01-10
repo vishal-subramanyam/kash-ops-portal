@@ -1,23 +1,23 @@
-import React, {useRef} from "react";
+import React, { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/Styles.css";
 
 function SubCategoryTask(props) {
-    let confirmationModal = useRef();
+  let confirmationModal = useRef();
 
-    const areYouSure = () => {
+  const areYouSure = () => {
     confirmationModal.current.showModal();
-   }
+  };
 
-   const closeConfirmationModal = () => {
-    confirmationModal.current.close()
-   }
+  const closeConfirmationModal = () => {
+    confirmationModal.current.close();
+  };
 
-   const deleteSubCatTask = async (sowId, subCatId, task) => {
-    console.log("delete button clicked", sowId, subCatId, task )
+  const deleteSubCatTask = async (sowId, subCatId, task) => {
+    console.log("delete button clicked", sowId, subCatId, task);
 
-     try {
+    try {
       const response = await fetch(
         "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
         {
@@ -31,7 +31,7 @@ function SubCategoryTask(props) {
               {
                 SowId: sowId,
                 ProjectSubTaskId: subCatId,
-                Segment1: task
+                Segment1: task,
               },
             ],
             _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TASK",
@@ -40,57 +40,85 @@ function SubCategoryTask(props) {
         }
       );
       const data = await response.json();
-      console.log(`Deleted Sub Category Task ${props.subCategoryTask.Segment1}`, data);
+      console.log(
+        `Deleted Sub Category Task ${props.subCategoryTask.Segment1}`,
+        data
+      );
       closeConfirmationModal();
     } catch (error) {
-      alert(`Unable to delete ${props.subCategoryTask.Segment1}. ${error}`)
+      alert(`Unable to delete ${props.subCategoryTask.Segment1}. ${error}`);
     }
-   }
+  };
 
+  return (
+    <div>
+      <details className="sub-grouping">
+        <summary>
+          <p>{props.subCategoryTask.Segment1}</p>
+          <button onClick={() => areYouSure()} className="delete-task">
+            <span className="material-symbols-outlined">
+              <FontAwesomeIcon
+                className="delete-timesheet-record"
+                icon={faTrashCan}
+              />
+            </span>
+          </button>
+        </summary>
+      </details>
 
-    return ( 
-
-        <div>
-            <details className="sub-grouping">
-                <summary>
-                    <p>{props.subCategoryTask.Segment1}</p>
-                <button onClick={() => areYouSure()} className="delete-task">
-                    <span className="material-symbols-outlined">
-                    <FontAwesomeIcon
-                        className="delete-timesheet-record"
-                        icon={faTrashCan}
-                    />
-                    </span>
-                </button>
-                </summary>
-                </details> 
-            
-                <dialog id="myModal"
-                  className="confirm-delete-dialog-box"
-                  ref={confirmationModal}
-            >
-                    <div id="confirmmsgdiv" className="modal-dialog modal-confirm">
-                          <div className="modal-content">
-                              <div className="modal-header flex-column">						
-                                  <h4 className="modal-title w-100">Confirm Delete</h4>	
-                                  <button onClick={closeConfirmationModal} type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                              </div>
-                              <div id="removeconfirmpopup" className="modal-body">
-                                  <p>Are you sure you want to delete <b>{props.subCategoryTask.Segment1}</b>? </p>    				
-                              </div>
-                              <div className="modal-footer justify-content-center">
-                                  <button onClick={closeConfirmationModal} type="button" className="modal-btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                  <button type="button" className="modal-btn btn-danger" onClick={() => deleteSubCatTask(props.subCategoryTask.SowId, props.subCategoryTask.ProjectSubTaskId, props.subCategoryTask.Segment1)}>Delete</button>
-                              </div>
-                          </div>
-                      </div>
-                  </dialog>
-            
-            
-            
-            
+      <dialog
+        id="myModal"
+        className="confirm-delete-dialog-box"
+        ref={confirmationModal}
+      >
+        <div id="confirmmsgdiv" className="modal-dialog modal-confirm">
+          <div className="modal-content">
+            <div className="modal-header flex-column">
+              <h4 className="modal-title w-100">Confirm Delete</h4>
+              <button
+                onClick={closeConfirmationModal}
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
-            );
+            <div id="removeconfirmpopup" className="modal-body">
+              <p>
+                Are you sure you want to delete{" "}
+                <b>{props.subCategoryTask.Segment1}</b>?{" "}
+              </p>
+            </div>
+            <div className="modal-footer justify-content-center">
+              <button
+                onClick={closeConfirmationModal}
+                type="button"
+                className="modal-btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="modal-btn btn-danger"
+                onClick={() =>
+                  deleteSubCatTask(
+                    props.subCategoryTask.SowId,
+                    props.subCategoryTask.ProjectSubTaskId,
+                    props.subCategoryTask.Segment1
+                  )
+                }
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </dialog>
+    </div>
+  );
 }
 
 export default SubCategoryTask;
