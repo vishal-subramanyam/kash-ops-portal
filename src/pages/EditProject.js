@@ -6,6 +6,7 @@ import "../assets/styles/Styles.css";
 import AddSubCategoryForm from "../components/AddSubCategoryForm";
 import ProjectSubCategory from "../components/ProjectSubCategory";
 import SaveNewSubCategory from "../components/SaveNewSubCategory";
+import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 
 
 function EditProject() {
@@ -35,13 +36,16 @@ function EditProject() {
   useEffect(() => {
     console.log("use effect to get all companies")
     getAllCompaniesProjects();
-    getProjectAndSubcategories()
   }, [])
-
+  
   useEffect(() => {
-    console.log("Use effect to get all projects and subcategories", selectedCompanyIdState)
-    getProjectsByCompany(selectedCompanyIdState)
-  }, [selectedCompanyName])
+    getProjectAndSubcategories()
+  }, [selectedProjectSowIdState])
+
+  // useEffect(() => {
+  //   console.log("Use effect to get all projects and subcategories", selectedCompanyIdState)
+  //   getProjectsByCompany(selectedCompanyIdState)
+  // }, [selectedCompanyName])
 
   const getAllCompaniesProjects = async () => {
     await fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
@@ -108,12 +112,6 @@ function EditProject() {
       .catch((err) => alert("Unable to get project subcategories from database.", err));
   }
 
-  const filterTasksBySubCategory = (subCategories) => {
-    allTasksBySubCategory = subCategories.filter((task) => {
-      return task.ProjectSubTaskId 
-    })
-  }
-
   const populateSubAssignmentsWorkArea = (e) => {
     console.log("project sub assignments", e.target[e.target.selectedIndex].getAttribute("data-value"));
     let selectedProjectSowId = e.target[e.target.selectedIndex].getAttribute("data-sowid");
@@ -123,7 +121,7 @@ function EditProject() {
       return selectedProjectSowId === subCat.SowId
     })
     subCategoriesByProject = subCatBySowId
-    setSubCategoriesByProjectState(subCatBySowId)
+    // setSubCategoriesByProjectState(subCatBySowId)
     // filterTasksBySubCategory(subCategoriesByProject)
     console.log(subCategoriesByProject)
     // console.log(allTasksBySubCategory)
@@ -177,7 +175,10 @@ function EditProject() {
               ...prevState, newSubCategory[i]
             ])
           }
-
+          newWorkAreaInput.current.value = ""
+          newWorkAreaIdInput.current.value = ""
+          // hide the add new sub cat component
+          closeEditWorkArea()
         } catch (error) {
           // enter your logic for when there is an error (ex. error toast)
           console.log(error);
@@ -187,59 +188,59 @@ function EditProject() {
 
   }
 
-  // add task to existing sub category
-  const addTaskToSubCategory = async (projectId,subCatTitle, subCatId, segment1) => {
-    // e.preventDefault()
-    console.log("Add task to sub category",  projectId, subCatTitle, subCatId, segment1)
-    let newSubCatTask = {
-                    SowId: projectId,
-                    ProjectSubTaskId: subCatId,
-                    SubTaskTitle: subCatTitle,
-                    Segment2: "",
-                    Segment1: segment1,
-                    Segment3: "" }
-    // add task to existing sub category. Validate if task name field is filled out
-    if (segment1 === undefined || segment1 === "") {
-      alert("Add a task name to add to sub category.")
-    } else {
-      console.log("run fetch to add task to sub cat")
-      try {
-          const response = await fetch(
-            "http://localhost:4040/GenericTransactionService/processTransaction",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                // your expected POST request payload goes here
-                data: [
-                    {
-                    SowId: projectId,
-                    ProjectSubTaskId: subCatId,
-                    SubTaskTitle: subCatTitle,
-                    Segment2: "",
-                    Segment1: segment1,
-                    Segment3: ""
-                  },
-                ],
-                _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
-                secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
-              }),
-            }
-          );
-          const data = await response.json();
-          console.log("Added task to sub category table", data);
+  // // add task to existing sub category
+  // const addTaskToSubCategory = async (projectId,subCatTitle, subCatId, segment1) => {
+  //   // e.preventDefault()
+  //   console.log("Add task to sub category",  projectId, subCatTitle, subCatId, segment1)
+  //   let newSubCatTask = {
+  //                   SowId: projectId,
+  //                   ProjectSubTaskId: subCatId,
+  //                   SubTaskTitle: subCatTitle,
+  //                   Segment2: "",
+  //                   Segment1: segment1,
+  //                   Segment3: "" }
+  //   // add task to existing sub category. Validate if task name field is filled out
+  //   if (segment1 === undefined || segment1 === "") {
+  //     alert("Fill in a task name.")
+  //   } else {
+  //     console.log("run fetch to add task to sub cat")
+  //     try {
+  //         const response = await fetch(
+  //           "http://localhost:4040/GenericTransactionService/processTransaction",
+  //           {
+  //             method: "POST",
+  //             headers: {
+  //               "Content-Type": "application/json",
+  //             },
+  //             body: JSON.stringify({
+  //               // your expected POST request payload goes here
+  //               data: [
+  //                   {
+  //                   SowId: projectId,
+  //                   ProjectSubTaskId: subCatId,
+  //                   SubTaskTitle: subCatTitle,
+  //                   Segment2: "",
+  //                   Segment1: segment1,
+  //                   Segment3: ""
+  //                 },
+  //               ],
+  //               _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
+  //               secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+  //             }),
+  //           }
+  //         );
+  //         const data = await response.json();
+  //         console.log("Added task to sub category table", data);
 
-          // update the array that is passed to project sub cat component that then filters to show sub cat tasks (segment1s)
-          setSubCategoriesByProjectState((prevState) => [...prevState, newSubCatTask])
-        } catch (error) {
-          console.log(error);
-          alert("Unable to add task.")
-        }
+  //         // update the array that is passed to project sub cat component that then filters to show sub cat tasks (segment1s)
+  //         setSubCategoriesByProjectState((prevState) => [...prevState, newSubCatTask])
+  //       } catch (error) {
+  //         console.log(error);
+  //         alert("Unable to add task.")
+  //       }
   
-    }
-  }
+  //   }
+  // }
 
   const validateRequiredInputs = (e) => {
     e.preventDefault()
@@ -263,19 +264,20 @@ function EditProject() {
       addProjectSubCategory();
   };
 
-   const areYouSure = (projectId, subCatId, subCatTask) => {
-    console.log("delete confirmation", projectId, subCatId, subCatTask)
-    //                 document.getElementById('removeconfirmpopup').value = "";
-    confirmationModal.current.showModal();
-   }
+  //  const areYouSure = (projectId, subCatId, subCatTask) => {
+  //   console.log("delete confirmation", projectId, subCatId, subCatTask)
+  //   console.log(confirmationModal.current)
+  //   //                 document.getElementById('removeconfirmpopup').value = "";
+  //   confirmationModal.current.showModal();
+  //  }
 
-   const closeConfirmationModal = () => {
-    confirmationModal.current.close()
-   }
+  //  const closeConfirmationModal = () => {
+  //   confirmationModal.current.close()
+  //  }
 
-   const deleteWorkArea = (sowId, taskId) => {
-    console.log("delete button clicked")
-   }
+  //  const deleteWorkArea = (sowId, taskId) => {
+  //   console.log("delete button clicked")
+  //  }
 
   return (
     <div className="add-sub-assignment-page--body">
@@ -516,10 +518,11 @@ function EditProject() {
                 {console.log(consolidatedSubCategories)}
                 {
                   consolidatedSubCategories.map((subCat) => {
-                    return <ProjectSubCategory 
-                    subCategory={subCat} 
-                    allTasksBySubCategory={subCategoriesByProjectState} addTaskToSubCat={addTaskToSubCategory}
-                    deleteSubCatConfirmation={areYouSure}
+                    return <ProjectSubCategory
+                    subCategory={subCat}
+                    allSubCategories={allSubCategories}
+                    // addTaskToSubCat={addTaskToSubCategory}
+                    // deleteSubCatConfirmation={areYouSure}
                     projectId= {subCat.SowId}
                     subCatTitle={subCat.SubTaskTitle}
                     subCatId={subCat.ProjectSubTaskId}
@@ -532,7 +535,12 @@ function EditProject() {
           </div>
           </form>
           
-          <dialog id="myModal" className="confirm-delete-dialog-box" ref={confirmationModal}>
+         {/* <DeleteConfirmationModal close={closeConfirmationModal} deleteRecord={deleteWorkArea} ref={confirmationModal}/> */}
+          
+          {/* <dialog id="myModal"
+          className="confirm-delete-dialog-box"
+          ref={confirmationModal}
+    >
              <div id="confirmmsgdiv" className="modal-dialog modal-confirm">
                   <div className="modal-content">
                       <div className="modal-header flex-column">						
@@ -548,8 +556,8 @@ function EditProject() {
                       </div>
                   </div>
               </div>
-          </dialog>
-          
+          </dialog> */}
+
         </div>
       </main>
     </div>

@@ -33,18 +33,6 @@ function EditEmployeeInfo() {
     getAllUsers()
   }, [selectedCurrentUser]);
 
-  // useEffect(() => {
-  //   for(let i = 0; i < adminLevelDesignation.current.childNodes.length; i++ ) {
-  //     let adminSelectionChoice = adminLevelDesignation.current.childNodes[i].getAttribute('value')
-  //     // if (adminSelectionChoice === selectedEmployeeFromDropdown[0].AdminLevel) {
-  //       console.log("seleted admin", adminSelectionChoice)
-  //       adminLevelDesignation.current.childNodes[0].setAttribute('selected', true)
-  //       return
-  //     // } else {
-  //       // adminLevelDesignation.current.childNodes[i].setAttribute('selected', false)
-  //     // }
-  //   }
-  // }, [selectedCurrentUser])
 
   const getAllUsers = () => {
     console.log("Use effect to query user table")
