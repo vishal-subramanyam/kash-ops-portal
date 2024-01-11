@@ -131,9 +131,9 @@ function SaveNewSubCategory(props) {
       </div>
       <div class="workspace-add-task-top-workarea-view">
         {console.log(subCatRecordsToSave)}
-        {newTaskToDisplay.map((task) => {
+        {newTaskToDisplay.map((task, i) => {
           return (
-            <details class="new-sub-grouping">
+            <details class="new-sub-grouping" key={i}>
               <summary>{task.Segment1}</summary>
             </details>
           );

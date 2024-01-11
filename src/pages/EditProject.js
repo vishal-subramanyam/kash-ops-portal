@@ -169,7 +169,7 @@ function EditProject() {
   };
 
   const closeEditWorkArea = () => {
-    console.log(editAddSubCat.current);
+    // console.log(editAddSubCat.current);
     setShowCreateNewSubCategory(false);
   };
 
@@ -215,8 +215,8 @@ function EditProject() {
       ]);
       newWorkAreaInput.current.value = "";
       newWorkAreaIdInput.current.value = "";
+      // await getProjectAndSubcategories();
       // hide the add new sub cat component
-      await getProjectAndSubcategories();
       closeEditWorkArea();
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)

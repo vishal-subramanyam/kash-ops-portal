@@ -8,18 +8,20 @@ function ProjectSubCategory(props) {
   let taskSegment1 = useRef();
   let confirmationModal = useRef();
   // Show the tasks per sub category and filter out segments with no value. set that filtered array to state
-  let [tasksBySubCategory, setTaskBySubCategory] = useState(
-    props.allSubCategories.filter((task) => {
-      return (
-        task.SowId === props.subCategory.SowId &&
-        task.ProjectSubTaskId === props.subCategory.ProjectSubTaskId &&
-        task.Segment1 !== "" &&
-        task.Segment1 !== "-"
-      );
-    })
+  let filteredSubCats = props.allSubCategories.filter((task) => {
+    return (
+      task.SowId === props.subCategory.SowId &&
+      task.ProjectSubTaskId === props.subCategory.ProjectSubTaskId &&
+      task.Segment1 !== "" &&
+      task.Segment1 !== "-"
+    );
+  });
+  let [tasksBySubCategory, setTaskBySubCategory] = useState(filteredSubCats);
+  console.log("filtered Sub Cats (proj sub cat component)", filteredSubCats);
+  console.log(
+    "filtered Sub Cats State Arr (proj sub cat component)",
+    tasksBySubCategory
   );
-  console.log(props.allSubCategories);
-  console.log(tasksBySubCategory);
 
   // add task to existing sub category
   const addTaskToSubCategory = async (
@@ -236,7 +238,10 @@ function ProjectSubCategory(props) {
           </form>
         </div>
         <div id="segment1id">
-          {console.log(tasksBySubCategory)}
+          {console.log(
+            "filtered Sub Cats State Arr to display(proj sub cat component)",
+            tasksBySubCategory
+          )}
           {tasksBySubCategory.map((task, i) => {
             return (
               <SubCategoryTask
