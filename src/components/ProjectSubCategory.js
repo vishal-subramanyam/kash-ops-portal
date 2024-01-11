@@ -84,7 +84,6 @@ function ProjectSubCategory(props) {
         console.log(error);
         alert("Unable to add task.");
       }
-      props.refetchProjectSubCats();
     }
   };
 
@@ -166,7 +165,7 @@ function ProjectSubCategory(props) {
                 viewBox="0,0,256,256"
                 width="25"
                 height="25"
-                fill-rule="nonzero"
+                fillRule="nonzero"
               >
                 <g
                   fill="#e7549a"
@@ -243,8 +242,9 @@ function ProjectSubCategory(props) {
               <SubCategoryTask
                 key={i}
                 subCategoryTask={task}
-                refetchAll={props.reset()}
+                refetchAll={props.reset}
                 allTasks={tasksBySubCategory}
+                resetTasks={setTaskBySubCategory}
               />
             );
           })}

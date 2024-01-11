@@ -49,8 +49,12 @@ function EditProject() {
   useEffect(() => {
     console.log("use effect to get all companies");
     getAllCompaniesProjects();
-    getProjectAndSubcategories();
+    // getProjectAndSubcategories();
   }, []);
+
+  useEffect(() => {
+    getProjectAndSubcategories();
+  }, [consolidatedSubCategories]);
 
   // useEffect(() => {
   //   console.log("Use effect to get all projects and subcategories", selectedCompanyIdState)
@@ -212,8 +216,8 @@ function EditProject() {
       newWorkAreaInput.current.value = "";
       newWorkAreaIdInput.current.value = "";
       // hide the add new sub cat component
+      await getProjectAndSubcategories();
       closeEditWorkArea();
-      getProjectAndSubcategories();
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
       console.log(error);

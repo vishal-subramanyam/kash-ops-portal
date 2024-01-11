@@ -46,10 +46,11 @@ function SubCategoryTask(props) {
       );
       closeConfirmationModal();
       // console.log(props.allTasks);
-      // let deleteTask = props.allTasks.filter((task) => {
-      //   return task.Segment1 !== props.subCategoryTask.Segment1;
-      // });
-      props.reset();
+      let deleteTask = props.allTasks.filter((task) => {
+        return task.Segment1 !== props.subCategoryTask.Segment1;
+      });
+      props.resetTasks(deleteTask);
+      // props.reset();
     } catch (error) {
       alert(`Unable to delete ${props.subCategoryTask.Segment1}. ${error}`);
     }

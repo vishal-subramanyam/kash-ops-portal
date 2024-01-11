@@ -31,7 +31,7 @@ function SaveNewSubCategory(props) {
         Segment1: newTaskName.current.value,
         Segment3: "-",
       };
-      newTaskToDisplay.push(newSubCatTaskRecord);
+      setNewTaskToDisplay((prevState) => [...prevState, newSubCatTaskRecord]);
       setSubCatRecordsToSave((prevState) => [
         ...prevState,
         newSubCatTaskRecord,
