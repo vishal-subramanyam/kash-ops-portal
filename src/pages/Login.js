@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/Login.css";
+import useAuth from "../components/Authentication";
 import LoginForm from "../components/LoginForm";
 import SignUpForm from "../components/SignUpForm";
 
@@ -8,13 +9,13 @@ function Login() {
   const navigate = useNavigate();
   const [showSignUpForm, setShowSignUpForm] = useState(false);
 
-  useEffect(()=> {
-      document.body.classList.add('remove-body-padding');
+  useEffect(() => {
+    document.body.classList.add("remove-body-padding");
 
-      return () => {
-        document.body.classList.remove('remove-body-padding')
-      }
-  }, [])
+    return () => {
+      document.body.classList.remove("remove-body-padding");
+    };
+  }, []);
 
   const userLogin = (e) => {
     e.preventDefault();
@@ -43,8 +44,8 @@ function Login() {
   };
 
   const userSignUp = () => {
-    console.log("Sign Up Form Triggered")
-  }
+    console.log("Sign Up Form Triggered");
+  };
   return (
     <main className="kash-operations-login">
       <div className="kash_operations_home--hero-section">
@@ -59,16 +60,16 @@ function Login() {
             className="button sign_up-button"
             onClick={() => setShowSignUpForm(!showSignUpForm)}
           >
-            <p className="sign_up-button-text">{showSignUpForm ? 'Login' : 'Sign Up'}</p>
+            <p className="sign_up-button-text">
+              {showSignUpForm ? "Login" : "Sign Up"}
+            </p>
           </button>
         </div>
-      {
-      showSignUpForm 
-      ? 
-      <SignUpForm userSignUp={userSignUp} />
-      :
-      <LoginForm userLogin={userLogin} />
-    }
+        {showSignUpForm ? (
+          <SignUpForm userSignUp={userSignUp} />
+        ) : (
+          <LoginForm userLogin={userLogin} />
+        )}
       </div>
     </main>
   );
