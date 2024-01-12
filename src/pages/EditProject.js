@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Link, useAsyncError } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/Styles.css";
@@ -21,10 +21,11 @@ function EditProject() {
   let confirmationModal = useRef();
   let projectDescription = useRef();
   let subCategoryContainer = useRef();
+  let newTaskName = useRef();
   let editAddSubCat = useRef();
-  let [selectedCompanyIdState, setSelectedCompanyIdState] = useState();
-  let subCategoriesByProject = [];
-  let allTasksBySubCategory = [];
+  let taskSegment1 = useRef();
+  let [selectedCompanyIdState, setSelectedCompanyIdState] = useState("");
+  let [newSubCategory, setNewSubCategory] = useState([]);
   let [selectedCompanyName, setSelectedCompanyName] = useState("");
   let [showNewSubCategory, setShowCreateNewSubCategory] = useState(false);
   let [createBtnDisabled, setCreateBtnDisabled] = useState(true);
@@ -38,6 +39,18 @@ function EditProject() {
   let [allSubCategories, setAllSubCategories] = useState([]);
   let [consolidatedSubCategories, setConsolidatedSubCategories] = useState([]);
   let [allCompaniesProjectsArr, setAllCompaniesProjectsArr] = useState([]);
+  let [newTaskToDisplay, setNewTaskToDisplay] = useState([]);
+  let [tasksBySubCategory, setTaskBySubCategory] = useState([]);
+  let [subCatRecordsToSave, setSubCatRecordsToSave] = useState([
+    // {
+    //   SowId: props.projectId,
+    //   ProjectSubTaskId: props.subCatId,
+    //   SubTaskTitle: props.subCatName,
+    //   Segment2: "-",
+    //   Segment1: "-",
+    //   Segment3: "-",
+    // },
+  ]);
   let requiredInputs = [
     companyName,
     projectDescription,
@@ -47,19 +60,15 @@ function EditProject() {
 
   //   on page load, fetch companies from DB
   useEffect(() => {
-    console.log("use effect to get all companies");
+    console.log("use effect to get all companies, projects and sub categories");
     getAllCompaniesProjects();
     // getProjectAndSubcategories();
   }, []);
 
   useEffect(() => {
     getProjectAndSubcategories();
+    // populateSubAssignmentsWorkArea();
   }, [consolidatedSubCategories]);
-
-  // useEffect(() => {
-  //   console.log("Use effect to get all projects and subcategories", selectedCompanyIdState)
-  //   getProjectsByCompany(selectedCompanyIdState)
-  // }, [selectedCompanyName])
 
   const getAllCompaniesProjects = async () => {
     await fetch(
@@ -77,14 +86,19 @@ function EditProject() {
     )
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
+        // set state array that queries PROJECTS_AND_COMPANY_INFO_TABLE
         setAllCompaniesProjectsArr(res.data);
+
+        // filter all companies and projects array to remove duplicate company values
         let removeDuplicateCompany = Object.values(
           res.data.reduce((c, e) => {
             if (!c[e.CompanyName]) c[e.CompanyName] = e;
             return c;
           }, {})
         );
+        console.log(removeDuplicateCompany);
+        // set state array without duplicate company values
         setAllCompaniesRemoveDuplicateArr(removeDuplicateCompany);
       })
       .catch((err) => alert("Unable to get companies from database.", err));
@@ -95,25 +109,27 @@ function EditProject() {
     let selCompanyName = e.target[e.target.selectedIndex].getAttribute("value");
     // set state variable to selected company name
     setSelectedCompanyName(selCompanyName);
-    console.log(
-      "company selected",
-      e.target[e.target.selectedIndex].getAttribute("data-companyid")
-    );
     let selectedCompanyId =
       e.target[e.target.selectedIndex].getAttribute("data-companyid");
     console.log(selectedCompanyId);
     // set state variable to selected company name
+    setSelectedProjectSowIdState("");
+    console.log(
+      "selected project sow Id after company name change",
+      selectedProjectSowIdState
+    );
     setSelectedCompanyIdState(selectedCompanyId);
     getProjectsByCompany(selectedCompanyId);
   };
 
   const getProjectsByCompany = (id) => {
-    console.log("Getting projects by company", allProjectsByCompany);
     let projectsByCompanyId = allCompaniesProjectsArr.filter((project) => {
       return id === project.CompanyId;
     });
-    console.log(projectsByCompanyId);
     setAllProjectsByCompany(projectsByCompanyId);
+
+    // console.log(projectDescription);
+    // projectDescription.current.childNodes[0].setAttribute("selected", true);
   };
 
   const getProjectAndSubcategories = async () => {
@@ -141,30 +157,39 @@ function EditProject() {
       );
   };
 
-  const populateSubAssignmentsWorkArea = (e) => {
-    console.log(
-      "project sub assignments",
-      e.target[e.target.selectedIndex].getAttribute("data-value")
-    );
-    let selectedProjectSowId =
-      e.target[e.target.selectedIndex].getAttribute("data-sowid");
-    setSelectedProjectSowIdState(selectedProjectSowId);
-    console.log(allSubCategories);
+  const updateFilteredSubCats = () => {
+    console.log("updated filtered sub cat function", allSubCategories);
     let subCatsBySowId = allSubCategories.filter((subCat) => {
-      return selectedProjectSowId === subCat.SowId;
+      return selectedProjectSowIdState === subCat.SowId;
     });
-    subCategoriesByProject = subCatsBySowId;
-    // setSubCategoriesByProjectState(subCatBySowId)
-    // filterTasksBySubCategory(subCategoriesByProject)
-    console.log(subCategoriesByProject);
-    // console.log(allTasksBySubCategory)
     let filteredSubCats = Object.values(
-      subCategoriesByProject.reduce((c, e) => {
+      subCatsBySowId.reduce((c, e) => {
         if (!c[e.SubTaskTitle]) c[e.SubTaskTitle] = e;
         return c;
       }, {})
     );
-    console.log(filteredSubCats);
+    console.log("update filtered sub cat state array", filteredSubCats);
+    setConsolidatedSubCategories(filteredSubCats);
+  };
+
+  const populateSubAssignmentsWorkArea = (e) => {
+    let selectedProjectSowId =
+      e.target[e.target.selectedIndex].getAttribute("data-sowid");
+    setSelectedProjectSowIdState(selectedProjectSowId);
+
+    let subCatsBySowId = allSubCategories.filter((subCat) => {
+      return selectedProjectSowId === subCat.SowId;
+    });
+
+    // console.log(subCatsBySowId);
+
+    let filteredSubCats = Object.values(
+      subCatsBySowId.reduce((c, e) => {
+        if (!c[e.SubTaskTitle]) c[e.SubTaskTitle] = e;
+        return c;
+      }, {})
+    );
+    // console.log(filteredSubCats);
     setConsolidatedSubCategories(filteredSubCats);
   };
 
@@ -174,19 +199,13 @@ function EditProject() {
   };
 
   // open the create new sub cat component
-  const addProjectSubCategory = async (sowId, subCatId, subCatTitle) => {
-    console.log(
-      "Add sub category to selected project by SOW ID",
-      sowId,
-      subCatId,
-      subCatTitle
-    );
+  const addProjectSubCategory = async () => {
     setShowCreateNewSubCategory(true);
   };
 
   // create new sub cat (and tasks) record
   const saveProjectSubCategory = async (newSubCategory) => {
-    console.log("save project sub category", newSubCategory);
+    // console.log(newSubCategory);
 
     try {
       const response = await fetch(
@@ -209,13 +228,17 @@ function EditProject() {
       console.log("Added new sub category", data);
       // add new sub cat to state array to update UI
 
+      // for (let i = 0; i < newSubCategory.length; i++) {
+      //   setAllSubCategories((prevState) => [...prevState, newSubCategory[i]]);
+      // }
       setConsolidatedSubCategories((prevState) => [
         ...prevState,
         newSubCategory[0],
       ]);
       newWorkAreaInput.current.value = "";
       newWorkAreaIdInput.current.value = "";
-      // await getProjectAndSubcategories();
+      await getProjectAndSubcategories();
+      // updateFilteredSubCats();
       // hide the add new sub cat component
       closeEditWorkArea();
     } catch (error) {
@@ -228,11 +251,11 @@ function EditProject() {
   const validateRequiredInputs = (e) => {
     e.preventDefault();
     // validate inputs
-    console.log("Validate inputs");
-    console.log("company name", companyName.current.value);
-    console.log("sub cat Id", newWorkAreaIdInput.current.value);
-    console.log("sub cat name", newWorkAreaInput.current.value);
-    console.log("project", projectDescription.current.value);
+    // console.log("Validate inputs");
+    // console.log("company name", companyName.current.value);
+    // console.log("sub cat Id", newWorkAreaIdInput.current.value);
+    // console.log("sub cat name", newWorkAreaInput.current.value);
+    // console.log("project", projectDescription.current.value);
     // run function to edit project details
     // create sub-assignment for project
     // open confirmation portal function
@@ -247,20 +270,83 @@ function EditProject() {
     addProjectSubCategory();
   };
 
-  //  const areYouSure = (projectId, subCatId, subCatTask) => {
-  //   console.log("delete confirmation", projectId, subCatId, subCatTask)
-  //   console.log(confirmationModal.current)
-  //   //                 document.getElementById('removeconfirmpopup').value = "";
-  //   confirmationModal.current.showModal();
-  //  }
+  // add task to existing sub category
+  const addTaskToSubCategory = async (
+    projectId,
+    subCatTitle,
+    subCatId,
+    segment1
+  ) => {
+    // e.preventDefault()
+    // console.log(
+    //   "Add task to sub category",
+    //   projectId,
+    //   subCatTitle,
+    //   subCatId,
+    //   segment1
+    // );
+    let newSubCatTask = {
+      SowId: projectId,
+      ProjectSubTaskId: subCatId,
+      SubTaskTitle: subCatTitle,
+      Segment2: "",
+      Segment1: segment1,
+      Segment3: "",
+    };
+    // add task to existing sub category. Validate if task name field is filled out
+    if (segment1 === undefined || segment1 === "") {
+      alert("Fill in a task name.");
+    } else {
+      console.log("run fetch to add task to sub cat");
+      try {
+        const response = await fetch(
+          "http://localhost:4040/GenericTransactionService/processTransaction",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              // your expected POST request payload goes here
+              data: [
+                {
+                  SowId: projectId,
+                  ProjectSubTaskId: subCatId,
+                  SubTaskTitle: subCatTitle,
+                  Segment2: "",
+                  Segment1: segment1,
+                  Segment3: "",
+                },
+              ],
+              _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
+              secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+            }),
+          }
+        );
+        const data = await response.json();
+        console.log("Added task to sub category table", data);
 
-  //  const closeConfirmationModal = () => {
-  //   confirmationModal.current.close()
-  //  }
+        // update the array that filters to show sub cat tasks (segment1s)
+        setTaskBySubCategory((prevState) => [...prevState, newSubCatTask]);
+        taskSegment1.current.value = "";
+      } catch (error) {
+        console.log(error);
+        alert("Unable to add task.");
+      }
+    }
+  };
 
-  //  const deleteWorkArea = (sowId, taskId) => {
-  //   console.log("delete button clicked")
-  //  }
+  const areYouSure = () => {
+    confirmationModal.current.showModal();
+  };
+
+  const closeConfirmationModal = () => {
+    confirmationModal.current.close();
+  };
+
+  const deleteWorkArea = (sowId, taskId) => {
+    console.log("delete button clicked");
+  };
 
   return (
     <div className="add-sub-assignment-page--body">
@@ -505,59 +591,199 @@ function EditProject() {
               {/* Conditionally Show the create new sub category UI */}
               {showNewSubCategory ? (
                 <SaveNewSubCategory
-                  saveRecord={saveProjectSubCategory}
-                  close={closeEditWorkArea}
                   projectId={selectedProjectSowIdState}
-                  subCatName={newWorkAreaInput.current.value}
                   subCatId={newWorkAreaIdInput.current.value}
+                  subCatName={newWorkAreaInput.current.value}
+                  saveRecord={saveProjectSubCategory}
                 />
               ) : (
                 ""
               )}
             </div>
-            {console.log(consolidatedSubCategories)}
+            {console.log(
+              "filtered sub cat array to display",
+              consolidatedSubCategories
+            )}
             {consolidatedSubCategories.map((subCat, i) => {
               return (
-                <ProjectSubCategory
-                  key={i}
-                  subCategory={subCat}
-                  // allSubCategories={subCategoriesByProjectState}
-                  allSubCategories={allSubCategories}
-                  // addTaskToSubCat={addTaskToSubCategory}
-                  // deleteSubCatConfirmation={areYouSure}
-                  reset={getProjectAndSubcategories}
-                  subCats={consolidatedSubCategories}
-                  resetConsolidatedSubCatArr={setConsolidatedSubCategories}
-                  projectId={subCat.SowId}
-                  subCatTitle={subCat.SubTaskTitle}
-                  subCatId={subCat.ProjectSubTaskId}
-                />
+                <details className="main-grouping">
+                  <summary>
+                    <p>{subCat.SubTaskTitle}</p>
+
+                    <button
+                      onClick={() => areYouSure()}
+                      className="delete-sub-category"
+                    >
+                      <span className="material-symbols-outlined">
+                        <FontAwesomeIcon
+                          className="delete-timesheet-record"
+                          icon={faTrashCan}
+                        />
+                      </span>
+                    </button>
+                  </summary>
+                  <div className="workspace-add-task-to-workarea-input">
+                    <form className="workspace-add-task-input-area">
+                      <div className="workspace-add-task-plus">
+                        <svg
+                          id="addWorkspaceBtn"
+                          className="add-sub-assignment-details-form--add-sub-assignment-button-svg"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0,0,256,256"
+                          width="25"
+                          height="25"
+                          fillRule="nonzero"
+                        >
+                          <g
+                            fill="#e7549a"
+                            fillRule="nonzero"
+                            stroke="none"
+                            strokeWidth="1"
+                            strokeLinecap="butt"
+                            strokeLinejoin="miter"
+                            strokeMiterlimit="10"
+                            strokeDasharray=""
+                            strokeDashoffset="0"
+                            fontFamily="none"
+                            fontWeight="none"
+                            fontSize="none"
+                            textAnchor="none"
+                            style={{ mixBlendMode: "normal" }}
+                          >
+                            <path
+                              d="M0,256v-256h256v256z"
+                              id="bgRectangle"
+                            ></path>
+                          </g>
+                          <g
+                            fill="#ffffff"
+                            fillRule="evenodd"
+                            stroke="none"
+                            strokeWidth="1"
+                            strokeLinecap="butt"
+                            strokeLinejoin="miter"
+                            strokeMiterlimit="10"
+                            strokeDasharray=""
+                            strokeDashoffset="0"
+                            fontFamily="none"
+                            fontWeight="none"
+                            fontSize="none"
+                            textAnchor="none"
+                            style={{ mixBlendMode: "normal" }}
+                          >
+                            <g transform="scale(10.66667,10.66667)">
+                              <path d="M11,2v9h-9v2h9v9h2v-9h9v-2h-9v-9z"></path>
+                            </g>
+                          </g>
+                        </svg>
+                      </div>
+                      <div className="workspace-add-task-text-input">
+                        <input
+                          id="addtaskid"
+                          className="add-new-sub-task-input add-workspace"
+                          type="text"
+                          placeholder="New Task Name"
+                          defaultValue={""}
+                          ref={taskSegment1}
+                          required
+                        />
+                      </div>
+
+                      <button
+                        className="workspace-add-task-btn"
+                        type="button"
+                        onClick={() =>
+                          addTaskToSubCategory(
+                            subCat.SowId,
+                            subCat.SubTaskTitle,
+                            subCat.ProjectSubTaskId,
+                            taskSegment1.current.value
+                          )
+                        }
+                      >
+                        Add Task
+                      </button>
+                    </form>
+                  </div>
+
+                  <div id="segment1id">
+                    {console.log(
+                      "filtered Sub Cats State Arr to display(edit project component)",
+                      tasksBySubCategory
+                    )}
+                    {tasksBySubCategory.map((task, i) => {
+                      return (
+                        <details className="sub-grouping">
+                          <summary>
+                            <p>{task.Segment1}</p>
+                            <button
+                              onClick={() => areYouSure()}
+                              className="delete-task"
+                            >
+                              <span className="material-symbols-outlined">
+                                <FontAwesomeIcon
+                                  className="delete-timesheet-record"
+                                  icon={faTrashCan}
+                                />
+                              </span>
+                            </button>
+                          </summary>
+                        </details>
+                      );
+                    })}
+                  </div>
+                </details>
               );
             })}
           </div>
 
           {/* <DeleteConfirmationModal close={closeConfirmationModal} deleteRecord={deleteWorkArea} ref={confirmationModal}/> */}
 
-          {/* <dialog id="myModal"
-          className="confirm-delete-dialog-box"
-          ref={confirmationModal}
-    >
-             <div id="confirmmsgdiv" className="modal-dialog modal-confirm">
-                  <div className="modal-content">
-                      <div className="modal-header flex-column">						
-                          <h4 className="modal-title w-100">Confirm Delete</h4>	
-                          <button onClick={closeConfirmationModal} type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                      </div>
-                      <div id="removeconfirmpopup" className="modal-body">
-                          <p>Are you sure you want to delete <b>Sub Category or Segment</b>? </p>    				
-                      </div>
-                      <div className="modal-footer justify-content-center">
-                          <button onClick={closeConfirmationModal} type="button" className="modal-btn btn-secondary" data-dismiss="modal">Cancel</button>
-                          <button type="button" className="modal-btn btn-danger" onClick={deleteWorkArea}>Delete</button>
-                      </div>
-                  </div>
+          <dialog
+            id="myModal"
+            className="confirm-delete-dialog-box"
+            ref={confirmationModal}
+          >
+            <div id="confirmmsgdiv" className="modal-dialog modal-confirm">
+              <div className="modal-content">
+                <div className="modal-header flex-column">
+                  <h4 className="modal-title w-100">Confirm Delete</h4>
+                  <button
+                    onClick={closeConfirmationModal}
+                    type="button"
+                    className="close"
+                    data-dismiss="modal"
+                    aria-hidden="true"
+                  >
+                    &times;
+                  </button>
+                </div>
+                <div id="removeconfirmpopup" className="modal-body">
+                  <p>
+                    Are you sure you want to delete{" "}
+                    <b>Sub Category or Segment</b>?{" "}
+                  </p>
+                </div>
+                <div className="modal-footer justify-content-center">
+                  <button
+                    onClick={closeConfirmationModal}
+                    type="button"
+                    className="modal-btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="modal-btn btn-danger"
+                    onClick={deleteWorkArea}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-          </dialog> */}
+            </div>
+          </dialog>
         </div>
       </main>
     </div>
