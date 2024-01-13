@@ -1,8 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
 
 function EditCompanyAdmin() {
+  let [allUsers, setAllUsers] = useState([]);
+  let [allCompanies, setAllCompanies] = useState([]);
+
+  useEffect(() => {
+    getAllCompanies();
+    getAllUsers();
+  });
+
+  const getAllCompanies = () => {
+    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ _keyword_: "KASH_OPERATIONS_COMPANY_TABLE" }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setAllCompanies(res.data);
+      })
+      .catch((err) => alert(err));
+  };
+  const getAllUsers = () => {
+    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ _keyword_: "KASH_OPERATIONS_USER_TABLE" }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setAllUsers(res.data);
+      })
+      .catch((err) => alert(err));
+  };
+
   return (
     <div>
       <dialog class="database-submit-dialog" id="database-submit-dialog">
@@ -62,6 +103,11 @@ function EditCompanyAdmin() {
                     class="attach_contact_to_project--company_name--selection"
                   >
                     <option value="">- Select a Company -</option>
+                    {allCompanies.map((company) => {
+                      <option value={company.CompanyName}>
+                        {company.CompanyName}
+                      </option>;
+                    })}
                   </select>
                 </label>
 
@@ -112,7 +158,7 @@ function EditCompanyAdmin() {
                   class="remove_contact_from_project--project_description--selection"
                   onchange="populateAdminsToRemove()"
                 >
-                  <option value="">- Select a Project -</option>
+                  <option value="">- Select a Company -</option>
                 </select>
               </label>
 
