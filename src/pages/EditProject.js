@@ -206,9 +206,9 @@ function EditProject() {
       console.log("Added new sub category", data);
       // add new sub cat to state array to update UI
 
-      // for (let i = 0; i < newSubCategory.length; i++) {
-      //   setAllSubCategories((prevState) => [...prevState, newSubCategory[i]]);
-      // }
+      for (let i = 0; i < newSubCategory.length; i++) {
+        setAllSubCategories((prevState) => [...prevState, newSubCategory[i]]);
+      }
       setConsolidatedSubCategories((prevState) => [
         ...prevState,
         newSubCategory[0],
@@ -241,8 +241,39 @@ function EditProject() {
         return;
       }
     }
-    // show component to run function to save new sub cat record
-    addProjectSubCategory();
+
+    for (let i = 0; i < consolidatedSubCategories.length; i++) {
+      if (
+        consolidatedSubCategories[i].SubTaskTitle ===
+        newWorkAreaInput.current.value
+      ) {
+        alert("Sub Category Name already exists.");
+        newWorkAreaInput.current.value = "";
+        newWorkAreaIdInput.current.value = "";
+        return;
+      } else if (
+        consolidatedSubCategories[i].ProjectSubTaskId ===
+        newWorkAreaIdInput.current.value
+      ) {
+        alert("Sub Category ID already exists.");
+        newWorkAreaInput.current.value = "";
+        newWorkAreaIdInput.current.value = "";
+        return;
+      } else if (
+        consolidatedSubCategories[i].SubTaskTitle ===
+          newWorkAreaInput.current.value &&
+        consolidatedSubCategories[i].ProjectSubTaskId ===
+          newWorkAreaIdInput.current.value
+      ) {
+        alert("Sub Category Name and ID already exist.");
+        newWorkAreaInput.current.value = "";
+        newWorkAreaIdInput.current.value = "";
+        return;
+      } else {
+        // show component to run function to save new sub cat record
+        addProjectSubCategory();
+      }
+    }
   };
 
   // add task to existing sub category
@@ -571,6 +602,7 @@ function EditProject() {
                   subCatId={newWorkAreaIdInput.current.value}
                   subCatName={newWorkAreaInput.current.value}
                   saveRecord={saveProjectSubCategory}
+                  close={closeEditWorkArea}
                 />
               ) : (
                 ""
