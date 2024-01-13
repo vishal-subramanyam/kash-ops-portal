@@ -50,7 +50,7 @@ function SubCategoryTask(props) {
         return task.Segment1 !== props.subCategoryTask.Segment1;
       });
       props.resetTasks(deleteTask);
-      // props.reset();
+      props.refetch();
     } catch (error) {
       alert(`Unable to delete ${props.subCategoryTask.Segment1}. ${error}`);
     }

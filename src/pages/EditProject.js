@@ -206,9 +206,9 @@ function EditProject() {
       console.log("Added new sub category", data);
       // add new sub cat to state array to update UI
 
-      for (let i = 0; i < newSubCategory.length; i++) {
-        setAllSubCategories((prevState) => [...prevState, newSubCategory[i]]);
-      }
+      // for (let i = 0; i < newSubCategory.length; i++) {
+      //   setAllSubCategories((prevState) => [...prevState, newSubCategory[i]]);
+      // }
       setConsolidatedSubCategories((prevState) => [
         ...prevState,
         newSubCategory[0],
@@ -311,18 +311,18 @@ function EditProject() {
   //   }
   // };
 
-  const areYouSure = () => {
-    confirmationModal.current.showModal();
-  };
+  // const areYouSure = () => {
+  //   confirmationModal.current.showModal();
+  // };
 
-  const closeConfirmationModal = () => {
-    confirmationModal.current.close();
-  };
+  // const closeConfirmationModal = () => {
+  //   confirmationModal.current.close();
+  // };
 
-  const deleteWorkArea = (sowId, taskId) => {
-    console.log("delete button clicked");
-    closeConfirmationModal();
-  };
+  // const deleteWorkArea = (sowId, taskId) => {
+  //   console.log("delete button clicked");
+  //   closeConfirmationModal();
+  // };
 
   return (
     <div className="add-sub-assignment-page--body">
@@ -704,13 +704,16 @@ function EditProject() {
 
                 <ProjectSubCategory
                   // addTaskToSubCat={addTaskToSubCategory}
-                  close={closeConfirmationModal}
-                  confirm={areYouSure}
+                  // close={closeConfirmationModal}
+                  // confirm={areYouSure}
+                  key={i}
                   subCategory={subCat}
                   projectId={selectedProjectSowIdState}
                   subCatTitle={subCat.SubTaskTitle}
                   subCatId={subCat.ProjectSubTaskId}
                   allSubCats={allSubCategories}
+                  resetConsolidatedSubCatArr={setConsolidatedSubCategories}
+                  reset={getProjectAndSubcategories}
                 />
               );
             })}
@@ -718,7 +721,7 @@ function EditProject() {
 
           {/* <DeleteConfirmationModal close={closeConfirmationModal} deleteRecord={deleteWorkArea} ref={confirmationModal}/> */}
 
-          <dialog
+          {/* <dialog
             id="myModal"
             className="confirm-delete-dialog-box"
             ref={confirmationModal}
@@ -762,7 +765,7 @@ function EditProject() {
                 </div>
               </div>
             </div>
-          </dialog>
+          </dialog> */}
         </div>
       </main>
     </div>
