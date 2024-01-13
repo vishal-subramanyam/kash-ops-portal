@@ -99,6 +99,7 @@ function EditProject() {
 
   const selectCompanyLoadProjectDescription = (e) => {
     setConsolidatedSubCategories([]);
+    projectDescription.current.value = "";
     let selCompanyName = e.target[e.target.selectedIndex].getAttribute("value");
     // set state variable to selected company name
     setSelectedCompanyName(selCompanyName);
