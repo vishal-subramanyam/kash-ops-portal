@@ -38,6 +38,15 @@ function ProjectSubCategory(props) {
       subCatId,
       segment1
     );
+
+    // check if the task name already exists
+    for (let i = 0; i < tasksBySubCategory.length; i++) {
+      if (segment1 === tasksBySubCategory[i].Segment1) {
+        alert("Task name already exists.");
+        return;
+      }
+    }
+
     let newSubCatTask = {
       SowId: projectId,
       ProjectSubTaskId: subCatId,
