@@ -61,7 +61,7 @@ function EditProject() {
   useEffect(() => {
     getProjectAndSubcategories();
     // populateSubAssignmentsWorkArea();
-  }, []);
+  }, [consolidatedSubCategories]);
 
   const getAllCompaniesProjects = async () => {
     await fetch(
@@ -208,15 +208,12 @@ function EditProject() {
       for (let i = 0; i < newSubCategory.length; i++) {
         setAllSubCategories((prevState) => [...prevState, newSubCategory[i]]);
       }
-      // setConsolidatedSubCategories((prevState) => [
-      //   ...prevState,
-      //   newSubCategory[0],
-      // ]);
+      setConsolidatedSubCategories((prevState) => [
+        ...prevState,
+        newSubCategory[0],
+      ]);
       newWorkAreaInput.current.value = "";
       newWorkAreaIdInput.current.value = "";
-      // await getProjectAndSubcategories();
-      // updateFilteredSubCats();
-      // hide the add new sub cat component
       closeEditWorkArea();
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
@@ -712,7 +709,7 @@ function EditProject() {
                   projectId={selectedProjectSowIdState}
                   subCatTitle={subCat.SubTaskTitle}
                   subCatId={subCat.ProjectSubTaskId}
-                  allSubCats={allSubCatsBySelectedProject}
+                  allSubCats={allSubCategories}
                 />
               );
             })}

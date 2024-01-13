@@ -16,7 +16,7 @@ function ProjectSubCategory(props) {
       task.Segment1 !== "-"
     );
   });
-  let [tasksBySubCategory, setTaskBySubCategory] = useState([]);
+  let [tasksBySubCategory, setTaskBySubCategory] = useState(filteredSubCats);
   console.log("filtered Sub Cats (proj sub cat component)", filteredSubCats);
   console.log(
     "filtered Sub Cats State Arr (proj sub cat component)",
@@ -242,7 +242,7 @@ function ProjectSubCategory(props) {
           </form>
         </div>
         <div id="segment1id">
-          {filteredSubCats.map((task, i) => {
+          {tasksBySubCategory.map((task, i) => {
             return (
               <SubCategoryTask
                 key={i}
