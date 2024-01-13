@@ -3,9 +3,9 @@ import useAuth from "../components/Authentication";
 import { useLocation, Navigate } from "react-router-dom";
 
 function RequireAuth({ children }) {
-  const { authed } = useAuth();
+  const authed = useAuth();
   const location = useLocation();
-
+  console.log(authed);
   return authed === true ? (
     children
   ) : (

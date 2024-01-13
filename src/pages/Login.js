@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/Login.css";
-import useAuth from "../components/Authentication";
 import LoginForm from "../components/LoginForm";
 import SignUpForm from "../components/SignUpForm";
+import useAuth from "../components/Authentication";
 
-function Login() {
+function Login(props) {
   const navigate = useNavigate();
   const [showSignUpForm, setShowSignUpForm] = useState(false);
 
@@ -40,7 +40,8 @@ function Login() {
     // } else {
     //   alert("login failed");
     // }
-    navigate("/home");
+
+    navigate("/");
   };
 
   const userSignUp = () => {

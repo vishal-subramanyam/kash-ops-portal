@@ -1,10 +1,10 @@
-import * as React from "react";
+import React, { useState, createContext } from "react";
 
-const authContext = React.createContext();
+const authContext = createContext;
 
-function useAuth() {
-  const [authed, setAuthed] = React.useState(false);
-
+export function useAuth() {
+  const [authed, setAuthed] = useState(false);
+  console.log(authed);
   return {
     authed,
     login() {

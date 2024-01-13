@@ -38,19 +38,12 @@ function EditProject() {
   let [allProjectsByCompany, setAllProjectsByCompany] = useState([]);
   let [allSubCategories, setAllSubCategories] = useState([]);
   let [consolidatedSubCategories, setConsolidatedSubCategories] = useState([]);
+  let [allSubCatsBySelectedProject, setAllSubCatsBySelectedProject] = useState(
+    []
+  );
   let [allCompaniesProjectsArr, setAllCompaniesProjectsArr] = useState([]);
   let [newTaskToDisplay, setNewTaskToDisplay] = useState([]);
   let [tasksBySubCategory, setTaskBySubCategory] = useState([]);
-  let [subCatRecordsToSave, setSubCatRecordsToSave] = useState([
-    // {
-    //   SowId: props.projectId,
-    //   ProjectSubTaskId: props.subCatId,
-    //   SubTaskTitle: props.subCatName,
-    //   Segment2: "-",
-    //   Segment1: "-",
-    //   Segment3: "-",
-    // },
-  ]);
   let requiredInputs = [
     companyName,
     projectDescription,
@@ -68,7 +61,7 @@ function EditProject() {
   useEffect(() => {
     getProjectAndSubcategories();
     // populateSubAssignmentsWorkArea();
-  }, [consolidatedSubCategories]);
+  }, []);
 
   const getAllCompaniesProjects = async () => {
     await fetch(
@@ -86,7 +79,7 @@ function EditProject() {
     )
       .then((res) => res.json())
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         // set state array that queries PROJECTS_AND_COMPANY_INFO_TABLE
         setAllCompaniesProjectsArr(res.data);
 
@@ -97,7 +90,7 @@ function EditProject() {
             return c;
           }, {})
         );
-        console.log(removeDuplicateCompany);
+        // console.log(removeDuplicateCompany);
         // set state array without duplicate company values
         setAllCompaniesRemoveDuplicateArr(removeDuplicateCompany);
       })
@@ -111,7 +104,7 @@ function EditProject() {
     setSelectedCompanyName(selCompanyName);
     let selectedCompanyId =
       e.target[e.target.selectedIndex].getAttribute("data-companyid");
-    console.log(selectedCompanyId);
+    // console.log(selectedCompanyId);
     // set state variable to selected company name
     setSelectedProjectSowIdState("");
     console.log(
@@ -127,9 +120,6 @@ function EditProject() {
       return id === project.CompanyId;
     });
     setAllProjectsByCompany(projectsByCompanyId);
-
-    // console.log(projectDescription);
-    // projectDescription.current.childNodes[0].setAttribute("selected", true);
   };
 
   const getProjectAndSubcategories = async () => {
@@ -157,21 +147,6 @@ function EditProject() {
       );
   };
 
-  const updateFilteredSubCats = () => {
-    console.log("updated filtered sub cat function", allSubCategories);
-    let subCatsBySowId = allSubCategories.filter((subCat) => {
-      return selectedProjectSowIdState === subCat.SowId;
-    });
-    let filteredSubCats = Object.values(
-      subCatsBySowId.reduce((c, e) => {
-        if (!c[e.SubTaskTitle]) c[e.SubTaskTitle] = e;
-        return c;
-      }, {})
-    );
-    console.log("update filtered sub cat state array", filteredSubCats);
-    setConsolidatedSubCategories(filteredSubCats);
-  };
-
   const populateSubAssignmentsWorkArea = (e) => {
     let selectedProjectSowId =
       e.target[e.target.selectedIndex].getAttribute("data-sowid");
@@ -181,15 +156,17 @@ function EditProject() {
       return selectedProjectSowId === subCat.SowId;
     });
 
-    // console.log(subCatsBySowId);
+    setAllSubCatsBySelectedProject(subCatsBySowId);
+    console.log(subCatsBySowId);
 
+    // filter out duplicate sub categories
     let filteredSubCats = Object.values(
       subCatsBySowId.reduce((c, e) => {
         if (!c[e.SubTaskTitle]) c[e.SubTaskTitle] = e;
         return c;
       }, {})
     );
-    // console.log(filteredSubCats);
+
     setConsolidatedSubCategories(filteredSubCats);
   };
 
@@ -228,16 +205,16 @@ function EditProject() {
       console.log("Added new sub category", data);
       // add new sub cat to state array to update UI
 
-      // for (let i = 0; i < newSubCategory.length; i++) {
-      //   setAllSubCategories((prevState) => [...prevState, newSubCategory[i]]);
-      // }
-      setConsolidatedSubCategories((prevState) => [
-        ...prevState,
-        newSubCategory[0],
-      ]);
+      for (let i = 0; i < newSubCategory.length; i++) {
+        setAllSubCategories((prevState) => [...prevState, newSubCategory[i]]);
+      }
+      // setConsolidatedSubCategories((prevState) => [
+      //   ...prevState,
+      //   newSubCategory[0],
+      // ]);
       newWorkAreaInput.current.value = "";
       newWorkAreaIdInput.current.value = "";
-      await getProjectAndSubcategories();
+      // await getProjectAndSubcategories();
       // updateFilteredSubCats();
       // hide the add new sub cat component
       closeEditWorkArea();
@@ -271,70 +248,70 @@ function EditProject() {
   };
 
   // add task to existing sub category
-  const addTaskToSubCategory = async (
-    projectId,
-    subCatTitle,
-    subCatId,
-    segment1
-  ) => {
-    // e.preventDefault()
-    // console.log(
-    //   "Add task to sub category",
-    //   projectId,
-    //   subCatTitle,
-    //   subCatId,
-    //   segment1
-    // );
-    let newSubCatTask = {
-      SowId: projectId,
-      ProjectSubTaskId: subCatId,
-      SubTaskTitle: subCatTitle,
-      Segment2: "",
-      Segment1: segment1,
-      Segment3: "",
-    };
-    // add task to existing sub category. Validate if task name field is filled out
-    if (segment1 === undefined || segment1 === "") {
-      alert("Fill in a task name.");
-    } else {
-      console.log("run fetch to add task to sub cat");
-      try {
-        const response = await fetch(
-          "http://localhost:4040/GenericTransactionService/processTransaction",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              // your expected POST request payload goes here
-              data: [
-                {
-                  SowId: projectId,
-                  ProjectSubTaskId: subCatId,
-                  SubTaskTitle: subCatTitle,
-                  Segment2: "",
-                  Segment1: segment1,
-                  Segment3: "",
-                },
-              ],
-              _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
-              secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
-            }),
-          }
-        );
-        const data = await response.json();
-        console.log("Added task to sub category table", data);
+  // const addTaskToSubCategory = async (
+  //   projectId,
+  //   subCatTitle,
+  //   subCatId,
+  //   segment1
+  // ) => {
+  //   // e.preventDefault()
+  //   // console.log(
+  //   //   "Add task to sub category",
+  //   //   projectId,
+  //   //   subCatTitle,
+  //   //   subCatId,
+  //   //   segment1
+  //   // );
+  //   let newSubCatTask = {
+  //     SowId: projectId,
+  //     ProjectSubTaskId: subCatId,
+  //     SubTaskTitle: subCatTitle,
+  //     Segment2: "",
+  //     Segment1: segment1,
+  //     Segment3: "",
+  //   };
+  //   // add task to existing sub category. Validate if task name field is filled out
+  //   if (segment1 === undefined || segment1 === "") {
+  //     alert("Fill in a task name.");
+  //   } else {
+  //     console.log("run fetch to add task to sub cat");
+  //     try {
+  //       const response = await fetch(
+  //         "http://localhost:4040/GenericTransactionService/processTransaction",
+  //         {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify({
+  //             // your expected POST request payload goes here
+  //             data: [
+  //               {
+  //                 SowId: projectId,
+  //                 ProjectSubTaskId: subCatId,
+  //                 SubTaskTitle: subCatTitle,
+  //                 Segment2: "",
+  //                 Segment1: segment1,
+  //                 Segment3: "",
+  //               },
+  //             ],
+  //             _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
+  //             secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+  //           }),
+  //         }
+  //       );
+  //       const data = await response.json();
+  //       console.log("Added task to sub category table", data);
 
-        // update the array that filters to show sub cat tasks (segment1s)
-        setTaskBySubCategory((prevState) => [...prevState, newSubCatTask]);
-        taskSegment1.current.value = "";
-      } catch (error) {
-        console.log(error);
-        alert("Unable to add task.");
-      }
-    }
-  };
+  //       // update the array that filters to show sub cat tasks (segment1s)
+  //       setTaskBySubCategory((prevState) => [...prevState, newSubCatTask]);
+  //       taskSegment1.current.value = "";
+  //     } catch (error) {
+  //       console.log(error);
+  //       alert("Unable to add task.");
+  //     }
+  //   }
+  // };
 
   const areYouSure = () => {
     confirmationModal.current.showModal();
@@ -346,6 +323,7 @@ function EditProject() {
 
   const deleteWorkArea = (sowId, taskId) => {
     console.log("delete button clicked");
+    closeConfirmationModal();
   };
 
   return (
@@ -600,139 +578,142 @@ function EditProject() {
                 ""
               )}
             </div>
-            {console.log(
-              "filtered sub cat array to display",
-              consolidatedSubCategories
-            )}
             {consolidatedSubCategories.map((subCat, i) => {
               return (
-                <details className="main-grouping">
-                  <summary>
-                    <p>{subCat.SubTaskTitle}</p>
+                // <details className="main-grouping">
+                //   <summary>
+                //     <p>{subCat.SubTaskTitle}</p>
 
-                    <button
-                      onClick={() => areYouSure()}
-                      className="delete-sub-category"
-                    >
-                      <span className="material-symbols-outlined">
-                        <FontAwesomeIcon
-                          className="delete-timesheet-record"
-                          icon={faTrashCan}
-                        />
-                      </span>
-                    </button>
-                  </summary>
-                  <div className="workspace-add-task-to-workarea-input">
-                    <form className="workspace-add-task-input-area">
-                      <div className="workspace-add-task-plus">
-                        <svg
-                          id="addWorkspaceBtn"
-                          className="add-sub-assignment-details-form--add-sub-assignment-button-svg"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0,0,256,256"
-                          width="25"
-                          height="25"
-                          fillRule="nonzero"
-                        >
-                          <g
-                            fill="#e7549a"
-                            fillRule="nonzero"
-                            stroke="none"
-                            strokeWidth="1"
-                            strokeLinecap="butt"
-                            strokeLinejoin="miter"
-                            strokeMiterlimit="10"
-                            strokeDasharray=""
-                            strokeDashoffset="0"
-                            fontFamily="none"
-                            fontWeight="none"
-                            fontSize="none"
-                            textAnchor="none"
-                            style={{ mixBlendMode: "normal" }}
-                          >
-                            <path
-                              d="M0,256v-256h256v256z"
-                              id="bgRectangle"
-                            ></path>
-                          </g>
-                          <g
-                            fill="#ffffff"
-                            fillRule="evenodd"
-                            stroke="none"
-                            strokeWidth="1"
-                            strokeLinecap="butt"
-                            strokeLinejoin="miter"
-                            strokeMiterlimit="10"
-                            strokeDasharray=""
-                            strokeDashoffset="0"
-                            fontFamily="none"
-                            fontWeight="none"
-                            fontSize="none"
-                            textAnchor="none"
-                            style={{ mixBlendMode: "normal" }}
-                          >
-                            <g transform="scale(10.66667,10.66667)">
-                              <path d="M11,2v9h-9v2h9v9h2v-9h9v-2h-9v-9z"></path>
-                            </g>
-                          </g>
-                        </svg>
-                      </div>
-                      <div className="workspace-add-task-text-input">
-                        <input
-                          id="addtaskid"
-                          className="add-new-sub-task-input add-workspace"
-                          type="text"
-                          placeholder="New Task Name"
-                          defaultValue={""}
-                          ref={taskSegment1}
-                          required
-                        />
-                      </div>
+                //     <button
+                //       onClick={() => areYouSure()}
+                //       className="delete-sub-category"
+                //     >
+                //       <span className="material-symbols-outlined">
+                //         <FontAwesomeIcon
+                //           className="delete-timesheet-record"
+                //           icon={faTrashCan}
+                //         />
+                //       </span>
+                //     </button>
+                //   </summary>
+                //   <div className="workspace-add-task-to-workarea-input">
+                //     <form className="workspace-add-task-input-area">
+                //       <div className="workspace-add-task-plus">
+                //         <svg
+                //           id="addWorkspaceBtn"
+                //           className="add-sub-assignment-details-form--add-sub-assignment-button-svg"
+                //           xmlns="http://www.w3.org/2000/svg"
+                //           viewBox="0,0,256,256"
+                //           width="25"
+                //           height="25"
+                //           fillRule="nonzero"
+                //         >
+                //           <g
+                //             fill="#e7549a"
+                //             fillRule="nonzero"
+                //             stroke="none"
+                //             strokeWidth="1"
+                //             strokeLinecap="butt"
+                //             strokeLinejoin="miter"
+                //             strokeMiterlimit="10"
+                //             strokeDasharray=""
+                //             strokeDashoffset="0"
+                //             fontFamily="none"
+                //             fontWeight="none"
+                //             fontSize="none"
+                //             textAnchor="none"
+                //             style={{ mixBlendMode: "normal" }}
+                //           >
+                //             <path
+                //               d="M0,256v-256h256v256z"
+                //               id="bgRectangle"
+                //             ></path>
+                //           </g>
+                //           <g
+                //             fill="#ffffff"
+                //             fillRule="evenodd"
+                //             stroke="none"
+                //             strokeWidth="1"
+                //             strokeLinecap="butt"
+                //             strokeLinejoin="miter"
+                //             strokeMiterlimit="10"
+                //             strokeDasharray=""
+                //             strokeDashoffset="0"
+                //             fontFamily="none"
+                //             fontWeight="none"
+                //             fontSize="none"
+                //             textAnchor="none"
+                //             style={{ mixBlendMode: "normal" }}
+                //           >
+                //             <g transform="scale(10.66667,10.66667)">
+                //               <path d="M11,2v9h-9v2h9v9h2v-9h9v-2h-9v-9z"></path>
+                //             </g>
+                //           </g>
+                //         </svg>
+                //       </div>
+                //       <div className="workspace-add-task-text-input">
+                //         <input
+                //           id="addtaskid"
+                //           className="add-new-sub-task-input add-workspace"
+                //           type="text"
+                //           placeholder="New Task Name"
+                //           defaultValue={""}
+                //           ref={taskSegment1}
+                //           required
+                //         />
+                //       </div>
 
-                      <button
-                        className="workspace-add-task-btn"
-                        type="button"
-                        onClick={() =>
-                          addTaskToSubCategory(
-                            subCat.SowId,
-                            subCat.SubTaskTitle,
-                            subCat.ProjectSubTaskId,
-                            taskSegment1.current.value
-                          )
-                        }
-                      >
-                        Add Task
-                      </button>
-                    </form>
-                  </div>
+                //       <button
+                //         className="workspace-add-task-btn"
+                //         type="button"
+                //         onClick={() =>
+                //           addTaskToSubCategory(
+                //             subCat.SowId,
+                //             subCat.SubTaskTitle,
+                //             subCat.ProjectSubTaskId,
+                //             taskSegment1.current.value
+                //           )
+                //         }
+                //       >
+                //         Add Task
+                //       </button>
+                //     </form>
+                //   </div>
 
-                  <div id="segment1id">
-                    {console.log(
-                      "filtered Sub Cats State Arr to display(edit project component)",
-                      tasksBySubCategory
-                    )}
-                    {tasksBySubCategory.map((task, i) => {
-                      return (
-                        <details className="sub-grouping">
-                          <summary>
-                            <p>{task.Segment1}</p>
-                            <button
-                              onClick={() => areYouSure()}
-                              className="delete-task"
-                            >
-                              <span className="material-symbols-outlined">
-                                <FontAwesomeIcon
-                                  className="delete-timesheet-record"
-                                  icon={faTrashCan}
-                                />
-                              </span>
-                            </button>
-                          </summary>
-                        </details>
-                      );
-                    })}
-                  </div>
-                </details>
+                //   <div id="segment1id">
+                //     {tasksBySubCategory.map((task, i) => {
+                //       return (
+                //         <details className="sub-grouping">
+                //           <summary>
+                //             <p>{task.Segment1}</p>
+                //             <button
+                //               onClick={() => areYouSure()}
+                //               className="delete-task"
+                //             >
+                //               <span className="material-symbols-outlined">
+                //                 <FontAwesomeIcon
+                //                   className="delete-timesheet-record"
+                //                   icon={faTrashCan}
+                //                 />
+                //               </span>
+                //             </button>
+                //           </summary>
+                //         </details>
+                //       );
+                //     })}
+                //   </div>
+                // </details>
+
+                <ProjectSubCategory
+                  // addTaskToSubCat={addTaskToSubCategory}
+                  close={closeConfirmationModal}
+                  confirm={areYouSure}
+                  subCategory={subCat}
+                  projectId={selectedProjectSowIdState}
+                  subCatTitle={subCat.SubTaskTitle}
+                  subCatId={subCat.ProjectSubTaskId}
+                  allSubCats={allSubCatsBySelectedProject}
+                />
               );
             })}
           </div>

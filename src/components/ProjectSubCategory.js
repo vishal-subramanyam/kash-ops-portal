@@ -8,15 +8,15 @@ function ProjectSubCategory(props) {
   let taskSegment1 = useRef();
   let confirmationModal = useRef();
   // Show the tasks per sub category and filter out segments with no value. set that filtered array to state
-  let filteredSubCats = props.allSubCategories.filter((task) => {
+  let filteredSubCats = props.allSubCats.filter((task) => {
     return (
-      task.SowId === props.subCategory.SowId &&
+      // task.SowId === props.subCategory.SowId &&
       task.ProjectSubTaskId === props.subCategory.ProjectSubTaskId &&
       task.Segment1 !== "" &&
       task.Segment1 !== "-"
     );
   });
-  let [tasksBySubCategory, setTaskBySubCategory] = useState(filteredSubCats);
+  let [tasksBySubCategory, setTaskBySubCategory] = useState([]);
   console.log("filtered Sub Cats (proj sub cat component)", filteredSubCats);
   console.log(
     "filtered Sub Cats State Arr (proj sub cat component)",
@@ -89,58 +89,58 @@ function ProjectSubCategory(props) {
     }
   };
 
-  const areYouSure = () => {
-    confirmationModal.current.showModal();
-  };
+  // const areYouSure = () => {
+  //   confirmationModal.current.showModal();
+  // };
 
-  const closeConfirmationModal = () => {
-    confirmationModal.current.close();
-  };
+  // const closeConfirmationModal = () => {
+  //   confirmationModal.current.close();
+  // };
 
-  const deleteSubCategory = async (sowId, subCatId) => {
-    console.log("delete button clicked", sowId, subCatId);
+  // const deleteSubCategory = async (sowId, subCatId) => {
+  //   console.log("delete button clicked", sowId, subCatId);
 
-    try {
-      const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            // your expected POST request payload goes here
-            data: [
-              {
-                SowId: sowId,
-                ProjectSubTaskId: subCatId,
-              },
-            ],
-            _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY",
-            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
-          }),
-        }
-      );
-      const data = await response.json();
-      // enter you logic when the fetch is successful
-      console.log(
-        `Deleted Sub Category ${props.subCategory.SubTaskTitle}`,
-        data
-      );
-      closeConfirmationModal();
-      // props.reset();
-    } catch (error) {
-      alert(`Unable to delete ${props.subCategory.SubTaskTitle}. ${error}`);
-    }
+  //   try {
+  //     const response = await fetch(
+  //       "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           // your expected POST request payload goes here
+  //           data: [
+  //             {
+  //               SowId: sowId,
+  //               ProjectSubTaskId: subCatId,
+  //             },
+  //           ],
+  //           _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY",
+  //           secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+  //         }),
+  //       }
+  //     );
+  //     const data = await response.json();
+  //     // enter you logic when the fetch is successful
+  //     console.log(
+  //       `Deleted Sub Category ${props.subCategory.SubTaskTitle}`,
+  //       data
+  //     );
+  //     closeConfirmationModal();
+  //     // props.reset();
+  //   } catch (error) {
+  //     alert(`Unable to delete ${props.subCategory.SubTaskTitle}. ${error}`);
+  //   }
 
-    // need to update the state array - consolidatedSubCategories
-    console.log(props.subCats);
-    let deleteSubCat = props.subCats.filter((cat) => {
-      return cat.SubTaskTitle !== props.subCategory.SubTaskTitle;
-    });
-    props.resetConsolidatedSubCatArr(deleteSubCat);
-    props.reset();
-  };
+  //   // need to update the state array - consolidatedSubCategories
+  //   console.log(props.subCats);
+  //   let deleteSubCat = props.subCats.filter((cat) => {
+  //     return cat.SubTaskTitle !== props.subCategory.SubTaskTitle;
+  //   });
+  //   props.resetConsolidatedSubCatArr(deleteSubCat);
+  //   props.reset();
+  // };
 
   return (
     <div>
@@ -148,7 +148,11 @@ function ProjectSubCategory(props) {
         <summary>
           <p>{props.subCategory.SubTaskTitle}</p>
 
-          <button onClick={() => areYouSure()} className="delete-sub-category">
+          {/* <button onClick={() => areYouSure()} className="delete-sub-category"> */}
+          <button
+            onClick={() => props.confirm()}
+            className="delete-sub-category"
+          >
             <span className="material-symbols-outlined">
               <FontAwesomeIcon
                 className="delete-timesheet-record"
@@ -238,11 +242,7 @@ function ProjectSubCategory(props) {
           </form>
         </div>
         <div id="segment1id">
-          {console.log(
-            "filtered Sub Cats State Arr to display(proj sub cat component)",
-            tasksBySubCategory
-          )}
-          {tasksBySubCategory.map((task, i) => {
+          {filteredSubCats.map((task, i) => {
             return (
               <SubCategoryTask
                 key={i}
@@ -256,7 +256,7 @@ function ProjectSubCategory(props) {
         </div>
       </details>
 
-      <dialog
+      {/* <dialog
         id="myModal"
         className="confirm-delete-dialog-box"
         ref={confirmationModal}
@@ -302,7 +302,7 @@ function ProjectSubCategory(props) {
             </div>
           </div>
         </div>
-      </dialog>
+      </dialog> */}
     </div>
   );
 }
