@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
@@ -14,49 +14,59 @@ import EditCompanyAdmin from "./pages/EditCompanyAdmin";
 import TimesheetsHub from "./pages/TimesheetsHub";
 import UpdateTimesheet from "./pages/UpdateTimesheet";
 import RequireAuth from "./components/RequireAuth";
+import UpdatePassword from "./pages/UpdatePassword";
 
-const authContext = React.createContext();
+// const authContext = React.createContext();
 
-export function useAuth() {
-  const [authed, setAuthed] = React.useState(false);
+// export function useAuth() {
+//   const [authed, setAuthed] = React.useState(false);
 
-  return {
-    authed,
-    login() {
-      console.log("authorize login");
-      return new Promise((res) => {
-        setAuthed(true);
-        res();
-      });
-    },
-    logout() {
-      console.log("de-authorize on logout");
-      return new Promise((res) => {
-        setAuthed(false);
-        res();
-      });
-    },
-  };
-}
+//   return {
+//     authed,
+//     login() {
+//       console.log("authorize login");
+//       return new Promise((res) => {
+//         setAuthed(true);
+//         res();
+//       });
+//     },
+//     logout() {
+//       console.log("de-authorize on logout");
+//       return new Promise((res) => {
+//         setAuthed(false);
+//         res();
+//       });
+//     },
+//   };
+// }
 
-export function AuthProvider({ children }) {
-  const auth = useAuth();
+// export function AuthProvider({ children }) {
+//   const auth = useAuth();
 
-  return <authContext.Provider value={auth}>{children}</authContext.Provider>;
-}
+//   return <authContext.Provider value={auth}>{children}</authContext.Provider>;
+// }
 
-export function AuthConsumer() {
-  return React.useContext(authContext);
-}
+// export function AuthConsumer() {
+//   return React.useContext(authContext);
+// }
 
 function App() {
   return (
+    // <BrowserRouter>
     <div className="App">
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         {/* <Route path="/safetyapp" element={<HomePage />} /> */}
         <Route
-          path="/"
+          path="/update-password"
+          element={
+            // <RequireAuth>
+            <UpdatePassword />
+            //  </RequireAuth>
+          }
+        />
+        <Route
+          path="/home"
           element={
             // <RequireAuth>
             <HomePage />
@@ -146,6 +156,7 @@ function App() {
         />
       </Routes>
     </div>
+    // </BrowserRouter>
   );
 }
 

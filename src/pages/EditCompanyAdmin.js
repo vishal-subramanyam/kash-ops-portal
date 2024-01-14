@@ -3,20 +3,24 @@ import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
 
 function EditCompanyAdmin() {
-  let companyAdminForm = useRef();
+  let companyRemoveAdminForm = useRef();
+  let companyAddAdminForm = useRef();
   let [allAdmins, setAllAdmins] = useState([]);
   let [allCompanies, setAllCompanies] = useState([]);
   let [allCompanyAdmins, setAllCompanyAdmins] = useState([]);
   let [allAdminsPerCompany, setAllAdminsPerCompany] = useState([]);
   let [companyNameToAddAdmin, setCompanyNameToAddAdmin] = useState();
+  let [companyNameToRemove, setCompanyNameToRemove] = useState();
   let [companyIdToAddAdmin, setCompanyIdToAddAdmin] = useState();
   let [adminUserIdToAddToCompany, setAdminUserIdToAddToCompany] = useState();
   let [adminUsernameToAddToCompany, setAdminUsernameToAddToCompany] =
     useState();
   let [adminFullNameToAddToCompany, setAdminFullNameToAddToCompany] =
     useState();
+  let [adminFullNameToRemove, setAdminFullNameToRemove] = useState();
   let [companyIdToRemoveAdmin, setCompanyIdToRemoveAdmin] = useState();
-  let [adminToRemoveFromCompany, setAdminToRemoveFromCompany] = useState();
+  let [adminEmpIdToRemoveFromCompany, setAdminEmpIdToRemoveFromCompany] =
+    useState();
 
   useEffect(() => {
     getAllCompanies();
@@ -141,7 +145,8 @@ function EditCompanyAdmin() {
       console.log(error);
       alert("Unable to add admin to company.");
     }
-    companyAdminForm.current.reset();
+    getAllCompanyAdmins();
+    companyAddAdminForm.current.reset();
   };
 
   const selectCompanyPopulateAdminsToRemove = (e) => {
@@ -150,23 +155,76 @@ function EditCompanyAdmin() {
     );
     let companyId =
       e.target[e.target.selectedIndex].getAttribute("data-companyid");
+    let companyName = e.target[e.target.selectedIndex].getAttribute("value");
+    setCompanyNameToRemove(companyName);
+    setCompanyIdToRemoveAdmin(companyId);
     let adminsPerComapny = allCompanyAdmins.filter((admin) => {
       return admin.CompanyId === companyId;
     });
     console.log(adminsPerComapny);
-    let adminNames = allAdmins.filter((user) => {
-      return user.EmpId;
-    });
-    console.log(adminNames);
-    setAllAdminsPerCompany(adminsPerComapny);
+    console.log(allAdmins);
+    let adminFullnames = [];
+
+    // get the names of the admins per company since the company admin role table only includes the emp ids
+    for (let i = 0; i < allAdmins.length; i++) {
+      for (let j = 0; j < adminsPerComapny.length; j++) {
+        if (allAdmins[i].EmpId === adminsPerComapny[j].EmpId) {
+          adminFullnames.push(allAdmins[i]);
+        }
+      }
+    }
+    console.log(adminFullnames);
+    setAllAdminsPerCompany(adminFullnames);
   };
 
-  const selectAdminToRemove = () => {
+  const selectAdminToRemove = (e) => {
     console.log("selected admin to remove from company");
+    let userId = e.target[e.target.selectedIndex].getAttribute("data-userid");
+    let userFullName = e.target[e.target.selectedIndex].getAttribute("value");
+    setAdminFullNameToRemove(userFullName);
+    setAdminEmpIdToRemoveFromCompany(userId);
   };
 
-  const removeAdminFromCompany = () => {
+  const removeAdminFromCompany = async (e) => {
+    e.preventDefault();
     console.log("remove selected admin from selected company");
+    try {
+      const response = await fetch(
+        "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // your expected POST request payload goes here
+            data: [
+              {
+                EmpId: adminEmpIdToRemoveFromCompany,
+                CompanyId: companyIdToRemoveAdmin,
+              },
+            ],
+            _keyword_: "KASH_OPERATIONS_COMPANY_ADMIN_ROLE_TABLE",
+            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+          }),
+        }
+      );
+      const data = await response.json();
+      // enter you logic when the fetch is successful
+      console.log("Deleted company admin role table", data);
+      let removeMsg =
+        adminFullNameToRemove +
+        " was successfully added as an Admin to " +
+        companyNameToAddAdmin +
+        "!";
+
+      alert(removeMsg);
+    } catch (error) {
+      // enter your logic for when there is an error (ex. error toast)
+      console.log(error);
+      alert("Unable to remove admin from company.");
+    }
+    companyRemoveAdminForm.current.reset();
   };
 
   return (
@@ -211,7 +269,7 @@ function EditCompanyAdmin() {
           <form
             id="attach_contact_to_project--form"
             className="edit_contact_page--mini-form attach_contact_to_project--form"
-            ref={companyAdminForm}
+            ref={companyAddAdminForm}
           >
             <h2 className="attach_contact_to_project--title">
               Attach Admin to Company
@@ -289,6 +347,7 @@ function EditCompanyAdmin() {
           <form
             id="remove_contact_from_project--form"
             className="edit_contact_page--mini-form remove_contact_from_project--form"
+            ref={companyRemoveAdminForm}
           >
             <h2 className="remove_contact_from_project--title">
               Remove Admin from Company
@@ -343,10 +402,10 @@ function EditCompanyAdmin() {
                       <option
                         id="remove_contact_from_project--contact-name-empty-display-option"
                         key={i}
-                        value={admin.FirstName + admin.LastName}
+                        value={admin.FirstName + " " + admin.LastName}
                         data-userid={admin.EmpId}
                       >
-                        {admin.FirstName + admin.LastName}
+                        {admin.FirstName + " " + admin.LastName}
                       </option>
                     );
                   })}

@@ -17,33 +17,6 @@ function Login(props) {
     };
   }, []);
 
-  const userLogin = (e) => {
-    e.preventDefault();
-    // find out if user is an Admin level
-    // configuration in kashPEAK to determine if Admin
-    // find out if user exists, if user exists then determine is true or false
-    //AUTHENTICATE USER
-    // const data = JSON.parse(localStorage.getItem("data"));
-    // let isSuccessful = false;
-    // console.log(data);
-    // for (let index = 0; index < data.length; index++) {
-    //   if (
-    //     this.state.email === data[index].email &&
-    //     this.state.password === data[index].password
-    //   ) {
-    //     isSuccessful = true;
-    //     break;
-    //   }
-    // }
-    // if (isSuccessful) {
-    //   alert("login successful");
-    // } else {
-    //   alert("login failed");
-    // }
-
-    navigate("/");
-  };
-
   const userSignUp = () => {
     console.log("Sign Up Form Triggered");
   };
@@ -69,7 +42,7 @@ function Login(props) {
         {showSignUpForm ? (
           <SignUpForm userSignUp={userSignUp} />
         ) : (
-          <LoginForm userLogin={userLogin} />
+          <LoginForm />
         )}
       </div>
     </main>
