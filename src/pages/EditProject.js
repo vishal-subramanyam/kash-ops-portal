@@ -225,8 +225,9 @@ function EditProject() {
 
   const validateRequiredInputs = (e) => {
     e.preventDefault();
+
     // validate inputs
-    // console.log("Validate inputs");
+    console.log("Validate inputs");
     // console.log("company name", companyName.current.value);
     // console.log("sub cat Id", newWorkAreaIdInput.current.value);
     // console.log("sub cat name", newWorkAreaInput.current.value);
@@ -269,11 +270,10 @@ function EditProject() {
         newWorkAreaInput.current.value = "";
         newWorkAreaIdInput.current.value = "";
         return;
-      } else {
-        // show component to run function to save new sub cat record
-        addProjectSubCategory();
       }
     }
+    // show component to run function to save new sub cat record
+    addProjectSubCategory();
   };
 
   // add task to existing sub category

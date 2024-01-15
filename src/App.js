@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import HomePage from "./pages/HomePage";
@@ -16,46 +16,19 @@ import UpdateTimesheet from "./pages/UpdateTimesheet";
 import RequireAuth from "./components/RequireAuth";
 import UpdatePassword from "./pages/UpdatePassword";
 
-// const authContext = React.createContext();
-
-// export function useAuth() {
-//   const [authed, setAuthed] = React.useState(false);
-//   console.log(authed);
-//   return {
-//     authed,
-//     login() {
-//       console.log("authorize login");
-//       return new Promise((res) => {
-//         setAuthed(true);
-//         res();
-//       });
-//     },
-//     logout() {
-//       console.log("de-authorize on logout");
-//       return new Promise((res) => {
-//         setAuthed(false);
-//         res();
-//       });
-//     },
-//   };
-// }
-
-// export function AuthProvider({ children }) {
-//   const auth = useAuth();
-
-//   return <authContext.Provider value={auth}>{children}</authContext.Provider>;
-// }
-
-// export function AuthConsumer() {
-//   return React.useContext(authContext);
-// }
-
 function App() {
+  let [loggedInUser, setLoggedInUser] = useState("");
+  let [isAdmin, setIsAdmin] = useState(true);
   return (
     // <BrowserRouter>
     <div className="App">
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={
+            <Login loggedInUserName={setLoggedInUser} setAdmin={setIsAdmin} />
+          }
+        />
         {/* <Route path="/safetyapp" element={<HomePage />} /> */}
         <Route
           path="/update-password"

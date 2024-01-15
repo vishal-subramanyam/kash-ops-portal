@@ -42,7 +42,10 @@ function Login(props) {
         {showSignUpForm ? (
           <SignUpForm userSignUp={userSignUp} />
         ) : (
-          <LoginForm />
+          <LoginForm
+            userLoggedIn={props.loggedInUserName}
+            setAdmin={props.setAdmin}
+          />
         )}
       </div>
     </main>

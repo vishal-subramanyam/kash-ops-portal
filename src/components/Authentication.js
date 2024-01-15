@@ -3,7 +3,7 @@ import React, { useState, createContext } from "react";
 const authContext = createContext;
 
 export function useAuth() {
-  const [authed, setAuthed] = useState(false);
+  const [authed, setAuthed] = useState(true);
   console.log(authed);
   return {
     authed,
@@ -11,7 +11,6 @@ export function useAuth() {
       console.log("authorize login");
       return new Promise((res) => {
         setAuthed(true);
-        console.log(res);
         res();
       });
     },
