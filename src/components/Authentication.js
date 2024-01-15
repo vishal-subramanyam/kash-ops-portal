@@ -11,6 +11,7 @@ export function useAuth() {
       console.log("authorize login");
       return new Promise((res) => {
         setAuthed(true);
+        console.log(res);
         res();
       });
     },

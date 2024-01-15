@@ -1,8 +1,10 @@
 import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../components/Authentication";
 import "../assets/styles/Styles.css";
 
 function LoginForm(props) {
+  const { setAuthed } = useAuth();
   const navigate = useNavigate();
   let usernameInput = useRef();
   let passwordInput = useRef();
@@ -63,8 +65,8 @@ function LoginForm(props) {
     //   console.log(error);
     //   alert("Unable to login.");
     // }
-
-    navigate("/home");
+    setAuthed(true);
+    navigate("/");
   };
 
   return (

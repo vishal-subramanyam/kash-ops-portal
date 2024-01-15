@@ -20,7 +20,7 @@ import UpdatePassword from "./pages/UpdatePassword";
 
 // export function useAuth() {
 //   const [authed, setAuthed] = React.useState(false);
-
+//   console.log(authed);
 //   return {
 //     authed,
 //     login() {
@@ -55,103 +55,103 @@ function App() {
     // <BrowserRouter>
     <div className="App">
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         {/* <Route path="/safetyapp" element={<HomePage />} /> */}
         <Route
           path="/update-password"
           element={
-            // <RequireAuth>
-            <UpdatePassword />
-            //  </RequireAuth>
+            <RequireAuth>
+              <UpdatePassword />
+            </RequireAuth>
           }
         />
         <Route
-          path="/home"
+          path="/"
           element={
-            // <RequireAuth>
-            <HomePage />
-            //  </RequireAuth>
+            <RequireAuth>
+              <HomePage />
+            </RequireAuth>
           }
         />
         {/* Operations Hub. Set props to pass if logged in user is Admin Level or not*/}
         <Route
           path="/employee-hub"
           element={
-            // <RequireAuth>
-            <EmployeeHub />
-            // </RequireAuth>
+            <RequireAuth>
+              <EmployeeHub />
+            </RequireAuth>
           }
         />
         <Route
           path="/add-employee"
           element={
-            // <RequireAuth>
-            <AddEmployee />
-            // </RequireAuth>
+            <RequireAuth>
+              <AddEmployee />
+            </RequireAuth>
           }
         />
         <Route
           path="/employee-roles-and-responsibilities"
           element={
-            // <RequireAuth>
-            <EmployeeRoleAndResponsibilities />
-            // </RequireAuth>
+            <RequireAuth>
+              <EmployeeRoleAndResponsibilities />
+            </RequireAuth>
           }
         />
         <Route
           path="/clients-hub"
           element={
-            // <RequireAuth>
-            <ClientsHub />
-            // </RequireAuth>
+            <RequireAuth>
+              <ClientsHub />
+            </RequireAuth>
           }
         />
         <Route
           path="/add-company"
           element={
-            //  <RequireAuth>
-            <AddCompany />
-            //  </RequireAuth>
+            <RequireAuth>
+              <AddCompany />
+            </RequireAuth>
           }
         />
         <Route
           path="/add-project"
           element={
-            // <RequireAuth>
-            <AddProject />
-            // </RequireAuth>
+            <RequireAuth>
+              <AddProject />
+            </RequireAuth>
           }
         />
         <Route
           path="/edit-project"
           element={
-            // <RequireAuth>
-            <EditProject />
-            // </RequireAuth>
+            <RequireAuth>
+              <EditProject />
+            </RequireAuth>
           }
         />
         <Route
           path="/edit-company-admin"
           element={
-            // <RequireAuth>
-            <EditCompanyAdmin />
-            // </RequireAuth>
+            <RequireAuth>
+              <EditCompanyAdmin />
+            </RequireAuth>
           }
         />
         <Route
           path="/timesheets-hub"
           element={
-            // <RequireAuth>
-            <TimesheetsHub />
-            //</RequireAuth>
+            <RequireAuth>
+              <TimesheetsHub />
+            </RequireAuth>
           }
         />
         <Route
           path="/update-timesheet"
           element={
-            //<RequireAuth>
-            <UpdateTimesheet />
-            //</RequireAuth>
+            <RequireAuth>
+              <UpdateTimesheet />
+            </RequireAuth>
           }
         />
       </Routes>
