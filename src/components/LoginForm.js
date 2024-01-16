@@ -47,7 +47,7 @@ function LoginForm(props) {
           },
           body: JSON.stringify({
             _keyword_: "KASH_OPERATIONS_USER_TABLE",
-            username: "WFINTERNALUSN",
+            username: "ganderson",
             password: "QUxFWDEyMw==",
             secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
           }),
@@ -57,19 +57,17 @@ function LoginForm(props) {
       // enter you logic when the fetch is successful
       console.log("User logged in", data);
       if (data.success === false) {
-        console.log(
-          "Unable to login. Check username and paassword are correct."
-        );
+        alert("Unable to login. Check username and paassword are correct.");
         return;
       }
 
       // get the first name of the employee that is logged in
-      let firstName = allUsers.filter((name) => data.EmpId === name.EmpId);
-      console.log(firstName);
+      let userArrObject = allUsers.filter((name) => data.EmpId === name.EmpId);
+      console.log(userArrObject);
 
       // save logged in user first name to state
       // get the first name of the logged in user by getting emp id from the response of the logged in fetch
-      props.userLoggedIn(firstName);
+      props.userLoggedIn(userArrObject);
 
       if (data.IsAdmin === "Admin" || data.IsAdmin === "SuperAdmin") {
         props.setAdmin(true);
