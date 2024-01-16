@@ -15,6 +15,7 @@ import TimesheetsHub from "./pages/TimesheetsHub";
 import UpdateTimesheet from "./pages/UpdateTimesheet";
 import RequireAuth from "./components/RequireAuth";
 import UpdatePassword from "./pages/UpdatePassword";
+import { useAuth } from "./components/Authentication";
 
 function App() {
   let [loggedInUser, setLoggedInUser] = useState("");

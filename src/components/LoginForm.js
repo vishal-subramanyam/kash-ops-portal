@@ -4,7 +4,7 @@ import { useAuth } from "../components/Authentication";
 import "../assets/styles/Styles.css";
 
 function LoginForm(props) {
-  const { login } = useAuth();
+  const { authed, login } = useAuth();
   const navigate = useNavigate();
   let usernameInput = useRef();
   let passwordInput = useRef();
@@ -33,54 +33,59 @@ function LoginForm(props) {
       .catch((err) => alert(err));
   };
 
-  const userLogin = async (e) => {
+  const userLogin = (e) => {
     e.preventDefault();
     console.log(usernameInput.current.value);
     console.log(btoa(passwordInput.current.value));
-    try {
-      const response = await fetch(
-        "http://localhost:4040/AppContextService/KshSignIn",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            _keyword_: "KASH_OPERATIONS_USER_TABLE",
-            username: "ganderson",
-            password: "QUxFWDEyMw==",
-            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
-          }),
-        }
-      );
-      const data = await response.json();
-      // enter you logic when the fetch is successful
-      console.log("User logged in", data);
-      if (data.success === false) {
-        alert("Unable to login. Check username and paassword are correct.");
-        return;
+    // try {
+    //   const response = await fetch(
+    //     "http://localhost:4040/AppContextService/KshSignIn",
+    //     {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify({
+    //         _keyword_: "KASH_OPERATIONS_USER_TABLE",
+    //         username: usernameInput.current.value,
+    //         password: btoa(passwordInput.current.value),
+    //         secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+    //       }),
+    //     }
+    //   );
+    //   const data = await response.json();
+    //   // enter you logic when the fetch is successful
+    //   console.log("User logged in", data);
+    //   if (data.success === "false") {
+    //     alert("Unable to login. Check username and paassword are correct.");
+    //   } else {
+    //     // get the first name of the employee that is logged in
+    //     let userArrObject = allUsers.filter(
+    //       (name) => data.EmpId === name.EmpId
+    //     );
+    //     console.log(userArrObject);
+
+    //     // save logged in user first name to state
+    //     // get the first name of the logged in user by getting emp id from the response of the logged in fetch
+    //     props.userLoggedIn(userArrObject);
+
+    //     if (data.IsAdmin === "Admin" || data.IsAdmin === "SuperAdmin") {
+    //       props.setAdmin(true);
+    //     }
+
+    //     // set auth state to true
+    //   }
+    // } catch (error) {
+    //   // enter your logic for when there is an error (ex. error toast)
+    //   console.log(error);
+    //   alert("Unable to login.");
+    // }
+
+    login(usernameInput.current.value, btoa(passwordInput.current.value)).then(
+      () => {
+        navigate("/");
       }
-
-      // get the first name of the employee that is logged in
-      let userArrObject = allUsers.filter((name) => data.EmpId === name.EmpId);
-      console.log(userArrObject);
-
-      // save logged in user first name to state
-      // get the first name of the logged in user by getting emp id from the response of the logged in fetch
-      props.userLoggedIn(userArrObject);
-
-      if (data.IsAdmin === "Admin" || data.IsAdmin === "SuperAdmin") {
-        props.setAdmin(true);
-      }
-
-      // set auth state to true
-      await login();
-      navigate("/");
-    } catch (error) {
-      // enter your logic for when there is an error (ex. error toast)
-      console.log(error);
-      alert("Unable to login.");
-    }
+    );
   };
 
   return (
