@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "../assets/styles/Login.css";
 import LoginForm from "../components/LoginForm";
 import SignUpForm from "../components/SignUpForm";
 import useAuth from "../components/Authentication";
 
 function Login(props) {
-  const navigate = useNavigate();
   const [showSignUpForm, setShowSignUpForm] = useState(false);
 
   useEffect(() => {
@@ -16,10 +14,6 @@ function Login(props) {
       document.body.classList.remove("remove-body-padding");
     };
   }, []);
-
-  const userSignUp = () => {
-    console.log("Sign Up Form Triggered");
-  };
   return (
     <main className="kash-operations-login">
       <div className="kash_operations_home--hero-section">
@@ -40,7 +34,7 @@ function Login(props) {
           </button>
         </div>
         {showSignUpForm ? (
-          <SignUpForm userSignUp={userSignUp} />
+          <SignUpForm />
         ) : (
           <LoginForm
             userLoggedIn={props.loggedInUserName}

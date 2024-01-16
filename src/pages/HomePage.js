@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "../assets/styles/HomePage.css";
 import "../assets/styles/Styles.css";
 
-function HomePage() {
+function HomePage(props) {
   // Get props from App.js to determine if logged in user is Admin Level or not
 
   // set state to handle admin data
@@ -32,38 +32,50 @@ function HomePage() {
           KASH Tech Operations
         </h1>
         <p class="kash_operations_home--user-welcome-msg">
-          Welcome, <span id="kash_ops_user--first-name">USER</span>!
+          Welcome,{" "}
+          <span id="kash_ops_user--first-name">
+            {props.loggedInUserName[0].FirstName
+              ? props.loggedInUserName[0].FirstName
+              : "User"}
+          </span>
+          !
         </p>
       </div>
       <section class="kash_operations_home--catgories-holder max-width--main-container">
-        <div class="kash_operations_home--main-card--wrapper kash_operations_home--employees-card--wrapper">
-          <Link
-            to="/employee-hub"
-            class="kash_operations_home--main-card kash_operations_home--employees-card"
-          >
-            <h2 class="kash_operations--employees-card-title">Employees</h2>
-          </Link>
-          <div class="employee-card--details_tag main-card--details_tag">
-            <p class="tag-note">Add Employee</p>
-            <p class="tag-note">Employee Info</p>
-            <p class="tag-note">Reports</p>
-          </div>
-        </div>
+        {/* if logged in user is not an admin, hide employee and clients hubs */}
+        {!props.admin ? (
+          ""
+        ) : (
+          <>
+            <div class="kash_operations_home--main-card--wrapper kash_operations_home--employees-card--wrapper">
+              <Link
+                to="/employee-hub"
+                class="kash_operations_home--main-card kash_operations_home--employees-card"
+              >
+                <h2 class="kash_operations--employees-card-title">Employees</h2>
+              </Link>
+              <div class="employee-card--details_tag main-card--details_tag">
+                <p class="tag-note">Add Employee</p>
+                <p class="tag-note">Employee Info</p>
+                <p class="tag-note">Reports</p>
+              </div>
+            </div>
 
-        <div class="kash_operations_home--main-card--wrapper kash_operations_home--clients-card--wrapper">
-          <Link
-            to="/clients-hub"
-            class="kash_operations_home--main-card kash_operations_home--clients-card"
-          >
-            <h2 class="kash_operations--clients-card-title">Clients</h2>
-          </Link>
-          <div class="client-card--details_tag main-card--details_tag">
-            <p class="tag-note">Add Company</p>
-            <p class="tag-note">Company Info</p>
-            <p class="tag-note">Manage Projects</p>
-          </div>
-        </div>
-
+            <div class="kash_operations_home--main-card--wrapper kash_operations_home--clients-card--wrapper">
+              <Link
+                to="/clients-hub"
+                class="kash_operations_home--main-card kash_operations_home--clients-card"
+              >
+                <h2 class="kash_operations--clients-card-title">Clients</h2>
+              </Link>
+              <div class="client-card--details_tag main-card--details_tag">
+                <p class="tag-note">Add Company</p>
+                <p class="tag-note">Company Info</p>
+                <p class="tag-note">Manage Projects</p>
+              </div>
+            </div>
+          </>
+        )}
         <div class="kash_operations_home--main-card--wrapper kash_operations_home--timesheets-card--wrapper">
           <Link
             to="/timesheets-hub"

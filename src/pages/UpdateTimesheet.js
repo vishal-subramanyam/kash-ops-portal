@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
-function UpdateTimesheet() {
+function UpdateTimesheet(props) {
   let selectedEmployeeId; // To add to Timesheets table - EmpId
   let selectedProjectId; // To add to Timesheets table - SowId
   let selectedSubAssignmentId;
@@ -65,6 +65,10 @@ function UpdateTimesheet() {
   let [subAssignmentByProject, setsubAssignmentByProjectArr] = useState([]);
   let [tasksBySubAssignment, setTasksBySubAssignment] = useState([]);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
+  let basicUserInfo = allEmployeesArr.filter((user) => {
+    return user.EmpId === props.loggedInUser[0].EmpId;
+  });
+  console.log(props.loggedInUser);
 
   const getCurrentPrevMonday = () => {
     let todayDate = new Date();
@@ -76,11 +80,8 @@ function UpdateTimesheet() {
     // setCurrentPrevMonday(prevMondayFormat);
   };
   useEffect(() => {
-    getAllEmployees();
-  }, []);
-
-  useEffect(() => {
     getAllProjects();
+    getAllEmployees();
   }, []);
 
   const getAllEmployees = () => {
@@ -90,7 +91,7 @@ function UpdateTimesheet() {
         Accept: "application/json, text/plain, */*",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ _keyword_: "KASH_OPERATIONS_EMPLOYEE_TABLE" }),
+      body: JSON.stringify({ _keyword_: "KASH_OPERATIONS_USER_TABLE" }),
     })
       .then((res) => res.json())
       .then((res) => {
@@ -390,17 +391,21 @@ function UpdateTimesheet() {
     console.log(index);
     // If timesheet_entry_id is present, then run a fetch to delete record from database and remove from state array
     // If timesheet_entry_id is not present, the record does not yet exist in database and remove record from state array
-    
-    if(!window.confirm("Are you sure you want to delete this timesheet record?")) {
-      console.log("Confirm delete regected")
-      return
+
+    if (
+      !window.confirm("Are you sure you want to delete this timesheet record?")
+    ) {
+      console.log("Confirm delete regected");
+      return;
     } else {
-      let recordsAfterDelete = timesheetRecordsByEmployee.filter((record, i) => {
-        return i !== index;
-      });
+      let recordsAfterDelete = timesheetRecordsByEmployee.filter(
+        (record, i) => {
+          return i !== index;
+        }
+      );
       console.log(recordsAfterDelete);
       setTimesheetRecordsByEmployee(recordsAfterDelete);
-  
+
       if (databaseRowId) {
         console.log("fetch to delete record from timesheets table");
         try {
@@ -434,7 +439,6 @@ function UpdateTimesheet() {
       }
       getTimesheetByEmployeeId(selectedEmployeeIdState);
     }
-    
   };
 
   const showConfirmationModal = () => {
@@ -512,7 +516,6 @@ function UpdateTimesheet() {
                   Employee:
                 </label>
                 <select
-                  // onchange="loadTableGen()"
                   className="employee-dropdown-input"
                   id="employee-dropdown-input"
                   name="employee-dropdown-input"
@@ -520,13 +523,19 @@ function UpdateTimesheet() {
                   ref={selectedEmployee}
                 >
                   <option value="">- Choose an Employee -</option>
-                  {allEmployeesArr.map((employee, i) => {
-                    return (
-                      <option key={i} data-employeeid={employee.EmpId}>
-                        {employee.FirstName + " " + employee.LastName}
-                      </option>
-                    );
-                  })}
+                  {props.admin ? (
+                    allEmployeesArr.map((employee, i) => {
+                      return (
+                        <option key={i} data-employeeid={employee.EmpId}>
+                          {employee.FirstName + " " + employee.LastName}
+                        </option>
+                      );
+                    })
+                  ) : (
+                    <option data-employeeid={basicUserInfo[0].EmpId}>
+                      {basicUserInfo[0].FirstName} {basicUserInfo[0].LastName}
+                    </option>
+                  )}
                 </select>
               </div>
 
@@ -691,17 +700,15 @@ function UpdateTimesheet() {
         					<option value=""></option>
         				</select>
         			</div--> */}
-
-
               </div>
             </div>
 
             <div className="w-5">
-                  <div>
-                    <div className="addbutton" onClick={addToStagingSheet}>
-                      + Add to Sheet
-                    </div>
-                  </div>
+              <div>
+                <div className="addbutton" onClick={addToStagingSheet}>
+                  + Add to Sheet
+                </div>
+              </div>
             </div>
 
             <div className="hours_and_text-status">

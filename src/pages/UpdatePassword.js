@@ -6,11 +6,13 @@ function UpdatePassword() {
   const navigate = useNavigate();
   let passwordInput = useRef();
   let confrimPasswordInput = useRef();
+  let updatePWForm = useRef();
 
   useEffect(() => {}, []);
 
   const updatePassword = () => {
     console.log("Update Password Triggered");
+    updatePWForm.current.reset();
   };
   return (
     <main className="kash-operations-login">
@@ -20,7 +22,10 @@ function UpdatePassword() {
       </div>
       <div className="kash_operations_home--content-holder">
         <div className="kash_operations_home--banner-heading"></div>
-        <form action="" className="login-form">
+        <form method="post" className="login-form" ref={updatePWForm}>
+          <h1 className="kash_operations_home--title login-heading">
+            Update Password
+          </h1>
           <div className="login-field">
             <label className="login-form--input_label" htmlFor="password-input">
               <p className="login-form--username-label">Password</p>
@@ -29,6 +34,7 @@ function UpdatePassword() {
                 className="login-input"
                 id="password-input"
                 name="password-input"
+                required
                 ref={passwordInput}
               />
             </label>
@@ -44,6 +50,7 @@ function UpdatePassword() {
                 className="login-input"
                 id="confirm-password-input"
                 name="confirm-password-input"
+                required
                 ref={confrimPasswordInput}
               />
             </label>

@@ -10,7 +10,7 @@ function TimesheetsHub() {
         <h1 class="kash_operations--hub-title timesheets-hub-page-title">
           Timesheets
         </h1>
-        <Link to="/home" class="return-to-operations-hub">
+        <Link to="/" class="return-to-operations-hub">
           <svg
             width="80"
             height="134"

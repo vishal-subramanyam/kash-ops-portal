@@ -107,8 +107,8 @@ a {
 .login-form {
   font-weight: 600;
   font-size: 1.2rem;
-  margin-top: 3rem;
-  margin-bottom: 3rem;
+  /* margin-top: 3rem;
+  margin-bottom: 3rem; */
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -146,7 +146,7 @@ a {
   background-color: #326d97;
   color: #e7f5ff;
   font-size: 1.2rem;
-  margin-top: 30px;
+  /* margin-top: 30px; */
   padding: 16px 20px;
   border-radius: 0.4rem;
   font-weight: 600;
@@ -169,6 +169,11 @@ a {
   font-size: 24px;
   margin-left: auto;
   color: #366575;
+}
+
+.login-heading {
+  color: #326d97;
+  font-size: 2rem !important;
 }
 @media (min-width: 900px) {
   .kash-operations-login {

@@ -136,19 +136,18 @@ function ProjectSubCategory(props) {
         `Deleted Sub Category ${props.subCategory.SubTaskTitle}`,
         data
       );
+      // need to update the state array - consolidatedSubCategories
+      console.log(props.allSubCats);
+      let deleteSubCat = props.allSubCats.filter((cat) => {
+        return cat.SubTaskTitle !== props.subCategory.SubTaskTitle;
+      });
+      props.resetConsolidatedSubCatArr(deleteSubCat);
+      props.reset();
       closeConfirmationModal();
       // props.reset();
     } catch (error) {
       alert(`Unable to delete ${props.subCategory.SubTaskTitle}. ${error}`);
     }
-
-    // need to update the state array - consolidatedSubCategories
-    console.log(props.allSubCats);
-    let deleteSubCat = props.allSubCats.filter((cat) => {
-      return cat.SubTaskTitle !== props.subCategory.SubTaskTitle;
-    });
-    props.resetConsolidatedSubCatArr(deleteSubCat);
-    props.reset();
   };
 
   return (

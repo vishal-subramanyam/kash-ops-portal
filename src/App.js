@@ -18,7 +18,7 @@ import UpdatePassword from "./pages/UpdatePassword";
 
 function App() {
   let [loggedInUser, setLoggedInUser] = useState("");
-  let [isAdmin, setIsAdmin] = useState(true);
+  let [isAdmin, setIsAdmin] = useState(false);
   return (
     // <BrowserRouter>
     <div className="App">
@@ -29,7 +29,6 @@ function App() {
             <Login loggedInUserName={setLoggedInUser} setAdmin={setIsAdmin} />
           }
         />
-        {/* <Route path="/safetyapp" element={<HomePage />} /> */}
         <Route
           path="/update-password"
           element={
@@ -42,7 +41,7 @@ function App() {
           path="/"
           element={
             <RequireAuth>
-              <HomePage />
+              <HomePage loggedInUserName={loggedInUser} admin={isAdmin} />
             </RequireAuth>
           }
         />
@@ -123,7 +122,7 @@ function App() {
           path="/update-timesheet"
           element={
             <RequireAuth>
-              <UpdateTimesheet />
+              <UpdateTimesheet loggedInUser={loggedInUser} admin={isAdmin} />
             </RequireAuth>
           }
         />

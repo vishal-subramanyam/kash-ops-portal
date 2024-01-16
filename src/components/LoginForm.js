@@ -8,11 +8,12 @@ function LoginForm(props) {
   const navigate = useNavigate();
   let usernameInput = useRef();
   let passwordInput = useRef();
+  let loginForm = useRef();
   let [allUsers, setAllUsers] = useState([]);
 
   useEffect(() => {
     getAllUsers();
-  });
+  }, []);
 
   const getAllUsers = () => {
     console.log("Use effect to query user table");
@@ -46,7 +47,7 @@ function LoginForm(props) {
           },
           body: JSON.stringify({
             _keyword_: "KASH_OPERATIONS_USER_TABLE",
-            username: "ganderson",
+            username: "WFINTERNALUSN",
             password: "QUxFWDEyMw==",
             secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
           }),
@@ -61,10 +62,18 @@ function LoginForm(props) {
         );
         return;
       }
+
+      // get the first name of the employee that is logged in
+      let firstName = allUsers.filter((name) => data.EmpId === name.EmpId);
+      console.log(firstName);
+
       // save logged in user first name to state
       // get the first name of the logged in user by getting emp id from the response of the logged in fetch
-      props.userLoggedIn("Firsst name");
-      props.setAdmin(true);
+      props.userLoggedIn(firstName);
+
+      if (data.IsAdmin === "Admin" || data.IsAdmin === "SuperAdmin") {
+        props.setAdmin(true);
+      }
 
       // set auth state to true
       await login();
@@ -77,7 +86,8 @@ function LoginForm(props) {
   };
 
   return (
-    <form method="post" className="login-form">
+    <form method="post" className="login-form" ref={loginForm}>
+      <h1 className="kash_operations_home--title login-heading">Login</h1>
       <div className="login-field">
         <label
           className="login-form--input_label"
@@ -89,6 +99,7 @@ function LoginForm(props) {
             className="login-input"
             id="login--username-input"
             name="login--username-input"
+            required
             ref={usernameInput}
           />
         </label>
@@ -104,6 +115,7 @@ function LoginForm(props) {
             className="login-input"
             id="login--password-input"
             name="login--password-input"
+            required
             ref={passwordInput}
           />
         </label>
