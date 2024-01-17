@@ -29,8 +29,8 @@ export function useAuth() {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
-        setAllUsers("all users", res.data);
+        console.log("all users", res);
+        setAllUsers(res.data);
       })
       .catch((err) => alert(err));
   };
