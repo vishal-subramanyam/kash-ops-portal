@@ -34,17 +34,14 @@ function HomePage(props) {
         <p class="kash_operations_home--user-welcome-msg">
           Welcome,{" "}
           <span id="kash_ops_user--first-name">
-            {/* {props.loggedInUserName[0].FirstName
-              ? props.loggedInUserName[0].FirstName
-              : 
-              "User"} */}
+            {props.loggedInUserName.FirstName}
           </span>
           !
         </p>
       </div>
       <section class="kash_operations_home--catgories-holder max-width--main-container">
         {/* if logged in user is not an admin, hide employee and clients hubs */}
-        {!props.admin ? (
+        {props.admin === "BasicUser" ? (
           ""
         ) : (
           <>

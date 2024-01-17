@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/Authentication";
 import "../assets/styles/Styles.css";
@@ -10,29 +10,6 @@ function LoginForm(props) {
   let usernameInput = useRef();
   let passwordInput = useRef();
   let loginForm = useRef();
-  let [allUsers, setAllUsers] = useState([]);
-
-  useEffect(() => {
-    getAllUsers();
-  }, []);
-
-  const getAllUsers = () => {
-    console.log("Use effect to query user table");
-    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
-      method: "POST",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ _keyword_: "KASH_OPERATIONS_USER_TABLE" }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        setAllUsers(res.data);
-      })
-      .catch((err) => alert(err));
-  };
 
   const userLogin = (e) => {
     e.preventDefault();
@@ -85,7 +62,7 @@ function LoginForm(props) {
     login(usernameInput.current.value, btoa(passwordInput.current.value)).then(
       () => {
         // <Navigate to="/" replace={true} />;
-        navigate(state?.path || "/", { replace: false });
+        navigate(state?.path || "/");
         console.log("res promise on login function on useAuth triggered");
       }
     );

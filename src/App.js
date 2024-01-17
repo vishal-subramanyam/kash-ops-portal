@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  useLocation,
-  Navigate,
-} from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import "./App.css";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
@@ -24,19 +18,45 @@ import UpdatePassword from "./pages/UpdatePassword";
 import { useAuth } from "./hooks/Authentication";
 
 function App() {
-  let { authed } = useAuth();
-  let [loggedInUser, setLoggedInUser] = useState("");
-  let [isAdmin, setIsAdmin] = useState(false);
+  let { logout, user, loggedInUser, isAdmin } = useAuth();
+  let username = window.localStorage.getItem("user");
+  let loggedInUserLocal = JSON.parse(
+    window.localStorage.getItem("loggedInUserInfo")
+  );
+  let isAdminLocal = window.localStorage.getItem("adminLevel");
+  let navigate = useNavigate();
+
+  const userLogout = () => {
+    logout();
+    navigate("/login");
+  };
   return (
     // <BrowserRouter>
     <div className="App">
+      {console.log("USER from useAuth", user)}
+      {console.log("logged in user info from useAuth", loggedInUser)}
+      {console.log("admin from useAuth", isAdmin)}
+
+      {console.log("USER", username)}
+      {console.log("logged in user info", loggedInUserLocal)}
+      {console.log("admin", isAdminLocal)}
+
+      {/* hide button if username in local storage is "null" because value in local storage is a string */}
+      {username !== "null" ? (
+        <button
+          style={{ float: "right", marginTop: "15px" }}
+          type="submit"
+          value="Submit"
+          className="button sign_up-button"
+          onClick={userLogout}
+        >
+          <p className="sign_up-button-text">Logout</p>
+        </button>
+      ) : (
+        ""
+      )}
       <Routes>
-        <Route
-          path="/login"
-          element={
-            <Login loggedInUserName={setLoggedInUser} setAdmin={setIsAdmin} />
-          }
-        />
+        <Route path="/login" element={<Login />} />
         <Route
           path="/update-password"
           element={
@@ -49,7 +69,10 @@ function App() {
           path="/"
           element={
             <RequireAuth>
-              <HomePage loggedInUserName={loggedInUser} admin={isAdmin} />
+              <HomePage
+                loggedInUserName={loggedInUserLocal}
+                admin={isAdminLocal}
+              />
             </RequireAuth>
           }
         />
@@ -130,7 +153,10 @@ function App() {
           path="/update-timesheet"
           element={
             <RequireAuth>
-              <UpdateTimesheet loggedInUser={loggedInUser} admin={isAdmin} />
+              <UpdateTimesheet
+                loggedInUser={loggedInUserLocal}
+                admin={isAdminLocal}
+              />
             </RequireAuth>
           }
         />

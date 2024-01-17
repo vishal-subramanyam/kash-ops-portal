@@ -66,7 +66,7 @@ function UpdateTimesheet(props) {
   let [tasksBySubAssignment, setTasksBySubAssignment] = useState([]);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
   let basicUserInfo = allEmployeesArr.filter((user) => {
-    return user.EmpId === props.loggedInUser[0].EmpId;
+    return user.EmpId === props.loggedInUser.EmpId;
   });
   console.log(props.loggedInUser);
 
@@ -523,7 +523,7 @@ function UpdateTimesheet(props) {
                   ref={selectedEmployee}
                 >
                   <option value="">- Choose an Employee -</option>
-                  {props.admin ? (
+                  {props.admin !== "BasicUser" ? (
                     allEmployeesArr.map((employee, i) => {
                       return (
                         <option key={i} data-employeeid={employee.EmpId}>

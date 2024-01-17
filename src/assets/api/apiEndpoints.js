@@ -1,7 +1,5 @@
+export const domain = "http://20.62.40.96:4040/";
 export const getAPIRequest = async (url, method, bodyData) => {
-  // const domain = 'http://localhost:8320/SigmaAPIServices/'
-  const domain = "http://localhost:4040/";
-
   if (bodyData != null) {
     return fetch(`${domain}${url}`, {
       method: method,
