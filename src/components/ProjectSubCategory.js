@@ -3,6 +3,7 @@ import "../assets/styles/Styles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import SubCategoryTask from "./SubCategoryTask";
+import { domain } from "../assets/api/apiEndpoints";
 
 function ProjectSubCategory(props) {
   let taskSegment1 = useRef();
@@ -62,7 +63,7 @@ function ProjectSubCategory(props) {
       console.log("run fetch to add task to sub cat");
       try {
         const response = await fetch(
-          "http://localhost:4040/GenericTransactionService/processTransaction",
+          `${domain}GenericTransactionService/processTransaction`,
           {
             method: "POST",
             headers: {
@@ -111,7 +112,7 @@ function ProjectSubCategory(props) {
 
     try {
       const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
+        `${domain}GenericTransactionService/processTransactionForDelete`,
         {
           method: "POST",
           headers: {

@@ -6,10 +6,7 @@ const authContext = React.createContext;
 export function useAuth() {
   const [authed, setAuthed] = useState(false);
   const [user, setUser] = useLocalStorage("user", null);
-  let [loggedInUser, setLoggedInUser] = useLocalStorage(
-    "loggedInUserInfo",
-    null
-  );
+  let [loggedInUser, setLoggedInUser] = useLocalStorage("loggedInUserInfo", {});
   let [isAdmin, setIsAdmin] = useLocalStorage("adminLevel", null);
   let [allUsers, setAllUsers] = useState([]);
 
@@ -41,7 +38,7 @@ export function useAuth() {
     login(username, password) {
       console.log("password base64", password);
       return new Promise((res) => {
-        fetch("http://20.62.40.96:3000/AppContextService/KshSignIn", {
+        fetch(`${domain}AppContextService/KshSignIn`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -71,11 +68,11 @@ export function useAuth() {
               // save logged in user first name to state
               // get the first name of the logged in user by getting emp id from the response of the logged in fetch
               setLoggedInUser(userArrObject[0]);
-
+              let basicUserString = "BasicUser";
               if (data.IsAdmin === "Admin" || data.IsAdmin === "SuperAdmin") {
                 setIsAdmin(data.IsAdmin);
               } else {
-                setIsAdmin("BasicUser");
+                setIsAdmin(basicUserString);
               }
 
               setUser(data.username);

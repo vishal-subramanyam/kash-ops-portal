@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Styles.css";
 
 function AddProject() {
@@ -31,7 +32,7 @@ function AddProject() {
 
   // useEffect to get (POST) companies from database and add to allCompanies state array
   useEffect(() => {
-    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -49,7 +50,7 @@ function AddProject() {
 
   // useEffect to get (POST) project from database and add to allProjects state array
   useEffect(() => {
-    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -111,7 +112,7 @@ function AddProject() {
 
     try {
       const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransaction",
+        `${domain}GenericTransactionService/processTransaction`,
         {
           method: "POST",
           headers: {

@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Styles.css";
 import "../assets/styles/EditEmployeeInfo.css";
 
 function EditEmployeeInfo() {
   let selectedEmployeeFromDropdown;
-  let initialAdminOption = [{"AdminLevel": ""}];
+  let initialAdminOption = [{ AdminLevel: "" }];
   let adminLevelDesignation = useRef();
   let firstNameInput = useRef();
   let lastNameInput = useRef();
@@ -30,13 +31,12 @@ function EditEmployeeInfo() {
   // if Admin level user, check the admin checkbox
 
   useEffect(() => {
-    getAllUsers()
+    getAllUsers();
   }, [selectedCurrentUser]);
 
-
   const getAllUsers = () => {
-    console.log("Use effect to query user table")
-    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+    console.log("Use effect to query user table");
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -50,20 +50,24 @@ function EditEmployeeInfo() {
         setAllUsers(res.data);
       })
       .catch((err) => alert(err));
-  }
+  };
 
   const setAdminOption = (selectedUser) => {
-    console.log(selectedUser)
-    for(let i = 0; i < adminLevelDesignation.current.childNodes.length; i++ ) {
-      let adminSelectionChoice = adminLevelDesignation.current.childNodes[i].getAttribute('value')
+    console.log(selectedUser);
+    for (let i = 0; i < adminLevelDesignation.current.childNodes.length; i++) {
+      let adminSelectionChoice =
+        adminLevelDesignation.current.childNodes[i].getAttribute("value");
       if (adminSelectionChoice === selectedUser[0].AdminLevel) {
-        console.log("seleted admin", adminSelectionChoice)
-        adminLevelDesignation.current.childNodes[i].setAttribute('selected', true)
+        console.log("seleted admin", adminSelectionChoice);
+        adminLevelDesignation.current.childNodes[i].setAttribute(
+          "selected",
+          true
+        );
       } else if (adminSelectionChoice !== selectedUser[0].AdminLevel) {
-        adminLevelDesignation.current.childNodes[i].removeAttribute('selected')
+        adminLevelDesignation.current.childNodes[i].removeAttribute("selected");
       }
     }
-  }
+  };
   const onNameChange = async (e, i) => {
     // fetch employee name from database
     // populate the input fields with relevant data from api call
@@ -80,35 +84,30 @@ function EditEmployeeInfo() {
     selectedEmployeeFromDropdown = allUsersArr.filter((user, i) => {
       return selectedEmployeeId === user.EmpId;
     });
-    setUserDetailInputs(selectedEmployeeFromDropdown)
-    setAdminOption(selectedEmployeeFromDropdown)
+    setUserDetailInputs(selectedEmployeeFromDropdown);
+    setAdminOption(selectedEmployeeFromDropdown);
     setSelectedCurrentUser(...selectedEmployeeFromDropdown);
   };
 
   const setUserDetailInputs = (user) => {
-    console.log(user)
-    firstNameInput.current.value = user[0].FirstName
-    lastNameInput.current.value = user[0].LastName
-    emailAddressInput.current.value = user[0].EmailAddress
-    employeePhoneNumber.current.value = user[0].PhoneNumber
-    employeeLocationCity.current.value = user[0].EmpLocationCity
-    employeeLocationState.current.value = user[0].EmpLocationState
-    employeeLocationCountry.current.value = user[0].EmpLocationCountry
-  }
+    console.log(user);
+    firstNameInput.current.value = user[0].FirstName;
+    lastNameInput.current.value = user[0].LastName;
+    emailAddressInput.current.value = user[0].EmailAddress;
+    employeePhoneNumber.current.value = user[0].PhoneNumber;
+    employeeLocationCity.current.value = user[0].EmpLocationCity;
+    employeeLocationState.current.value = user[0].EmpLocationState;
+    employeeLocationCountry.current.value = user[0].EmpLocationCountry;
+  };
 
   const updateUser = async (e) => {
     e.preventDefault();
     console.log(selectedCurrentUser);
 
     // make a fetch post call to update employee info given field values
-    console.log(firstNameInput.current.value);
-    console.log(lastNameInput.current.value);
-
-    // http://localhost:4040/GenericTransactionService/processTransactionForUpdate
-
     try {
       const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransactionForUpdate",
+        `${domain}GenericTransactionService/processTransactionForUpdate`,
         {
           method: "POST",
           headers: {
@@ -126,7 +125,7 @@ function EditEmployeeInfo() {
                 PhoneNumber: employeePhoneNumber.current.value,
                 LastName: lastNameInput.current.value,
                 EmpId: selectedCurrentUser.EmpId,
-                AdminLevel: adminLevelDesignation.current.value
+                AdminLevel: adminLevelDesignation.current.value,
               },
             ],
             _keyword_: "KASH_OPERATIONS_USER_TABLE",
@@ -141,20 +140,17 @@ function EditEmployeeInfo() {
       alert("User Updated");
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
-      console.log(error);
-      alert("Unable to update user.")
+      alert("Unable to update user.");
     }
   };
-
 
   const deleteUser = async (e) => {
     e.preventDefault();
     // check if selected employee is admin, delete from admin and employee tables
     // make a fetch call to the delete user endpoint
-    console.log("Delete button clicked", selectedCurrentUser)
-   try {
+    try {
       const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
+        `${domain}/GenericTransactionService/processTransactionForDelete`,
         {
           method: "POST",
           headers: {
@@ -180,12 +176,12 @@ function EditEmployeeInfo() {
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
       console.log(error);
-      alert("Unable to delete user.")
+      alert("Unable to delete user.");
     }
-    console.log(editUserForm.current)
-    editUserForm.current.reset()
-    setAdminOption(initialAdminOption)
-    setSelectedCurrentUser({})
+    console.log(editUserForm.current);
+    editUserForm.current.reset();
+    setAdminOption(initialAdminOption);
+    setSelectedCurrentUser({});
     alert("User Deleted");
   };
 
@@ -203,34 +199,40 @@ function EditEmployeeInfo() {
             <div className="roles_and_responsibilities--mini-form manage_roles_and_tasks--form">
               <h2>Edit Employee Information</h2>
               <form ref={editUserForm}>
-              <label className="manage_roles--employee_label" htmlFor="EMP_ID">
-                Employee
-                <select name="EMP_ID" id="EMP_ID" onChange={onNameChange}>
-                  <option value="Select an Employee">
-                    -Select an Employee-
-                  </option>
-                  {allUsersArr.map((employee, i) => {
-                    return (
-                      <option
-                        data-employeeid={employee.EmpId}
-                        value={`${employee.FirstName} ${employee.LastName}`}
-                        key={i}
-                      >
-                        {`${employee.FirstName} ${employee.LastName}`}
-                      </option>
-                    );
-                  })}
-                </select>
-              </label>
-              {/* <form ref={addEmployeeForm}> */}
+                <label
+                  className="manage_roles--employee_label"
+                  htmlFor="EMP_ID"
+                >
+                  Employee
+                  <select name="EMP_ID" id="EMP_ID" onChange={onNameChange}>
+                    <option value="Select an Employee">
+                      -Select an Employee-
+                    </option>
+                    {allUsersArr.map((employee, i) => {
+                      return (
+                        <option
+                          data-employeeid={employee.EmpId}
+                          value={`${employee.FirstName} ${employee.LastName}`}
+                          key={i}
+                        >
+                          {`${employee.FirstName} ${employee.LastName}`}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </label>
+                {/* <form ref={addEmployeeForm}> */}
                 <div className="employee-info-form">
                   <div className="left_group_inputs">
                     <br />
-                    <label htmlFor="admin-level-designation">
-                      Admin Level
-                    </label>
-                    <select name="admin-level-designation" id="admin-designation" className="admin-designation" ref={adminLevelDesignation}>
-                      <option value="" ></option>
+                    <label htmlFor="admin-level-designation">Admin Level</label>
+                    <select
+                      name="admin-level-designation"
+                      id="admin-designation"
+                      className="admin-designation"
+                      ref={adminLevelDesignation}
+                    >
+                      <option value=""></option>
                       <option value="SuperAdmin">Super Admin</option>
                       <option value="Admin">Admin</option>
                       <option value="BasicUser">Basic User</option>

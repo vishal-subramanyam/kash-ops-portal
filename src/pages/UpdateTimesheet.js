@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
+import { domain } from "../assets/api/apiEndpoints";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
@@ -85,7 +86,7 @@ function UpdateTimesheet(props) {
   }, []);
 
   const getAllEmployees = () => {
-    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -102,7 +103,7 @@ function UpdateTimesheet(props) {
   };
 
   const getAllProjects = () => {
-    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -123,7 +124,7 @@ function UpdateTimesheet(props) {
   const getTimesheetByEmployeeId = (id) => {
     console.log(reportingPeriodStartDate.current.value);
     console.log(id);
-    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -166,20 +167,17 @@ function UpdateTimesheet(props) {
   };
 
   const getProjectSubCategories = async (projectId) => {
-    await fetch(
-      "http://localhost:4040/GenericResultBuilderService/buildResults",
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          _keyword_: "SUB_CATEGORIES_BY_PROJECT_ID",
-          SowId: projectId,
-        }),
-      }
-    )
+    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "SUB_CATEGORIES_BY_PROJECT_ID",
+        SowId: projectId,
+      }),
+    })
       .then((res) => res.json())
       .then((res) => {
         console.log(res.data);
@@ -191,19 +189,16 @@ function UpdateTimesheet(props) {
 
   const getTasksBySubAssignment = async (selectedSubAssignmentId) => {
     console.log(selectedSubAssignmentId);
-    await fetch(
-      "http://localhost:4040/GenericResultBuilderService/buildResults",
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
-        }),
-      }
-    )
+    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
+      }),
+    })
       .then((res) => res.json())
       .then((res) => {
         console.log(res.data);
@@ -250,6 +245,7 @@ function UpdateTimesheet(props) {
   };
 
   const selectSubAssignment = (e) => {
+    console.log(e.target[e.target.selectedIndex]);
     selectedSubAssignmentId =
       e.target[e.target.selectedIndex].getAttribute("data-subprojectid");
     selectedSubAssignmentName = e.target[e.target.selectedIndex].getAttribute(
@@ -335,7 +331,7 @@ function UpdateTimesheet(props) {
   const updateCurrentTimesheetRecord = async (currentRecordArr) => {
     try {
       const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransactionForUpdate",
+        `${domain}GenericTransactionService/processTransactionForUpdate`,
         {
           method: "POST",
           headers: {
@@ -362,7 +358,7 @@ function UpdateTimesheet(props) {
   const addNewTimesheetRecord = async (newRecordArr) => {
     try {
       const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransaction",
+        `${domain}GenericTransactionService/processTransaction`,
         {
           method: "POST",
           headers: {
@@ -410,7 +406,7 @@ function UpdateTimesheet(props) {
         console.log("fetch to delete record from timesheets table");
         try {
           const response = await fetch(
-            "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
+            `${domain}GenericTransactionService/processTransactionForDelete`,
             {
               method: "POST",
               headers: {
@@ -523,7 +519,7 @@ function UpdateTimesheet(props) {
                   ref={selectedEmployee}
                 >
                   <option value="">- Choose an Employee -</option>
-                  {props.admin !== "BasicUser" ? (
+                  {props.admin !== '"BasicUser"' ? (
                     allEmployeesArr.map((employee, i) => {
                       return (
                         <option key={i} data-employeeid={employee.EmpId}>
@@ -668,7 +664,7 @@ function UpdateTimesheet(props) {
                   <div>
                     <label htmlFor="sub-assignment">Work Area</label>
                   </div>
-                  <select id="sub-assignment" onClick={selectSubAssignment}>
+                  <select id="sub-assignment" onChange={selectSubAssignment}>
                     <option value=""></option>
                     {subAssignmentByProject.map((subProject, i) => {
                       return (

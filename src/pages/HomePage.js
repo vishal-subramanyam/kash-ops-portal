@@ -41,7 +41,7 @@ function HomePage(props) {
       </div>
       <section class="kash_operations_home--catgories-holder max-width--main-container">
         {/* if logged in user is not an admin, hide employee and clients hubs */}
-        {props.admin === "BasicUser" ? (
+        {props.admin === '"BasicUser"' ? (
           ""
         ) : (
           <>

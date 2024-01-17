@@ -9,10 +9,9 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/Styles.css";
-import AddSubCategoryForm from "../components/AddSubCategoryForm";
+import { domain } from "../assets/api/apiEndpoints";
 import ProjectSubCategory from "../components/ProjectSubCategory";
 import SaveNewSubCategory from "../components/SaveNewSubCategory";
-import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 
 function EditProject() {
   let companyName = useRef();
@@ -64,19 +63,16 @@ function EditProject() {
   }, [consolidatedSubCategories]);
 
   const getAllCompaniesProjects = async () => {
-    await fetch(
-      "http://localhost:4040/GenericResultBuilderService/buildResults",
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          _keyword_: "PROJECTS_AND_COMPANY_INFO_TABLE",
-        }),
-      }
-    )
+    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "PROJECTS_AND_COMPANY_INFO_TABLE",
+      }),
+    })
       .then((res) => res.json())
       .then((res) => {
         // console.log(res.data);
@@ -125,19 +121,16 @@ function EditProject() {
 
   const getProjectAndSubcategories = async () => {
     console.log("fetching all projects and sub categories");
-    await fetch(
-      "http://localhost:4040/GenericResultBuilderService/buildResults",
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
-        }),
-      }
-    )
+    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
+      }),
+    })
       .then((res) => res.json())
       .then((res) => {
         console.log(res.data);
@@ -187,7 +180,7 @@ function EditProject() {
 
     try {
       const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransaction",
+        `${domain}GenericTransactionService/processTransaction`,
         {
           method: "POST",
           headers: {
@@ -275,85 +268,6 @@ function EditProject() {
     // show component to run function to save new sub cat record
     addProjectSubCategory();
   };
-
-  // add task to existing sub category
-  // const addTaskToSubCategory = async (
-  //   projectId,
-  //   subCatTitle,
-  //   subCatId,
-  //   segment1
-  // ) => {
-  //   // e.preventDefault()
-  //   // console.log(
-  //   //   "Add task to sub category",
-  //   //   projectId,
-  //   //   subCatTitle,
-  //   //   subCatId,
-  //   //   segment1
-  //   // );
-  //   let newSubCatTask = {
-  //     SowId: projectId,
-  //     ProjectSubTaskId: subCatId,
-  //     SubTaskTitle: subCatTitle,
-  //     Segment2: "",
-  //     Segment1: segment1,
-  //     Segment3: "",
-  //   };
-  //   // add task to existing sub category. Validate if task name field is filled out
-  //   if (segment1 === undefined || segment1 === "") {
-  //     alert("Fill in a task name.");
-  //   } else {
-  //     console.log("run fetch to add task to sub cat");
-  //     try {
-  //       const response = await fetch(
-  //         "http://localhost:4040/GenericTransactionService/processTransaction",
-  //         {
-  //           method: "POST",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify({
-  //             // your expected POST request payload goes here
-  //             data: [
-  //               {
-  //                 SowId: projectId,
-  //                 ProjectSubTaskId: subCatId,
-  //                 SubTaskTitle: subCatTitle,
-  //                 Segment2: "",
-  //                 Segment1: segment1,
-  //                 Segment3: "",
-  //               },
-  //             ],
-  //             _keyword_: "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
-  //             secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
-  //           }),
-  //         }
-  //       );
-  //       const data = await response.json();
-  //       console.log("Added task to sub category table", data);
-
-  //       // update the array that filters to show sub cat tasks (segment1s)
-  //       setTaskBySubCategory((prevState) => [...prevState, newSubCatTask]);
-  //       taskSegment1.current.value = "";
-  //     } catch (error) {
-  //       console.log(error);
-  //       alert("Unable to add task.");
-  //     }
-  //   }
-  // };
-
-  // const areYouSure = () => {
-  //   confirmationModal.current.showModal();
-  // };
-
-  // const closeConfirmationModal = () => {
-  //   confirmationModal.current.close();
-  // };
-
-  // const deleteWorkArea = (sowId, taskId) => {
-  //   console.log("delete button clicked");
-  //   closeConfirmationModal();
-  // };
 
   return (
     <div className="add-sub-assignment-page--body">

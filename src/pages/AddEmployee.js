@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { domain } from "../assets/api/apiEndpoints";
 import "../assets/api/apiEndpoints.js";
 import "../assets/styles/HomePage.css";
 
@@ -37,7 +38,7 @@ function AddEmployee() {
   const addUser = async () => {
     try {
       const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransaction",
+        `${domain}GenericTransactionService/processTransaction`,
         {
           method: "POST",
           headers: {
@@ -74,14 +75,14 @@ function AddEmployee() {
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
       console.log(error);
-      alert("Unable to add user.")
+      alert("Unable to add user.");
     }
-  }
+  };
 
   // SHOW MODAL FOR NEWLY ADDED EMPLOYEE INFO
   const onModalOpen = () => {
-    console.log("modal first name", modalEmployeeFirstName.current.value)
-    console.log("first name ref", firstNameInput.current.value)
+    console.log("modal first name", modalEmployeeFirstName.current.value);
+    console.log("first name ref", firstNameInput.current.value);
     modalEmployeeFirstName.current.innerHTML = firstNameInput.current.value;
     modalEmployeeLastName.current.innerHTML = lastNameInput.current.value;
     modalEmployeeId.current.innerHTML = userIDInput.current.value;
@@ -94,28 +95,27 @@ function AddEmployee() {
     }
   };
 
-
   const checkIfUsernameIdExists = async () => {
     console.log("check if Emp Username already exists");
-    await fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        _keyword_: "KASH_OPERATIONS_USER_TABLE"
+        _keyword_: "KASH_OPERATIONS_USER_TABLE",
       }),
     })
       .then((res) => res.json())
       .then((res) => {
         console.log("response from the users fetch", res);
-        console.log(usernameInput.current.value)
-        console.log(userIDInput.current.value)
-        setAllUsersArr(res.data)
+        console.log(usernameInput.current.value);
+        console.log(userIDInput.current.value);
+        setAllUsersArr(res.data);
       })
       .catch((err) => alert(err));
-  }
+  };
 
   const validateRequiredInputs = async (e) => {
     e.preventDefault();
@@ -123,35 +123,42 @@ function AddEmployee() {
     console.log(firstNameInput.current.value);
 
     // if(firstNameInput && lastNameInput && userIDInput && usernameInput) {
-      console.log("Fields filled out")
-      // await checkIfEmpIdAlreadyExistsInDB();
-      await checkIfUsernameIdExists();
-      console.log(allUsersArr)
-      let userNameExistsArr = allUsersArr.filter((userName) => userName.KashOperationsUsn === usernameInput.current.value);
-      let userIdExistsArr = allUsersArr.filter((userId) => userId.EmpId === userIDInput.current.value)
-      console.log(userNameExistsArr)
-      console.log(userIdExistsArr)
-      console.log(usernameInput.current.value)
-      // if employee id exists, the response will be a array containing the employee object
-     if (userIdExistsArr.length !== 0 ) {
-        alert("User ID already exists. Choose a different ID number.");
-      } else if (userNameExistsArr.length !== 0) {
-        alert("Username already exists. Choose a different username.");
-      } else {
-        addUser()
-        onModalOpen();
-        addEmployeeForm.current.reset();
-      }
+    console.log("Fields filled out");
+    // await checkIfEmpIdAlreadyExistsInDB();
+    await checkIfUsernameIdExists();
+    console.log(allUsersArr);
+    let userNameExistsArr = allUsersArr.filter(
+      (userName) => userName.KashOperationsUsn === usernameInput.current.value
+    );
+    let userIdExistsArr = allUsersArr.filter(
+      (userId) => userId.EmpId === userIDInput.current.value
+    );
+    console.log(userNameExistsArr);
+    console.log(userIdExistsArr);
+    console.log(usernameInput.current.value);
+    // if employee id exists, the response will be a array containing the employee object
+    if (userIdExistsArr.length !== 0) {
+      alert("User ID already exists. Choose a different ID number.");
+    } else if (userNameExistsArr.length !== 0) {
+      alert("Username already exists. Choose a different username.");
+    } else {
+      addUser();
+      onModalOpen();
+      addEmployeeForm.current.reset();
+    }
     // } else {
     //   alert("Please fill out First Name, Last Name, Employee ID and Username fields.")
     // }
-
   };
 
   // run function for employee usernames
   return (
     <div>
-      <dialog className="database-submit-dialog" id="database-submit-dialog" ref={submitEmployeeToDBDialog}>
+      <dialog
+        className="database-submit-dialog"
+        id="database-submit-dialog"
+        ref={submitEmployeeToDBDialog}
+      >
         <form method="dialog">
           <p>
             Employee Added: <br />
@@ -277,19 +284,22 @@ function AddEmployee() {
                   name="employee-form--wf-name-select"
                   ref={usernameInput}
                 />
-                </label>
-                <div className="admin-designation-container checkBoxLabel">
-                  <span className="employee--form--id-label">
-                    Add as admin?
-                  </span>
-                  <select name="admin-level-designation" id="admin-designation" className="admin-designation" ref={adminLevelDesignation} required>
-                    <option value=""></option>
-                    <option value="SuperAdmin">Super Admin</option>
-                    <option value="Admin">Admin</option>
-                    <option value="BasicUser">Basic User</option>
-                  </select>
-                </div>
-              
+              </label>
+              <div className="admin-designation-container checkBoxLabel">
+                <span className="employee--form--id-label">Add as admin?</span>
+                <select
+                  name="admin-level-designation"
+                  id="admin-designation"
+                  className="admin-designation"
+                  ref={adminLevelDesignation}
+                  required
+                >
+                  <option value=""></option>
+                  <option value="SuperAdmin">Super Admin</option>
+                  <option value="Admin">Admin</option>
+                  <option value="BasicUser">Basic User</option>
+                </select>
+              </div>
             </div>
           </div>
 

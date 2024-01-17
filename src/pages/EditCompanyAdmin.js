@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
+import { domain } from "../assets/api/apiEndpoints";
 
 function EditCompanyAdmin() {
   let companyRemoveAdminForm = useRef();
@@ -29,7 +30,7 @@ function EditCompanyAdmin() {
   }, []);
 
   const getAllCompanies = () => {
-    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -45,7 +46,7 @@ function EditCompanyAdmin() {
       .catch((err) => alert(err));
   };
   const getAllAdmins = () => {
-    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -67,7 +68,7 @@ function EditCompanyAdmin() {
   };
 
   const getAllCompanyAdmins = () => {
-    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -110,7 +111,7 @@ function EditCompanyAdmin() {
     console.log("add admin to company");
     try {
       const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransaction",
+        `${domain}GenericTransactionService/processTransaction`,
         {
           method: "POST",
           headers: {
@@ -190,7 +191,7 @@ function EditCompanyAdmin() {
     console.log("remove selected admin from selected company");
     try {
       const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
+        `${domain}GenericTransactionService/processTransactionForDelete`,
         {
           method: "POST",
           headers: {

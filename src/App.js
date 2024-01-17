@@ -44,7 +44,7 @@ function App() {
       {/* hide button if username in local storage is "null" because value in local storage is a string */}
       {username !== "null" ? (
         <button
-          style={{ float: "right", marginTop: "15px" }}
+          style={{ float: "right", marginTop: "10px" }}
           type="submit"
           value="Submit"
           className="button sign_up-button"

@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { domain } from "../assets/api/apiEndpoints";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/Styles.css";
 
@@ -19,7 +20,7 @@ function SubCategoryTask(props) {
 
     try {
       const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransactionForDelete",
+        `${domain}GenericTransactionService/processTransactionForDelete`,
         {
           method: "POST",
           headers: {

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Styles.css";
 
 function SignUpForm(props) {
@@ -20,7 +21,7 @@ function SignUpForm(props) {
 
     try {
       const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransaction",
+        `${domain}GenericTransactionService/processTransaction`,
         {
           method: "POST",
           headers: {

@@ -20,7 +20,7 @@ export const getAPIRequest = async (url, method, bodyData) => {
 
 export const getFileAPIRequest = async (url, method, bodyData) => {
   // const domain = 'http://localhost:8320/SigmaAPIServices/'
-  const domain = "http://localhost:4040/";
+  const domain = "http://20.62.40.96:4040/";
 
   return fetch(`${domain}${url}`, {
     method: method,

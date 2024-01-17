@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
+import { domain } from "../assets/api/apiEndpoints";
 
 function AddCompany() {
   let companyName;
@@ -22,7 +23,7 @@ function AddCompany() {
   let [allCompaniesArr, setAllCompaniesArr] = useState([]);
   // function to check if company id is already created
   useEffect(() => {
-    fetch("http://localhost:4040/GenericResultBuilderService/buildResults", {
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -72,7 +73,7 @@ function AddCompany() {
   const fetchToAddCompany = async () => {
     try {
       const response = await fetch(
-        "http://localhost:4040/GenericTransactionService/processTransaction",
+        `${domain}GenericTransactionService/processTransaction`,
         {
           method: "POST",
           headers: {
@@ -103,7 +104,7 @@ function AddCompany() {
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
       console.log(error);
-      alert("Unable to add company.")
+      alert("Unable to add company.");
     }
   };
 
