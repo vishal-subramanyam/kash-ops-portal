@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../components/Authentication";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../hooks/Authentication";
 import "../assets/styles/Styles.css";
 
 function LoginForm(props) {
   const { authed, login } = useAuth();
   const navigate = useNavigate();
+  const { state } = useLocation();
   let usernameInput = useRef();
   let passwordInput = useRef();
   let loginForm = useRef();
@@ -83,7 +84,9 @@ function LoginForm(props) {
 
     login(usernameInput.current.value, btoa(passwordInput.current.value)).then(
       () => {
-        navigate("/");
+        // <Navigate to="/" replace={true} />;
+        navigate(state?.path || "/", { replace: false });
+        console.log("res promise on login function on useAuth triggered");
       }
     );
   };

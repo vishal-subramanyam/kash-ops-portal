@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "../assets/styles/Login.css";
 import LoginForm from "../components/LoginForm";
 import SignUpForm from "../components/SignUpForm";
-import useAuth from "../components/Authentication";
 
 function Login(props) {
   const [showSignUpForm, setShowSignUpForm] = useState(false);

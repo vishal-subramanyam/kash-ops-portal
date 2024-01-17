@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 import "./App.css";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
@@ -15,9 +21,10 @@ import TimesheetsHub from "./pages/TimesheetsHub";
 import UpdateTimesheet from "./pages/UpdateTimesheet";
 import RequireAuth from "./components/RequireAuth";
 import UpdatePassword from "./pages/UpdatePassword";
-import { useAuth } from "./components/Authentication";
+import { useAuth } from "./hooks/Authentication";
 
 function App() {
+  let { authed } = useAuth();
   let [loggedInUser, setLoggedInUser] = useState("");
   let [isAdmin, setIsAdmin] = useState(false);
   return (

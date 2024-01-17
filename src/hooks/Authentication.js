@@ -1,12 +1,14 @@
 import React, { useState, createContext } from "react";
-
+import { useLocalStorage } from "./LocalStorage";
 const authContext = React.createContext;
 
 export function useAuth() {
   const [authed, setAuthed] = useState(false);
-  console.log(authed);
+  const [user, setUser] = useLocalStorage("user", null);
+  console.log(user);
   return {
-    authed,
+    // authed,
+    user,
     login(username, password) {
       console.log("authorize login");
       return new Promise((res) => {
@@ -25,15 +27,15 @@ export function useAuth() {
           .then((response) => response.json())
           .then((data) => {
             console.log(data);
-            setAuthed((current) => !current);
-            // res();
+            // setAuthed(true);
+            setUser(data.username);
+            res();
           })
           .catch((error) => {
             // enter your logic for when there is an error (ex. error toast)
             console.log(error);
             alert("Unable to login.");
           });
-        res();
       });
     },
     logout() {

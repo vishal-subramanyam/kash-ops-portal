@@ -34,9 +34,10 @@ function HomePage(props) {
         <p class="kash_operations_home--user-welcome-msg">
           Welcome,{" "}
           <span id="kash_ops_user--first-name">
-            {props.loggedInUserName[0].FirstName
+            {/* {props.loggedInUserName[0].FirstName
               ? props.loggedInUserName[0].FirstName
-              : "User"}
+              : 
+              "User"} */}
           </span>
           !
         </p>
