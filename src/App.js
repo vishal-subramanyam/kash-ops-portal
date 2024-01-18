@@ -16,6 +16,7 @@ import UpdateTimesheet from "./pages/UpdateTimesheet";
 import RequireAuth from "./components/RequireAuth";
 import UpdatePassword from "./pages/UpdatePassword";
 import { useAuth } from "./hooks/Authentication";
+import ReportsHub from "./pages/ReportsHub";
 
 function App() {
   let { logout, user, loggedInUser, isAdmin } = useAuth();
@@ -31,7 +32,6 @@ function App() {
     navigate("/login");
   };
   return (
-    // <BrowserRouter>
     <div className="App">
       {console.log("USER from useAuth", user)}
       {console.log("logged in user info from useAuth", loggedInUser)}
@@ -160,9 +160,19 @@ function App() {
             </RequireAuth>
           }
         />
+        <Route
+          path="/reports"
+          element={
+            <RequireAuth>
+              <ReportsHub
+                loggedInUser={loggedInUserLocal}
+                admin={isAdminLocal}
+              />
+            </RequireAuth>
+          }
+        />
       </Routes>
     </div>
-    // </BrowserRouter>
   );
 }
 

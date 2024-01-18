@@ -1,0 +1,9 @@
+.report-title {
+  font-weight: 800;
+  font-size: 1.5rem;
+}
+
+.report-container {
+  height: 300;
+  width: "100%";
+}

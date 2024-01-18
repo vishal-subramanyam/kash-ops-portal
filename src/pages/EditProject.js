@@ -52,7 +52,7 @@ function EditProject() {
 
   //   on page load, fetch companies from DB
   useEffect(() => {
-    console.log("use effect to get all companies, projects and sub categories");
+    console.log("use effect to get all companies and projects");
     getAllCompaniesProjects();
     // getProjectAndSubcategories();
   }, []);

@@ -1,17 +1,10 @@
-import react from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import "../assets/styles/HomePage.css";
 import "../assets/styles/Styles.css";
 import EditEmployeeInfo from "../components/EditEmployeeInfo";
 
 function EmployeeHub() {
-  var myUrl =
-    "http://52.167.226.44:8080/ibi_apps/WFServlet?IBIC_server=EDASERVE&IBIMR_drill=IBFS,RUNFEX,IBIF_ex,true&IBIF_ex=IBFS:/WFC/Repository/KashDemo_Files/KASH_Operations/html-pages/external_html_and_assets/html/dropdown-fex-files/admin_links--employee_hub.fex";
-  // const hideLightbox = () => {
-  //   document.getElementsByClassName("lightboxbackdrop")[0].style.display =
-  //     "none";
-  // };
-
   const showEditEmployeeModel = () => {
     document.getElementsByClassName("lightboxbackdrop")[0].style.display =
       "flex";
@@ -60,12 +53,11 @@ function EmployeeHub() {
       </div>
       <div className="hub_page--main-actions-holder employee_hub--main-action-holder">
         {/* View report redirects to a new portal */}
-        <a
+        <Link
           target="_blank"
-          href="http://52.167.226.44:8080/ibi_apps/portal/operations/employee_report--assembled-viz"
+          to="/reports"
           className="hub_page--main-action-link employee_hub--main-action-link"
         >
-          {/* <a target="_blank" href="#"  className="hub_page--main-action-link employee_hub--main-action-link"> */}
           <p>View Reports</p>
           <svg
             width="100"
@@ -77,7 +69,7 @@ function EmployeeHub() {
             <path d="M0 12.8597H59.2665V32.988H0V12.8597Z" fill="#FA9B4B" />
             <path d="M99.1037 23L59.2665 46V0L99.1037 23Z" fill="#FA9B4B" />
           </svg>
-        </a>
+        </Link>
       </div>
       {/* // <!--<div className="hub_page--secondary-actions-holder">-->
     // <!--    <a href="http://52.167.226.44:8080/ibi_apps/WFServlet.ibfs?IBFS1_action=RUNFEX&IBFS_path=/WFC/Repository/KashDemo_Files/KASH_Operations/html-pages/external_html_and_assets/html/add-employee-page.html" className="hub_page--secondary-action-link employee_hub--secondary-action-link">Add Employee</a>-->
