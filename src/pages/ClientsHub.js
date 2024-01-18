@@ -45,9 +45,9 @@ function ClientsHub() {
           <path d="M99.1037 23L59.2665 46V0L99.1037 23Z" fill="#FA9B4B" />
         </svg> */}
         {/* </a--> */}
-        <a
+        <Link
           target="_blank"
-          href="http://52.167.226.44:8080/ibi_apps/portal/operations/company_report--assembled-viz"
+          to="/reports"
           class="hub_page--main-action-link client_hub--main-action-link"
         >
           <p>View Reports</p>
@@ -61,7 +61,7 @@ function ClientsHub() {
             <path d="M0 12.8597H59.2665V32.988H0V12.8597Z" fill="#FA9B4B" />
             <path d="M99.1037 23L59.2665 46V0L99.1037 23Z" fill="#FA9B4B" />
           </svg>
-        </a>
+        </Link>
       </div>
 
       {/* START If logged in user is Admin level, show below  */}

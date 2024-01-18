@@ -34,7 +34,6 @@ function EmployeeHub() {
         <h1 className="kash_operations--hub-title employees-hub-page-title">
           Employees
         </h1>
-        {/* <a href="http://52.167.226.44:8080/ibi_apps/WFServlet.ibfs?IBFS1_action=RUNFEX&IBFS_path=/WFC/Repository/KashDemo_Files/KASH_Operations/html-pages/check_admin_and_display_home.fex" className="return-to-operations-hub"> */}
         <Link to="/" className="return-to-operations-hub">
           <svg
             width="80"

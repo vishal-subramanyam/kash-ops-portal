@@ -43,9 +43,9 @@ function TimesheetsHub() {
             <path d="M99.1037 23L59.2665 46V0L99.1037 23Z" fill="#FA9B4B" />
           </svg>
         </Link>
-        <a
+        <Link
           target="_blank"
-          href="http://52.167.226.44:8080/ibi_apps/portal/operations/timesheet_report--admin-version"
+          to="/reports"
           class="hub_page--main-action-link timesheet_hub--main-action-link"
         >
           <p>View Reports</p>
@@ -59,7 +59,7 @@ function TimesheetsHub() {
             <path d="M0 12.8597H59.2665V32.988H0V12.8597Z" fill="#FA9B4B" />
             <path d="M99.1037 23L59.2665 46V0L99.1037 23Z" fill="#FA9B4B" />
           </svg>
-        </a>
+        </Link>
       </div>
       {/* <div class="hub_page--secondary-actions-holder">
         <!-- <a href="#" class="hub_page--secondary-action-link client_hub--secondary-action-link">Submit Timesheet</a>
