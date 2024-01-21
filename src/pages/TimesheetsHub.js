@@ -44,7 +44,6 @@ function TimesheetsHub() {
           </svg>
         </Link>
         <Link
-          target="_blank"
           to="/reports"
           class="hub_page--main-action-link timesheet_hub--main-action-link"
         >

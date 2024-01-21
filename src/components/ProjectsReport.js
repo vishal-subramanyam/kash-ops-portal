@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Reports.css";
 
@@ -26,8 +26,8 @@ function ProjectsReport() {
     getAllProjects();
   }, []);
 
-  const getAllProjects = () => {
-    fetch(`${domain}GenericResultBuilderService/buildResults`, {
+  const getAllProjects = async () => {
+    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",

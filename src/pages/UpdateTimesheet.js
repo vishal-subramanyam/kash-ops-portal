@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 function UpdateTimesheet(props) {
-  let selectedEmployeeId; // To add to Timesheets table - EmpId
   let selectedProjectId; // To add to Timesheets table - SowId
   let selectedSubAssignmentId;
   let selectedSubAssignmentName; // To add to Timesheets table - SubAssignment
@@ -31,9 +30,14 @@ function UpdateTimesheet(props) {
     TuesdayHours: "0.00",
     WednesdayHours: "0.00",
   };
+  let weekdayTime = useRef();
+  let mondayTime = useRef();
+  let tuesdayTime = useRef();
   let subAssignmentByProjectArr = [];
   let subAssignmentByProjectFiltered = [];
   let reportingPeriodStartDate = useRef();
+  let [reportingPeriodStartDateState, setReportingPeriodStartDateState] =
+    useState();
   let submittedTimesheetToDBDialogue = useRef();
   let confirmationModalEmployeeName = useRef();
   let mondayHours = useRef();
@@ -43,7 +47,7 @@ function UpdateTimesheet(props) {
   let [selectedProjectCompanyNameState, setSelectedProjectCompanyNameState] =
     useState("");
   let [selectedProjectSOWIDState, setSelectedProjectSOWIDState] = useState("");
-  let [selectedEmployeeIdState, setSelectedEmployeeIdState] = useState(null);
+  let [selectedEmployeeIdState, setSelectedEmployeeIdState] = useState(0);
   let [selectedSubAssignmentNameState, setSelectedSubAssignmentNameState] =
     useState("");
   // let [taskBySubAssignmentState, setTaskBySubAssignmentState] = useState("");
@@ -69,21 +73,17 @@ function UpdateTimesheet(props) {
   let basicUserInfo = allEmployeesArr.filter((user) => {
     return user.EmpId === props.loggedInUser.EmpId;
   });
-  console.log(props.loggedInUser);
 
-  const getCurrentPrevMonday = () => {
-    let todayDate = new Date();
-    todayDate.setDate(todayDate.getDate() - ((todayDate.getDay() + 6) % 7));
-    console.log(todayDate.toLocaleDateString("en-US"));
-    let prevMondayFormat = todayDate.toISOString().split("T")[0];
-    console.log(prevMondayFormat);
-    return prevMondayFormat;
-    // setCurrentPrevMonday(prevMondayFormat);
-  };
   useEffect(() => {
     getAllProjects();
     getAllEmployees();
+    console.log("period start date monday", currentPrevMonday);
   }, []);
+
+  useEffect(() => {
+    console.log("use effect to call get timesheet by emp id function");
+    getTimesheetByEmployeeId(selectedEmployeeIdState);
+  }, [reportingPeriodStartDateState]);
 
   const getAllEmployees = () => {
     fetch(`${domain}GenericResultBuilderService/buildResults`, {
@@ -96,7 +96,6 @@ function UpdateTimesheet(props) {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         setAllEmployeesArr(res.data);
       })
       .catch((err) => alert("Unable to get users from database.", err));
@@ -115,15 +114,23 @@ function UpdateTimesheet(props) {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         setProjectAndCompanyInfoArr(res.data);
       })
       .catch((err) => alert("Unable to get projects from database.", err));
   };
 
+  const changePeriodStartDate = (empId) => {
+    // weekdayTime.current.value = "";
+    console.log(
+      "period start date changed",
+      reportingPeriodStartDate.current.value
+    );
+    setReportingPeriodStartDateState(reportingPeriodStartDate.current.value);
+    // getTimesheetByEmployeeId(empId);
+  };
+
   const getTimesheetByEmployeeId = (id) => {
-    console.log(reportingPeriodStartDate.current.value);
-    console.log(id);
+    console.log("get TS by employee from DB", id);
     fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
@@ -136,31 +143,28 @@ function UpdateTimesheet(props) {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res.data);
         // save all timesheet records to state
-        setAlllTimesheetRecords(res.data);
+        // setAlllTimesheetRecords(res.data);
+
+        // just show the timesheet data that matches the employee selected in dropdown and period start date
         let filteredTimesheet = res.data.filter((timesheet) => {
           return (
             id === timesheet.EmpId &&
             reportingPeriodStartDate.current.value === timesheet.PeriodStartDate
           );
         });
-        console.log(filteredTimesheet);
+        console.log(
+          "current timesheets filtered by selected employee and period start date",
+          filteredTimesheet
+        );
         setTimesheetRecordsByEmployee(filteredTimesheet);
       })
       .catch((err) => alert(err));
   };
 
-  const changeTimesheetRecordByDate = (id) => {
-    console.log("reporting date selected");
-    console.log(id);
-  };
-
   const getSelectedEmployeeId = (e) => {
-    console.log(selectedEmployee.current.value);
-    selectedEmployeeId =
+    let selectedEmployeeId =
       e.target[e.target.selectedIndex].getAttribute("data-employeeid");
-    console.log(selectedEmployeeId);
     setSelectedEmployeeIdState(selectedEmployeeId);
     // fetch timesheets table for selected employee Id and display in table
     getTimesheetByEmployeeId(selectedEmployeeId);
@@ -180,7 +184,6 @@ function UpdateTimesheet(props) {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res.data);
         subAssignmentByProjectArr = res.data;
         // setsubAssignmentByProject(res.data);
       })
@@ -188,7 +191,6 @@ function UpdateTimesheet(props) {
   };
 
   const getTasksBySubAssignment = async (selectedSubAssignmentId) => {
-    console.log(selectedSubAssignmentId);
     await fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
@@ -201,11 +203,9 @@ function UpdateTimesheet(props) {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res.data);
         let filterTasks = res.data.filter((task) => {
           return selectedSubAssignmentId === task.ProjectSubTaskId;
         });
-        console.log(filterTasks);
         setTasksBySubAssignment(filterTasks);
       })
       .catch((err) => alert(err));
@@ -214,18 +214,14 @@ function UpdateTimesheet(props) {
   const getSelectedProjectData = async (e) => {
     selectedProjectId =
       e.target[e.target.selectedIndex].getAttribute("data-projectid");
-    // console.log(selectedProjectId);
-    // console.log(e.target[e.target.selectedIndex].innerHTML);
+
     let selectedProjectDetails = e.target[e.target.selectedIndex].innerHTML;
-    console.log(selectedProjectDetails);
     // Get Company name and save to state
     if (selectedProjectDetails) {
       let selectedProjectCompanyName = selectedProjectDetails.split(" -")[0];
-      console.log(selectedProjectCompanyName);
       setSelectedProjectCompanyNameState(selectedProjectCompanyName);
       // Get SOW ID and save to state variable
       let selectedProjectSOWID = selectedProjectDetails.match(/\((.*)\)/).pop();
-      console.log(selectedProjectSOWID);
       setSelectedProjectSOWIDState(selectedProjectSOWID);
     }
 
@@ -233,7 +229,6 @@ function UpdateTimesheet(props) {
     subAssignmentTitleDescriptor.current.innerHTML = selectedProjectDetails;
     // get sub projects for selected project ID
     await getProjectSubCategories(selectedProjectId);
-    console.log(subAssignmentByProjectArr);
     // filter sub assignments to remove duplicates and assign to filtered array
     subAssignmentByProjectFiltered = Object.values(
       await subAssignmentByProjectArr.reduce((c, e) => {
@@ -245,18 +240,12 @@ function UpdateTimesheet(props) {
   };
 
   const selectSubAssignment = (e) => {
-    console.log(e.target[e.target.selectedIndex]);
     selectedSubAssignmentId =
       e.target[e.target.selectedIndex].getAttribute("data-subprojectid");
     selectedSubAssignmentName = e.target[e.target.selectedIndex].getAttribute(
       "data-subprojectname"
     );
-    console.log(
-      "selected sub-assignment " +
-        selectedSubAssignmentName +
-        "-" +
-        selectedSubAssignmentId
-    );
+
     // Add sub assignment name to state array
     setSelectedSubAssignmentNameState(selectedSubAssignmentName);
 
@@ -309,26 +298,48 @@ function UpdateTimesheet(props) {
 
   // update the timesheet by employee state array when the days of the week are changed in table
   const updateTimesheetRecord = (name, index) => (e) => {
+    console.log(
+      "updated day of the week",
+      name,
+      "with index of",
+      index,
+      "with value of",
+      e.target.value
+    );
     let newArr = [...timesheetRecordsByEmployee];
     newArr[index][name] = e.target.value;
+    console.log("updating TS by Emp state array that gets sent to DB", newArr);
     setTimesheetRecordsByEmployee(newArr);
   };
 
   const sendUploadTimesheetToDatabase = async () => {
-    console.log(timesheetRecordsByEmployee);
+    console.log(
+      "current timesheet records by employee",
+      timesheetRecordsByEmployee
+    );
     let currentRecords = timesheetRecordsByEmployee.filter((record) => {
       return Boolean(record.TimesheetEntryId);
     });
+    console.log(
+      "current records in state array of timesheet records on TS entry id",
+      currentRecords
+    );
+
     let newRecords = timesheetRecordsByEmployee.filter((record) => {
       return !Boolean(record.TimesheetEntryId);
     });
+    console.log(
+      "new records by TSs for filtering TS By Employee state array",
+      newRecords
+    );
     await updateCurrentTimesheetRecord(currentRecords);
     await addNewTimesheetRecord(newRecords);
-    getTimesheetByEmployeeId(selectedEmployeeIdState);
+    await getTimesheetByEmployeeId(selectedEmployeeIdState);
     showConfirmationModal();
   };
 
   const updateCurrentTimesheetRecord = async (currentRecordArr) => {
+    console.log("update existing timesheet records", currentRecordArr);
     try {
       const response = await fetch(
         `${domain}GenericTransactionService/processTransactionForUpdate`,
@@ -347,15 +358,15 @@ function UpdateTimesheet(props) {
       );
       const data = await response.json();
       // enter you logic when the fetch is successful
-      console.log("Updated record in Timesheets table", data);
+      console.log("update fetch call succcess", data);
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
-      console.log(error);
       alert("unable to update record");
     }
   };
 
   const addNewTimesheetRecord = async (newRecordArr) => {
+    console.log("add new record to timesheet table", newRecordArr);
     try {
       const response = await fetch(
         `${domain}GenericTransactionService/processTransaction`,
@@ -374,24 +385,19 @@ function UpdateTimesheet(props) {
       );
       const data = await response.json();
       // enter you logic when the fetch is successful
-      console.log("Added to Timesheets table", data);
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
-      console.log(error);
       alert("Unable to add record to timesheets table.");
     }
   };
 
   const deleteTimesheetRow = async (databaseRowId, index) => {
-    console.log("deleting row " + databaseRowId);
-    console.log(index);
     // If timesheet_entry_id is present, then run a fetch to delete record from database and remove from state array
     // If timesheet_entry_id is not present, the record does not yet exist in database and remove record from state array
 
     if (
       !window.confirm("Are you sure you want to delete this timesheet record?")
     ) {
-      console.log("Confirm delete regected");
       return;
     } else {
       let recordsAfterDelete = timesheetRecordsByEmployee.filter(
@@ -399,11 +405,9 @@ function UpdateTimesheet(props) {
           return i !== index;
         }
       );
-      console.log(recordsAfterDelete);
       setTimesheetRecordsByEmployee(recordsAfterDelete);
 
       if (databaseRowId) {
-        console.log("fetch to delete record from timesheets table");
         try {
           const response = await fetch(
             `${domain}GenericTransactionService/processTransactionForDelete`,
@@ -425,11 +429,7 @@ function UpdateTimesheet(props) {
             }
           );
           const data = await response.json();
-          // enter you logic when the fetch is successful
-          console.log(`Deleted record ${databaseRowId} from timesheets table`);
         } catch (error) {
-          // enter your logic for when there is an error (ex. error toast)
-          console.log(error);
           alert(`Cound not delete record ${databaseRowId}`);
         }
       }
@@ -544,7 +544,6 @@ function UpdateTimesheet(props) {
                     Reporting Period Start Date (Mon)
                   </label>
                   <input
-                    // onchange="loadTableGen()"
                     defaultValue={currentPrevMonday}
                     step={7}
                     type="date"
@@ -553,7 +552,7 @@ function UpdateTimesheet(props) {
                     name="timesheet-update--timesheet-start-date-input"
                     ref={reportingPeriodStartDate}
                     onChange={() =>
-                      getTimesheetByEmployeeId(selectedEmployeeIdState)
+                      changePeriodStartDate(selectedEmployeeIdState)
                     }
                   />
 
@@ -684,7 +683,6 @@ function UpdateTimesheet(props) {
                     <label htmlFor="sub-assignment-seg-1">Task Area</label>
                   </div>
                   <select id="sub-assignment-seg-1" ref={subAssignmentTask}>
-                    <option value=""></option>
                     {tasksBySubAssignment.map((subTask, i) => {
                       return <option key={i}>{subTask.Segment1}</option>;
                     })}
@@ -728,6 +726,7 @@ function UpdateTimesheet(props) {
                         <th scope="col">Task Area</th>
                         {/* <!--th>Segment 2</th--> */}
                         <th scope="col">Ticket #</th>
+                        <th scope="col">Timesheet PK</th>
                         <th scope="col">Mon</th>
                         <th scope="col">Tue</th>
                         <th scope="col">Wed</th>
@@ -758,14 +757,16 @@ function UpdateTimesheet(props) {
                             <td>{record.SubAssignment}</td>
                             <td>{record.SubAssignmentSegment1}</td>
                             <td>{record.TicketNum}</td>
+                            <td>{record.TimesheetEntryId}</td>
                             <td>
                               <input
                                 className="weekly-hours-input add-timesheet-entry--form-input hours-input"
                                 type="number"
                                 min="0"
+                                max="24"
                                 step={0.25}
-                                ref={mondayHours}
-                                defaultValue={record.MondayHours}
+                                value={record.MondayHours}
+                                autoComplete="off"
                                 onChange={updateTimesheetRecord(
                                   "MondayHours",
                                   i
@@ -777,8 +778,10 @@ function UpdateTimesheet(props) {
                                 className="weekly-hours-input add-timesheet-entry--form-input hours-input"
                                 type="number"
                                 min="0"
+                                max="24"
                                 step={0.25}
-                                defaultValue={record.TuesdayHours}
+                                value={record.TuesdayHours}
+                                autoComplete="off"
                                 onChange={updateTimesheetRecord(
                                   "TuesdayHours",
                                   i
@@ -790,8 +793,10 @@ function UpdateTimesheet(props) {
                                 className="weekly-hours-input add-timesheet-entry--form-input hours-input"
                                 type="number"
                                 min="0"
+                                max="24"
                                 step={0.25}
-                                defaultValue={record.WednesdayHours}
+                                value={record.WednesdayHours}
+                                autoComplete="off"
                                 onChange={updateTimesheetRecord(
                                   "WednesdayHours",
                                   i
@@ -803,8 +808,10 @@ function UpdateTimesheet(props) {
                                 className="weekly-hours-input add-timesheet-entry--form-input hours-input"
                                 type="number"
                                 min="0"
+                                max="24"
                                 step={0.25}
-                                defaultValue={record.ThursdayHours}
+                                value={record.ThursdayHours}
+                                autoComplete="off"
                                 onChange={updateTimesheetRecord(
                                   "ThursdayHours",
                                   i
@@ -816,8 +823,10 @@ function UpdateTimesheet(props) {
                                 className="weekly-hours-input add-timesheet-entry--form-input hours-input"
                                 type="number"
                                 min="0"
+                                max="24"
                                 step={0.25}
-                                defaultValue={record.FridayHours}
+                                value={record.FridayHours}
+                                autoComplete="off"
                                 onChange={updateTimesheetRecord(
                                   "FridayHours",
                                   i
@@ -829,8 +838,10 @@ function UpdateTimesheet(props) {
                                 className="weekly-hours-input add-timesheet-entry--form-input hours-input"
                                 type="number"
                                 min="0"
+                                max="24"
                                 step={0.25}
-                                defaultValue={record.SaturdayHours}
+                                value={record.SaturdayHours}
+                                autoComplete="off"
                                 onChange={updateTimesheetRecord(
                                   "SaturdayHours",
                                   i
@@ -842,8 +853,10 @@ function UpdateTimesheet(props) {
                                 className="weekly-hours-input add-timesheet-entry--form-input hours-input"
                                 type="number"
                                 min="0"
+                                mx="24"
                                 step={0.25}
-                                defaultValue={record.SundayHours}
+                                value={record.SundayHours}
+                                autoComplete="off"
                                 onChange={updateTimesheetRecord(
                                   "SundayHours",
                                   i

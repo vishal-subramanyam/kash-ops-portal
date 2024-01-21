@@ -30,8 +30,9 @@ function TimesheetsReport() {
   useEffect(() => {
     getTimesheets();
   }, []);
-  const getTimesheets = () => {
-    fetch(`${domain}GenericResultBuilderService/buildResults`, {
+
+  const getTimesheets = async () => {
+    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",

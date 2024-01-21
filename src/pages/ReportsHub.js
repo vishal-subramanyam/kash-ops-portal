@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "../assets/styles/Styles.css";
 import ProjectsReport from "../components/ProjectsReport";
 import TimesheetsReport from "../components/TimesheetsReport";
+import SubAssignmentsReport from "../components/SubAssignmentsReport";
 
 function ReportsHub() {
   return (
@@ -47,6 +48,7 @@ function ReportsHub() {
       <main>
         <ProjectsReport />
         <TimesheetsReport />
+        <SubAssignmentsReport />
       </main>
     </>
   );

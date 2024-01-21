@@ -46,7 +46,6 @@ function ClientsHub() {
         </svg> */}
         {/* </a--> */}
         <Link
-          target="_blank"
           to="/reports"
           class="hub_page--main-action-link client_hub--main-action-link"
         >
