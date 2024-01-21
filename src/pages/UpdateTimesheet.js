@@ -80,11 +80,6 @@ function UpdateTimesheet(props) {
     console.log("period start date monday", currentPrevMonday);
   }, []);
 
-  useEffect(() => {
-    console.log("use effect to call get timesheet by emp id function");
-    getTimesheetByEmployeeId(selectedEmployeeIdState);
-  }, [reportingPeriodStartDateState]);
-
   const getAllEmployees = () => {
     fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
@@ -117,16 +112,6 @@ function UpdateTimesheet(props) {
         setProjectAndCompanyInfoArr(res.data);
       })
       .catch((err) => alert("Unable to get projects from database.", err));
-  };
-
-  const changePeriodStartDate = (empId) => {
-    // weekdayTime.current.value = "";
-    console.log(
-      "period start date changed",
-      reportingPeriodStartDate.current.value
-    );
-    setReportingPeriodStartDateState(reportingPeriodStartDate.current.value);
-    // getTimesheetByEmployeeId(empId);
   };
 
   const getTimesheetByEmployeeId = (id) => {
@@ -552,7 +537,7 @@ function UpdateTimesheet(props) {
                     name="timesheet-update--timesheet-start-date-input"
                     ref={reportingPeriodStartDate}
                     onChange={() =>
-                      changePeriodStartDate(selectedEmployeeIdState)
+                      getTimesheetByEmployeeId(selectedEmployeeIdState)
                     }
                   />
 
