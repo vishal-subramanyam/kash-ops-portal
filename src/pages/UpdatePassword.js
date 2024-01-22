@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Login.css";
 
 function UpdatePassword() {
@@ -8,8 +9,12 @@ function UpdatePassword() {
   let passwordInput = useRef();
   let confrimPasswordInput = useRef();
   let updatePWForm = useRef();
+  let [empId, setEmpId] = useState();
+  let [allUsers, setAllUsers] = useState([]);
 
   useEffect(() => {
+    getAllUsers();
+
     // useEffect to remove the padding around the kash ops image since the padding is applied to the body  on the styles.css file and affects all other pages.
     document.body.classList.add("remove-body-padding");
 
@@ -18,8 +23,40 @@ function UpdatePassword() {
     };
   }, []);
 
+  const getAllUsers = () => {
+    console.log("Use effect to query user table");
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ _keyword_: "KASH_OPERATIONS_USER_TABLE" }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setAllUsers(res.data);
+      })
+      .catch((err) => alert(err));
+  };
+
+  const getEmpIdFromUsn = (username) => {
+    let usnEmpId = allUsers.filter((usn) => {
+      return allUsers.KashOperationsUsn === username;
+    });
+    console.log(usnEmpId);
+  };
+
   const updatePassword = () => {
     console.log("Update Password Triggered");
+    getEmpIdFromUsn(usernameInput);
+    if (passwordInput !== confrimPasswordInput) {
+      alert(
+        "Please ensure that the password and confirm password fields match."
+      );
+      return;
+    }
     updatePWForm.current.reset();
   };
   return (
