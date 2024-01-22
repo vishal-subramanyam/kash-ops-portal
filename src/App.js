@@ -60,9 +60,9 @@ function App() {
         <Route
           path="/update-password"
           element={
-            <RequireAuth>
-              <UpdatePassword />
-            </RequireAuth>
+            // <RequireAuth>
+            <UpdatePassword />
+            // </RequireAuth>
           }
         />
         <Route

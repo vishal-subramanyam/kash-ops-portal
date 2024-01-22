@@ -142,6 +142,37 @@ a {
   outline: 2px solid #67a4ff;
   /* border-bottom-color: #366575; */
 }
+
+.login-form--change-password-link {
+  font-size: 0.75rem;
+  color: #ffb494;
+  text-decoration: none !important;
+}
+
+.update-password--return-to-login {
+  color: #ffb494;
+}
+
+.login-form--change-password-link a,
+.update-password--return-to-login {
+  text-decoration: none !important;
+}
+
+.update-password--return-to-login {
+  display: flex;
+  align-items: center;
+}
+
+.update-password--return-to-login svg {
+  margin-right: 0.25rem;
+}
+
+.login-form--change-password-link a:hover,
+.update-password--return-to-login:hover,
+.update-password--return-to-login p:hover {
+  color: #ffb494;
+}
+
 .signin-button {
   background-color: #326d97;
   color: #e7f5ff;
@@ -202,6 +233,9 @@ a {
   .kash_operations_home--content-holder {
     padding: 2rem;
     flex-grow: 1;
+  }
+  .update-password--content-holder {
+    padding: 1rem 2rem;
   }
   .kash_operations_home--banner-heading {
     width: 100%;

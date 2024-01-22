@@ -7,6 +7,7 @@ function Login(props) {
   const [showSignUpForm, setShowSignUpForm] = useState(false);
 
   useEffect(() => {
+    // useEffect to remove the padding around the kash ops image since the padding is applied to the body  on the styles.css file and affects all other pages.
     document.body.classList.add("remove-body-padding");
 
     return () => {

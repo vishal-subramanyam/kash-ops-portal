@@ -379,17 +379,17 @@ function UpdateTimesheet(props) {
   const deleteTimesheetRow = async (databaseRowId, index) => {
     // If timesheet_entry_id is present, then run a fetch to delete record from database and remove from state array
     // If timesheet_entry_id is not present, the record does not yet exist in database and remove record from state array
-
+    let recordsAfterDelete;
     if (
       !window.confirm("Are you sure you want to delete this timesheet record?")
     ) {
       return;
     } else {
-      let recordsAfterDelete = timesheetRecordsByEmployee.filter(
-        (record, i) => {
-          return i !== index;
-        }
-      );
+      recordsAfterDelete = timesheetRecordsByEmployee.filter((record, i) => {
+        console.log(record);
+        return i !== index;
+      });
+      console.log(recordsAfterDelete);
       setTimesheetRecordsByEmployee(recordsAfterDelete);
 
       if (databaseRowId) {
@@ -418,7 +418,6 @@ function UpdateTimesheet(props) {
           alert(`Cound not delete record ${databaseRowId}`);
         }
       }
-      getTimesheetByEmployeeId(selectedEmployeeIdState);
     }
   };
 

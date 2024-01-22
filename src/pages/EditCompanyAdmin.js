@@ -109,6 +109,31 @@ function EditCompanyAdmin() {
   const addAdminToCompany = async (e) => {
     e.preventDefault();
     console.log("add admin to company");
+    console.log(adminUserIdToAddToCompany);
+    console.log(companyIdToAddAdmin);
+
+    if (!adminUserIdToAddToCompany || !companyIdToAddAdmin) {
+      alert("Please select both a company and admin.");
+      return;
+    }
+
+    // iterate the all company admins state array, concatinate value of companyId with value of EmpId and compare to the entry in allCompanyAdmins state array at index i
+    for (let i = 0; i < allCompanyAdmins.length; i++) {
+      let selectedUserAndCompany =
+        companyIdToAddAdmin + adminUserIdToAddToCompany;
+      console.log(selectedUserAndCompany);
+      let existingUserAndCompanyRecord =
+        allCompanyAdmins[i].CompanyId + allCompanyAdmins[i].EmpId;
+      console.log(existingUserAndCompanyRecord);
+
+      if (selectedUserAndCompany === existingUserAndCompanyRecord) {
+        alert(
+          `${adminFullNameToAddToCompany} is already and admin for ${companyNameToAddAdmin}`
+        );
+        return;
+      }
+    }
+
     try {
       const response = await fetch(
         `${domain}GenericTransactionService/processTransaction`,
@@ -148,6 +173,13 @@ function EditCompanyAdmin() {
     }
     getAllCompanyAdmins();
     companyAddAdminForm.current.reset();
+    companyRemoveAdminForm.current.reset();
+    setAllAdminsPerCompany([]);
+    setCompanyIdToAddAdmin("");
+    setCompanyNameToAddAdmin("");
+    setAdminUserIdToAddToCompany("");
+    setAdminUsernameToAddToCompany("");
+    setAdminFullNameToAddToCompany("");
   };
 
   const selectCompanyPopulateAdminsToRemove = (e) => {
@@ -189,6 +221,10 @@ function EditCompanyAdmin() {
   const removeAdminFromCompany = async (e) => {
     e.preventDefault();
     console.log("remove selected admin from selected company");
+    if (!companyIdToRemoveAdmin || !adminEmpIdToRemoveFromCompany) {
+      alert("Please select both a company and admin for removal.");
+      return;
+    }
     try {
       const response = await fetch(
         `${domain}GenericTransactionService/processTransactionForDelete`,
@@ -211,12 +247,12 @@ function EditCompanyAdmin() {
         }
       );
       const data = await response.json();
-      // enter you logic when the fetch is successful
+
       console.log("Deleted company admin role table", data);
       let removeMsg =
         adminFullNameToRemove +
-        " was successfully added as an Admin to " +
-        companyNameToAddAdmin +
+        " was successfully removed as an Admin from " +
+        companyNameToRemove +
         "!";
 
       alert(removeMsg);
@@ -226,6 +262,12 @@ function EditCompanyAdmin() {
       alert("Unable to remove admin from company.");
     }
     companyRemoveAdminForm.current.reset();
+    setAllAdminsPerCompany([]);
+    setCompanyNameToRemove("");
+    setCompanyIdToRemoveAdmin("");
+    setAdminFullNameToRemove("");
+    setAdminEmpIdToRemoveFromCompany("");
+    getAllCompanyAdmins();
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../hooks/Authentication";
 import "../assets/styles/Styles.css";
 
@@ -57,6 +57,11 @@ function LoginForm(props) {
             ref={passwordInput}
           />
         </label>
+        <div className="login-form--change-password-link">
+          <Link to="/update-password">
+            <p>Change Password</p>
+          </Link>
+        </div>
       </div>
       <button
         type="submit"
