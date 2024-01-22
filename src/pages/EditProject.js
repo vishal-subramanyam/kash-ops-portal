@@ -58,6 +58,9 @@ function EditProject() {
   }, []);
 
   useEffect(() => {
+    console.log(
+      "use effect that calls function to get all sub categories when consolidated sub cat state array changes"
+    );
     getProjectAndSubcategories();
     // populateSubAssignmentsWorkArea();
   }, [consolidatedSubCategories]);
@@ -522,6 +525,7 @@ function EditProject() {
                 ""
               )}
             </div>
+            {console.log(consolidatedSubCategories)}
             {consolidatedSubCategories.map((subCat, i) => {
               return (
                 // <details className="main-grouping">
@@ -658,6 +662,7 @@ function EditProject() {
                   subCatTitle={subCat.SubTaskTitle}
                   subCatId={subCat.ProjectSubTaskId}
                   allSubCats={allSubCategories}
+                  allSubCatsConsolidated={consolidatedSubCategories}
                   resetConsolidatedSubCatArr={setConsolidatedSubCategories}
                   reset={getProjectAndSubcategories}
                 />

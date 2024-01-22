@@ -11,7 +11,7 @@ function ProjectSubCategory(props) {
   // Show the tasks per sub category and filter out segments with no value. set that filtered array to state
   let filteredSubCats = props.allSubCats.filter((task) => {
     return (
-      // task.SowId === props.subCategory.SowId &&
+      task.SowId === props.subCategory.SowId &&
       task.ProjectSubTaskId === props.subCategory.ProjectSubTaskId &&
       task.Segment1 !== "" &&
       task.Segment1 !== "-"
@@ -138,12 +138,13 @@ function ProjectSubCategory(props) {
         data
       );
       // need to update the state array - consolidatedSubCategories
-      console.log(props.allSubCats);
-      let deleteSubCat = props.allSubCats.filter((cat) => {
+      console.log(props.allSubCatsConsolidated);
+      let deleteSubCat = props.allSubCatsConsolidated.filter((cat) => {
         return cat.SubTaskTitle !== props.subCategory.SubTaskTitle;
       });
+      console.log(deleteSubCat);
       props.resetConsolidatedSubCatArr(deleteSubCat);
-      props.reset();
+      // props.reset();
       closeConfirmationModal();
       // props.reset();
     } catch (error) {
