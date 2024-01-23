@@ -718,9 +718,7 @@ function UpdateTimesheet(props) {
                         <th scope="col">Project</th>
                         <th scope="col">Work Area</th>
                         <th scope="col">Task Area</th>
-                        {/* <!--th>Segment 2</th--> */}
                         <th scope="col">Ticket #</th>
-                        {/* <th scope="col">Timesheet PK</th> */}
                         <th scope="col">Mon</th>
                         <th scope="col">Tue</th>
                         <th scope="col">Wed</th>
@@ -732,6 +730,7 @@ function UpdateTimesheet(props) {
                       </tr>
                     </thead>
                     <tbody id="tabBod">
+                      {console.log(timesheetRecordsByEmployee)}
                       {timesheetRecordsByEmployee
                         .sort(function (a, b) {
                           return a.TimesheetEntryId - b.TimesheetEntryId;
@@ -757,7 +756,6 @@ function UpdateTimesheet(props) {
                               <td>{record.SubAssignment}</td>
                               <td>{record.SubAssignmentSegment1}</td>
                               <td>{record.TicketNum}</td>
-                              {/* <td>{record.TimesheetEntryId}</td> */}
                               <td>
                                 <input
                                   className="weekly-hours-input add-timesheet-entry--form-input hours-input"
@@ -863,7 +861,15 @@ function UpdateTimesheet(props) {
                                   )}
                                 />
                               </td>
-                              <td>0</td>
+                              <td>
+                                {parseFloat(record.MondayHours) +
+                                  parseFloat(record.TuesdayHours) +
+                                  parseFloat(record.WednesdayHours) +
+                                  parseFloat(record.ThursdayHours) +
+                                  parseFloat(record.FridayHours) +
+                                  parseFloat(record.SaturdayHours) +
+                                  parseFloat(record.SundayHours)}
+                              </td>
                             </tr>
                           );
                         })}
