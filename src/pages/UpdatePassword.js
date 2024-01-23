@@ -24,7 +24,6 @@ function UpdatePassword() {
   }, []);
 
   const getAllUsers = () => {
-    console.log("Use effect to query user table");
     fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
@@ -41,24 +40,55 @@ function UpdatePassword() {
       .catch((err) => alert(err));
   };
 
-  const getEmpIdFromUsn = (username) => {
-    let usnEmpId = allUsers.filter((usn) => {
-      return allUsers.KashOperationsUsn === username;
-    });
-    console.log(usnEmpId);
+  const fetchUpdatePW = async (employeeId, password) => {
+    try {
+      const response = await fetch(
+        `${domain}GenericTransactionService/processTransactionForUpdate`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // your expected POST request payload goes here
+            data: [
+              {
+                EmpId: employeeId,
+                UserPassword: btoa(password),
+              },
+            ],
+            _keyword_: "KASH_OPERATIONS_USER_TABLE",
+            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+          }),
+        }
+      );
+      const data = await response.json();
+      alert("Password Updated");
+    } catch (error) {
+      // enter your logic for when there is an error (ex. error toast)
+      alert("Unable to update user.");
+    }
   };
 
   const updatePassword = () => {
-    console.log("Update Password Triggered");
-    getEmpIdFromUsn(usernameInput);
+    console.log("Update Password Triggered", usernameInput.current.value);
+    let usnEmpId = allUsers.filter((usn) => {
+      if (usn.KashOperationsUsn === usernameInput.current.value) {
+        return usn;
+      }
+    });
+    console.log(usnEmpId.KashOperationsUsn);
     if (passwordInput !== confrimPasswordInput) {
       alert(
         "Please ensure that the password and confirm password fields match."
       );
       return;
     }
+    fetchUpdatePW(usnEmpId.KashOperationsUsn, confrimPasswordInput);
     updatePWForm.current.reset();
+    navigate("/login");
   };
+
   return (
     <main className="kash-operations-login">
       <div className="kash_operations_home--hero-section">
@@ -108,7 +138,7 @@ function UpdatePassword() {
             <label className="login-form--input_label" htmlFor="password-input">
               <p className="login-form--username-label">Password</p>
               <input
-                type="text"
+                type="password"
                 className="login-input"
                 id="password-input"
                 name="password-input"

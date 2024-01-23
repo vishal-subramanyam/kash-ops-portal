@@ -239,6 +239,9 @@ a {
     overflow: auto;
     margin-top: 1rem;
   }
+  .update-password--content-holder h1 {
+    margin-top: 1rem;
+  }
   .kash_operations_home--banner-heading {
     width: 100%;
   }
