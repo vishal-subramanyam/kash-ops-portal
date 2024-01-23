@@ -7,6 +7,8 @@ function SignUpForm(props) {
   const navigate = useNavigate();
   let usernameInput = useRef();
   let email = useRef();
+  let firstName = useRef();
+  let lastName = useRef();
   let createUserForm = useRef();
   let [allUsers, setAllUsers] = useState([]);
 
@@ -46,14 +48,11 @@ function SignUpForm(props) {
         return usn;
       }
     });
-    console.log(existingUsn);
     if (existingUsn.length !== 0) {
       createUserForm.current.reset();
       alert("That username already exists.");
       return;
     }
-
-    console.log(randomEmpId, usernameInput.current.value, email.current.value);
 
     fetch(`${domain}GenericTransactionService/processTransaction`, {
       method: "POST",
@@ -64,8 +63,8 @@ function SignUpForm(props) {
         data: [
           {
             EmpId: randomEmpId,
-            FirstName: "",
-            LastName: "",
+            FirstName: firstName.current.value,
+            LastName: lastName.current.value,
             EmailAddress: email.current.value,
             PhoneNumber: "",
             EmpLocationCity: "",
@@ -131,6 +130,38 @@ function SignUpForm(props) {
             name="signup--email-input"
             required
             ref={email}
+          />
+        </label>
+      </div>
+      <div className="login-field">
+        <label
+          className="login-form--input_label"
+          htmlFor="signup--first-name-input"
+        >
+          <p className="login-form--password-label">First Name</p>
+          <input
+            type="text"
+            className="login-input"
+            id="login--first-name-input"
+            name="signup--first-name-input"
+            required
+            ref={firstName}
+          />
+        </label>
+      </div>
+      <div className="login-field">
+        <label
+          className="login-form--input_label"
+          htmlFor="signup--last-name-input"
+        >
+          <p className="login-form--password-label">Last Name</p>
+          <input
+            type="text"
+            className="login-input"
+            id="login--last-name-input"
+            name="signup--last-name-input"
+            required
+            ref={lastName}
           />
         </label>
       </div>
