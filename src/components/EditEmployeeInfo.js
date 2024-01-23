@@ -72,12 +72,7 @@ function EditEmployeeInfo() {
     // fetch employee name from database
     // populate the input fields with relevant data from api call
 
-    console.log(
-      "selected employee from dropdown " +
-        e.target.children[e.target.selectedIndex].getAttribute(
-          "data-employeeId"
-        )
-    );
+    console.log("Employee name dropdown to select for update or delete");
     let selectedEmployeeId =
       e.target.children[e.target.selectedIndex].getAttribute("data-employeeid");
     // set state array for selected employee if the employee Ids match
@@ -134,9 +129,18 @@ function EditEmployeeInfo() {
         }
       );
       const data = await response.json();
-      // enter you logic when the fetch is successful
-      console.log("Updated User");
-      console.log(data);
+      setSelectedCurrentUser((prevState) => ({
+        ...prevState,
+        EmpLocationCountry: employeeLocationCountry.current.value,
+        FirstName: firstNameInput.current.value,
+        EmpLocationCity: employeeLocationCity.current.value,
+        EmailAddress: emailAddressInput.current.value,
+        EmpLocationState: employeeLocationState.current.value,
+        PhoneNumber: employeePhoneNumber.current.value,
+        LastName: lastNameInput.current.value,
+        EmpId: selectedCurrentUser.EmpId,
+        AdminLevel: adminLevelDesignation.current.value,
+      }));
       alert("User Updated");
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
@@ -208,17 +212,21 @@ function EditEmployeeInfo() {
                     <option value="Select an Employee">
                       -Select an Employee-
                     </option>
-                    {allUsersArr.map((employee, i) => {
-                      return (
-                        <option
-                          data-employeeid={employee.EmpId}
-                          value={`${employee.FirstName} ${employee.LastName}`}
-                          key={i}
-                        >
-                          {`${employee.FirstName} ${employee.LastName}`}
-                        </option>
-                      );
-                    })}
+                    {allUsersArr
+                      .sort(function (a, b) {
+                        return a.EmpId - b.EmpId;
+                      })
+                      .map((employee, i) => {
+                        return (
+                          <option
+                            data-employeeid={employee.EmpId}
+                            value={`${employee.FirstName} ${employee.LastName}`}
+                            key={i}
+                          >
+                            {`${employee.FirstName} ${employee.LastName}`}
+                          </option>
+                        );
+                      })}
                   </select>
                 </label>
                 {/* <form ref={addEmployeeForm}> */}

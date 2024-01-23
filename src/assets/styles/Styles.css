@@ -605,9 +605,9 @@ input[type="text"] {
   width: 10rem;
   background-color: #fefaf7;
 }
-.checkBoxLabel {
+/* .checkBoxLabel {
   margin-top: 0.4rem;
-}
+} */
 .admin-designation:focus,
 .add-employee-form label > input:focus {
   outline: 3px solid var(--kashtech_operations--characteristic-orange-1);

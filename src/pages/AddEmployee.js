@@ -139,19 +139,17 @@ function AddEmployee() {
     // if employee id exists, the response will be a array containing the employee object
     if (userIdExistsArr.length !== 0) {
       alert("User ID already exists. Choose a different ID number.");
+      return;
     } else if (userNameExistsArr.length !== 0) {
       alert("Username already exists. Choose a different username.");
+      return;
     } else {
       addUser();
       onModalOpen();
       addEmployeeForm.current.reset();
     }
-    // } else {
-    //   alert("Please fill out First Name, Last Name, Employee ID and Username fields.")
-    // }
   };
 
-  // run function for employee usernames
   return (
     <div>
       <dialog
@@ -160,30 +158,45 @@ function AddEmployee() {
         ref={submitEmployeeToDBDialog}
       >
         <form method="dialog">
-          <p>
-            Employee Added: <br />
+          <p>Employee Added: </p>
+          <div>
+            <span
+              id="employee-page-dialog--first_name-span"
+              className="employee-page-dialog--first_name-span"
+            >
+              Name:
+            </span>{" "}
             <span
               id="employee-page-dialog--first_name-span"
               className="employee-page-dialog--first_name-span"
               ref={modalEmployeeFirstName}
-            ></span>
+            ></span>{" "}
             <span
               className="employee-page-dialog--last_name-span"
               id="employee-page-dialog--last_name-span"
               ref={modalEmployeeLastName}
             ></span>
-            <br />
+          </div>
+          <div>
+            <span
+              id="employee-page-dialog--id-span"
+              className="employee-page-dialog--id-span"
+            >
+              Emp Id:
+            </span>{" "}
             <span
               id="employee-page-dialog--id-span"
               className="employee-page-dialog--id-span"
               ref={modalEmployeeId}
             ></span>
-          </p>
+          </div>
+
           <div>
             <button
               className="dialog-modal-confirm-button"
               id="dialog-modal-confirm-button"
               value="confirm"
+              sttyle={{ marginTop: "15px" }}
             >
               OK
             </button>
