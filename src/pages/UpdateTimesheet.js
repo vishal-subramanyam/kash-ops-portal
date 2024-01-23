@@ -30,9 +30,6 @@ function UpdateTimesheet(props) {
     TuesdayHours: "0.00",
     WednesdayHours: "0.00",
   };
-  let weekdayTime = useRef();
-  let mondayTime = useRef();
-  let tuesdayTime = useRef();
   let subAssignmentByProjectArr = [];
   let subAssignmentByProjectFiltered = [];
   let reportingPeriodStartDate = useRef();
@@ -40,7 +37,6 @@ function UpdateTimesheet(props) {
     useState();
   let submittedTimesheetToDBDialogue = useRef();
   let confirmationModalEmployeeName = useRef();
-  let mondayHours = useRef();
   let selectedEmployee = useRef();
   let selectedProject = useRef();
   let taskTicketNumber = useRef();
@@ -320,8 +316,19 @@ function UpdateTimesheet(props) {
     );
     await updateCurrentTimesheetRecord(currentRecords);
     await addNewTimesheetRecord(newRecords);
-    await getTimesheetByEmployeeId(selectedEmployeeIdState);
+    getTimesheetByEmployeeId(selectedEmployeeIdState);
     showConfirmationModal();
+
+    // reset the project, sub assignment and tasks dropdowns and ticket number fields
+    selectedProject.current.value = "";
+    taskTicketNumber.current.value = "";
+    subAssignmentTask.current.value = "";
+    subAssignmentTitleDescriptor.current.innerHTML = "";
+    setSelectedProjectCompanyNameState("");
+    setSelectedProjectSOWIDState("");
+    setSelectedSubAssignmentNameState();
+    setsubAssignmentByProjectArr([]);
+    setTasksBySubAssignment([]);
   };
 
   const updateCurrentTimesheetRecord = async (currentRecordArr) => {
@@ -713,7 +720,7 @@ function UpdateTimesheet(props) {
                         <th scope="col">Task Area</th>
                         {/* <!--th>Segment 2</th--> */}
                         <th scope="col">Ticket #</th>
-                        <th scope="col">Timesheet PK</th>
+                        {/* <th scope="col">Timesheet PK</th> */}
                         <th scope="col">Mon</th>
                         <th scope="col">Tue</th>
                         <th scope="col">Wed</th>
@@ -725,135 +732,141 @@ function UpdateTimesheet(props) {
                       </tr>
                     </thead>
                     <tbody id="tabBod">
-                      {console.log(timesheetRecordsByEmployee)}
-                      {timesheetRecordsByEmployee.map((record, i) => {
-                        return (
-                          <tr key={i}>
-                            <td>
-                              <FontAwesomeIcon
-                                className="delete-timesheet-record"
-                                icon={faTrashCan}
-                                onClick={() =>
-                                  deleteTimesheetRow(record.TimesheetEntryId, i)
-                                }
-                              />
-                            </td>
-                            <td>
-                              {record.CompanyName} - {record.SowId}
-                            </td>
-                            <td>{record.SubAssignment}</td>
-                            <td>{record.SubAssignmentSegment1}</td>
-                            <td>{record.TicketNum}</td>
-                            <td>{record.TimesheetEntryId}</td>
-                            <td>
-                              <input
-                                className="weekly-hours-input add-timesheet-entry--form-input hours-input"
-                                type="number"
-                                min="0"
-                                max="24"
-                                step={0.25}
-                                value={record.MondayHours}
-                                autoComplete="off"
-                                onChange={updateTimesheetRecord(
-                                  "MondayHours",
-                                  i
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="weekly-hours-input add-timesheet-entry--form-input hours-input"
-                                type="number"
-                                min="0"
-                                max="24"
-                                step={0.25}
-                                value={record.TuesdayHours}
-                                autoComplete="off"
-                                onChange={updateTimesheetRecord(
-                                  "TuesdayHours",
-                                  i
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="weekly-hours-input add-timesheet-entry--form-input hours-input"
-                                type="number"
-                                min="0"
-                                max="24"
-                                step={0.25}
-                                value={record.WednesdayHours}
-                                autoComplete="off"
-                                onChange={updateTimesheetRecord(
-                                  "WednesdayHours",
-                                  i
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="weekly-hours-input add-timesheet-entry--form-input hours-input"
-                                type="number"
-                                min="0"
-                                max="24"
-                                step={0.25}
-                                value={record.ThursdayHours}
-                                autoComplete="off"
-                                onChange={updateTimesheetRecord(
-                                  "ThursdayHours",
-                                  i
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="weekly-hours-input add-timesheet-entry--form-input hours-input"
-                                type="number"
-                                min="0"
-                                max="24"
-                                step={0.25}
-                                value={record.FridayHours}
-                                autoComplete="off"
-                                onChange={updateTimesheetRecord(
-                                  "FridayHours",
-                                  i
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="weekly-hours-input add-timesheet-entry--form-input hours-input"
-                                type="number"
-                                min="0"
-                                max="24"
-                                step={0.25}
-                                value={record.SaturdayHours}
-                                autoComplete="off"
-                                onChange={updateTimesheetRecord(
-                                  "SaturdayHours",
-                                  i
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="weekly-hours-input add-timesheet-entry--form-input hours-input"
-                                type="number"
-                                min="0"
-                                mx="24"
-                                step={0.25}
-                                value={record.SundayHours}
-                                autoComplete="off"
-                                onChange={updateTimesheetRecord(
-                                  "SundayHours",
-                                  i
-                                )}
-                              />
-                            </td>
-                            <td>0</td>
-                          </tr>
-                        );
-                      })}
+                      {timesheetRecordsByEmployee
+                        .sort(function (a, b) {
+                          return a.TimesheetEntryId - b.TimesheetEntryId;
+                        })
+                        .map((record, i) => {
+                          return (
+                            <tr key={i}>
+                              <td>
+                                <FontAwesomeIcon
+                                  className="delete-timesheet-record"
+                                  icon={faTrashCan}
+                                  onClick={() =>
+                                    deleteTimesheetRow(
+                                      record.TimesheetEntryId,
+                                      i
+                                    )
+                                  }
+                                />
+                              </td>
+                              <td>
+                                {record.CompanyName} - {record.SowId}
+                              </td>
+                              <td>{record.SubAssignment}</td>
+                              <td>{record.SubAssignmentSegment1}</td>
+                              <td>{record.TicketNum}</td>
+                              {/* <td>{record.TimesheetEntryId}</td> */}
+                              <td>
+                                <input
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                  type="number"
+                                  min="0"
+                                  max="24"
+                                  step={0.25}
+                                  value={record.MondayHours}
+                                  autoComplete="off"
+                                  onChange={updateTimesheetRecord(
+                                    "MondayHours",
+                                    i
+                                  )}
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                  type="number"
+                                  min="0"
+                                  max="24"
+                                  step={0.25}
+                                  value={record.TuesdayHours}
+                                  autoComplete="off"
+                                  onChange={updateTimesheetRecord(
+                                    "TuesdayHours",
+                                    i
+                                  )}
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                  type="number"
+                                  min="0"
+                                  max="24"
+                                  step={0.25}
+                                  value={record.WednesdayHours}
+                                  autoComplete="off"
+                                  onChange={updateTimesheetRecord(
+                                    "WednesdayHours",
+                                    i
+                                  )}
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                  type="number"
+                                  min="0"
+                                  max="24"
+                                  step={0.25}
+                                  value={record.ThursdayHours}
+                                  autoComplete="off"
+                                  onChange={updateTimesheetRecord(
+                                    "ThursdayHours",
+                                    i
+                                  )}
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                  type="number"
+                                  min="0"
+                                  max="24"
+                                  step={0.25}
+                                  value={record.FridayHours}
+                                  autoComplete="off"
+                                  onChange={updateTimesheetRecord(
+                                    "FridayHours",
+                                    i
+                                  )}
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                  type="number"
+                                  min="0"
+                                  max="24"
+                                  step={0.25}
+                                  value={record.SaturdayHours}
+                                  autoComplete="off"
+                                  onChange={updateTimesheetRecord(
+                                    "SaturdayHours",
+                                    i
+                                  )}
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                  type="number"
+                                  min="0"
+                                  mx="24"
+                                  step={0.25}
+                                  value={record.SundayHours}
+                                  autoComplete="off"
+                                  onChange={updateTimesheetRecord(
+                                    "SundayHours",
+                                    i
+                                  )}
+                                />
+                              </td>
+                              <td>0</td>
+                            </tr>
+                          );
+                        })}
                     </tbody>
                   </table>
                 </div>

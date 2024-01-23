@@ -176,7 +176,6 @@ input[type="text"] {
   cursor: pointer;
 
   border-radius: 50%;
-  
 }
 
 .employee-input_holder {
@@ -550,11 +549,11 @@ input[type="text"] {
     font-size: 2.5rem;
   }
 }
-@media (min-width: 900px) {
+/* @media (min-width: 900px) {
   .timesheet-information-group-holder {
     flex-wrap: nowrap;
   }
-}
+} */
 
 /* ################################################################### */
 
@@ -609,7 +608,8 @@ input[type="text"] {
 .checkBoxLabel {
   margin-top: 0.4rem;
 }
-.admin-designation:focus, .add-employee-form label > input:focus {
+.admin-designation:focus,
+.add-employee-form label > input:focus {
   outline: 3px solid var(--kashtech_operations--characteristic-orange-1);
 }
 .add-employee-form--top-section {
