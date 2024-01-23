@@ -40,34 +40,41 @@ function UpdatePassword() {
       .catch((err) => alert(err));
   };
 
-  const fetchUpdatePW = async (employeeId, password) => {
-    try {
-      const response = await fetch(
-        `${domain}GenericTransactionService/processTransactionForUpdate`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+  const fetchUpdatePW = (employeeId, password) => {
+    console.log(
+      "Fetch called to update user's pw. EmpId:",
+      employeeId,
+      "PW:",
+      password,
+      "Encrypted PW:",
+      btoa(password)
+    );
+    fetch(`${domain}GenericTransactionService/processTransactionForUpdate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        // your expected POST request payload goes here
+        data: [
+          {
+            EmpId: employeeId,
+            UserPassword: btoa(password),
           },
-          body: JSON.stringify({
-            // your expected POST request payload goes here
-            data: [
-              {
-                EmpId: employeeId,
-                UserPassword: btoa(password),
-              },
-            ],
-            _keyword_: "KASH_OPERATIONS_USER_TABLE",
-            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
-          }),
-        }
-      );
-      const data = await response.json();
-      alert("Password Updated");
-    } catch (error) {
-      // enter your logic for when there is an error (ex. error toast)
-      alert("Unable to update user.");
-    }
+        ],
+        _keyword_: "KASH_OPERATIONS_USER_TABLE",
+        secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        alert("Password Updated");
+      })
+      .catch((error) => {
+        // enter your logic for when there is an error (ex. error toast)
+        alert("Unable to update password.", error);
+      });
   };
 
   const updatePassword = () => {
