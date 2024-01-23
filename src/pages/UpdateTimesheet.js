@@ -70,9 +70,10 @@ function UpdateTimesheet(props) {
   let [subAssignmentByProject, setsubAssignmentByProjectArr] = useState([]);
   let [tasksBySubAssignment, setTasksBySubAssignment] = useState([]);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
-  let basicUserInfo = allEmployeesArr.filter((user) => {
-    return user.EmpId === props.loggedInUser.EmpId;
-  });
+  // let basicUserInfo = allEmployeesArr.filter((user) => {
+  //   return user.EmpId === props.loggedInUser.EmpId;
+  // });
+  let basicUserInfo = props.loggedInUser;
 
   useEffect(() => {
     getAllProjects();
@@ -495,6 +496,8 @@ function UpdateTimesheet(props) {
                 >
                   Employee:
                 </label>
+                {console.log(basicUserInfo.EmpId)}
+
                 <select
                   className="employee-dropdown-input"
                   id="employee-dropdown-input"
@@ -512,8 +515,8 @@ function UpdateTimesheet(props) {
                       );
                     })
                   ) : (
-                    <option data-employeeid={basicUserInfo[0].EmpId}>
-                      {basicUserInfo[0].FirstName} {basicUserInfo[0].LastName}
+                    <option data-employeeid={basicUserInfo.EmpId}>
+                      {basicUserInfo.FirstName} {basicUserInfo.LastName}
                     </option>
                   )}
                 </select>

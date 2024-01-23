@@ -59,7 +59,7 @@ function LoginForm(props) {
         </label>
         <div className="login-form--change-password-link">
           <Link to="/update-password">
-            <p>Change Password</p>
+            <p>Forgot Password</p>
           </Link>
         </div>
       </div>

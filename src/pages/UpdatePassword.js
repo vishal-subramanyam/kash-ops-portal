@@ -41,25 +41,16 @@ function UpdatePassword() {
   };
 
   const fetchUpdatePW = (employeeId, password) => {
-    console.log(
-      "Fetch called to update user's pw. EmpId:",
-      employeeId,
-      "PW:",
-      password,
-      "Encrypted PW:",
-      btoa(password)
-    );
     fetch(`${domain}GenericTransactionService/processTransactionForUpdate`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        // your expected POST request payload goes here
         data: [
           {
             EmpId: employeeId,
-            UserPassword: btoa(password),
+            UserPassword: password,
           },
         ],
         _keyword_: "KASH_OPERATIONS_USER_TABLE",
@@ -70,6 +61,7 @@ function UpdatePassword() {
       .then((res) => {
         console.log(res);
         alert("Password Updated");
+        navigate("/login");
       })
       .catch((error) => {
         // enter your logic for when there is an error (ex. error toast)
@@ -77,23 +69,24 @@ function UpdatePassword() {
       });
   };
 
-  const updatePassword = () => {
-    console.log("Update Password Triggered", usernameInput.current.value);
+  const updatePassword = (e) => {
+    e.preventDefault();
+
     let usnEmpId = allUsers.filter((usn) => {
       if (usn.KashOperationsUsn === usernameInput.current.value) {
         return usn;
       }
     });
-    console.log(usnEmpId.KashOperationsUsn);
-    if (passwordInput !== confrimPasswordInput) {
+
+    if (passwordInput.current.value !== confrimPasswordInput.current.value) {
+      updatePWForm.current.reset();
       alert(
         "Please ensure that the password and confirm password fields match."
       );
       return;
     }
-    fetchUpdatePW(usnEmpId.KashOperationsUsn, confrimPasswordInput);
+    fetchUpdatePW(usnEmpId[0].EmpId, confrimPasswordInput.current.value);
     updatePWForm.current.reset();
-    navigate("/login");
   };
 
   return (

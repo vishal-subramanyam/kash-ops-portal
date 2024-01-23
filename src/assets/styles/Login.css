@@ -111,7 +111,7 @@ a {
   margin-bottom: 3rem; */
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
 }
 .login-field {
   width: 100%;
@@ -145,7 +145,7 @@ a {
 
 .login-form--change-password-link {
   font-size: 0.75rem;
-  color: #ffb494;
+  color: #ff8c4b;
   text-decoration: none !important;
 }
 
@@ -205,6 +205,7 @@ a {
 .login-heading {
   color: #326d97;
   font-size: 2rem !important;
+  padding-bottom: 1rem;
 }
 @media (min-width: 900px) {
   .kash-operations-login {

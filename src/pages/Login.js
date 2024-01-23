@@ -34,7 +34,7 @@ function Login(props) {
           </button>
         </div>
         {showSignUpForm ? (
-          <SignUpForm />
+          <SignUpForm showSignUp={setShowSignUpForm} />
         ) : (
           <LoginForm
             userLoggedIn={props.loggedInUserName}

@@ -8,62 +8,95 @@ function SignUpForm(props) {
   let usernameInput = useRef();
   let email = useRef();
   let createUserForm = useRef();
-  let [randomEmpId, setRandomEmpId] = useState();
+  let [allUsers, setAllUsers] = useState([]);
 
   useEffect(() => {
-    let newEmpId = Math.floor(10000000 + Math.random() * 90000000);
-    console.log(newEmpId);
-    setRandomEmpId(newEmpId);
+    getAllUsers();
   }, []);
 
-  const userSignUp = async () => {
-    console.log("Sign Up Form Triggered");
+  const getAllUsers = () => {
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ _keyword_: "KASH_OPERATIONS_USER_TABLE" }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setAllUsers(res.data);
+      })
+      .catch((err) => alert(err));
+  };
 
-    try {
-      const response = await fetch(
-        `${domain}GenericTransactionService/processTransaction`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            // your expected POST request payload goes here
-            data: [
-              {
-                EmpId: randomEmpId,
-                FirstName: "",
-                LastName: "",
-                EmailAddress: email.current.value,
-                PhoneNumber: "",
-                EmpLocationCity: "",
-                EmpLocationState: "",
-                EmpLocationCountry: "",
-                AdminLevel: "BasicUser",
-                KashOperationsUsn: usernameInput.current.value,
-                EmployeeAddress: "",
-                EmployeeZipCode: "",
-                EmployeeType: "",
-                EmployeeContractorName: "",
-              },
-            ],
-            _keyword_: "KASH_OPERATIONS_USER_TABLE",
-            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
-          }),
-        }
-      );
-      const data = await response.json();
-      // enter you logic when the fetch is successful
-      console.log("New user created", data);
-      alert("New user created. Check the email.");
-      // automatically send new user an email with link to change password
-    } catch (error) {
-      // enter your logic for when there is an error (ex. error toast)
-      console.log(error);
-      alert("Unable to sign up.");
+  const createRandomEmpId = () => {
+    let newEmpId = Math.floor(10000000 + Math.random() * 90000000);
+    console.log(newEmpId);
+    return newEmpId;
+  };
+
+  const userSignUp = async (e) => {
+    e.preventDefault();
+    console.log("Sign Up Form Triggered");
+    let randomEmpId = createRandomEmpId();
+    let existingUsn = allUsers.filter((usn) => {
+      if (usn.KashOperationsUsn === usernameInput.current.value) {
+        return usn;
+      }
+    });
+    console.log(existingUsn);
+    if (existingUsn.length !== 0) {
+      createUserForm.current.reset();
+      alert("That username already exists.");
+      return;
     }
-    navigate("/login");
-    createUserForm.current.reset();
+
+    console.log(randomEmpId, usernameInput.current.value, email.current.value);
+
+    fetch(`${domain}GenericTransactionService/processTransaction`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data: [
+          {
+            EmpId: randomEmpId,
+            FirstName: "",
+            LastName: "",
+            EmailAddress: email.current.value,
+            PhoneNumber: "",
+            EmpLocationCity: "",
+            EmpLocationState: "",
+            EmpLocationCountry: "",
+            AdminLevel: "BasicUser",
+            KashOperationsUsn: usernameInput.current.value,
+            EmployeeAddress: "",
+            EmployeeZipCode: "",
+            EmployeeType: "",
+            EmployeeContractorName: "",
+          },
+        ],
+        _keyword_: "KASH_OPERATIONS_USER_TABLE",
+        secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        alert("New user created. Check your email.");
+        // automatically send new user an email with link to change password
+
+        props.showSignUp(false);
+        // navigate("/login");
+        createUserForm.current.reset();
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("Unable to sign up.", error);
+      });
   };
   return (
     <form method="post" className="login-form" ref={createUserForm}>
