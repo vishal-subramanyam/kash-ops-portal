@@ -69,10 +69,7 @@ function App() {
           path="/"
           element={
             <RequireAuth>
-              <HomePage
-                loggedInUserName={loggedInUserLocal}
-                admin={isAdminLocal}
-              />
+              <HomePage loggedInUser={loggedInUserLocal} admin={isAdminLocal} />
             </RequireAuth>
           }
         />
@@ -89,7 +86,10 @@ function App() {
           path="/add-employee"
           element={
             <RequireAuth>
-              <AddEmployee />
+              <AddEmployee
+                loggedInUser={loggedInUserLocal}
+                admin={isAdminLocal}
+              />
             </RequireAuth>
           }
         />

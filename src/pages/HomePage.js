@@ -22,7 +22,7 @@ function HomePage(props) {
         <p className="kash_operations_home--user-welcome-msg">
           Welcome,{" "}
           <span id="kash_ops_user--first-name">
-            {props.loggedInUserName.FirstName}
+            {props.loggedInUser.FirstName}
           </span>
           !
         </p>

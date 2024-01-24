@@ -76,13 +76,10 @@ function AddEmployee() {
           }),
         }
       );
-      const data = await response.json();
-      // enter you logic when the fetch is successful
-      console.log("Added to User table", data);
     } catch (error) {
-      // enter your logic for when there is an error (ex. error toast)
       console.log(error);
-      alert("Unable to add user.");
+      setMessage(alertMessageDisplay(`Unable to add user. Error: ${error}`));
+      alertMessage.current.showModal();
     }
   };
 
@@ -98,7 +95,12 @@ function AddEmployee() {
     if (typeof submitEmployeeToDBDialog.current.showModal === "function") {
       submitEmployeeToDBDialog.current.showModal();
     } else {
-      alert("Sorry, the <dialog> API is not supported by this browser.");
+      setMessage(
+        alertMessageDisplay(
+          "Sorry, the <dialog> API is not supported by this browser."
+        )
+      );
+      alertMessage.current.showModal();
     }
   };
 
@@ -121,7 +123,14 @@ function AddEmployee() {
         console.log(userIDInput.current.value);
         setAllUsersArr(res.data);
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to get users from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
   };
 
   const alertMessageDisplay = (entry) => {
@@ -163,7 +172,7 @@ function AddEmployee() {
       alertMessage.current.showModal();
       return;
     } else {
-      // addUser();
+      addUser();
       onModalOpen();
       addEmployeeForm.current.reset();
     }
@@ -171,7 +180,7 @@ function AddEmployee() {
 
   return (
     <div>
-      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />;
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
       <dialog
         className="database-submit-dialog"
         id="database-submit-dialog"
@@ -188,11 +197,11 @@ function AddEmployee() {
             </span>{" "}
             <span
               id="employee-page-dialog--first_name-span"
-              className="employee-page-dialog--first_name-span"
+              className="employee-page-dialog--first_name-span employee-page-dialog--first-name"
               ref={modalEmployeeFirstName}
             ></span>{" "}
             <span
-              className="employee-page-dialog--last_name-span"
+              className="employee-page-dialog--last_name-span employee-page-dialog--last-name"
               id="employee-page-dialog--last_name-span"
               ref={modalEmployeeLastName}
             ></span>
@@ -200,7 +209,7 @@ function AddEmployee() {
           <div>
             <span
               id="employee-page-dialog--id-span"
-              className="employee-page-dialog--id-span"
+              className="employee-page-dialog--empId-label-span"
             >
               Emp Id:
             </span>{" "}
@@ -318,7 +327,7 @@ function AddEmployee() {
                 />
               </label>
               <div className="admin-designation-container checkBoxLabel">
-                <span className="employee--form--id-label">Add as admin?</span>
+                <span className="employee--form--id-label">Admin Level</span>
                 <select
                   name="admin-level-designation"
                   id="admin-designation"

@@ -468,8 +468,15 @@ input[type="text"] {
 .database-submit-dialog .project-page-dialog--sow-id-span {
   color: #8d3ebd;
 }
+.employee-page-dialog--empId-label-span {
+  color: #000;
+}
 .database-submit-dialog .employee-page-dialog--id-span {
   color: #f57407;
+}
+.employee-page-dialog--first-name,
+.employee-page-dialog--last-name {
+  color: #1f7ed6;
 }
 .database-submit-dialog[open] {
   opacity: 1;
