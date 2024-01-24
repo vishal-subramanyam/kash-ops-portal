@@ -36,6 +36,7 @@ function SaveNewSubCategory(props) {
         ...prevState,
         newSubCatTaskRecord,
       ]);
+      newTaskName.current.value = "";
     }
   };
   return (

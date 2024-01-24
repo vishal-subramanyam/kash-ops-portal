@@ -224,13 +224,6 @@ function EditProject() {
 
     // validate inputs
     console.log("Validate inputs");
-    // console.log("company name", companyName.current.value);
-    // console.log("sub cat Id", newWorkAreaIdInput.current.value);
-    // console.log("sub cat name", newWorkAreaInput.current.value);
-    // console.log("project", projectDescription.current.value);
-    // run function to edit project details
-    // create sub-assignment for project
-    // open confirmation portal function
 
     for (let input of requiredInputs) {
       if (input.current.value === "") {
