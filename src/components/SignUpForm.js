@@ -49,7 +49,7 @@ function SignUpForm(props) {
 
   const closeAlert = () => {
     alertMessage.current.close();
-    addEmployeeForm.current.reset();
+    createUserForm.current.reset();
   };
 
   const createRandomEmpId = () => {

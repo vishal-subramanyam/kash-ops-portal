@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import AlertMessage from "../components/AlertMessage";
 import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
 import { domain } from "../assets/api/apiEndpoints";
@@ -33,6 +34,8 @@ function UpdateTimesheet(props) {
   let subAssignmentByProjectArr = [];
   let subAssignmentByProjectFiltered = [];
   let reportingPeriodStartDate = useRef();
+  let alertMessage = useRef();
+  let [message, setMessage] = useState("");
   let [reportingPeriodStartDateState, setReportingPeriodStartDateState] =
     useState();
   let submittedTimesheetToDBDialogue = useRef();
@@ -90,7 +93,14 @@ function UpdateTimesheet(props) {
       .then((res) => {
         setAllEmployeesArr(res.data);
       })
-      .catch((err) => alert("Unable to get users from database.", err));
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to get users from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
   };
 
   const getAllProjects = () => {
@@ -108,7 +118,14 @@ function UpdateTimesheet(props) {
       .then((res) => {
         setProjectAndCompanyInfoArr(res.data);
       })
-      .catch((err) => alert("Unable to get projects from database.", err));
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to get projects from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
   };
 
   const getTimesheetByEmployeeId = (id) => {
@@ -141,7 +158,12 @@ function UpdateTimesheet(props) {
         );
         setTimesheetRecordsByEmployee(filteredTimesheet);
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(`Unable to load timesheet. Error: ${err}`)
+        );
+        alertMessage.current.showModal();
+      });
   };
 
   const getSelectedEmployeeId = (e) => {
@@ -169,7 +191,14 @@ function UpdateTimesheet(props) {
         subAssignmentByProjectArr = res.data;
         // setsubAssignmentByProject(res.data);
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to get project sub categories. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
   };
 
   const getTasksBySubAssignment = async (selectedSubAssignmentId) => {
@@ -190,7 +219,14 @@ function UpdateTimesheet(props) {
         });
         setTasksBySubAssignment(filterTasks);
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to load sub category tasks. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
   };
 
   const getSelectedProjectData = async (e) => {
@@ -274,7 +310,8 @@ function UpdateTimesheet(props) {
         newTimesheetRecord,
       ]);
     } else {
-      alert("Fill in the ALL of the above fields.");
+      setMessage(alertMessageDisplay("Fill in the ALL of the above fields."));
+      alertMessage.current.showModal();
     }
   };
 
@@ -349,12 +386,10 @@ function UpdateTimesheet(props) {
           }),
         }
       );
-      const data = await response.json();
-      // enter you logic when the fetch is successful
-      console.log("update fetch call succcess", data);
     } catch (error) {
       // enter your logic for when there is an error (ex. error toast)
-      alert("unable to update record");
+      setMessage(alertMessageDisplay("Unable to update record."));
+      alertMessage.current.showModal();
     }
   };
 
@@ -376,11 +411,13 @@ function UpdateTimesheet(props) {
           }),
         }
       );
-      const data = await response.json();
-      // enter you logic when the fetch is successful
     } catch (error) {
-      // enter your logic for when there is an error (ex. error toast)
-      alert("Unable to add record to timesheets table.");
+      setMessage(
+        alertMessageDisplay(
+          `Unable to add record to timesheets table. Error: ${error}`
+        )
+      );
+      alertMessage.current.showModal();
     }
   };
 
@@ -421,9 +458,13 @@ function UpdateTimesheet(props) {
               }),
             }
           );
-          const data = await response.json();
         } catch (error) {
-          alert(`Cound not delete record ${databaseRowId}`);
+          setMessage(
+            alertMessageDisplay(
+              `Cound not delete record ${databaseRowId}. Error: ${error}`
+            )
+          );
+          alertMessage.current.showModal();
         }
       }
     }
@@ -437,12 +478,26 @@ function UpdateTimesheet(props) {
     ) {
       submittedTimesheetToDBDialogue.current.showModal();
     } else {
-      alert("Sorry, the <dialog> API is not supported by this browser.");
+      setMessage(
+        alertMessageDisplay(
+          "Sorry, the <dialog> API is not supported by this browser."
+        )
+      );
+      alertMessage.current.showModal();
     }
+  };
+
+  const alertMessageDisplay = (entry) => {
+    return entry;
+  };
+
+  const closeAlert = () => {
+    alertMessage.current.close();
   };
 
   return (
     <div>
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
       <dialog
         className="database-submit-dialog"
         id="database-submit-dialog"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import AlertMessage from "./AlertMessage";
 import { DataGrid } from "@mui/x-data-grid";
 import { domain } from "../assets/api/apiEndpoints";
@@ -116,7 +116,6 @@ function ProjectsReport() {
 
   const closeAlert = () => {
     alertMessage.current.close();
-    addEmployeeForm.current.reset();
   };
 
   return (

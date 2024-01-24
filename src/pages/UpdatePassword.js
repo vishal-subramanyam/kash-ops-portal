@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import AlertMessage from "../components/AlertMessage";
 import { useNavigate, Link } from "react-router-dom";
 import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Login.css";
@@ -9,6 +10,8 @@ function UpdatePassword() {
   let passwordInput = useRef();
   let confrimPasswordInput = useRef();
   let updatePWForm = useRef();
+  let alertMessage = useRef();
+  let [message, setMessage] = useState("");
   let [empId, setEmpId] = useState();
   let [allUsers, setAllUsers] = useState([]);
 
@@ -37,7 +40,10 @@ function UpdatePassword() {
         console.log(res);
         setAllUsers(res.data);
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        setMessage(alertMessageDisplay(`Unable to load users. Error: ${err}`));
+        alertMessage.current.showModal();
+      });
   };
 
   const fetchUpdatePW = (employeeId, password) => {
@@ -80,12 +86,24 @@ function UpdatePassword() {
 
     if (passwordInput.current.value !== confrimPasswordInput.current.value) {
       updatePWForm.current.reset();
-      alert(
-        "Please ensure that the password and confirm password fields match."
+      setMessage(
+        alertMessageDisplay(
+          "Please ensure that the password and confirm password fields match."
+        )
       );
+      alertMessage.current.showModal();
       return;
     }
     fetchUpdatePW(usnEmpId[0].EmpId, confrimPasswordInput.current.value);
+    updatePWForm.current.reset();
+  };
+
+  const alertMessageDisplay = (entry) => {
+    return entry;
+  };
+
+  const closeAlert = () => {
+    alertMessage.current.close();
     updatePWForm.current.reset();
   };
 
@@ -173,6 +191,7 @@ function UpdatePassword() {
           </button>
         </form>
       </div>
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
     </main>
   );
 }

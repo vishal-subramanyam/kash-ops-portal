@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import AlertMessage from "./AlertMessage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { domain } from "../assets/api/apiEndpoints";
@@ -16,7 +16,6 @@ function SubCategoryTask(props) {
 
   const closeAlert = () => {
     alertMessage.current.close();
-    addEmployeeForm.current.reset();
   };
 
   const areYouSure = () => {

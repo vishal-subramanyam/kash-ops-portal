@@ -169,7 +169,6 @@ function ProjectSubCategory(props) {
 
   const closeAlert = () => {
     alertMessage.current.close();
-    addEmployeeForm.current.reset();
   };
   return (
     <div>

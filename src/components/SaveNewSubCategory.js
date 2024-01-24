@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import AlertMessage from "./AlertMessage";
 import "../assets/styles/Styles.css";
 
 function SaveNewSubCategory(props) {
@@ -14,6 +15,16 @@ function SaveNewSubCategory(props) {
       Segment3: "-",
     },
   ]);
+  let alertMessage = useRef();
+  let [message, setMessage] = useState("");
+
+  const alertMessageDisplay = (entry) => {
+    return entry;
+  };
+
+  const closeAlert = () => {
+    alertMessage.current.close();
+  };
 
   const createNewSubCatRecord = (projectId, subCatName, subCatId) => {
     console.log(projectId, subCatName, subCatId, newTaskName.current.value);
@@ -152,6 +163,7 @@ function SaveNewSubCategory(props) {
           Save Work Area
         </button>
       </div>
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
     </details>
   );
 }
