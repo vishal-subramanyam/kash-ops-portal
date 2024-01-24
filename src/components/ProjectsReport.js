@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import AlertMessage from "./AlertMessage";
 import { DataGrid } from "@mui/x-data-grid";
 import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Reports.css";
@@ -21,6 +22,8 @@ function ProjectsReport() {
     SowId: true,
     TotalProjectedHours: true,
   });
+  let alertMessage = useRef();
+  let [message, setMessage] = useState("");
 
   useEffect(() => {
     getAllProjects();
@@ -42,7 +45,12 @@ function ProjectsReport() {
         console.log(res.data);
         setAllProjectsArr(res.data);
       })
-      .catch((err) => alert("Unable to get projects from database.", err));
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(`Unable to get projects from database. ${err}`)
+        );
+        alertMessage.current.showModal();
+      });
   };
 
   // Transform the data
@@ -102,6 +110,15 @@ function ProjectsReport() {
     (column) => columnVisibilityModel[column.field]
   );
 
+  const alertMessageDisplay = (entry) => {
+    return entry;
+  };
+
+  const closeAlert = () => {
+    alertMessage.current.close();
+    addEmployeeForm.current.reset();
+  };
+
   return (
     <div>
       <h1 className="report-title">KASH OPS PROJECTS</h1>
@@ -114,6 +131,7 @@ function ProjectsReport() {
           onColumnVisibilityModelChange={handleToggleColumnVisibility}
         />
       </div>
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
     </div>
   );
 }

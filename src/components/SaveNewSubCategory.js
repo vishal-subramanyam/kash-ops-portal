@@ -21,7 +21,10 @@ function SaveNewSubCategory(props) {
       newTaskName.current.value === undefined ||
       newTaskName.current.value === ""
     ) {
-      alert("Please fill out the new task name field");
+      setMessage(
+        alertMessageDisplay("Please fill out the new task name field.")
+      );
+      alertMessage.current.showModal();
     } else {
       let newSubCatTaskRecord = {
         SowId: projectId,

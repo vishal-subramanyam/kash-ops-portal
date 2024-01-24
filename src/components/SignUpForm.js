@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import AlertMessage from "./AlertMessage";
 import { useNavigate } from "react-router-dom";
 import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Styles.css";
@@ -10,6 +11,8 @@ function SignUpForm(props) {
   let firstName = useRef();
   let lastName = useRef();
   let createUserForm = useRef();
+  let alertMessage = useRef();
+  let [message, setMessage] = useState("");
   let [allUsers, setAllUsers] = useState([]);
 
   useEffect(() => {
@@ -30,7 +33,23 @@ function SignUpForm(props) {
         console.log(res);
         setAllUsers(res.data);
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to load users from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
+  };
+
+  const alertMessageDisplay = (entry) => {
+    return entry;
+  };
+
+  const closeAlert = () => {
+    alertMessage.current.close();
+    addEmployeeForm.current.reset();
   };
 
   const createRandomEmpId = () => {
@@ -50,7 +69,8 @@ function SignUpForm(props) {
     });
     if (existingUsn.length !== 0) {
       createUserForm.current.reset();
-      alert("That username already exists.");
+      setMessage(alertMessageDisplay("That username already exists."));
+      alertMessage.current.showModal();
       return;
     }
 
@@ -84,8 +104,8 @@ function SignUpForm(props) {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
-        alert("New user created. Check your email.");
+        setMessage(alertMessageDisplay("New user created. Check your email."));
+        alertMessage.current.showModal();
         // automatically send new user an email with link to change password
 
         props.showSignUp(false);
@@ -93,8 +113,8 @@ function SignUpForm(props) {
         createUserForm.current.reset();
       })
       .catch((error) => {
-        console.log(error);
-        alert("Unable to sign up.", error);
+        setMessage(alertMessageDisplay(`Unable to sign up. Error: ${error}`));
+        alertMessage.current.showModal();
       });
   };
   return (
@@ -173,6 +193,7 @@ function SignUpForm(props) {
       >
         <div className="signin-text">Create User</div>
       </button>
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
     </form>
   );
 }

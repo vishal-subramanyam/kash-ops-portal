@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import AlertMessage from "./AlertMessage";
 import "../assets/styles/Styles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
@@ -8,6 +9,8 @@ import { domain } from "../assets/api/apiEndpoints";
 function ProjectSubCategory(props) {
   let taskSegment1 = useRef();
   let confirmationModal = useRef();
+  let alertMessage = useRef();
+  let [message, setMessage] = useState("");
   // Show the tasks per sub category and filter out segments with no value. set that filtered array to state
   let filteredSubCats = props.allSubCats.filter((task) => {
     return (
@@ -43,7 +46,8 @@ function ProjectSubCategory(props) {
     // check if the task name already exists
     for (let i = 0; i < tasksBySubCategory.length; i++) {
       if (segment1 === tasksBySubCategory[i].Segment1) {
-        alert("Task name already exists.");
+        setMessage(alertMessageDisplay("Task name already exists."));
+        alertMessage.current.showModal();
         return;
       }
     }
@@ -58,7 +62,8 @@ function ProjectSubCategory(props) {
     };
     // add task to existing sub category. Validate if task name field is filled out
     if (segment1 === undefined || segment1 === "") {
-      alert("Fill in a task name.");
+      setMessage(alertMessageDisplay("Fill in a task name."));
+      alertMessage.current.showModal();
     } else {
       console.log("run fetch to add task to sub cat");
       try {
@@ -94,7 +99,8 @@ function ProjectSubCategory(props) {
         taskSegment1.current.value = "";
       } catch (error) {
         console.log(error);
-        alert("Unable to add task.");
+        setMessage(alertMessageDisplay(`Unable to add task. Error: ${error}`));
+        alertMessage.current.showModal();
       }
     }
   };
@@ -148,10 +154,23 @@ function ProjectSubCategory(props) {
       closeConfirmationModal();
       // props.reset();
     } catch (error) {
-      alert(`Unable to delete ${props.subCategory.SubTaskTitle}. ${error}`);
+      setMessage(
+        alertMessageDisplay(
+          `Unable to delete ${props.subCategory.SubTaskTitle}. Error: ${error}`
+        )
+      );
+      alertMessage.current.showModal();
     }
   };
 
+  const alertMessageDisplay = (entry) => {
+    return entry;
+  };
+
+  const closeAlert = () => {
+    alertMessage.current.close();
+    addEmployeeForm.current.reset();
+  };
   return (
     <div>
       <details className="main-grouping">
@@ -314,6 +333,7 @@ function ProjectSubCategory(props) {
           </div>
         </div>
       </dialog>
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
     </div>
   );
 }

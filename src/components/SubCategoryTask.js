@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import AlertMessage from "./AlertMessage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { domain } from "../assets/api/apiEndpoints";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
@@ -6,6 +7,17 @@ import "../assets/styles/Styles.css";
 
 function SubCategoryTask(props) {
   let confirmationModal = useRef();
+  let alertMessage = useRef();
+  let [message, setMessage] = useState("");
+
+  const alertMessageDisplay = (entry) => {
+    return entry;
+  };
+
+  const closeAlert = () => {
+    alertMessage.current.close();
+    addEmployeeForm.current.reset();
+  };
 
   const areYouSure = () => {
     confirmationModal.current.showModal();
@@ -53,7 +65,12 @@ function SubCategoryTask(props) {
       props.resetTasks(deleteTask);
       props.refetch();
     } catch (error) {
-      alert(`Unable to delete ${props.subCategoryTask.Segment1}. ${error}`);
+      setMessage(
+        alertMessageDisplay(
+          `Unable to delete ${props.subCategoryTask.Segment1}. Error: ${error}`
+        )
+      );
+      alertMessage.current.showModal();
     }
   };
 
@@ -124,6 +141,7 @@ function SubCategoryTask(props) {
           </div>
         </div>
       </dialog>
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
     </div>
   );
 }

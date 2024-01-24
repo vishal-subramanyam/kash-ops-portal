@@ -46,20 +46,23 @@ function EditEmployeeInfo(props) {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         setAllUsers(res.data);
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to load users from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
   };
 
   const setAdminOption = (selectedUser) => {
-    console.log(selectedUser);
-
     for (let i = 0; i < adminLevelDesignation.current.childNodes.length; i++) {
       let adminSelectionChoice =
         adminLevelDesignation.current.childNodes[i].getAttribute("value");
       if (adminSelectionChoice === selectedUser[0].AdminLevel) {
-        console.log("seleted admin", adminSelectionChoice);
         adminLevelDesignation.current.childNodes[i].setAttribute(
           "selected",
           true
@@ -71,7 +74,6 @@ function EditEmployeeInfo(props) {
   };
 
   const onNameChange = async (e, i) => {
-    console.log("Employee name dropdown to select for update or delete");
     let selectedEmployeeId =
       e.target.children[e.target.selectedIndex].getAttribute("data-employeeid");
     // set state array for selected employee if the employee Ids match
@@ -79,7 +81,6 @@ function EditEmployeeInfo(props) {
       return selectedEmployeeId === user.EmpId;
     });
     setUserDetailInputs(selectedEmployeeFromDropdown);
-
     if (selectedEmployeeFromDropdown.AdminLevel === "Super Admin") {
       setAdminOption(selectedEmployeeFromDropdown);
     } else {
@@ -90,7 +91,6 @@ function EditEmployeeInfo(props) {
   };
 
   const setUserDetailInputs = (user) => {
-    console.log(user);
     firstNameInput.current.value = user[0].FirstName;
     lastNameInput.current.value = user[0].LastName;
     emailAddressInput.current.value = user[0].EmailAddress;
@@ -102,9 +102,6 @@ function EditEmployeeInfo(props) {
 
   const updateUser = async (e) => {
     e.preventDefault();
-    console.log(selectedCurrentUser);
-
-    // make a fetch post call to update employee info given field values
     try {
       const response = await fetch(
         `${domain}GenericTransactionService/processTransactionForUpdate`,
@@ -114,7 +111,6 @@ function EditEmployeeInfo(props) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            // your expected POST request payload goes here
             data: [
               {
                 EmpLocationCountry: employeeLocationCountry.current.value,
@@ -146,10 +142,11 @@ function EditEmployeeInfo(props) {
         EmpId: selectedCurrentUser.EmpId,
         AdminLevel: adminLevelDesignation.current.value,
       }));
-      alert("User Updated");
+      setMessage(alertMessageDisplay("User Updated."));
+      alertMessage.current.showModal();
     } catch (error) {
-      // enter your logic for when there is an error (ex. error toast)
-      alert("Unable to update user.");
+      setMessage(alertMessageDisplay(`Unable to update user. Error: ${error}`));
+      alertMessage.current.showModal();
     }
   };
 
@@ -177,23 +174,16 @@ function EditEmployeeInfo(props) {
           }),
         }
       );
-      const data = await response.json();
-      // enter you logic when the fetch is successful
-      console.log("Deleted user", data);
-      // setselectedCurrentUser({});
-      // console.log(selectedCurrentUser);
+      setMessage(alertMessageDisplay("User Deleted"));
+      alertMessage.current.showModal();
     } catch (error) {
-      // enter your logic for when there is an error (ex. error toast)
-      console.log(error);
-      alert("Unable to delete user.");
+      setMessage(alertMessageDisplay(`Unable to delete user. Error: ${error}`));
+      alertMessage.current.showModal();
     }
     console.log(editUserForm.current);
     editUserForm.current.reset();
     setAdminOption(initialAdminOption);
     setSelectedCurrentUser({});
-
-    setMessage(alertMessageDisplay("User Deleted"));
-    alertMessage.current.showModal();
   };
 
   const alertMessageDisplay = (entry) => {
@@ -206,7 +196,7 @@ function EditEmployeeInfo(props) {
 
   return (
     <div className="lightboxbackdrop" ref={editUserPopup}>
-      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />;
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
       <div className="lightbox" style={{ overflow: "scroll" }}>
         <span onClick={hideLightbox} className="x-button">
           X
