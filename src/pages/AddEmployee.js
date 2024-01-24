@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import AlertMessage from "../components/AlertMessage.js";
 import { domain } from "../assets/api/apiEndpoints";
 import "../assets/api/apiEndpoints.js";
 import "../assets/styles/HomePage.css";
 
 function AddEmployee() {
   //   // input value variables
+  let [message, setMessage] = useState("");
   let adminLevelDesignation = useRef();
   let addEmployeeForm = useRef();
   let firstNameInput = useRef();
@@ -25,6 +27,7 @@ function AddEmployee() {
   let modalEmployeeLastName = useRef();
   let modalEmployeeId = useRef();
   let submitEmployeeToDBDialog = useRef();
+  let alertMessage = useRef();
   let [adminCheckbox, setAdminCheckbox] = useState(false);
   let [allUsersArr, setAllUsersArr] = useState([]);
 
@@ -34,6 +37,10 @@ function AddEmployee() {
     userIDInput,
     usernameInput,
   ];
+
+  useEffect(() => {
+    getAllUsers();
+  }, []);
 
   const addUser = async () => {
     try {
@@ -95,7 +102,7 @@ function AddEmployee() {
     }
   };
 
-  const checkIfUsernameIdExists = async () => {
+  const getAllUsers = async () => {
     console.log("check if Emp Username already exists");
     await fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
@@ -117,15 +124,17 @@ function AddEmployee() {
       .catch((err) => alert(err));
   };
 
+  const alertMessageDisplay = (entry) => {
+    return entry;
+  };
+
+  const closeAlert = () => {
+    alertMessage.current.close();
+    addEmployeeForm.current.reset();
+  };
+
   const validateRequiredInputs = async (e) => {
     e.preventDefault();
-    console.log("add employee form submitted", e);
-    console.log(firstNameInput.current.value);
-
-    // if(firstNameInput && lastNameInput && userIDInput && usernameInput) {
-    console.log("Fields filled out");
-    // await checkIfEmpIdAlreadyExistsInDB();
-    await checkIfUsernameIdExists();
     console.log(allUsersArr);
     let userNameExistsArr = allUsersArr.filter(
       (userName) => userName.KashOperationsUsn === usernameInput.current.value
@@ -138,13 +147,23 @@ function AddEmployee() {
     console.log(usernameInput.current.value);
     // if employee id exists, the response will be a array containing the employee object
     if (userIdExistsArr.length !== 0) {
-      alert("User ID already exists. Choose a different ID number.");
+      setMessage(
+        alertMessageDisplay(
+          "User ID already exists. Choose a different ID number."
+        )
+      );
+      alertMessage.current.showModal();
       return;
     } else if (userNameExistsArr.length !== 0) {
-      alert("Username already exists. Choose a different username.");
+      setMessage(
+        alertMessageDisplay(
+          "Username already exists. Choose a different username."
+        )
+      );
+      alertMessage.current.showModal();
       return;
     } else {
-      addUser();
+      // addUser();
       onModalOpen();
       addEmployeeForm.current.reset();
     }
@@ -152,6 +171,7 @@ function AddEmployee() {
 
   return (
     <div>
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />;
       <dialog
         className="database-submit-dialog"
         id="database-submit-dialog"
@@ -203,7 +223,6 @@ function AddEmployee() {
           </div>
         </form>
       </dialog>
-
       <main className="add-employee-page__main-section max-width--main-container">
         <h1 className="add-employee__page-title form-page-title--lg-1">
           Add an Employee
