@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { domain } from "../assets/api/apiEndpoints";
+import AlertMessage from "./AlertMessage";
 import "../assets/styles/Styles.css";
 import "../assets/styles/EditEmployeeInfo.css";
 
-function EditEmployeeInfo() {
+function EditEmployeeInfo(props) {
+  let isAdminLocal = window.localStorage.getItem("adminLevel");
   let selectedEmployeeFromDropdown;
   let initialAdminOption = [{ AdminLevel: "" }];
   let adminLevelDesignation = useRef();
@@ -15,27 +17,25 @@ function EditEmployeeInfo() {
   let employeeLocationState = useRef();
   let employeeLocationCountry = useRef();
   let editUserForm = useRef();
-  let adminOptionChoice = useRef();
+  let alertMessage = useRef();
+  let editUserPopup = useRef();
   let [isEmployeeAdmin, setEmployeeAsAdmin] = useState(false);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
   let [allUsersArr, setAllUsers] = useState([]);
   let [selectedCurrentUser, setSelectedCurrentUser] = useState({});
-
-  const hideLightbox = () => {
-    document.getElementsByClassName("lightboxbackdrop")[0].style.display =
-      "none";
-  };
-
-  // useEffect to fetch data from KASH_OPERATIONS_EMPLOYEE_TABLE for the employee select dropdown that triggers onNameChange function
-  // fetch from Employee table and check if employee is Admin level
-  // if Admin level user, check the admin checkbox
+  let [message, setMessage] = useState("");
 
   useEffect(() => {
     getAllUsers();
   }, [selectedCurrentUser]);
 
+  // hide popup for editting user details
+  const hideLightbox = () => {
+    editUserPopup.current.style.display = "none";
+    editUserForm.current.reset();
+  };
+
   const getAllUsers = () => {
-    console.log("Use effect to query user table");
     fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
@@ -54,6 +54,7 @@ function EditEmployeeInfo() {
 
   const setAdminOption = (selectedUser) => {
     console.log(selectedUser);
+
     for (let i = 0; i < adminLevelDesignation.current.childNodes.length; i++) {
       let adminSelectionChoice =
         adminLevelDesignation.current.childNodes[i].getAttribute("value");
@@ -68,10 +69,8 @@ function EditEmployeeInfo() {
       }
     }
   };
-  const onNameChange = async (e, i) => {
-    // fetch employee name from database
-    // populate the input fields with relevant data from api call
 
+  const onNameChange = async (e, i) => {
     console.log("Employee name dropdown to select for update or delete");
     let selectedEmployeeId =
       e.target.children[e.target.selectedIndex].getAttribute("data-employeeid");
@@ -80,7 +79,13 @@ function EditEmployeeInfo() {
       return selectedEmployeeId === user.EmpId;
     });
     setUserDetailInputs(selectedEmployeeFromDropdown);
-    setAdminOption(selectedEmployeeFromDropdown);
+
+    if (selectedEmployeeFromDropdown.AdminLevel === "Super Admin") {
+      setAdminOption(selectedEmployeeFromDropdown);
+    } else {
+      adminLevelDesignation.current.value =
+        selectedEmployeeFromDropdown[0].AdminLevel;
+    }
     setSelectedCurrentUser(...selectedEmployeeFromDropdown);
   };
 
@@ -186,11 +191,22 @@ function EditEmployeeInfo() {
     editUserForm.current.reset();
     setAdminOption(initialAdminOption);
     setSelectedCurrentUser({});
-    alert("User Deleted");
+
+    setMessage(alertMessageDisplay("User Deleted"));
+    alertMessage.current.showModal();
+  };
+
+  const alertMessageDisplay = (entry) => {
+    return entry;
+  };
+  const closeAlert = () => {
+    alertMessage.current.close();
+    editUserForm.current.reset();
   };
 
   return (
-    <div className="lightboxbackdrop">
+    <div className="lightboxbackdrop" ref={editUserPopup}>
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />;
       <div className="lightbox" style={{ overflow: "scroll" }}>
         <span onClick={hideLightbox} className="x-button">
           X
@@ -229,22 +245,33 @@ function EditEmployeeInfo() {
                       })}
                   </select>
                 </label>
-                {/* <form ref={addEmployeeForm}> */}
+
                 <div className="employee-info-form">
                   <div className="left_group_inputs">
                     <br />
                     <label htmlFor="admin-level-designation">Admin Level</label>
-                    <select
-                      name="admin-level-designation"
-                      id="admin-designation"
-                      className="admin-designation"
-                      ref={adminLevelDesignation}
-                    >
-                      <option value=""></option>
-                      <option value="SuperAdmin">Super Admin</option>
-                      <option value="Admin">Admin</option>
-                      <option value="BasicUser">Basic User</option>
-                    </select>
+                    {console.log(isAdminLocal)}
+                    {isAdminLocal === '"Super Admin"' ? (
+                      <select
+                        name="admin-level-designation"
+                        id="admin-designation"
+                        className="admin-designation"
+                        ref={adminLevelDesignation}
+                      >
+                        <option value=""></option>
+                        <option value="Super Admin">Super Admin</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Basic User">Basic User</option>
+                      </select>
+                    ) : (
+                      <input
+                        name="admin-level-designation"
+                        id="admin-designation"
+                        className="admin-designation"
+                        readOnly
+                        ref={adminLevelDesignation}
+                      />
+                    )}
                     <br />
                     {/* <label htmlFor="userName">
                 Username

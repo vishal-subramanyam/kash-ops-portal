@@ -25,6 +25,7 @@ function App() {
     window.localStorage.getItem("loggedInUserInfo")
   );
   let isAdminLocal = window.localStorage.getItem("adminLevel");
+
   let navigate = useNavigate();
 
   const userLogout = () => {

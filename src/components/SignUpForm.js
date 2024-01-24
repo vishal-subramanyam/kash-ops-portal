@@ -70,7 +70,7 @@ function SignUpForm(props) {
             EmpLocationCity: "",
             EmpLocationState: "",
             EmpLocationCountry: "",
-            AdminLevel: "BasicUser",
+            AdminLevel: "Basic User",
             KashOperationsUsn: usernameInput.current.value,
             EmployeeAddress: "",
             EmployeeZipCode: "",

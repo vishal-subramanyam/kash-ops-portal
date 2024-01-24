@@ -513,7 +513,7 @@ function UpdateTimesheet(props) {
                   ref={selectedEmployee}
                 >
                   <option value="">- Choose an Employee -</option>
-                  {props.admin !== '"BasicUser"' ? (
+                  {props.admin !== '"Basic User"' ? (
                     allEmployeesArr.map((employee, i) => {
                       return (
                         <option key={i} data-employeeid={employee.EmpId}>

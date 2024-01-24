@@ -59,7 +59,7 @@ function EditCompanyAdmin() {
         console.log(res);
 
         let admins = res.data.filter((user) => {
-          return user.AdminLevel !== "BasicUser";
+          return user.AdminLevel !== "Basic User";
         });
         console.log(admins);
         setAllAdmins(admins);

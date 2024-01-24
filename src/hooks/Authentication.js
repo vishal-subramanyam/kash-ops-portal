@@ -68,8 +68,8 @@ export function useAuth() {
               // save logged in user first name to state
               // get the first name of the logged in user by getting emp id from the response of the logged in fetch
               setLoggedInUser(userArrObject[0]);
-              let basicUserString = "BasicUser";
-              if (data.IsAdmin === "Admin" || data.IsAdmin === "SuperAdmin") {
+              let basicUserString = "Basic User";
+              if (data.IsAdmin === "Admin" || data.IsAdmin === "Super Admin") {
                 setIsAdmin(data.IsAdmin);
               } else {
                 setIsAdmin(basicUserString);

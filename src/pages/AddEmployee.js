@@ -5,8 +5,7 @@ import { domain } from "../assets/api/apiEndpoints";
 import "../assets/api/apiEndpoints.js";
 import "../assets/styles/HomePage.css";
 
-function AddEmployee() {
-  //   // input value variables
+function AddEmployee(props) {
   let [message, setMessage] = useState("");
   let adminLevelDesignation = useRef();
   let addEmployeeForm = useRef();
@@ -118,9 +117,6 @@ function AddEmployee() {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log("response from the users fetch", res);
-        console.log(usernameInput.current.value);
-        console.log(userIDInput.current.value);
         setAllUsersArr(res.data);
       })
       .catch((err) => {
@@ -326,20 +322,31 @@ function AddEmployee() {
                   ref={usernameInput}
                 />
               </label>
-              <div className="admin-designation-container checkBoxLabel">
+              <div className="admin-designation-container">
                 <span className="employee--form--id-label">Admin Level</span>
-                <select
-                  name="admin-level-designation"
-                  id="admin-designation"
-                  className="admin-designation"
-                  ref={adminLevelDesignation}
-                  required
-                >
-                  <option value=""></option>
-                  <option value="SuperAdmin">Super Admin</option>
-                  <option value="Admin">Admin</option>
-                  <option value="BasicUser">Basic User</option>
-                </select>
+                {props.admin === '"Super Admin"' ? (
+                  <select
+                    name="admin-level-designation"
+                    id="admin-designation"
+                    className="admin-designation"
+                    ref={adminLevelDesignation}
+                    required
+                  >
+                    <option value=""></option>
+                    <option value="Super Admin">Super Admin</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Basic User">Basic User</option>
+                  </select>
+                ) : (
+                  <input
+                    name="admin-level-designation"
+                    id="admin-designation"
+                    className="admin-designation"
+                    value="Basic User"
+                    ref={adminLevelDesignation}
+                    required
+                  />
+                )}
               </div>
             </div>
           </div>
