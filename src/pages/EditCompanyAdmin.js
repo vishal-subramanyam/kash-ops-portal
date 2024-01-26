@@ -1,11 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
+import AlertMessage from "../components/AlertMessage";
 import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
 import { domain } from "../assets/api/apiEndpoints";
 
-function EditCompanyAdmin() {
+function EditCompanyAdmin(props) {
   let companyRemoveAdminForm = useRef();
   let companyAddAdminForm = useRef();
+  let alertMessage = useRef();
+  let [message, setMessage] = useState("");
   let [allAdmins, setAllAdmins] = useState([]);
   let [allCompanies, setAllCompanies] = useState([]);
   let [allCompanyAdmins, setAllCompanyAdmins] = useState([]);
@@ -40,10 +43,16 @@ function EditCompanyAdmin() {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         setAllCompanies(res.data);
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to load companies from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
   };
   const getAllAdmins = () => {
     fetch(`${domain}GenericResultBuilderService/buildResults`, {
@@ -56,34 +65,55 @@ function EditCompanyAdmin() {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
-
         let admins = res.data.filter((user) => {
           return user.AdminLevel !== "Basic User";
         });
-        console.log(admins);
         setAllAdmins(admins);
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to load admin users from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
   };
 
-  const getAllCompanyAdmins = () => {
-    fetch(`${domain}GenericResultBuilderService/buildResults`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        _keyword_: "KASH_OPERATIONS_COMPANY_ADMIN_ROLE_TABLE",
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        setAllCompanyAdmins(res.data);
-      })
-      .catch((err) => alert(err));
+  const getAllCompanyAdmins = async () => {
+    try {
+      let res = await fetch(
+        `${domain}GenericResultBuilderService/buildResults`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            _keyword_: "KASH_OPERATIONS_COMPANY_ADMIN_ROLE_TABLE",
+          }),
+        }
+      );
+      let data = await res.json();
+
+      if (props.loggedInUser.AdminLevel === "Super Admin") {
+        console.log("logged in user is Super Admin");
+        setAllCompanyAdmins(data.data);
+      } else {
+        let adminCompanies = data.data.filter((company) => {
+          return company.EmpId === props.loggedInUser.EmpId;
+        });
+        setAllCompanyAdmins(adminCompanies);
+      }
+    } catch (error) {
+      setMessage(
+        alertMessageDisplay(
+          `Unable to load company admins from database. Error: ${error}`
+        )
+      );
+      alertMessage.current.showModal();
+    }
   };
 
   const selectCompanyToAddAdmin = (e) => {
@@ -108,12 +138,11 @@ function EditCompanyAdmin() {
 
   const addAdminToCompany = async (e) => {
     e.preventDefault();
-    console.log("add admin to company");
-    console.log(adminUserIdToAddToCompany);
-    console.log(companyIdToAddAdmin);
-
     if (!adminUserIdToAddToCompany || !companyIdToAddAdmin) {
-      alert("Please select both a company and admin.");
+      setMessage(
+        alertMessageDisplay("Please select both a company and admin.")
+      );
+      alertMessage.current.showModal();
       return;
     }
 
@@ -127,9 +156,12 @@ function EditCompanyAdmin() {
       console.log(existingUserAndCompanyRecord);
 
       if (selectedUserAndCompany === existingUserAndCompanyRecord) {
-        alert(
-          `${adminFullNameToAddToCompany} is already and admin for ${companyNameToAddAdmin}`
+        setMessage(
+          alertMessageDisplay(
+            `${adminFullNameToAddToCompany} is already and admin for ${companyNameToAddAdmin}`
+          )
         );
+        alertMessage.current.showModal();
         return;
       }
     }
@@ -156,20 +188,18 @@ function EditCompanyAdmin() {
           }),
         }
       );
-      const data = await response.json();
-      // enter you logic when the fetch is successful
-      console.log("Added to company admin role table", data);
       let addMsg =
         adminFullNameToAddToCompany +
         " was successfully added as an Admin to " +
         companyNameToAddAdmin +
         "!";
-
-      alert(addMsg);
+      setMessage(alertMessageDisplay(`${addMsg}`));
+      alertMessage.current.showModal();
     } catch (error) {
-      // enter your logic for when there is an error (ex. error toast)
-      console.log(error);
-      alert("Unable to add admin to company.");
+      setMessage(
+        alertMessageDisplay(`Unable to add admin to company. Error: ${error}`)
+      );
+      alertMessage.current.showModal();
     }
     getAllCompanyAdmins();
     companyAddAdminForm.current.reset();
@@ -222,7 +252,12 @@ function EditCompanyAdmin() {
     e.preventDefault();
     console.log("remove selected admin from selected company");
     if (!companyIdToRemoveAdmin || !adminEmpIdToRemoveFromCompany) {
-      alert("Please select both a company and admin for removal.");
+      setMessage(
+        alertMessageDisplay(
+          "Please select both a company and admin for removal."
+        )
+      );
+      alertMessage.current.showModal();
       return;
     }
     try {
@@ -246,20 +281,22 @@ function EditCompanyAdmin() {
           }),
         }
       );
-      const data = await response.json();
 
-      console.log("Deleted company admin role table", data);
       let removeMsg =
         adminFullNameToRemove +
         " was successfully removed as an Admin from " +
         companyNameToRemove +
         "!";
 
-      alert(removeMsg);
+      setMessage(alertMessageDisplay(`${removeMsg}`));
+      alertMessage.current.showModal();
     } catch (error) {
-      // enter your logic for when there is an error (ex. error toast)
-      console.log(error);
-      alert("Unable to remove admin from company.");
+      setMessage(
+        alertMessageDisplay(
+          `Unable to remove admin from company. Error: ${error}`
+        )
+      );
+      alertMessage.current.showModal();
     }
     companyRemoveAdminForm.current.reset();
     setAllAdminsPerCompany([]);
@@ -270,8 +307,17 @@ function EditCompanyAdmin() {
     getAllCompanyAdmins();
   };
 
+  const alertMessageDisplay = (entry) => {
+    return entry;
+  };
+
+  const closeAlert = () => {
+    alertMessage.current.close();
+  };
+
   return (
     <div>
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
       <dialog className="database-submit-dialog" id="database-submit-dialog">
         <form method="dialog">
           <div id="database-submit-dialog--text-content-holder">
@@ -330,6 +376,15 @@ function EditCompanyAdmin() {
                     className="attach_contact_to_project--company_name--selection"
                     onChange={selectCompanyToAddAdmin}
                   >
+                    {console.log("All companies: ", allCompanies)}
+                    {console.log("All company admins: ", allCompanyAdmins)}
+                    {console.log(
+                      allCompanies.filter((company) => {
+                        allCompanyAdmins.map((admin) => {
+                          return company.CompanyId === admin.CompanyId;
+                        });
+                      })
+                    )}
                     <option value="">- Select a Company -</option>
                     {allCompanies.map((company, i) => {
                       return (

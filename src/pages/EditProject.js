@@ -1,10 +1,5 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
+import AlertMessage from "../components/AlertMessage";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faTrashCan } from "@fortawesome/free-solid-svg-icons";
@@ -23,6 +18,8 @@ function EditProject() {
   let newTaskName = useRef();
   let editAddSubCat = useRef();
   let taskSegment1 = useRef();
+  let alertMessage = useRef();
+  let [message, setMessage] = useState("");
   let [selectedCompanyIdState, setSelectedCompanyIdState] = useState("");
   let [newSubCategory, setNewSubCategory] = useState([]);
   let [selectedCompanyName, setSelectedCompanyName] = useState("");
@@ -93,7 +90,14 @@ function EditProject() {
         // set state array without duplicate company values
         setAllCompaniesRemoveDuplicateArr(removeDuplicateCompany);
       })
-      .catch((err) => alert("Unable to get companies from database.", err));
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to get companies from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
   };
 
   const selectCompanyLoadProjectDescription = (e) => {
@@ -139,9 +143,14 @@ function EditProject() {
         console.log(res.data);
         setAllSubCategories(res.data);
       })
-      .catch((err) =>
-        alert("Unable to get project subcategories from database.", err)
-      );
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to get project subcategories from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
   };
 
   const populateSubAssignmentsWorkArea = (e) => {
@@ -213,9 +222,10 @@ function EditProject() {
       newWorkAreaIdInput.current.value = "";
       closeEditWorkArea();
     } catch (error) {
-      // enter your logic for when there is an error (ex. error toast)
-      console.log(error);
-      alert("Unable to add sub category.");
+      setMessage(
+        alertMessageDisplay(`Unable to add sub category. Error: ${error}`)
+      );
+      alertMessage.current.showModal();
     }
   };
 
@@ -227,7 +237,8 @@ function EditProject() {
 
     for (let input of requiredInputs) {
       if (input.current.value === "") {
-        alert("Fill out all of the above fields");
+        setMessage(alertMessageDisplay("Fill out all of the above fields."));
+        alertMessage.current.showModal();
         return;
       }
     }
@@ -237,7 +248,8 @@ function EditProject() {
         consolidatedSubCategories[i].SubTaskTitle ===
         newWorkAreaInput.current.value
       ) {
-        alert("Sub Category Name already exists.");
+        setMessage(alertMessageDisplay("Sub Category Name already exists."));
+        alertMessage.current.showModal();
         newWorkAreaInput.current.value = "";
         newWorkAreaIdInput.current.value = "";
         return;
@@ -245,7 +257,8 @@ function EditProject() {
         consolidatedSubCategories[i].ProjectSubTaskId ===
         newWorkAreaIdInput.current.value
       ) {
-        alert("Sub Category ID already exists.");
+        setMessage(alertMessageDisplay("Sub Category ID already exists."));
+        alertMessage.current.showModal();
         newWorkAreaInput.current.value = "";
         newWorkAreaIdInput.current.value = "";
         return;
@@ -255,7 +268,10 @@ function EditProject() {
         consolidatedSubCategories[i].ProjectSubTaskId ===
           newWorkAreaIdInput.current.value
       ) {
-        alert("Sub Category Name and ID already exist.");
+        setMessage(
+          alertMessageDisplay("Sub Category Name and ID already exist.")
+        );
+        alertMessage.current.showModal();
         newWorkAreaInput.current.value = "";
         newWorkAreaIdInput.current.value = "";
         return;
@@ -264,7 +280,13 @@ function EditProject() {
     // show component to run function to save new sub cat record
     addProjectSubCategory();
   };
+  const alertMessageDisplay = (entry) => {
+    return entry;
+  };
 
+  const closeAlert = () => {
+    alertMessage.current.close();
+  };
   return (
     <div className="add-sub-assignment-page--body">
       <main className="add-sub-assignment__main-section max-width--main-container">
@@ -584,6 +606,8 @@ function EditProject() {
           </dialog> */}
         </div>
       </main>
+
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
     </div>
   );
 }

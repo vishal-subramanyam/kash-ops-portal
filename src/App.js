@@ -34,13 +34,13 @@ function App() {
   };
   return (
     <div className="App">
-      {console.log("USER from useAuth", user)}
+      {/* {console.log("USER from useAuth", user)}
       {console.log("logged in user info from useAuth", loggedInUser)}
       {console.log("admin from useAuth", isAdmin)}
 
       {console.log("USER", username)}
       {console.log("logged in user info", loggedInUserLocal)}
-      {console.log("admin", isAdminLocal)}
+      {console.log("admin", isAdminLocal)} */}
 
       {/* hide button if username in local storage is "null" because value in local storage is a string */}
       {username !== "null" ? (
@@ -61,9 +61,9 @@ function App() {
         <Route
           path="/update-password"
           element={
-            // <RequireAuth>
-            <UpdatePassword />
-            // </RequireAuth>
+            <RequireAuth>
+              <UpdatePassword />
+            </RequireAuth>
           }
         />
         <Route
@@ -138,7 +138,10 @@ function App() {
           path="/edit-company-admin"
           element={
             <RequireAuth>
-              <EditCompanyAdmin />
+              <EditCompanyAdmin
+                loggedInUser={loggedInUserLocal}
+                admin={isAdminLocal}
+              />
             </RequireAuth>
           }
         />

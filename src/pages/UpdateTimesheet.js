@@ -46,7 +46,7 @@ function UpdateTimesheet(props) {
   let [selectedProjectCompanyNameState, setSelectedProjectCompanyNameState] =
     useState("");
   let [selectedProjectSOWIDState, setSelectedProjectSOWIDState] = useState("");
-  let [selectedEmployeeIdState, setSelectedEmployeeIdState] = useState(0);
+  let [selectedEmployeeIdState, setSelectedEmployeeIdState] = useState();
   let [selectedSubAssignmentNameState, setSelectedSubAssignmentNameState] =
     useState("");
   // let [taskBySubAssignmentState, setTaskBySubAssignmentState] = useState("");
@@ -72,6 +72,8 @@ function UpdateTimesheet(props) {
   // let basicUserInfo = allEmployeesArr.filter((user) => {
   //   return user.EmpId === props.loggedInUser.EmpId;
   // });
+
+  // create variable for logged in user details to use in conditional display of employee dropdown
   let basicUserInfo = props.loggedInUser;
 
   useEffect(() => {
@@ -271,13 +273,32 @@ function UpdateTimesheet(props) {
     getTasksBySubAssignment(selectedSubAssignmentId);
   };
 
+  const validateRequiredInputs = (...inputs) => {
+    for (let input of inputs) {
+      console.log(input);
+      if (input === "") {
+        setMessage(alertMessageDisplay("Fill out all of the above fields."));
+        alertMessage.current.showModal();
+        return;
+      }
+    }
+  };
+
   const addToStagingSheet = () => {
-    console.log(`${selectedEmployeeIdState} 
-    ${reportingPeriodStartDate.current.value} 
-    ${selectedProjectSOWIDState}
-    ${selectedProjectCompanyNameState} 
-    ${subAssignmentTask.current.value}
-    ${taskTicketNumber.current.value}`);
+    // console.log(`${selectedEmployeeIdState}
+    // ${reportingPeriodStartDate.current.value}
+    // ${selectedProjectSOWIDState}
+    // ${selectedProjectCompanyNameState}
+    // ${subAssignmentTask.current.value}
+    // ${taskTicketNumber.current.value}`);
+
+    // validateRequiredInputs(
+    //   selectedEmployeeIdState,
+    //   reportingPeriodStartDate.current.value,
+    //   selectedProjectSOWIDState,
+    //   selectedProjectCompanyNameState
+    // );
+
     if (
       selectedEmployeeIdState &&
       reportingPeriodStartDate.current.value &&
@@ -558,8 +579,6 @@ function UpdateTimesheet(props) {
                 >
                   Employee:
                 </label>
-                {console.log(basicUserInfo.EmpId)}
-
                 <select
                   className="employee-dropdown-input"
                   id="employee-dropdown-input"

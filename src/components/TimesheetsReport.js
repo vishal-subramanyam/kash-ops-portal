@@ -1,20 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import React, { useState, useRef, useEffect } from "react";
+import AlertMessage from "./AlertMessage";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Reports.css";
 
-function TimesheetsReport() {
+function TimesheetsReport(props) {
   const [allTimesheetRecords, setAllTimesheetRecords] = useState([]);
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     Billable: false,
     CompanyName: true,
-    EmpId: true,
+    EmpId: false,
+    FullName: true,
+    ProjectCategory: true,
     FridayHours: true,
     MondayHours: true,
     NonBillableReason: false,
     PeriodStartDate: true,
     SaturdayHours: true,
-    SowId: true,
+    SowId: false,
     SubAssignment: true,
     SubAssignmentSegment1: true,
     SubAssignmentSegment2: false,
@@ -26,12 +29,20 @@ function TimesheetsReport() {
     TuesdayHours: true,
     WednesdayHours: true,
   });
+  let alertMessage = useRef();
+  let [message, setMessage] = useState("");
 
   useEffect(() => {
-    getTimesheets();
+    if (props.loggedInUser.AdminLevel === "Super Admin") {
+      console.log("User is Super Admin");
+      getAllTimesheets();
+    } else {
+      console.log("User is basic or admin");
+      getTimesheetsByEmpId();
+    }
   }, []);
 
-  const getTimesheets = async () => {
+  const getAllTimesheets = async () => {
     await fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
@@ -48,12 +59,49 @@ function TimesheetsReport() {
         // save all timesheet records to state
         setAllTimesheetRecords(res.data);
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to timesheets from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
   };
 
-  const transformedRowsTS = allTimesheetRecords.map((item) => ({
-    idTS: item.TimesheetEntryId,
+  const getTimesheetsByEmpId = async () => {
+    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "TIMESHEETS_BY_COMPANY_ADMIN_TABLE",
+        EmpId: props.loggedInUser.EmpId,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res.data);
+        // save all timesheet records to state
+        setAllTimesheetRecords(res.data);
+      })
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to timesheets from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
+  };
+
+  const transformedRowsTS = allTimesheetRecords.map((item, i) => ({
+    idTS: i,
     Billable: item.Billable,
+    FullName: item.FullName,
+    ProjectCategory: item.ProjectCategory,
     SundayHours: item.SundayHours,
     SubAssignmentSegment2: item.SubAssignmentSegment2,
     SubAssignmentSegment1: item.SubAssignmentSegment1,
@@ -79,6 +127,8 @@ function TimesheetsReport() {
     "SubAssignmentSegment2",
     "NonBillableReason",
     "TimesheetStatusEntry",
+    "EmpId",
+    "SowId",
   ];
 
   //   const initialColumnVisibilityModel = Object.fromEntries(
@@ -91,9 +141,10 @@ function TimesheetsReport() {
 
   const customColumnOrder = [
     "idTS",
-    "EmpId",
     "PeriodStartDate",
-    "SowId",
+    "CompanyName",
+    "FullName",
+    "ProjectCategory",
     "SubAssignment",
     "SubAssignmentSegment1",
     "TicketNum",
@@ -105,7 +156,6 @@ function TimesheetsReport() {
     "SaturdayHours",
     "SundayHours",
     "Billable",
-    "CompanyName",
   ];
 
   const columnList = customColumnOrder.map((item) => ({
@@ -124,6 +174,14 @@ function TimesheetsReport() {
     (column) => columnVisibilityModel[column.field]
   );
 
+  const alertMessageDisplay = (entry) => {
+    return entry;
+  };
+
+  const closeAlert = () => {
+    alertMessage.current.close();
+  };
+
   return (
     <div>
       <h1 className="report-title"> KASH OPS TIMESHEETS </h1>
@@ -134,8 +192,12 @@ function TimesheetsReport() {
           getRowId={(row) => row.idTS}
           columnVisibilityModel={columnVisibilityModel}
           onColumnVisibilityModelChange={handleToggleColumnVisibility}
+          slots={{
+            toolbar: GridToolbar,
+          }}
         />
       </div>
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
     </div>
   );
 }

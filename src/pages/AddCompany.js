@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import AlertMessage from "../components/AlertMessage";
 import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
 import { domain } from "../assets/api/apiEndpoints";
@@ -19,6 +20,8 @@ function AddCompany() {
   let confirmModalCompanyId = useRef();
   let addCompanyForm = useRef();
   let companySubmitDialoguePopup = useRef();
+  let alertMessage = useRef();
+  let [message, setMessage] = useState("");
   // let [companyIdExistsArr, setCompanyIdExistsArr] = useState([]);
   let [allCompaniesArr, setAllCompaniesArr] = useState([]);
   // function to check if company id is already created
@@ -36,7 +39,14 @@ function AddCompany() {
         console.log(res);
         setAllCompaniesArr(res.data);
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to load companies from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
   }, []);
 
   // SHOW MODAL FOR NEWLY ADDED COMPANY INFO
@@ -51,7 +61,12 @@ function AddCompany() {
     if (typeof companySubmitDialoguePopup.current.showModal === "function") {
       companySubmitDialoguePopup.current.showModal();
     } else {
-      alert("Sorry, the <dialog> API is not supported by this browser.");
+      setMessage(
+        alertMessageDisplay(
+          "Sorry, the <dialog> API is not supported by this browser."
+        )
+      );
+      alertMessage.current.showModal();
     }
   };
 
@@ -98,13 +113,9 @@ function AddCompany() {
           }),
         }
       );
-      const data = await response.json();
-      // enter you logic when the fetch is successful
-      console.log("Added to Company table" + data);
     } catch (error) {
-      // enter your logic for when there is an error (ex. error toast)
-      console.log(error);
-      alert("Unable to add company.");
+      setMessage(alertMessageDisplay(`Unable to add company. Error: ${error}`));
+      alertMessage.current.showModal();
     }
   };
 
@@ -130,18 +141,27 @@ function AddCompany() {
     console.log(companyIdExistsArr);
     // if company id exists (the array length is not 0), set alert that company id exists
     if (companyIdExistsArr.length !== 0) {
-      alert("Company ID already exists.");
+      setMessage(alertMessageDisplay("Company ID already exists."));
+      alertMessage.current.showModal();
     } else {
       // else, add company to database
-      console.log("fetch to add company to database");
       fetchToAddCompany();
       onModalOpen();
       addCompanyForm.current.reset();
     }
   };
 
+  const alertMessageDisplay = (entry) => {
+    return entry;
+  };
+
+  const closeAlert = () => {
+    alertMessage.current.close();
+  };
+
   return (
     <div>
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
       <dialog
         class="database-submit-dialog"
         id="database-submit-dialog"

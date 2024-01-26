@@ -23,6 +23,10 @@ function LoginForm(props) {
     );
   };
 
+  const checkEmail = () => {
+    alert("Check email to continue to changing password.");
+  };
+
   return (
     <form method="post" className="login-form" ref={loginForm}>
       <h1 className="kash_operations_home--title login-heading">Login</h1>
@@ -58,9 +62,9 @@ function LoginForm(props) {
           />
         </label>
         <div className="login-form--change-password-link">
-          <Link to="/update-password">
-            <p>Forgot Password</p>
-          </Link>
+          {/* <Link to="/update-password"> */}
+          <p onClick={checkEmail}>Forgot Password</p>
+          {/* </Link> */}
         </div>
       </div>
       <button

@@ -5,7 +5,7 @@ import ProjectsReport from "../components/ProjectsReport";
 import TimesheetsReport from "../components/TimesheetsReport";
 import SubAssignmentsReport from "../components/SubAssignmentsReport";
 
-function ReportsHub() {
+function ReportsHub(props) {
   return (
     <>
       <header>
@@ -47,7 +47,7 @@ function ReportsHub() {
 
       <main>
         <ProjectsReport />
-        <TimesheetsReport />
+        <TimesheetsReport loggedInUser={props.loggedInUser} />
         <SubAssignmentsReport />
       </main>
     </>

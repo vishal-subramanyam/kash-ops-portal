@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import AlertMessage from "../components/AlertMessage";
 import { Link } from "react-router-dom";
 import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Styles.css";
@@ -27,11 +28,20 @@ function AddProject() {
   let confirmationCompanyName = useRef();
   let confirmationProjectType = useRef();
   let confirmationProjectSOWId = useRef();
+  let alertMessage = useRef();
+  let [message, setMessage] = useState("");
+  let [allCompanyAdminsArr, setAllCompanyAdminsArr] = useState([]);
   let [allProjectsArr, setAllProjectsArr] = useState([]);
   let [allCompaniesArr, setAllCompaniesArr] = useState([]);
 
   // useEffect to get (POST) companies from database and add to allCompanies state array
   useEffect(() => {
+    getCompanies();
+    getProjects();
+    getCompanyAdmins();
+  }, []);
+
+  const getCompanies = () => {
     fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
@@ -45,11 +55,17 @@ function AddProject() {
         console.log(res);
         setAllCompaniesArr(res.data);
       })
-      .catch((err) => alert(err));
-  }, []);
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to load companies from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
+  };
 
-  // useEffect to get (POST) project from database and add to allProjects state array
-  useEffect(() => {
+  const getProjects = () => {
     fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
@@ -65,8 +81,41 @@ function AddProject() {
         console.log(res);
         setAllProjectsArr(res.data);
       })
-      .catch((err) => alert(err));
-  }, []);
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to load projects from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
+  };
+
+  const getCompanyAdmins = () => {
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "KASH_OPERATIONS_COMPANY_ADMIN_ROLE_TABLE",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setAllCompanyAdminsArr(res.data);
+      })
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to load company admins from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
+  };
 
   // open project added confirmation modal
   const onModalOpen = () => {
@@ -83,7 +132,12 @@ function AddProject() {
     ) {
       confirmationSubmitDialoguePopup.current.showModal();
     } else {
-      alert("Sorry, the <dialog> API is not supported by this browser.");
+      setMessage(
+        alertMessageDisplay(
+          "Sorry, the <dialog> API is not supported by this browser."
+        )
+      );
+      alertMessage.current.showModal();
     }
   };
 
@@ -136,13 +190,9 @@ function AddProject() {
           }),
         }
       );
-      const data = await response.json();
-      // enter you logic when the fetch is successful
-      console.log("Added to project table" + data);
     } catch (error) {
-      // enter your logic for when there is an error (ex. error toast)
-      console.log(error);
-      alert(`Error adding project ${error}`);
+      setMessage(alertMessageDisplay(`Unable to add project. Error: ${error}`));
+      alertMessage.current.showModal();
     }
   };
 
@@ -170,14 +220,21 @@ function AddProject() {
     );
     checkIfSOWIdAlreadyExists();
     if (projectSOWIDEXistsArr.length !== 0) {
-      alert("Project SOW ID already exists.");
+      setMessage(alertMessageDisplay("Project SOW ID already exists."));
+      alertMessage.current.showModal();
     } else {
-      // else, add company to database
-      console.log("fetch to add project to database");
       fetchToAddProject();
       onModalOpen();
       addProjectForm.current.reset();
     }
+  };
+
+  const alertMessageDisplay = (entry) => {
+    return entry;
+  };
+
+  const closeAlert = () => {
+    alertMessage.current.close();
   };
 
   const validateRequiredInputs = () => {
@@ -187,6 +244,7 @@ function AddProject() {
   };
   return (
     <div>
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
       <dialog
         className="database-submit-dialog"
         id="database-submit-dialog"

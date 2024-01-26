@@ -66,12 +66,15 @@ function UpdatePassword() {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
-        alert("Password Updated");
+        setMessage(alertMessageDisplay("Password updated."));
+        alertMessage.current.showModal();
         navigate("/login");
       })
       .catch((error) => {
-        // enter your logic for when there is an error (ex. error toast)
-        alert("Unable to update password.", error);
+        setMessage(
+          alertMessageDisplay(`Unable to update password. Error: ${error}`)
+        );
+        alertMessage.current.showModal();
       });
   };
 
@@ -140,7 +143,7 @@ function UpdatePassword() {
           </h1>
 
           <div className="login-field">
-            <label className="login-form--input_label" htmlFor="password-input">
+            <label className="login-form--input_label" htmlFor="username-input">
               <p className="login-form--username-label">Username</p>
               <input
                 type="text"
@@ -154,7 +157,7 @@ function UpdatePassword() {
           </div>
           <div className="login-field">
             <label className="login-form--input_label" htmlFor="password-input">
-              <p className="login-form--username-label">Password</p>
+              <p className="login-form--password-label">Password</p>
               <input
                 type="password"
                 className="login-input"
