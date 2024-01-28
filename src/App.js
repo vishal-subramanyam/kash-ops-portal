@@ -106,7 +106,10 @@ function App() {
           path="/clients-hub"
           element={
             <RequireAuth>
-              <ClientsHub />
+              <ClientsHub
+                loggedInUser={loggedInUserLocal}
+                admin={isAdminLocal}
+              />
             </RequireAuth>
           }
         />

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "../assets/styles/Styles.css";
 import "../assets/styles/HomePage.css";
 
-function ClientsHub() {
+function ClientsHub(props) {
   // on page load
   //  Determine if logged in user is Admin level
   return (
@@ -111,12 +111,17 @@ function ClientsHub() {
             >
               Edit Company Contacts
             </a> */}
-            <Link
-              to="/edit-company-admin"
-              class="edit-company_admin-link hub_page--secondary-action-link client_hub--secondary-action-link"
-            >
-              Edit Company Admins
-            </Link>
+            {console.log(props.loggedInUser)}
+            {props.loggedInUser.AdminLevel === "Super Admin" ? (
+              <Link
+                to="/edit-company-admin"
+                class="edit-company_admin-link hub_page--secondary-action-link client_hub--secondary-action-link"
+              >
+                Edit Company Admins
+              </Link>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>

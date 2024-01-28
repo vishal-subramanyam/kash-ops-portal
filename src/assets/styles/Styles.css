@@ -2174,3 +2174,22 @@ Specify # of total sub-levels?
   background-color: #842029 !important;
   color: #f8d7da !important;
 }
+
+.success-modal-container {
+  position: absolute;
+  border: none;
+  border-radius: 1rem;
+  padding: 1rem 1.2rem;
+  background-color: #a3cfbb;
+  color: #0a3622;
+  font-weight: 400;
+  margin: auto;
+  opacity: 0;
+  width: clamp(300px, 50vw, 780px);
+  min-width: 40vw;
+}
+
+.success-modal-button {
+  background-color: #0a3622 !important;
+  color: #a3cfbb !important;
+}

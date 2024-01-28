@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import AlertMessage from "../components/AlertMessage";
+import SuccessMessage from "../components/AlertMessage";
 import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
 import { domain } from "../assets/api/apiEndpoints";
@@ -8,6 +9,7 @@ function EditCompanyAdmin(props) {
   let companyRemoveAdminForm = useRef();
   let companyAddAdminForm = useRef();
   let alertMessage = useRef();
+  let successMessage = useRef();
   let [message, setMessage] = useState("");
   let [allAdmins, setAllAdmins] = useState([]);
   let [allCompanies, setAllCompanies] = useState([]);
@@ -193,8 +195,8 @@ function EditCompanyAdmin(props) {
         " was successfully added as an Admin to " +
         companyNameToAddAdmin +
         "!";
-      setMessage(alertMessageDisplay(`${addMsg}`));
-      alertMessage.current.showModal();
+      setMessage(successMessageDisplay(`${addMsg}`));
+      successMessage.current.showModal();
     } catch (error) {
       setMessage(
         alertMessageDisplay(`Unable to add admin to company. Error: ${error}`)
@@ -282,14 +284,14 @@ function EditCompanyAdmin(props) {
         }
       );
 
-      let removeMsg =
+      let msg =
         adminFullNameToRemove +
         " was successfully removed as an Admin from " +
         companyNameToRemove +
         "!";
 
-      setMessage(alertMessageDisplay(`${removeMsg}`));
-      alertMessage.current.showModal();
+      setMessage(successMessageDisplay(`${msg}`));
+      successMessage.current.showModal();
     } catch (error) {
       setMessage(
         alertMessageDisplay(
@@ -311,6 +313,10 @@ function EditCompanyAdmin(props) {
     return entry;
   };
 
+  const successMessageDisplay = (entry) => {
+    return entry;
+  };
+
   const closeAlert = () => {
     alertMessage.current.close();
   };
@@ -318,6 +324,11 @@ function EditCompanyAdmin(props) {
   return (
     <div>
       <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
+      <SuccessMessage
+        ref={successMessage}
+        close={closeAlert}
+        message={message}
+      />
       <dialog className="database-submit-dialog" id="database-submit-dialog">
         <form method="dialog">
           <div id="database-submit-dialog--text-content-holder">
