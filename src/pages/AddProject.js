@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Styles.css";
 
-function AddProject() {
+function AddProject(props) {
   // let projectNameInput = useRef();
   let projectType;
   let projectSOWId;
@@ -36,9 +36,14 @@ function AddProject() {
 
   // useEffect to get (POST) companies from database and add to allCompanies state array
   useEffect(() => {
-    getCompanies();
+    if (props.loggedInUser.AdminLevel === "Super Admin") {
+      getCompanies();
+    } else {
+      getCompaniesByCompAdmin();
+    }
+
     getProjects();
-    getCompanyAdmins();
+    // getCompanyAdmins();
   }, []);
 
   const getCompanies = () => {
@@ -49,6 +54,33 @@ function AddProject() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ _keyword_: "KASH_OPERATIONS_COMPANY_TABLE" }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setAllCompaniesArr(res.data);
+      })
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to load companies from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
+  };
+
+  const getCompaniesByCompAdmin = () => {
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "COMPANY_BY_COMPANY_ADMIN_TABLE",
+        EmpId: props.loggedInUser.EmpId,
+      }),
     })
       .then((res) => res.json())
       .then((res) => {
@@ -91,31 +123,31 @@ function AddProject() {
       });
   };
 
-  const getCompanyAdmins = () => {
-    fetch(`${domain}GenericResultBuilderService/buildResults`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        _keyword_: "KASH_OPERATIONS_COMPANY_ADMIN_ROLE_TABLE",
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        setAllCompanyAdminsArr(res.data);
-      })
-      .catch((err) => {
-        setMessage(
-          alertMessageDisplay(
-            `Unable to load company admins from database. Error: ${err}`
-          )
-        );
-        alertMessage.current.showModal();
-      });
-  };
+  // const getCompanyAdmins = () => {
+  //   fetch(`${domain}GenericResultBuilderService/buildResults`, {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json, text/plain, */*",
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       _keyword_: "KASH_OPERATIONS_COMPANY_ADMIN_ROLE_TABLE",
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       console.log(res);
+  //       setAllCompanyAdminsArr(res.data);
+  //     })
+  //     .catch((err) => {
+  //       setMessage(
+  //         alertMessageDisplay(
+  //           `Unable to load company admins from database. Error: ${err}`
+  //         )
+  //       );
+  //       alertMessage.current.showModal();
+  //     });
+  // };
 
   // open project added confirmation modal
   const onModalOpen = () => {

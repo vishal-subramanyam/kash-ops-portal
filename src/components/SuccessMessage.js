@@ -28,4 +28,4 @@ const successMessage = forwardRef(function (props, ref) {
   );
 });
 
-export default alertMessage;
+export default successMessage;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { domain } from "../assets/api/apiEndpoints";
 import AlertMessage from "./AlertMessage";
+import SuccessMessage from "./SuccessMessage";
 import "../assets/styles/Styles.css";
 import "../assets/styles/EditEmployeeInfo.css";
 
@@ -19,6 +20,7 @@ function EditEmployeeInfo(props) {
   let employeeLocationCountry = useRef();
   let editUserForm = useRef();
   let alertMessage = useRef();
+  let successMessage = useRef();
   let editUserPopup = useRef();
   let [isEmployeeAdmin, setEmployeeAsAdmin] = useState(false);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
@@ -144,8 +146,8 @@ function EditEmployeeInfo(props) {
         EmpId: selectedCurrentUser.EmpId,
         AdminLevel: adminLevelDesignation.current.value,
       }));
-      setMessage(alertMessageDisplay("User Updated."));
-      alertMessage.current.showModal();
+      setMessage(successMessageDisplay("User Updated."));
+      successMessage.current.showModal();
     } catch (error) {
       setMessage(alertMessageDisplay(`Unable to update user. Error: ${error}`));
       alertMessage.current.showModal();
@@ -176,8 +178,8 @@ function EditEmployeeInfo(props) {
           }),
         }
       );
-      setMessage(alertMessageDisplay("User Deleted"));
-      alertMessage.current.showModal();
+      setMessage(successMessageDisplay("User Deleted"));
+      successMessage.current.showModal();
     } catch (error) {
       setMessage(alertMessageDisplay(`Unable to delete user. Error: ${error}`));
       alertMessage.current.showModal();
@@ -191,14 +193,26 @@ function EditEmployeeInfo(props) {
   const alertMessageDisplay = (entry) => {
     return entry;
   };
+
+  const successMessageDisplay = (entry) => {
+    return entry;
+  };
+
   const closeAlert = () => {
     alertMessage.current.close();
+    successMessage.current.close();
+    usernameDisplay.current.innerHTML = "";
     editUserForm.current.reset();
   };
 
   return (
     <div className="lightboxbackdrop" ref={editUserPopup}>
       <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
+      <SuccessMessage
+        ref={successMessage}
+        close={closeAlert}
+        message={message}
+      />
       <div className="lightbox" style={{ overflow: "scroll" }}>
         <span onClick={hideLightbox} className="x-button">
           X
