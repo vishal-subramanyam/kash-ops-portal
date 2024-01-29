@@ -42,8 +42,8 @@ function AddProject(props) {
       getCompaniesByCompAdmin();
     }
 
+    // load projects to make sure that duplicate SOW IDs are not created
     getProjects();
-    // getCompanyAdmins();
   }, []);
 
   const getCompanies = () => {

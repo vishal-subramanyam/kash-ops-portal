@@ -136,7 +136,10 @@ function App() {
           path="/edit-project"
           element={
             <RequireAuth>
-              <EditProject />
+              <EditProject
+                loggedInUser={loggedInUserLocal}
+                admin={isAdminLocal}
+              />
             </RequireAuth>
           }
         />

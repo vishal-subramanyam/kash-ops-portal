@@ -62,7 +62,7 @@ function TimesheetsReport(props) {
       .catch((err) => {
         setMessage(
           alertMessageDisplay(
-            `Unable to timesheets from database. Error: ${err}`
+            `Unable to load timesheets from database. Error: ${err}`
           )
         );
         alertMessage.current.showModal();
@@ -90,7 +90,7 @@ function TimesheetsReport(props) {
       .catch((err) => {
         setMessage(
           alertMessageDisplay(
-            `Unable to timesheets from database. Error: ${err}`
+            `Unable to load timesheets from database. Error: ${err}`
           )
         );
         alertMessage.current.showModal();

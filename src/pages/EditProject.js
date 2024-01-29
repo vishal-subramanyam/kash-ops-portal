@@ -8,7 +8,7 @@ import { domain } from "../assets/api/apiEndpoints";
 import ProjectSubCategory from "../components/ProjectSubCategory";
 import SaveNewSubCategory from "../components/SaveNewSubCategory";
 
-function EditProject() {
+function EditProject(props) {
   let companyName = useRef();
   let newWorkAreaInput = useRef();
   let newWorkAreaIdInput = useRef();
@@ -50,8 +50,12 @@ function EditProject() {
   //   on page load, fetch companies from DB
   useEffect(() => {
     console.log("use effect to get all companies and projects");
-    getAllCompaniesProjects();
-    // getProjectAndSubcategories();
+
+    if (props.loggedInUser.AdminLevel === "Super Admin") {
+      getAllCompaniesProjects();
+    } else {
+      getAllCompaniesProjectsByCompAdmin();
+    }
   }, []);
 
   useEffect(() => {
@@ -77,6 +81,43 @@ function EditProject() {
       .then((res) => {
         // console.log(res.data);
         // set state array that queries PROJECTS_AND_COMPANY_INFO_TABLE
+        setAllCompaniesProjectsArr(res.data);
+
+        // filter all companies and projects array to remove duplicate company values
+        let removeDuplicateCompany = Object.values(
+          res.data.reduce((c, e) => {
+            if (!c[e.CompanyName]) c[e.CompanyName] = e;
+            return c;
+          }, {})
+        );
+        // console.log(removeDuplicateCompany);
+        // set state array without duplicate company values
+        setAllCompaniesRemoveDuplicateArr(removeDuplicateCompany);
+      })
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to get companies from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
+  };
+
+  const getAllCompaniesProjectsByCompAdmin = async () => {
+    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "PROJECTS_AND_COMPANY_BY_COMPANY_ADMIN_TABLE",
+        EmpId: props.loggedInUser.EmpId,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
         setAllCompaniesProjectsArr(res.data);
 
         // filter all companies and projects array to remove duplicate company values

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import AlertMessage from "../components/AlertMessage";
-import SuccessMessage from "../components/AlertMessage";
+import SuccessMessage from "../components/SuccessMessage";
 import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
 import { domain } from "../assets/api/apiEndpoints";
@@ -319,6 +319,7 @@ function EditCompanyAdmin(props) {
 
   const closeAlert = () => {
     alertMessage.current.close();
+    successMessage.current.close();
   };
 
   return (

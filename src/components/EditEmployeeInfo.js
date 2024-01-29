@@ -146,7 +146,7 @@ function EditEmployeeInfo(props) {
         EmpId: selectedCurrentUser.EmpId,
         AdminLevel: adminLevelDesignation.current.value,
       }));
-      setMessage(successMessageDisplay("User Updated."));
+      setMessage(alertMessageDisplay("User Updated."));
       successMessage.current.showModal();
     } catch (error) {
       setMessage(alertMessageDisplay(`Unable to update user. Error: ${error}`));
@@ -178,7 +178,7 @@ function EditEmployeeInfo(props) {
           }),
         }
       );
-      setMessage(successMessageDisplay("User Deleted"));
+      setMessage(alertMessageDisplay("User Deleted"));
       successMessage.current.showModal();
     } catch (error) {
       setMessage(alertMessageDisplay(`Unable to delete user. Error: ${error}`));
@@ -191,10 +191,6 @@ function EditEmployeeInfo(props) {
   };
 
   const alertMessageDisplay = (entry) => {
-    return entry;
-  };
-
-  const successMessageDisplay = (entry) => {
     return entry;
   };
 
