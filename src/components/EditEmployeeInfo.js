@@ -11,6 +11,7 @@ function EditEmployeeInfo(props) {
   let adminLevelDesignation = useRef();
   let firstNameInput = useRef();
   let lastNameInput = useRef();
+  let usernameDisplay = useRef();
   let emailAddressInput = useRef();
   let employeePhoneNumber = useRef();
   let employeeLocationCity = useRef();
@@ -93,6 +94,7 @@ function EditEmployeeInfo(props) {
   const setUserDetailInputs = (user) => {
     firstNameInput.current.value = user[0].FirstName;
     lastNameInput.current.value = user[0].LastName;
+    usernameDisplay.current.innerHTML = user[0].KashOperationsUsn;
     emailAddressInput.current.value = user[0].EmailAddress;
     employeePhoneNumber.current.value = user[0].PhoneNumber;
     employeeLocationCity.current.value = user[0].EmpLocationCity;
@@ -239,6 +241,18 @@ function EditEmployeeInfo(props) {
                 <div className="employee-info-form">
                   <div className="left_group_inputs">
                     <br />
+                    <label
+                      className="manage_roles--employee_label"
+                      htmlFor="manage_employees--first-name"
+                    >
+                      Username
+                    </label>
+                    <p
+                      id="username-display"
+                      name="manage_employees--username"
+                      className="username-display"
+                      ref={usernameDisplay}
+                    ></p>
                     <label htmlFor="admin-level-designation">Admin Level</label>
                     {console.log(isAdminLocal)}
                     {isAdminLocal === '"Super Admin"' ? (
