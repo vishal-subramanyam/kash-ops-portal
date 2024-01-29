@@ -195,6 +195,7 @@ function TimesheetsReport(props) {
           slots={{
             toolbar: GridToolbar,
           }}
+          pageSizeOptions={[5, 10, 25]}
         />
       </div>
       <AlertMessage ref={alertMessage} close={closeAlert} message={message} />

@@ -4,7 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Reports.css";
 
-function ProjectsReport() {
+function ProjectsReport(props) {
   let [allProjectsArr, setAllProjectsArr] = useState([]);
   let [columnVisibilityModel, setColumnVisibilityModel] = useState({
     CompanyAddress: false,
@@ -26,7 +26,11 @@ function ProjectsReport() {
   let [message, setMessage] = useState("");
 
   useEffect(() => {
-    getAllProjects();
+    if (props.loggedInUser.AdminLevel === "Super Admin") {
+      getAllProjects();
+    } else {
+      getAllProjectsByCompanyAdmin();
+    }
   }, []);
 
   const getAllProjects = async () => {
@@ -38,6 +42,32 @@ function ProjectsReport() {
       },
       body: JSON.stringify({
         _keyword_: "PROJECTS_AND_COMPANY_INFO_TABLE",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res.data);
+        setAllProjectsArr(res.data);
+      })
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(`Unable to get projects from database. ${err}`)
+        );
+        alertMessage.current.showModal();
+      });
+  };
+
+  // PROJECTS_AND_COMPANY_BY_COMPANY_ADMIN_TABLE;
+  const getAllProjectsByCompanyAdmin = async () => {
+    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "PROJECTS_AND_COMPANY_BY_COMPANY_ADMIN_TABLE",
+        EmpId: props.loggedInUser.EmpId,
       }),
     })
       .then((res) => res.json())

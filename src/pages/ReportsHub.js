@@ -46,7 +46,7 @@ function ReportsHub(props) {
       </nav>
 
       <main>
-        <ProjectsReport />
+        <ProjectsReport loggedInUser={props.loggedInUser} />
         <TimesheetsReport loggedInUser={props.loggedInUser} />
         <SubAssignmentsReport />
       </main>
