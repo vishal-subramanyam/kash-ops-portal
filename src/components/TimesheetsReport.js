@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import AlertMessage from "./AlertMessage";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar, GridFilterModel } from "@mui/x-data-grid";
 import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Reports.css";
 
@@ -31,6 +31,13 @@ function TimesheetsReport(props) {
   });
   let alertMessage = useRef();
   let [message, setMessage] = useState("");
+  let [twoWeeksAgo, setTwoWeeksAgo] = useState(() => {
+    let todayDate = new Date();
+    todayDate.setDate(todayDate.getDate() - ((todayDate.getDay() + 6) % 7));
+    let prevMondayFormat = todayDate;
+    let twoWeeksAgo = prevMondayFormat.setDate(prevMondayFormat.getDate() - 14);
+    return new Date(twoWeeksAgo).toISOString().split("T")[0];
+  });
 
   useEffect(() => {
     if (props.loggedInUser.AdminLevel === "Super Admin") {
@@ -121,6 +128,8 @@ function TimesheetsReport(props) {
     TimesheetStatusEntry: item.TimesheetStatusEntry,
     MondayHours: item.MondayHours,
   }));
+  console.log(transformedRowsTS);
+  console.log(allTimesheetRecords);
 
   const initialHiddenColumns = [
     "Billable",
@@ -158,10 +167,32 @@ function TimesheetsReport(props) {
     "Billable",
   ];
 
-  const columnList = customColumnOrder.map((item) => ({
-    field: item,
-    width: 150,
-  }));
+  // const columnList = customColumnOrder.map((item) => ({
+  //   field: item,
+  //   width: 150,
+  // }));
+  const columnList = customColumnOrder.map((item) => {
+    if (item === "PeriodStartDate") {
+      return {
+        field: item,
+        headerName: item.replace(/([A-Z])/g, " $1").trim(),
+        width: 150,
+        type: "date",
+        valueGetter: (params) => {
+          if (!params.value) {
+            return new Date(params.value);
+          }
+          return new Date(params.value);
+        },
+      };
+    } else {
+      return {
+        field: item,
+        headerName: item.replace(/([A-Z0-9])/g, " $1").trim(),
+        width: 150,
+      };
+    }
+  });
 
   const handleToggleColumnVisibility = (column) => {
     setColumnVisibilityModel((prevModel) => ({
@@ -182,6 +213,14 @@ function TimesheetsReport(props) {
     alertMessage.current.close();
   };
 
+  const getTwoWeeksAgo = () => {
+    let todayDate = new Date();
+    todayDate.setDate(todayDate.getDate() - ((todayDate.getDay() + 6) % 7));
+    let prevMondayFormat = todayDate;
+    let twoWeeksAgo = prevMondayFormat.setDate(prevMondayFormat.getDate() - 14);
+    return new Date(twoWeeksAgo).toISOString().split("T")[0];
+  };
+
   return (
     <div>
       <h1 className="report-title"> KASH OPS TIMESHEETS </h1>
@@ -195,7 +234,22 @@ function TimesheetsReport(props) {
           slots={{
             toolbar: GridToolbar,
           }}
-          pageSizeOptions={[5, 10, 25]}
+          initialState={{
+            filter: {
+              filterModel: {
+                items: [
+                  {
+                    field: "PeriodStartDate",
+                    operator: "onOrAfter",
+                    value: "2024-01-01",
+                    // type: "date",
+                  },
+                ],
+              },
+            },
+            pagination: { paginationModel: { pageSize: 25 } },
+          }}
+          pageSizeOptions={[25, 50, 75]}
         />
       </div>
       <AlertMessage ref={alertMessage} close={closeAlert} message={message} />

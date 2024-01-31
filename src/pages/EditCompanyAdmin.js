@@ -160,7 +160,7 @@ function EditCompanyAdmin(props) {
       if (selectedUserAndCompany === existingUserAndCompanyRecord) {
         setMessage(
           alertMessageDisplay(
-            `${adminFullNameToAddToCompany} is already and admin for ${companyNameToAddAdmin}`
+            `${adminFullNameToAddToCompany} is already an admin for ${companyNameToAddAdmin}`
           )
         );
         alertMessage.current.showModal();
@@ -192,7 +192,7 @@ function EditCompanyAdmin(props) {
       );
       let addMsg =
         adminFullNameToAddToCompany +
-        " was successfully added as an Admin to " +
+        " was successfully added as an admin to " +
         companyNameToAddAdmin +
         "!";
       setMessage(successMessageDisplay(`${addMsg}`));

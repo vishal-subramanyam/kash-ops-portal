@@ -292,12 +292,12 @@ function UpdateTimesheet(props) {
     // ${subAssignmentTask.current.value}
     // ${taskTicketNumber.current.value}`);
 
-    // validateRequiredInputs(
-    //   selectedEmployeeIdState,
-    //   reportingPeriodStartDate.current.value,
-    //   selectedProjectSOWIDState,
-    //   selectedProjectCompanyNameState
-    // );
+    validateRequiredInputs(
+      selectedEmployeeIdState,
+      reportingPeriodStartDate.current.value,
+      selectedProjectSOWIDState,
+      selectedProjectCompanyNameState
+    );
 
     if (
       selectedEmployeeIdState &&
