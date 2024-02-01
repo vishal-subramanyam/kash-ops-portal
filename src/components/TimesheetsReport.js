@@ -140,14 +140,6 @@ function TimesheetsReport(props) {
     "SowId",
   ];
 
-  //   const initialColumnVisibilityModel = Object.fromEntries(
-  //     Object.keys(allTimesheetRecords[0]).map((item) => [
-  //       item,
-  //       !initialHiddenColumns.includes(item),
-  //     ])
-  //   );
-  //   console.log(initialColumnVisibilityModel);
-
   const customColumnOrder = [
     "idTS",
     "PeriodStartDate",
@@ -167,10 +159,6 @@ function TimesheetsReport(props) {
     "Billable",
   ];
 
-  // const columnList = customColumnOrder.map((item) => ({
-  //   field: item,
-  //   width: 150,
-  // }));
   const columnList = customColumnOrder.map((item) => {
     if (item === "PeriodStartDate") {
       return {
