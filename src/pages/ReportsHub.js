@@ -48,7 +48,6 @@ function ReportsHub(props) {
       <main>
         <ProjectsReport loggedInUser={props.loggedInUser} />
         <TimesheetsReport loggedInUser={props.loggedInUser} />
-        <SubAssignmentsReport />
       </main>
     </>
   );

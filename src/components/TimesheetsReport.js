@@ -213,14 +213,6 @@ function TimesheetsReport(props) {
     alertMessage.current.close();
   };
 
-  const getTwoWeeksAgo = () => {
-    let todayDate = new Date();
-    todayDate.setDate(todayDate.getDate() - ((todayDate.getDay() + 6) % 7));
-    let prevMondayFormat = todayDate;
-    let twoWeeksAgo = prevMondayFormat.setDate(prevMondayFormat.getDate() - 14);
-    return new Date(twoWeeksAgo).toISOString().split("T")[0];
-  };
-
   return (
     <div>
       <h1 className="report-title"> KASH OPS TIMESHEETS </h1>
@@ -241,8 +233,7 @@ function TimesheetsReport(props) {
                   {
                     field: "PeriodStartDate",
                     operator: "onOrAfter",
-                    value: "2024-01-01",
-                    // type: "date",
+                    value: twoWeeksAgo,
                   },
                 ],
               },

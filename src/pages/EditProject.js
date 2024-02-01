@@ -164,6 +164,7 @@ function EditProject(props) {
     let projectsByCompanyId = allCompaniesProjectsArr.filter((project) => {
       return id === project.CompanyId;
     });
+    console.log(projectsByCompanyId);
     setAllProjectsByCompany(projectsByCompanyId);
   };
 

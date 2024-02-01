@@ -1,26 +1,23 @@
 import React, { useState, useRef, useEffect } from "react";
 import AlertMessage from "./AlertMessage";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Reports.css";
 
 function ProjectsReport(props) {
   let [allProjectsArr, setAllProjectsArr] = useState([]);
   let [columnVisibilityModel, setColumnVisibilityModel] = useState({
-    CompanyAddress: false,
     CompanyId: false,
-    CompanyLocationCity: false,
-    CompanyLocationCountry: false,
-    CompanyLocationState: false,
     CompanyName: true,
-    CompanyZipCode: false,
     CurrentStatus: true,
-    ExternalUsername: false,
     OriginalEndDate: true,
     OriginalStartDate: true,
     ProjectCategory: true,
     SowId: true,
-    TotalProjectedHours: true,
+    ProjectSubTaskId: true,
+    SubTaskTitle: true,
+    Segment1: true,
+    TotalProjectedHours: false,
   });
   let alertMessage = useRef();
   let [message, setMessage] = useState("");
@@ -41,7 +38,7 @@ function ProjectsReport(props) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        _keyword_: "PROJECTS_AND_COMPANY_INFO_TABLE",
+        _keyword_: "PROJECTS_AND_SUB_CATEGORY_AND_COMPANY_TABLE",
       }),
     })
       .then((res) => res.json())
@@ -66,7 +63,7 @@ function ProjectsReport(props) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        _keyword_: "PROJECTS_AND_COMPANY_BY_COMPANY_ADMIN_TABLE",
+        _keyword_: "PROJECTS_SUB_CATEGORY_COMPANY_BY_COMPANY_ADMIN",
         EmpId: props.loggedInUser.EmpId,
       }),
     })
@@ -90,28 +87,16 @@ function ProjectsReport(props) {
     ProjectCategory: item.ProjectCategory,
     OriginalEndDate: item.OriginalEndDate,
     CurrentStatus: item.CurrentStatus,
-    CompanyLocationCountry: item.CompanyLocationCountry,
     OriginalStartDate: item.OriginalStartDate,
     TotalProjectedHours: item.TotalProjectedHours,
-    CompanyZipCode: item.CompanyZipCode,
-    CompanyAddress: item.CompanyAddress,
     CompanyName: item.CompanyName,
     SowId: item.SowId,
-    ExternalUsername: item.ExternalUsername,
-    CompanyLocationState: item.CompanyLocationState,
-    CompanyLocationCity: item.CompanyLocationCity,
+    ProjectSubTaskId: item.ProjectSubTaskId,
+    SubTaskTitle: item.SubTaskTitle,
+    Segment1: item.Segment1,
   }));
 
-  const initialHiddenColumns = [
-    "CompanyLocationCity",
-    "CompanyId",
-    "CompanyZipCode",
-    "ExternalUsername",
-    "CompanyAddress",
-    "CompanyLocationCountry",
-    "CompanyLocationState",
-    "CompanyLocationCity",
-  ];
+  const initialHiddenColumns = ["TotalProjectedHours"];
 
   const customColumnOrder = [
     "id",
@@ -121,7 +106,9 @@ function ProjectsReport(props) {
     "OriginalStartDate",
     "OriginalEndDate",
     "CurrentStatus",
-    "TotalProjectedHours",
+    "ProjectSubTaskId",
+    "SubTaskTitle",
+    "Segment1",
   ];
 
   const columnList = customColumnOrder.map((item) => ({
@@ -158,6 +145,13 @@ function ProjectsReport(props) {
           getRowId={(row) => row.id}
           columnVisibilityModel={columnVisibilityModel}
           onColumnVisibilityModelChange={handleToggleColumnVisibility}
+          slots={{
+            toolbar: GridToolbar,
+          }}
+          initialState={{
+            pagination: { paginationModel: { pageSize: 25 } },
+          }}
+          pageSizeOptions={[25, 50, 75]}
         />
       </div>
       <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
