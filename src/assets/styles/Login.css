@@ -101,8 +101,8 @@ a {
 }
 .sign_up-button:active,
 .sign_up-button:focus {
-  background-color: #fee5de;
-  outline: 3px solid #94ecff;
+  background-color: #ffb494;
+  /* outline: 3px solid #94ecff; */
 }
 .login-form {
   font-weight: 600;
@@ -207,6 +207,17 @@ a {
   font-size: 2rem !important;
   padding-bottom: 1rem;
 }
+
+.user-control-btns {
+  position: absolute;
+  left: 85%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column-reverse;
+}
+
 @media (min-width: 900px) {
   .kash-operations-login {
     display: flex;
@@ -240,7 +251,7 @@ a {
   }
 
   .update-password--content-holder h1 {
-    margin-top: 1rem;
+    margin-top: 3rem;
   }
   .kash_operations_home--banner-heading {
     width: 100%;

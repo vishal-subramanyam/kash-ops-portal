@@ -226,9 +226,9 @@ function TimesheetsReport(props) {
                 ],
               },
             },
-            pagination: { paginationModel: { pageSize: 25 } },
+            pagination: { paginationModel: { pageSize: 15 } },
           }}
-          pageSizeOptions={[25, 50, 75]}
+          pageSizeOptions={[15, 25, 50, 75]}
         />
       </div>
       <AlertMessage ref={alertMessage} close={closeAlert} message={message} />

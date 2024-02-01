@@ -188,7 +188,7 @@ a {
   .kash_operations_home--top-banner {
     gap: 3rem;
     flex-direction: row;
-    justify-content: space-between;
+    /* justify-content: space-between; */
   }
   .kash_operations_home--title {
     text-align: start;

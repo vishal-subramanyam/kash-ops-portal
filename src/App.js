@@ -32,6 +32,10 @@ function App() {
     logout();
     navigate("/login");
   };
+
+  const changePW = () => {
+    navigate("/update-password");
+  };
   return (
     <div className="App">
       {/* {console.log("USER from useAuth", user)}
@@ -44,15 +48,27 @@ function App() {
 
       {/* hide button if username in local storage is "null" because value in local storage is a string */}
       {username !== "null" ? (
-        <button
-          style={{ float: "right", marginTop: "10px" }}
-          type="submit"
-          value="Submit"
-          className="button sign_up-button"
-          onClick={userLogout}
-        >
-          <p className="sign_up-button-text">Logout</p>
-        </button>
+        <span className="user-control-btns">
+          <button
+            style={{ width: "110px", marginTop: "5px" }}
+            type="submit"
+            value="Submit"
+            className="button sign_up-button"
+            onClick={changePW}
+          >
+            <p className="sign_up-button-text">Change Password</p>
+          </button>
+
+          <button
+            style={{ float: "right", marginTop: "10px" }}
+            type="submit"
+            value="Submit"
+            className="button sign_up-button"
+            onClick={userLogout}
+          >
+            <p className="sign_up-button-text">Logout</p>
+          </button>
+        </span>
       ) : (
         ""
       )}
