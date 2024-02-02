@@ -43,6 +43,7 @@ function UpdateTimesheet(props) {
   let selectedEmployee = useRef();
   let selectedProject = useRef();
   let taskTicketNumber = useRef();
+  let MondayHours = useRef();
   let [selectedProjectCompanyNameState, setSelectedProjectCompanyNameState] =
     useState("");
   let [selectedProjectSOWIDState, setSelectedProjectSOWIDState] = useState("");
@@ -373,13 +374,16 @@ function UpdateTimesheet(props) {
       "with value of",
       e.target.value
     );
+    if (e.target.value === "") {
+      e.target.value = 0;
+    }
     let newArr = [...timesheetRecordsByEmployee];
     newArr[index][name] = e.target.value;
     console.log("updating TS by Emp state array that gets sent to DB", newArr);
     setTimesheetRecordsByEmployee(newArr);
   };
 
-  const sendUploadTimesheetToDatabase = async () => {
+  const sendUploadTimesheetToDatabase = async (e) => {
     console.log(
       "current timesheet records by employee",
       timesheetRecordsByEmployee
@@ -401,14 +405,15 @@ function UpdateTimesheet(props) {
     );
     await updateCurrentTimesheetRecord(currentRecords);
     await addNewTimesheetRecord(newRecords);
-    getTimesheetByEmployeeId(selectedEmployeeIdState);
+    getTimesheetByEmployeeId(selectedEmployeeIdState, e);
     showConfirmationModal();
 
     // reset the project, sub assignment and tasks dropdowns and ticket number fields
     selectedProject.current.value = "";
     taskTicketNumber.current.value = "";
-    subAssignmentTask.current.value = "";
-    // subAssignmentTitleDescriptor.current.innerHTML = "";
+    if (subAssignmentTask.current !== undefined) {
+      subAssignmentTask.current.value = "";
+    }
     setSubAssignmentTitleDescriptor("");
     setSelectedProjectCompanyNameState("");
     setSelectedProjectSOWIDState("");
@@ -744,9 +749,9 @@ function UpdateTimesheet(props) {
             <div className="optional_sub-assignment_container">
               {subAssignmentByProjectArr.length === 0 ? (
                 <div className="optional_sub-assignment_holder">
-                  <h6 id="sub-assignment-title-descriptor">
-                    Selection area if chosen project contains sub assignments.
-                  </h6>
+                  <p className="sub-assignment_title-text">
+                    Project Sub-Assignments
+                  </p>
                 </div>
               ) : (
                 <span className="optional_sub-assignment_holder">
@@ -881,6 +886,7 @@ function UpdateTimesheet(props) {
                                   min="0"
                                   max="24"
                                   step={0.25}
+                                  ref={MondayHours}
                                   value={record.MondayHours}
                                   autoComplete="off"
                                   onChange={updateTimesheetRecord(
