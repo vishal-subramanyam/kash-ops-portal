@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./App.css";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
@@ -27,7 +27,7 @@ function App() {
   let isAdminLocal = window.localStorage.getItem("adminLevel");
 
   let navigate = useNavigate();
-
+  let location = useLocation();
   const userLogout = () => {
     logout();
     navigate("/login");
@@ -38,27 +38,22 @@ function App() {
   };
   return (
     <div className="App">
-      {/* {console.log("USER from useAuth", user)}
-      {console.log("logged in user info from useAuth", loggedInUser)}
-      {console.log("admin from useAuth", isAdmin)}
-
-      {console.log("USER", username)}
-      {console.log("logged in user info", loggedInUserLocal)}
-      {console.log("admin", isAdminLocal)} */}
-
-      {/* hide button if username in local storage is "null" because value in local storage is a string */}
+      {/* hide change password and logout buttons if username in local storage is "null" because value in local storage is a string */}
       {username !== "null" ? (
         <span className="user-control-btns">
-          <button
-            style={{ width: "110px", marginTop: "5px" }}
-            type="submit"
-            value="Submit"
-            className="button sign_up-button"
-            onClick={changePW}
-          >
-            <p className="sign_up-button-text">Change Password</p>
-          </button>
-
+          {location.pathname === "/update-password" ? (
+            ""
+          ) : (
+            <button
+              style={{ width: "110px", marginTop: "5px" }}
+              type="submit"
+              value="Submit"
+              className="button sign_up-button"
+              onClick={changePW}
+            >
+              <p className="sign_up-button-text">Change Password</p>
+            </button>
+          )}
           <button
             style={{ float: "right", marginTop: "10px" }}
             type="submit"

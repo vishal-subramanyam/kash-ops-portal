@@ -31,7 +31,7 @@ function UpdateTimesheet(props) {
     TuesdayHours: "0.00",
     WednesdayHours: "0.00",
   };
-  let subAssignmentByProjectArr = [];
+  // let subAssignmentByProjectArr = [];
   let subAssignmentByProjectFiltered = [];
   let reportingPeriodStartDate = useRef();
   let alertMessage = useRef();
@@ -51,7 +51,8 @@ function UpdateTimesheet(props) {
     useState("");
   // let [taskBySubAssignmentState, setTaskBySubAssignmentState] = useState("");
   let subAssignmentTask = useRef();
-  let subAssignmentTitleDescriptor = useRef();
+  let [subAssignmentTitleDescriptor, setSubAssignmentTitleDescriptor] =
+    useState("");
   let [allTimesheetRecords, setAlllTimesheetRecords] = useState([]);
   let [timesheetRecordsByEmployee, setTimesheetRecordsByEmployee] = useState(
     []
@@ -66,7 +67,7 @@ function UpdateTimesheet(props) {
     return prevMondayFormat;
   }); // To add to Timesheets table - PeriodStartDate
   let [projectAndCompanyInfoArr, setProjectAndCompanyInfoArr] = useState([]);
-  let [subAssignmentByProject, setsubAssignmentByProjectArr] = useState([]);
+  let [subAssignmentByProjectArr, setSubAssignmentByProjectArr] = useState([]);
   let [tasksBySubAssignment, setTasksBySubAssignment] = useState([]);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
   // let basicUserInfo = allEmployeesArr.filter((user) => {
@@ -130,7 +131,9 @@ function UpdateTimesheet(props) {
       });
   };
 
-  const getTimesheetByEmployeeId = (id) => {
+  const getTimesheetByEmployeeId = (id, e) => {
+    console.log("get timesheet by emp id", e.target);
+    validateRequiredInputs(e.target);
     console.log("get TS by employee from DB", id);
     fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
@@ -169,11 +172,12 @@ function UpdateTimesheet(props) {
   };
 
   const getSelectedEmployeeId = (e) => {
+    validateRequiredInputs(e.target);
     let selectedEmployeeId =
       e.target[e.target.selectedIndex].getAttribute("data-employeeid");
     setSelectedEmployeeIdState(selectedEmployeeId);
     // fetch timesheets table for selected employee Id and display in table
-    getTimesheetByEmployeeId(selectedEmployeeId);
+    getTimesheetByEmployeeId(selectedEmployeeId, e);
   };
 
   const getProjectSubCategories = async (projectId) => {
@@ -190,8 +194,17 @@ function UpdateTimesheet(props) {
     })
       .then((res) => res.json())
       .then((res) => {
-        subAssignmentByProjectArr = res.data;
-        // setsubAssignmentByProject(res.data);
+        // subAssignmentByProjectArr = res.data;
+
+        // filter sub assignments to remove duplicates and assign to filtered array
+        subAssignmentByProjectFiltered = Object.values(
+          res.data.reduce((c, e) => {
+            if (!c[e.SubTaskTitle]) c[e.SubTaskTitle] = e;
+            return c;
+          }, {})
+        );
+        console.log(subAssignmentByProjectFiltered);
+        setSubAssignmentByProjectArr(subAssignmentByProjectFiltered);
       })
       .catch((err) => {
         setMessage(
@@ -232,6 +245,8 @@ function UpdateTimesheet(props) {
   };
 
   const getSelectedProjectData = async (e) => {
+    validateRequiredInputs(e.target);
+
     selectedProjectId =
       e.target[e.target.selectedIndex].getAttribute("data-projectid");
 
@@ -246,17 +261,9 @@ function UpdateTimesheet(props) {
     }
 
     // update sub assignments heading to show selected project details
-    subAssignmentTitleDescriptor.current.innerHTML = selectedProjectDetails;
+    setSubAssignmentTitleDescriptor(selectedProjectDetails);
     // get sub projects for selected project ID
-    await getProjectSubCategories(selectedProjectId);
-    // filter sub assignments to remove duplicates and assign to filtered array
-    subAssignmentByProjectFiltered = Object.values(
-      await subAssignmentByProjectArr.reduce((c, e) => {
-        if (!c[e.SubTaskTitle]) c[e.SubTaskTitle] = e;
-        return c;
-      }, {})
-    );
-    setsubAssignmentByProjectArr(subAssignmentByProjectFiltered);
+    getProjectSubCategories(selectedProjectId);
   };
 
   const selectSubAssignment = (e) => {
@@ -273,44 +280,42 @@ function UpdateTimesheet(props) {
     getTasksBySubAssignment(selectedSubAssignmentId);
   };
 
-  const validateRequiredInputs = (inputs) => {
-    console.log(inputs);
-    for (const input of inputs) {
-      if (input.value === "" || input.value === undefined) {
-        console.log(input);
-        setMessage(alertMessageDisplay(`Fill out the ${input.label} field.`));
+  const validateRequiredInputs = (input) => {
+    console.log(input);
+    let inputArr = [];
+    if (Array.isArray(input) === false) {
+      input.classList.remove("timesheet-option_invalid");
+    } else {
+      for (const i of input) {
+        if (i.element.checkValidity() === false) {
+          console.log(i, " validity false");
+          inputArr.push(i.label);
+          i.element.classList.add("timesheet-option_invalid");
+        } else {
+          i.element.classList.remove("timesheet-option_invalid");
+        }
         alertMessage.current.showModal();
-        input.element.style.border = "2px solid red";
-      } else {
-        input.element.style.border = "2px solid #5c9262";
+        setMessage(
+          alertMessageDisplay(
+            `Fill out the ${inputArr.map((input) => input)} ${
+              inputArr.length > 1 ? "fields" : "field"
+            }.`
+          )
+        );
       }
     }
   };
 
   const addToStagingSheet = () => {
-    validateRequiredInputs([
-      {
-        label: "Employee",
-        value: selectedEmployeeIdState,
-        element: selectedEmployee.current,
-      },
-      {
-        label: "Reporting Period Start Date",
-        value: reportingPeriodStartDate.current.value,
-        element: reportingPeriodStartDate.current,
-      },
-      {
-        label: "Project Description",
-        value: selectedProject.current.value,
-        element: selectedProject.current,
-      },
-    ]);
-    /*
+    console.log(
+      selectedEmployee.current.value &&
+        reportingPeriodStartDate.current.value &&
+        selectedProject.current.value
+    );
     if (
-      selectedEmployeeIdState &&
+      selectedEmployee.current.value &&
       reportingPeriodStartDate.current.value &&
-      selectedProjectSOWIDState &&
-      selectedProjectCompanyNameState
+      selectedProject.current.value
     ) {
       newTimesheetRecord = {
         Billable: "",
@@ -341,7 +346,7 @@ function UpdateTimesheet(props) {
       validateRequiredInputs([
         {
           label: "Employee",
-          value: selectedEmployeeIdState,
+          value: selectedEmployee.current.value,
           element: selectedEmployee.current,
         },
         {
@@ -356,7 +361,6 @@ function UpdateTimesheet(props) {
         },
       ]);
     }
-    */
   };
 
   // update the timesheet by employee state array when the days of the week are changed in table
@@ -404,11 +408,12 @@ function UpdateTimesheet(props) {
     selectedProject.current.value = "";
     taskTicketNumber.current.value = "";
     subAssignmentTask.current.value = "";
-    subAssignmentTitleDescriptor.current.innerHTML = "";
+    // subAssignmentTitleDescriptor.current.innerHTML = "";
+    setSubAssignmentTitleDescriptor("");
     setSelectedProjectCompanyNameState("");
     setSelectedProjectSOWIDState("");
     setSelectedSubAssignmentNameState();
-    setsubAssignmentByProjectArr([]);
+    setSubAssignmentByProjectArr([]);
     setTasksBySubAssignment([]);
   };
 
@@ -607,6 +612,7 @@ function UpdateTimesheet(props) {
                   id="employee-dropdown-input"
                   name="employee-dropdown-input"
                   onChange={getSelectedEmployeeId}
+                  required
                   ref={selectedEmployee}
                 >
                   <option value="">- Choose an Employee -</option>
@@ -638,20 +644,15 @@ function UpdateTimesheet(props) {
                     defaultValue={currentPrevMonday}
                     step={7}
                     type="date"
+                    required
                     className="add-timesheet-entry--form-input timesheet-update--timesheet-start-date-input"
                     id="timesheet-update--timesheet-start-date-input"
                     name="timesheet-update--timesheet-start-date-input"
                     ref={reportingPeriodStartDate}
-                    onChange={() =>
-                      getTimesheetByEmployeeId(selectedEmployeeIdState)
+                    onChange={(event) =>
+                      getTimesheetByEmployeeId(selectedEmployeeIdState, event)
                     }
                   />
-
-                  {/* <!--<select name="reporting-start-date__dropdown-input" id="reporting-start-date__dropdown-input" className="reporting-start-date__dropdown-input">-->
-                        <!--    <option value="">-->
-
-                        <!--    </option>-->
-                        <!--</select>--> */}
                 </div>
 
                 <div className="project-description--holder">
@@ -740,70 +741,84 @@ function UpdateTimesheet(props) {
               </div>
             </div>
 
-            <div className="optional_sub-assignment_holder">
-              <div id="sub-assignment-title">
-                <p className="sub-assignment_title-text">
-                  Project Sub-Assignments
-                </p>
-                <span
-                  id="sub-assignment-title-descriptor"
-                  ref={subAssignmentTitleDescriptor}
-                ></span>
-              </div>
-              <div id="sub-assignment-content">
-                <div className="w-10">
-                  <div>
-                    <label htmlFor="sub-assignment">Work Area</label>
-                  </div>
-                  <select id="sub-assignment" onChange={selectSubAssignment}>
-                    <option value=""></option>
-                    {subAssignmentByProject.map((subProject, i) => {
-                      return (
-                        <option
-                          key={i}
-                          data-subprojectid={subProject.ProjectSubTaskId}
-                          data-subprojectname={subProject.SubTaskTitle}
-                        >
-                          {subProject.SubTaskTitle}
-                        </option>
-                      );
-                    })}
-                  </select>
+            <div className="optional_sub-assignment_container">
+              {subAssignmentByProjectArr.length === 0 ? (
+                <div className="optional_sub-assignment_holder">
+                  <h6 id="sub-assignment-title-descriptor">
+                    Selection area if chosen project contains sub assignments.
+                  </h6>
                 </div>
-                <div className="w-15">
-                  <div>
-                    <label htmlFor="sub-assignment-seg-1">Task Area</label>
+              ) : (
+                <span className="optional_sub-assignment_holder">
+                  <div id="sub-assignment-title">
+                    <p className="sub-assignment_title-text">
+                      Project Sub-Assignments
+                    </p>
+                    <span id="sub-assignment-title-descriptor">
+                      {subAssignmentTitleDescriptor}
+                    </span>
                   </div>
-                  <select id="sub-assignment-seg-1" ref={subAssignmentTask}>
-                    {tasksBySubAssignment.map((subTask, i) => {
-                      return <option key={i}>{subTask.Segment1}</option>;
-                    })}
-                  </select>
-                </div>
-                {/* <!--div className="w-15">
-        				<div><label htmlFor="sub-assignment-seg-2">Segment 2</label></div>
-        				<select id="sub-assignment-seg-2">
-        					<option value=""></option>
-        				</select>
-        			</div--> */}
-              </div>
+                  <div id="sub-assignment-content">
+                    <div className="w-10">
+                      <div>
+                        <label htmlFor="sub-assignment">Work Area</label>
+                      </div>
+                      <select
+                        id="sub-assignment"
+                        onChange={selectSubAssignment}
+                      >
+                        <option value=""></option>
+                        {subAssignmentByProjectArr.map((subProject, i) => {
+                          return (
+                            <option
+                              key={i}
+                              data-subprojectid={subProject.ProjectSubTaskId}
+                              data-subprojectname={subProject.SubTaskTitle}
+                            >
+                              {subProject.SubTaskTitle}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
+                    <div className="w-15">
+                      <div>
+                        <label htmlFor="sub-assignment-seg-1">Task Area</label>
+                      </div>
+                      <select id="sub-assignment-seg-1" ref={subAssignmentTask}>
+                        {tasksBySubAssignment.map((subTask, i) => {
+                          return <option key={i}>{subTask.Segment1}</option>;
+                        })}
+                      </select>
+                    </div>
+                  </div>
+                </span>
+              )}
             </div>
 
             <div className="w-5">
               <div>
-                <div className="addbutton" onClick={addToStagingSheet}>
+                <button
+                  className="addbutton"
+                  onClick={addToStagingSheet}
+                  type="button"
+                >
                   + Add to Sheet
-                </div>
+                </button>
               </div>
             </div>
+          </div>
+        </form>
 
+        {timesheetRecordsByEmployee.length === 0 ? (
+          ""
+        ) : (
+          <span>
             <div className="hours_and_text-status">
               <div className="timesheet__daily-hours-holder">
                 <h2 className="daily-hours--title">
                   Daily Hours (Round to nearest 0.25)
                 </h2>
-                {/* <!---------------------------------------------------------------------YOU ARE WORKING HERE BEGIN ------------------------------------------------------------------------------------------------------->
-<!--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------> */}
                 <div className="table-responsive">
                   <table
                     id="timeSheetTable"
@@ -817,6 +832,7 @@ function UpdateTimesheet(props) {
                         <th scope="col">Work Area</th>
                         <th scope="col">Task Area</th>
                         <th scope="col">Ticket #</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Mon</th>
                         <th scope="col">Tue</th>
                         <th scope="col">Wed</th>
@@ -828,7 +844,6 @@ function UpdateTimesheet(props) {
                       </tr>
                     </thead>
                     <tbody id="tabBod">
-                      {console.log(timesheetRecordsByEmployee)}
                       {timesheetRecordsByEmployee
                         .sort(function (a, b) {
                           return a.TimesheetEntryId - b.TimesheetEntryId;
@@ -854,6 +869,11 @@ function UpdateTimesheet(props) {
                               <td>{record.SubAssignment}</td>
                               <td>{record.SubAssignmentSegment1}</td>
                               <td>{record.TicketNum}</td>
+                              <td>
+                                <textarea rows="2" cols="5">
+                                  {record.TimesheetStatusEntry}
+                                </textarea>
+                              </td>
                               <td>
                                 <input
                                   className="weekly-hours-input add-timesheet-entry--form-input hours-input"
@@ -974,63 +994,34 @@ function UpdateTimesheet(props) {
                     </tbody>
                   </table>
                 </div>
-
-                {/* <!---------------------------------------------------------------------YOU ARE WORKING HERE END ------------------------------------------------------------------------------------------------------->
-<!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
-                <!--/div>
-                <label className="project-status_and_notes--label" htmlFor="project-status_and_notes--input">
-                    <p className="project-status_and_notes--label-title">
-                        Project Status/Notes:
-                    </p>
-                    <textarea cols="60" rows="8" className="add-timesheet-entry--form-input project-status_and_notes--input" id="project-status_and_notes--input" name="project-status_and_notes--input"></textarea>
-                </label>
-            </div>
-
-                <button onclick="sendTimesheetEntryToStaging()" type="button" className="timesheet__add-to-staging-button">
-                    Add To Staging Summary
-                </button>
-            </div--> */}
               </div>
             </div>
-          </div>
-        </form>
 
-        {/* <!--div className="timesheet__summary-divider">
-            <h2 className="projects-summary--title">
-                Staging Summary
-            </h2>
-        </div-->
-
-        <!--iframe src="" title="Weekly Hours Staging Report" id="timesheet-summary_iframe" className="timesheet-summary_iframe"--> */}
-
-        {/* </iframe> */}
-
-        {/* <iframe src="" id="loadTableGenerator" style="display: none"></iframe> */}
-
-        <button
-          id="submit-to-database-button"
-          type="button"
-          onClick={sendUploadTimesheetToDatabase}
-          className="submit-timesheet--to-server_button"
-        >
-          Save Timesheet
-          <svg
-            className="submit-to-server--embed-arrow"
-            width="32"
-            height="28"
-            viewBox="0 0 32 28"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M3.99254e-07 14C3.99254e-07 14.5303 0.210689 15.039 0.58572 15.414C0.960751 15.789 1.4694 15.9996 1.99978 15.9996H25.1692L16.5821 24.5821C16.3962 24.768 16.2487 24.9887 16.1481 25.2316C16.0475 25.4746 15.9957 25.7349 15.9957 25.9978C15.9957 26.2608 16.0475 26.5211 16.1481 26.764C16.2487 27.0069 16.3962 27.2277 16.5821 27.4136C16.7681 27.5995 16.9888 27.747 17.2317 27.8476C17.4747 27.9482 17.735 28 17.998 28C18.2609 28 18.5213 27.9482 18.7642 27.8476C19.0072 27.747 19.2279 27.5995 19.4138 27.4136L31.4125 15.4157C31.5987 15.23 31.7465 15.0093 31.8473 14.7664C31.9481 14.5235 32 14.263 32 14C32 13.737 31.9481 13.4765 31.8473 13.2336C31.7465 12.9907 31.5987 12.77 31.4125 12.5843L19.4138 0.586421C19.0383 0.210942 18.529 0 17.998 0C17.4669 0 16.9577 0.210942 16.5821 0.586421C16.2066 0.9619 15.9957 1.47116 15.9957 2.00217C15.9957 2.53317 16.2066 3.04243 16.5821 3.41791L25.1692 12.0004H1.99978C1.4694 12.0004 0.960751 12.211 0.58572 12.586C0.210689 12.961 3.99254e-07 13.4697 3.99254e-07 14Z"
-              fill="white"
-            />
-          </svg>
-        </button>
-
+            <button
+              id="submit-to-database-button"
+              type="button"
+              onClick={sendUploadTimesheetToDatabase}
+              className="submit-timesheet--to-server_button"
+            >
+              Save Timesheet
+              <svg
+                className="submit-to-server--embed-arrow"
+                width="32"
+                height="28"
+                viewBox="0 0 32 28"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M3.99254e-07 14C3.99254e-07 14.5303 0.210689 15.039 0.58572 15.414C0.960751 15.789 1.4694 15.9996 1.99978 15.9996H25.1692L16.5821 24.5821C16.3962 24.768 16.2487 24.9887 16.1481 25.2316C16.0475 25.4746 15.9957 25.7349 15.9957 25.9978C15.9957 26.2608 16.0475 26.5211 16.1481 26.764C16.2487 27.0069 16.3962 27.2277 16.5821 27.4136C16.7681 27.5995 16.9888 27.747 17.2317 27.8476C17.4747 27.9482 17.735 28 17.998 28C18.2609 28 18.5213 27.9482 18.7642 27.8476C19.0072 27.747 19.2279 27.5995 19.4138 27.4136L31.4125 15.4157C31.5987 15.23 31.7465 15.0093 31.8473 14.7664C31.9481 14.5235 32 14.263 32 14C32 13.737 31.9481 13.4765 31.8473 13.2336C31.7465 12.9907 31.5987 12.77 31.4125 12.5843L19.4138 0.586421C19.0383 0.210942 18.529 0 17.998 0C17.4669 0 16.9577 0.210942 16.5821 0.586421C16.2066 0.9619 15.9957 1.47116 15.9957 2.00217C15.9957 2.53317 16.2066 3.04243 16.5821 3.41791L25.1692 12.0004H1.99978C1.4694 12.0004 0.960751 12.211 0.58572 12.586C0.210689 12.961 3.99254e-07 13.4697 3.99254e-07 14Z"
+                  fill="white"
+                />
+              </svg>
+            </button>
+          </span>
+        )}
         {/* <!--button id="submit-for-review-button" type="button" onclick="submitTimesheetForReview()" className="submit-timesheet--to-server_button">
             Submit for Review <svg className="submit-to-server--embed-arrow" width="32" height="28" viewBox="0 0 32 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M3.99254e-07 14C3.99254e-07 14.5303 0.210689 15.039 0.58572 15.414C0.960751 15.789 1.4694 15.9996 1.99978 15.9996H25.1692L16.5821 24.5821C16.3962 24.768 16.2487 24.9887 16.1481 25.2316C16.0475 25.4746 15.9957 25.7349 15.9957 25.9978C15.9957 26.2608 16.0475 26.5211 16.1481 26.764C16.2487 27.0069 16.3962 27.2277 16.5821 27.4136C16.7681 27.5995 16.9888 27.747 17.2317 27.8476C17.4747 27.9482 17.735 28 17.998 28C18.2609 28 18.5213 27.9482 18.7642 27.8476C19.0072 27.747 19.2279 27.5995 19.4138 27.4136L31.4125 15.4157C31.5987 15.23 31.7465 15.0093 31.8473 14.7664C31.9481 14.5235 32 14.263 32 14C32 13.737 31.9481 13.4765 31.8473 13.2336C31.7465 12.9907 31.5987 12.77 31.4125 12.5843L19.4138 0.586421C19.0383 0.210942 18.529 0 17.998 0C17.4669 0 16.9577 0.210942 16.5821 0.586421C16.2066 0.9619 15.9957 1.47116 15.9957 2.00217C15.9957 2.53317 16.2066 3.04243 16.5821 3.41791L25.1692 12.0004H1.99978C1.4694 12.0004 0.960751 12.211 0.58572 12.586C0.210689 12.961 3.99254e-07 13.4697 3.99254e-07 14Z" fill="white"/>

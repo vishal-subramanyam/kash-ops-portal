@@ -70,7 +70,7 @@ function UpdatePassword(props) {
         console.log(res);
         setMessage(alertMessageDisplay("Password updated."));
         successMessage.current.showModal();
-        navigate("/login");
+        navigate("/");
       })
       .catch((error) => {
         setMessage(
@@ -152,7 +152,7 @@ function UpdatePassword(props) {
                 className="login-input"
                 id="username-input"
                 name="username-input"
-                defaultValue={props.loggedInUser.username}
+                value={props.loggedInUser.KashOperationsUsn}
                 readOnly
                 required
                 ref={usernameInput}
@@ -161,7 +161,7 @@ function UpdatePassword(props) {
           </div>
           <div className="login-field">
             <label className="login-form--input_label" htmlFor="password-input">
-              <p className="login-form--password-label">Password</p>
+              <p className="login-form--password-label">New Password</p>
               <input
                 type="password"
                 className="login-input"

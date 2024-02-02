@@ -118,6 +118,10 @@ input[type="text"] {
   border-radius: 3px;
 }
 
+.timesheet-option_invalid {
+  border: 2px solid red !important;
+}
+
 .form-page-title--lg-1 {
   font-size: 3rem;
   font-weight: 900;
@@ -237,8 +241,6 @@ input[type="text"] {
 /* ////////////////////////////////////////////// */
 /* ////////////////////////////////////////////// */
 
-.timesheet-update__main-section {
-}
 .optional_sub-assignment_holder {
   display: flex;
   flex-direction: column;
@@ -365,6 +367,7 @@ input[type="text"] {
   display: flex;
   gap: 2rem;
   flex-wrap: wrap;
+  margin-top: 1rem;
 }
 .daily-hours--title {
   font-weight: 300;
