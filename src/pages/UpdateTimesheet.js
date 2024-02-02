@@ -998,6 +998,22 @@ function UpdateTimesheet(props) {
                           );
                         })}
                     </tbody>
+                    <tfoot>
+                      <tr>
+                        <th colspan="6" scope="row">
+                          Hour Totals
+                        </th>
+                        <td>240</td>
+                        <td>240</td>
+                        <td>240</td>
+                        <td>240</td>
+                        <td>240</td>
+                        <td>240</td>
+                        <td>240</td>
+
+                        <td>240</td>
+                      </tr>
+                    </tfoot>
                   </table>
                 </div>
               </div>
