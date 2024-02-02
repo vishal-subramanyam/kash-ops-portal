@@ -1,16 +1,18 @@
 import React, { useEffect, useState, useRef } from "react";
 import AlertMessage from "../components/AlertMessage";
+import SuccessMessage from "../components/SuccessMessage";
 import { useNavigate, Link } from "react-router-dom";
 import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Login.css";
 
-function UpdatePassword() {
+function UpdatePassword(props) {
   const navigate = useNavigate();
   let usernameInput = useRef();
   let passwordInput = useRef();
   let confrimPasswordInput = useRef();
   let updatePWForm = useRef();
   let alertMessage = useRef();
+  let successMessage = useRef();
   let [message, setMessage] = useState("");
   let [empId, setEmpId] = useState();
   let [allUsers, setAllUsers] = useState([]);
@@ -67,7 +69,7 @@ function UpdatePassword() {
       .then((res) => {
         console.log(res);
         setMessage(alertMessageDisplay("Password updated."));
-        alertMessage.current.showModal();
+        successMessage.current.showModal();
         navigate("/login");
       })
       .catch((error) => {
@@ -150,6 +152,8 @@ function UpdatePassword() {
                 className="login-input"
                 id="username-input"
                 name="username-input"
+                defaultValue={props.loggedInUser.username}
+                readOnly
                 required
                 ref={usernameInput}
               />
@@ -195,6 +199,11 @@ function UpdatePassword() {
         </form>
       </div>
       <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
+      <SuccessMessage
+        ref={successMessage}
+        close={closeAlert}
+        message={message}
+      />
     </main>
   );
 }

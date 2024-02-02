@@ -78,7 +78,10 @@ function App() {
           path="/update-password"
           element={
             <RequireAuth>
-              <UpdatePassword />
+              <UpdatePassword
+                loggedInUser={loggedInUserLocal}
+                admin={isAdminLocal}
+              />
             </RequireAuth>
           }
         />

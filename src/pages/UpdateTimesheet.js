@@ -273,32 +273,39 @@ function UpdateTimesheet(props) {
     getTasksBySubAssignment(selectedSubAssignmentId);
   };
 
-  const validateRequiredInputs = (...inputs) => {
-    for (let input of inputs) {
-      console.log(input);
-      if (input === "") {
-        setMessage(alertMessageDisplay("Fill out all of the above fields."));
+  const validateRequiredInputs = (inputs) => {
+    console.log(inputs);
+    for (const input of inputs) {
+      if (input.value === "" || input.value === undefined) {
+        console.log(input);
+        setMessage(alertMessageDisplay(`Fill out the ${input.label} field.`));
         alertMessage.current.showModal();
-        return;
+        input.element.style.border = "2px solid red";
+      } else {
+        input.element.style.border = "2px solid #5c9262";
       }
     }
   };
 
   const addToStagingSheet = () => {
-    // console.log(`${selectedEmployeeIdState}
-    // ${reportingPeriodStartDate.current.value}
-    // ${selectedProjectSOWIDState}
-    // ${selectedProjectCompanyNameState}
-    // ${subAssignmentTask.current.value}
-    // ${taskTicketNumber.current.value}`);
-
-    validateRequiredInputs(
-      selectedEmployeeIdState,
-      reportingPeriodStartDate.current.value,
-      selectedProjectSOWIDState,
-      selectedProjectCompanyNameState
-    );
-
+    validateRequiredInputs([
+      {
+        label: "Employee",
+        value: selectedEmployeeIdState,
+        element: selectedEmployee.current,
+      },
+      {
+        label: "Reporting Period Start Date",
+        value: reportingPeriodStartDate.current.value,
+        element: reportingPeriodStartDate.current,
+      },
+      {
+        label: "Project Description",
+        value: selectedProject.current.value,
+        element: selectedProject.current,
+      },
+    ]);
+    /*
     if (
       selectedEmployeeIdState &&
       reportingPeriodStartDate.current.value &&
@@ -331,9 +338,25 @@ function UpdateTimesheet(props) {
         newTimesheetRecord,
       ]);
     } else {
-      setMessage(alertMessageDisplay("Fill in the ALL of the above fields."));
-      alertMessage.current.showModal();
+      validateRequiredInputs([
+        {
+          label: "Employee",
+          value: selectedEmployeeIdState,
+          element: selectedEmployee.current,
+        },
+        {
+          label: "Reporting Period Start Date",
+          value: reportingPeriodStartDate.current.value,
+          element: reportingPeriodStartDate.current,
+        },
+        {
+          label: "Project Description",
+          value: selectedProject.current.value,
+          element: selectedProject.current,
+        },
+      ]);
     }
+    */
   };
 
   // update the timesheet by employee state array when the days of the week are changed in table
@@ -645,6 +668,7 @@ function UpdateTimesheet(props) {
                     className="add-timesheet-entry--form-input project-description__dropdown-input"
                     onChange={getSelectedProjectData}
                     ref={selectedProject}
+                    required
                   >
                     <option value=""></option>
                     {projectAndCompanyInfoArr.map((project, i) => {
