@@ -44,15 +44,23 @@ function UpdateTimesheet(props) {
   let selectedProject = useRef();
   let taskTicketNumber = useRef();
   let TimesheetTableBody = useRef();
-  let TimesheetTableRow = useRef(null);
-  let [MondayHours, setMondayHours] = useState();
-  let [TuesdayHours, setTuesdayHours] = useState();
-  let [WednesdayHours, setWednesdayHours] = useState();
-  let [ThursdayHours, setThursdayHours] = useState();
-  let [FridayHours, setFridayHours] = useState();
-  let [SaturdayHours, setSaturdayHours] = useState();
-  let [SundayHours, setSundayHours] = useState();
-  let [hoursGrandTotal, setHoursGrandTotal] = useState();
+  // let TimesheetTableRow = useRef(null);
+  let rowTotal = 0;
+  let mondaysHours = 0;
+  let tuesdaysHours = 0;
+  let wednesdaysHours = 0;
+  let thursdaysHours = 0;
+  let fridaysHours = 0;
+  let saturdaysHours = 0;
+  let sundaysHours = 0;
+  let [MondayHours, setMondayHours] = useState(0);
+  let [TuesdayHours, setTuesdayHours] = useState(0);
+  let [WednesdayHours, setWednesdayHours] = useState(0);
+  let [ThursdayHours, setThursdayHours] = useState(0);
+  let [FridayHours, setFridayHours] = useState(0);
+  let [SaturdayHours, setSaturdayHours] = useState(0);
+  let [SundayHours, setSundayHours] = useState(0);
+  let [hoursGrandTotal, setHoursGrandTotal] = useState(0);
   let [selectedProjectCompanyNameState, setSelectedProjectCompanyNameState] =
     useState("");
   let [selectedProjectSOWIDState, setSelectedProjectSOWIDState] = useState("");
@@ -93,18 +101,18 @@ function UpdateTimesheet(props) {
     console.log("period start date monday", currentPrevMonday);
   }, []);
 
-  useEffect(() => {
-    console.log("use effect to get column totals");
-    if (
-      TimesheetTableBody.current === null ||
-      TimesheetTableBody.current === undefined
-    ) {
-      console.log("not loaded");
-      return;
-    } else {
-      getColumnTotals();
-    }
-  }, [timesheetRecordsByEmployee]);
+  // useEffect(() => {
+  //   console.log("use effect to get column totals");
+  //   if (
+  //     TimesheetTableBody.current === null ||
+  //     TimesheetTableBody.current === undefined
+  //   ) {
+  //     console.log("not loaded");
+  //     return;
+  //   } else {
+  //     getColumnTotals();
+  //   }
+  // }, []);
 
   const getAllEmployees = () => {
     fetch(`${domain}GenericResultBuilderService/buildResults`, {
@@ -154,100 +162,103 @@ function UpdateTimesheet(props) {
       });
   };
 
-  const getColumnTotals = () => {
-    console.log("get column totals");
-    let tableRows = TimesheetTableBody.current.childNodes;
-    console.log(tableRows);
-    let rowTotal = 0;
-    let mondaysHours = 0;
-    let tuesdaysHours = 0;
-    let wednesdaysHours = 0;
-    let thursdaysHours = 0;
-    let fridaysHours = 0;
-    let saturdaysHours = 0;
-    let sundaysHours = 0;
-    for (let i = 0; i < tableRows.length; i++) {
-      let tableRowCells = tableRows[i].childNodes;
-      for (let j = 0; j < tableRowCells.length; j++) {
-        if (tableRowCells[j].className.includes("row-total-hours")) {
-          let total = parseInt(
-            tableRowCells[tableRowCells.length - 1].innerHTML
-          );
-          rowTotal += total;
-        } else if (tableRowCells[j].childNodes.length > 0) {
-          for (let k = 0; k < tableRowCells[j].childNodes.length; k++) {
-            if (tableRowCells[j].childNodes[k].localName === "input") {
-              if (
-                tableRowCells[j].childNodes[k].className.includes(
-                  "monday-hours"
-                )
-              ) {
-                mondaysHours += parseInt(tableRowCells[j].childNodes[k].value);
-                console.log(mondaysHours);
-              } else if (
-                tableRowCells[j].childNodes[k].className.includes(
-                  "tuesday-hours"
-                )
-              ) {
-                tuesdaysHours += parseInt(tableRowCells[j].childNodes[k].value);
-              } else if (
-                tableRowCells[j].childNodes[k].className.includes(
-                  "wednesday-hours"
-                )
-              ) {
-                wednesdaysHours += parseInt(
-                  tableRowCells[j].childNodes[k].value
-                );
-              } else if (
-                tableRowCells[j].childNodes[k].className.includes(
-                  "thursday-hours"
-                )
-              ) {
-                thursdaysHours += parseInt(
-                  tableRowCells[j].childNodes[k].value
-                );
-              } else if (
-                tableRowCells[j].childNodes[k].className.includes(
-                  "friday-hours"
-                )
-              ) {
-                fridaysHours += parseInt(tableRowCells[j].childNodes[k].value);
-              } else if (
-                tableRowCells[j].childNodes[k].className.includes(
-                  "saturday-hours"
-                )
-              ) {
-                saturdaysHours += parseInt(
-                  tableRowCells[j].childNodes[k].value
-                );
-              } else if (
-                tableRowCells[j].childNodes[k].className.includes(
-                  "sunday-hours"
-                )
-              ) {
-                sundaysHours += parseInt(tableRowCells[j].childNodes[k].value);
-              }
-            }
-          }
-        }
-      }
-    }
-    console.log(rowTotal);
-    setMondayHours(mondaysHours);
-    setTuesdayHours(tuesdaysHours);
-    setWednesdayHours(wednesdaysHours);
-    setThursdayHours(thursdaysHours);
-    setFridayHours(fridaysHours);
-    setSaturdayHours(saturdaysHours);
-    setSundayHours(sundaysHours);
-    setHoursGrandTotal(rowTotal);
+  const getColumnTotals = (records) => {
+    // console.log("get column totals");
+    // let tableRows = TimesheetTableBody.current.childNodes;
+    // console.log(tableRows);
+    // // let rowTotal = 0;
+    // // let mondaysHours = 0;
+    // // let tuesdaysHours = 0;
+    // // let wednesdaysHours = 0;
+    // // let thursdaysHours = 0;
+    // // let fridaysHours = 0;
+    // // let saturdaysHours = 0;
+    // // let sundaysHours = 0;
+    // for (let i = 0; i < tableRows.length; i++) {
+    //   let tableRowCells = tableRows[i].childNodes;
+    //   for (let j = 0; j < tableRowCells.length; j++) {
+    //     if (tableRowCells[j].className.includes("row-total-hours")) {
+    //       let total = parseInt(
+    //         tableRowCells[tableRowCells.length - 1].innerHTML
+    //       );
+    //       rowTotal += total;
+    //     } else if (tableRowCells[j].childNodes.length > 0) {
+    //       for (let k = 0; k < tableRowCells[j].childNodes.length; k++) {
+    //         if (tableRowCells[j].childNodes[k].localName === "input") {
+    //           if (
+    //             tableRowCells[j].childNodes[k].className.includes(
+    //               "monday-hours"
+    //             )
+    //           ) {
+    //             mondaysHours += parseInt(tableRowCells[j].childNodes[k].value);
+    //             console.log("monday hours", mondaysHours);
+    //           } else if (
+    //             tableRowCells[j].childNodes[k].className.includes(
+    //               "tuesday-hours"
+    //             )
+    //           ) {
+    //             tuesdaysHours += parseInt(tableRowCells[j].childNodes[k].value);
+    //           } else if (
+    //             tableRowCells[j].childNodes[k].className.includes(
+    //               "wednesday-hours"
+    //             )
+    //           ) {
+    //             wednesdaysHours += parseInt(
+    //               tableRowCells[j].childNodes[k].value
+    //             );
+    //           } else if (
+    //             tableRowCells[j].childNodes[k].className.includes(
+    //               "thursday-hours"
+    //             )
+    //           ) {
+    //             thursdaysHours += parseInt(
+    //               tableRowCells[j].childNodes[k].value
+    //             );
+    //           } else if (
+    //             tableRowCells[j].childNodes[k].className.includes(
+    //               "friday-hours"
+    //             )
+    //           ) {
+    //             fridaysHours += parseInt(tableRowCells[j].childNodes[k].value);
+    //           } else if (
+    //             tableRowCells[j].childNodes[k].className.includes(
+    //               "saturday-hours"
+    //             )
+    //           ) {
+    //             saturdaysHours += parseInt(
+    //               tableRowCells[j].childNodes[k].value
+    //             );
+    //           } else if (
+    //             tableRowCells[j].childNodes[k].className.includes(
+    //               "sunday-hours"
+    //             )
+    //           ) {
+    //             sundaysHours += parseInt(tableRowCells[j].childNodes[k].value);
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+    // console.log(rowTotal);
+    // console.log(mondaysHours);
+    // setMondayHours(mondaysHours);
+    // setTuesdayHours(tuesdaysHours);
+    // setWednesdayHours(wednesdaysHours);
+    // setThursdayHours(thursdaysHours);
+    // setFridayHours(fridaysHours);
+    // setSaturdayHours(saturdaysHours);
+    // setSundayHours(sundaysHours);
+    // setHoursGrandTotal(rowTotal);
+
+    console.log(records);
   };
 
-  const getTimesheetByEmployeeId = (id, e) => {
-    console.log("get timesheet by emp id", e.target);
+  const getTimesheetByEmployeeId = async (id, e) => {
+    // console.log("get timesheet by emp id", e.target);
     validateRequiredInputs(e.target);
-    console.log("get TS by employee from DB", id);
-    fetch(`${domain}GenericResultBuilderService/buildResults`, {
+    // console.log("get TS by employee from DB", id);
+    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -274,6 +285,7 @@ function UpdateTimesheet(props) {
           filteredTimesheet
         );
         setTimesheetRecordsByEmployee(filteredTimesheet);
+        getColumnTotals(filteredTimesheet);
       })
       .catch((err) => {
         setMessage(
@@ -393,7 +405,7 @@ function UpdateTimesheet(props) {
   };
 
   const validateRequiredInputs = (input) => {
-    console.log(input);
+    // console.log(input);
     let inputArr = [];
     if (Array.isArray(input) === false) {
       input.classList.remove("timesheet-option_invalid");
@@ -488,9 +500,9 @@ function UpdateTimesheet(props) {
       "with value of",
       e.target.value
     );
-    if (e.target.value === "") {
-      e.target.value = 0;
-    }
+    // if (e.target.value === "") {
+    //   e.target.value = 0;
+    // }
     let newArr = [...timesheetRecordsByEmployee];
     newArr[index][name] = e.target.value;
     console.log("updating TS by Emp state array that gets sent to DB", newArr);
@@ -761,7 +773,7 @@ function UpdateTimesheet(props) {
                   </label>
                   <input
                     defaultValue={currentPrevMonday}
-                    // step={7}
+                    step={7}
                     type="date"
                     required
                     className="add-timesheet-entry--form-input timesheet-update--timesheet-start-date-input"
@@ -972,7 +984,7 @@ function UpdateTimesheet(props) {
                             <tr
                               key={i}
                               className="timesheet-table-row"
-                              ref={TimesheetTableRow}
+                              // ref={TimesheetTableRow}
                             >
                               <td className="timesheet-table-cell">
                                 <FontAwesomeIcon
