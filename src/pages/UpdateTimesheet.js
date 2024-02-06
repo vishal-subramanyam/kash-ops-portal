@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import AlertMessage from "../components/AlertMessage";
 import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
@@ -43,7 +43,16 @@ function UpdateTimesheet(props) {
   let selectedEmployee = useRef();
   let selectedProject = useRef();
   let taskTicketNumber = useRef();
-  let MondayHours = useRef();
+  let TimesheetTableBody = useRef();
+  let TimesheetTableRow = useRef(null);
+  let [mondayHours, setMondayHours] = useState();
+  let [tuesdayHours, setTuesdayHours] = useState();
+  let [wednesdayHours, setWednesdayHours] = useState();
+  let [thursdayHours, setThursdayHours] = useState();
+  let [fridayHours, setFridayHours] = useState();
+  let [saturdayHours, setSaturdayHours] = useState();
+  let [sundayHours, setSundayHours] = useState();
+  let [hoursGrandTotal, setHoursGrandTotal] = useState();
   let [selectedProjectCompanyNameState, setSelectedProjectCompanyNameState] =
     useState("");
   let [selectedProjectSOWIDState, setSelectedProjectSOWIDState] = useState("");
@@ -83,6 +92,18 @@ function UpdateTimesheet(props) {
     getAllEmployees();
     console.log("period start date monday", currentPrevMonday);
   }, []);
+
+  useEffect(() => {
+    if (
+      TimesheetTableBody.current === null ||
+      TimesheetTableBody.current === undefined
+    ) {
+      console.log("not loaded");
+      return;
+    } else {
+      getColumnTotals();
+    }
+  }, [timesheetRecordsByEmployee]);
 
   const getAllEmployees = () => {
     fetch(`${domain}GenericResultBuilderService/buildResults`, {
@@ -130,6 +151,96 @@ function UpdateTimesheet(props) {
         );
         alertMessage.current.showModal();
       });
+  };
+
+  const getColumnTotals = () => {
+    // console.log(TimesheetTableBody);
+    let tableRows = TimesheetTableBody.current.childNodes;
+    console.log(tableRows);
+    let rowTotal = 0;
+    let mondaysHours = 0;
+    let tuesdaysHours = 0;
+    let wednesdaysHours = 0;
+    let thursdaysHours = 0;
+    let fridaysHours = 0;
+    let saturdaysHours = 0;
+    let sundaysHours = 0;
+    for (let i = 0; i < tableRows.length; i++) {
+      let tableRowCells = tableRows[i].childNodes;
+      for (let j = 0; j < tableRowCells.length; j++) {
+        if (tableRowCells[j].className.includes("row-total-hours")) {
+          let total = parseInt(
+            tableRowCells[tableRowCells.length - 1].innerHTML
+          );
+          console.log(total);
+          rowTotal += total;
+        } else if (tableRowCells[j].childNodes.length > 0) {
+          for (let k = 0; k < tableRowCells[j].childNodes.length; k++) {
+            if (tableRowCells[j].childNodes[k].localName === "input") {
+              console.log(tableRowCells[j].childNodes[k].className);
+              if (
+                tableRowCells[j].childNodes[k].className.includes(
+                  "monday-hours"
+                )
+              ) {
+                mondaysHours += parseInt(tableRowCells[j].childNodes[k].value);
+              } else if (
+                tableRowCells[j].childNodes[k].className.includes(
+                  "tuesday-hours"
+                )
+              ) {
+                tuesdaysHours += parseInt(tableRowCells[j].childNodes[k].value);
+              } else if (
+                tableRowCells[j].childNodes[k].className.includes(
+                  "wednesday-hours"
+                )
+              ) {
+                wednesdaysHours += parseInt(
+                  tableRowCells[j].childNodes[k].value
+                );
+              } else if (
+                tableRowCells[j].childNodes[k].className.includes(
+                  "thursday-hours"
+                )
+              ) {
+                thursdaysHours += parseInt(
+                  tableRowCells[j].childNodes[k].value
+                );
+              } else if (
+                tableRowCells[j].childNodes[k].className.includes(
+                  "friday-hours"
+                )
+              ) {
+                fridaysHours += parseInt(tableRowCells[j].childNodes[k].value);
+              } else if (
+                tableRowCells[j].childNodes[k].className.includes(
+                  "saturday-hours"
+                )
+              ) {
+                saturdaysHours += parseInt(
+                  tableRowCells[j].childNodes[k].value
+                );
+              } else if (
+                tableRowCells[j].childNodes[k].className.includes(
+                  "sunday-hours"
+                )
+              ) {
+                sundaysHours += parseInt(tableRowCells[j].childNodes[k].value);
+              }
+            }
+          }
+        }
+      }
+    }
+    console.log(rowTotal);
+    setMondayHours(mondaysHours);
+    setTuesdayHours(tuesdaysHours);
+    setWednesdayHours(wednesdaysHours);
+    setThursdayHours(thursdaysHours);
+    setFridayHours(fridaysHours);
+    setSaturdayHours(saturdaysHours);
+    setSundayHours(sundaysHours);
+    setHoursGrandTotal(rowTotal);
   };
 
   const getTimesheetByEmployeeId = (id, e) => {
@@ -647,7 +758,7 @@ function UpdateTimesheet(props) {
                   </label>
                   <input
                     defaultValue={currentPrevMonday}
-                    step={7}
+                    // step={7}
                     type="date"
                     required
                     className="add-timesheet-entry--form-input timesheet-update--timesheet-start-date-input"
@@ -848,15 +959,19 @@ function UpdateTimesheet(props) {
                         <th scope="col">Total Hours</th>
                       </tr>
                     </thead>
-                    <tbody id="tabBod">
+                    <tbody id="tabBod" ref={TimesheetTableBody}>
                       {timesheetRecordsByEmployee
                         .sort(function (a, b) {
                           return a.TimesheetEntryId - b.TimesheetEntryId;
                         })
                         .map((record, i) => {
                           return (
-                            <tr key={i}>
-                              <td>
+                            <tr
+                              key={i}
+                              className="timesheet-table-row"
+                              ref={TimesheetTableRow}
+                            >
+                              <td className="timesheet-table-cell">
                                 <FontAwesomeIcon
                                   className="delete-timesheet-record"
                                   icon={faTrashCan}
@@ -868,25 +983,30 @@ function UpdateTimesheet(props) {
                                   }
                                 />
                               </td>
-                              <td>
+                              <td className="timesheet-table-cell">
                                 {record.CompanyName} - {record.SowId}
                               </td>
-                              <td>{record.SubAssignment}</td>
-                              <td>{record.SubAssignmentSegment1}</td>
-                              <td>{record.TicketNum}</td>
-                              <td>
+                              <td className="timesheet-table-cell">
+                                {record.SubAssignment}
+                              </td>
+                              <td className="timesheet-table-cell">
+                                {record.SubAssignmentSegment1}
+                              </td>
+                              <td className="timesheet-table-cell">
+                                {record.TicketNum}
+                              </td>
+                              <td className="timesheet-table-cell">
                                 <textarea rows="2" cols="5">
                                   {record.TimesheetStatusEntry}
                                 </textarea>
                               </td>
-                              <td>
+                              <td className="timesheet-table-cell">
                                 <input
-                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input monday-hours"
                                   type="number"
                                   min="0"
                                   max="24"
                                   step={0.25}
-                                  ref={MondayHours}
                                   value={record.MondayHours}
                                   autoComplete="off"
                                   onChange={updateTimesheetRecord(
@@ -895,9 +1015,9 @@ function UpdateTimesheet(props) {
                                   )}
                                 />
                               </td>
-                              <td>
+                              <td className="timesheet-table-cell">
                                 <input
-                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input tuesday-hours"
                                   type="number"
                                   min="0"
                                   max="24"
@@ -910,9 +1030,9 @@ function UpdateTimesheet(props) {
                                   )}
                                 />
                               </td>
-                              <td>
+                              <td className="timesheet-table-cell">
                                 <input
-                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input wednesday-hours"
                                   type="number"
                                   min="0"
                                   max="24"
@@ -925,9 +1045,9 @@ function UpdateTimesheet(props) {
                                   )}
                                 />
                               </td>
-                              <td>
+                              <td className="timesheet-table-cell">
                                 <input
-                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input thursday-hours"
                                   type="number"
                                   min="0"
                                   max="24"
@@ -940,9 +1060,9 @@ function UpdateTimesheet(props) {
                                   )}
                                 />
                               </td>
-                              <td>
+                              <td className="timesheet-table-cell">
                                 <input
-                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input friday-hours"
                                   type="number"
                                   min="0"
                                   max="24"
@@ -955,9 +1075,9 @@ function UpdateTimesheet(props) {
                                   )}
                                 />
                               </td>
-                              <td>
+                              <td className="timesheet-table-cell">
                                 <input
-                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input saturday-hours"
                                   type="number"
                                   min="0"
                                   max="24"
@@ -970,9 +1090,9 @@ function UpdateTimesheet(props) {
                                   )}
                                 />
                               </td>
-                              <td>
+                              <td className="timesheet-table-cell">
                                 <input
-                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input"
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input sunday-hours"
                                   type="number"
                                   min="0"
                                   mx="24"
@@ -985,7 +1105,7 @@ function UpdateTimesheet(props) {
                                   )}
                                 />
                               </td>
-                              <td>
+                              <td className="row-total-hours">
                                 {parseFloat(record.MondayHours) +
                                   parseFloat(record.TuesdayHours) +
                                   parseFloat(record.WednesdayHours) +
@@ -1003,15 +1123,20 @@ function UpdateTimesheet(props) {
                         <th colspan="6" scope="row">
                           Hour Totals
                         </th>
-                        <td>240</td>
-                        <td>240</td>
-                        <td>240</td>
-                        <td>240</td>
-                        <td>240</td>
-                        <td>240</td>
-                        <td>240</td>
-
-                        <td>240</td>
+                        <td className="monday-total-hours">{mondayHours}</td>
+                        <td className="tuesday-total-hours">{tuesdayHours}</td>
+                        <td className="wednesday-total-hours">
+                          {wednesdayHours}
+                        </td>
+                        <td className="thursday-total-hours">
+                          {thursdayHours}
+                        </td>
+                        <td className="friday-total-hours">{fridayHours}</td>
+                        <td className="saturday-total-hours">
+                          {saturdayHours}
+                        </td>
+                        <td className="sunday-total-hours">{sundayHours}</td>
+                        <td className="grand-total-hours">{hoursGrandTotal}</td>
                       </tr>
                     </tfoot>
                   </table>
