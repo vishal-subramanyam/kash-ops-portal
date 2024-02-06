@@ -101,19 +101,6 @@ function UpdateTimesheet(props) {
     console.log("period start date monday", currentPrevMonday);
   }, []);
 
-  // useEffect(() => {
-  //   console.log("use effect to get column totals");
-  //   if (
-  //     TimesheetTableBody.current === null ||
-  //     TimesheetTableBody.current === undefined
-  //   ) {
-  //     console.log("not loaded");
-  //     return;
-  //   } else {
-  //     getColumnTotals();
-  //   }
-  // }, []);
-
   const getAllEmployees = () => {
     fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
@@ -163,95 +150,33 @@ function UpdateTimesheet(props) {
   };
 
   const getColumnTotals = (records) => {
-    // console.log("get column totals");
-    // let tableRows = TimesheetTableBody.current.childNodes;
-    // console.log(tableRows);
-    // // let rowTotal = 0;
-    // // let mondaysHours = 0;
-    // // let tuesdaysHours = 0;
-    // // let wednesdaysHours = 0;
-    // // let thursdaysHours = 0;
-    // // let fridaysHours = 0;
-    // // let saturdaysHours = 0;
-    // // let sundaysHours = 0;
-    // for (let i = 0; i < tableRows.length; i++) {
-    //   let tableRowCells = tableRows[i].childNodes;
-    //   for (let j = 0; j < tableRowCells.length; j++) {
-    //     if (tableRowCells[j].className.includes("row-total-hours")) {
-    //       let total = parseInt(
-    //         tableRowCells[tableRowCells.length - 1].innerHTML
-    //       );
-    //       rowTotal += total;
-    //     } else if (tableRowCells[j].childNodes.length > 0) {
-    //       for (let k = 0; k < tableRowCells[j].childNodes.length; k++) {
-    //         if (tableRowCells[j].childNodes[k].localName === "input") {
-    //           if (
-    //             tableRowCells[j].childNodes[k].className.includes(
-    //               "monday-hours"
-    //             )
-    //           ) {
-    //             mondaysHours += parseInt(tableRowCells[j].childNodes[k].value);
-    //             console.log("monday hours", mondaysHours);
-    //           } else if (
-    //             tableRowCells[j].childNodes[k].className.includes(
-    //               "tuesday-hours"
-    //             )
-    //           ) {
-    //             tuesdaysHours += parseInt(tableRowCells[j].childNodes[k].value);
-    //           } else if (
-    //             tableRowCells[j].childNodes[k].className.includes(
-    //               "wednesday-hours"
-    //             )
-    //           ) {
-    //             wednesdaysHours += parseInt(
-    //               tableRowCells[j].childNodes[k].value
-    //             );
-    //           } else if (
-    //             tableRowCells[j].childNodes[k].className.includes(
-    //               "thursday-hours"
-    //             )
-    //           ) {
-    //             thursdaysHours += parseInt(
-    //               tableRowCells[j].childNodes[k].value
-    //             );
-    //           } else if (
-    //             tableRowCells[j].childNodes[k].className.includes(
-    //               "friday-hours"
-    //             )
-    //           ) {
-    //             fridaysHours += parseInt(tableRowCells[j].childNodes[k].value);
-    //           } else if (
-    //             tableRowCells[j].childNodes[k].className.includes(
-    //               "saturday-hours"
-    //             )
-    //           ) {
-    //             saturdaysHours += parseInt(
-    //               tableRowCells[j].childNodes[k].value
-    //             );
-    //           } else if (
-    //             tableRowCells[j].childNodes[k].className.includes(
-    //               "sunday-hours"
-    //             )
-    //           ) {
-    //             sundaysHours += parseInt(tableRowCells[j].childNodes[k].value);
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-    // console.log(rowTotal);
-    // console.log(mondaysHours);
-    // setMondayHours(mondaysHours);
-    // setTuesdayHours(tuesdaysHours);
-    // setWednesdayHours(wednesdaysHours);
-    // setThursdayHours(thursdaysHours);
-    // setFridayHours(fridaysHours);
-    // setSaturdayHours(saturdaysHours);
-    // setSundayHours(sundaysHours);
-    // setHoursGrandTotal(rowTotal);
-
     console.log(records);
+    for (let i = 0; i < records.length; i++) {
+      rowTotal +=
+        parseFloat(records[i].MondayHours) +
+        parseFloat(records[i].TuesdayHours) +
+        parseFloat(records[i].WednesdayHours) +
+        parseFloat(records[i].ThursdayHours) +
+        parseFloat(records[i].FridayHours) +
+        parseFloat(records[i].SaturdayHours) +
+        parseFloat(records[i].SundayHours);
+
+      mondaysHours += parseFloat(records[i].MondayHours);
+      tuesdaysHours += parseFloat(records[i].TuesdayHours);
+      wednesdaysHours += parseFloat(records[i].WednesdayHours);
+      thursdaysHours += parseFloat(records[i].ThursdayHours);
+      fridaysHours += parseFloat(records[i].FridayHours);
+      saturdaysHours += parseFloat(records[i].SaturdayHours);
+      sundaysHours += parseFloat(records[i].SundayHours);
+    }
+    setMondayHours(mondaysHours);
+    setTuesdayHours(tuesdaysHours);
+    setWednesdayHours(wednesdaysHours);
+    setThursdayHours(thursdaysHours);
+    setFridayHours(fridaysHours);
+    setSaturdayHours(saturdaysHours);
+    setSundayHours(sundaysHours);
+    setHoursGrandTotal(rowTotal);
   };
 
   const getTimesheetByEmployeeId = async (id, e) => {
@@ -489,9 +414,6 @@ function UpdateTimesheet(props) {
 
   // update the timesheet by employee state array when the days of the week are changed in table
   const updateTimesheetRecord = (name, index) => (e) => {
-    // if (name === "MondayHours") {
-    //   setMondayHours((prevState) => prevState + e.target.value);
-    // }
     console.log(
       "updated day of the week",
       name,
@@ -507,6 +429,7 @@ function UpdateTimesheet(props) {
     newArr[index][name] = e.target.value;
     console.log("updating TS by Emp state array that gets sent to DB", newArr);
     setTimesheetRecordsByEmployee(newArr);
+    getColumnTotals(newArr);
   };
 
   const sendUploadTimesheetToDatabase = async (e) => {
@@ -1134,6 +1057,25 @@ function UpdateTimesheet(props) {
                         })}
                     </tbody>
                     <tfoot>
+                      {/* <tr>
+                        <th colspan="6" scope="row">
+                          Hour Totals
+                        </th>
+                        <td className="monday-total-hours">{mondaysHours}</td>
+                        <td className="tuesday-total-hours">{tuesdaysHours}</td>
+                        <td className="wednesday-total-hours">
+                          {wednesdaysHours}
+                        </td>
+                        <td className="thursday-total-hours">
+                          {thursdaysHours}
+                        </td>
+                        <td className="friday-total-hours">{fridaysHours}</td>
+                        <td className="saturday-total-hours">
+                          {saturdaysHours}
+                        </td>
+                        <td className="sunday-total-hours">{sundaysHours}</td>
+                        <td className="grand-total-hours">{rowTotal}</td>
+                      </tr> */}
                       <tr>
                         <th colspan="6" scope="row">
                           Hour Totals
