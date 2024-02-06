@@ -45,13 +45,13 @@ function UpdateTimesheet(props) {
   let taskTicketNumber = useRef();
   let TimesheetTableBody = useRef();
   let TimesheetTableRow = useRef(null);
-  let [mondayHours, setMondayHours] = useState();
-  let [tuesdayHours, setTuesdayHours] = useState();
-  let [wednesdayHours, setWednesdayHours] = useState();
-  let [thursdayHours, setThursdayHours] = useState();
-  let [fridayHours, setFridayHours] = useState();
-  let [saturdayHours, setSaturdayHours] = useState();
-  let [sundayHours, setSundayHours] = useState();
+  let [MondayHours, setMondayHours] = useState();
+  let [TuesdayHours, setTuesdayHours] = useState();
+  let [WednesdayHours, setWednesdayHours] = useState();
+  let [ThursdayHours, setThursdayHours] = useState();
+  let [FridayHours, setFridayHours] = useState();
+  let [SaturdayHours, setSaturdayHours] = useState();
+  let [SundayHours, setSundayHours] = useState();
   let [hoursGrandTotal, setHoursGrandTotal] = useState();
   let [selectedProjectCompanyNameState, setSelectedProjectCompanyNameState] =
     useState("");
@@ -94,6 +94,7 @@ function UpdateTimesheet(props) {
   }, []);
 
   useEffect(() => {
+    console.log("use effect to get column totals");
     if (
       TimesheetTableBody.current === null ||
       TimesheetTableBody.current === undefined
@@ -154,7 +155,7 @@ function UpdateTimesheet(props) {
   };
 
   const getColumnTotals = () => {
-    // console.log(TimesheetTableBody);
+    console.log("get column totals");
     let tableRows = TimesheetTableBody.current.childNodes;
     console.log(tableRows);
     let rowTotal = 0;
@@ -172,18 +173,17 @@ function UpdateTimesheet(props) {
           let total = parseInt(
             tableRowCells[tableRowCells.length - 1].innerHTML
           );
-          console.log(total);
           rowTotal += total;
         } else if (tableRowCells[j].childNodes.length > 0) {
           for (let k = 0; k < tableRowCells[j].childNodes.length; k++) {
             if (tableRowCells[j].childNodes[k].localName === "input") {
-              console.log(tableRowCells[j].childNodes[k].className);
               if (
                 tableRowCells[j].childNodes[k].className.includes(
                   "monday-hours"
                 )
               ) {
                 mondaysHours += parseInt(tableRowCells[j].childNodes[k].value);
+                console.log(mondaysHours);
               } else if (
                 tableRowCells[j].childNodes[k].className.includes(
                   "tuesday-hours"
@@ -477,6 +477,9 @@ function UpdateTimesheet(props) {
 
   // update the timesheet by employee state array when the days of the week are changed in table
   const updateTimesheetRecord = (name, index) => (e) => {
+    // if (name === "MondayHours") {
+    //   setMondayHours((prevState) => prevState + e.target.value);
+    // }
     console.log(
       "updated day of the week",
       name,
@@ -1123,19 +1126,19 @@ function UpdateTimesheet(props) {
                         <th colspan="6" scope="row">
                           Hour Totals
                         </th>
-                        <td className="monday-total-hours">{mondayHours}</td>
-                        <td className="tuesday-total-hours">{tuesdayHours}</td>
+                        <td className="monday-total-hours">{MondayHours}</td>
+                        <td className="tuesday-total-hours">{TuesdayHours}</td>
                         <td className="wednesday-total-hours">
-                          {wednesdayHours}
+                          {WednesdayHours}
                         </td>
                         <td className="thursday-total-hours">
-                          {thursdayHours}
+                          {ThursdayHours}
                         </td>
-                        <td className="friday-total-hours">{fridayHours}</td>
+                        <td className="friday-total-hours">{FridayHours}</td>
                         <td className="saturday-total-hours">
-                          {saturdayHours}
+                          {SaturdayHours}
                         </td>
-                        <td className="sunday-total-hours">{sundayHours}</td>
+                        <td className="sunday-total-hours">{SundayHours}</td>
                         <td className="grand-total-hours">{hoursGrandTotal}</td>
                       </tr>
                     </tfoot>
