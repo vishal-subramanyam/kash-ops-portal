@@ -37,7 +37,11 @@ function UpdateTimesheet(props) {
   let reportingPeriodStartDate = useRef();
   let alertMessage = useRef();
   let timesheetStatusEntry = useRef();
-  let timesheetRecordIndex;
+  // let timesheetRecordIndex = 0;
+  let timesheetRecordStatusEntry = "";
+  let [timesheetRecordIndex, setTimesheetRecordIndex] = useState(0);
+  // let [timesheetRecordStatusEntry, setTimesheetRecordStatusEntry] =
+  //   useState("");
   let [message, setMessage] = useState("");
   let [reportingPeriodStartDateState, setReportingPeriodStartDateState] =
     useState();
@@ -427,7 +431,14 @@ function UpdateTimesheet(props) {
     //   e.target.value = 0;
     // }
     let newArr = [...timesheetRecordsByEmployee];
-    newArr[index][name] = e.target.value;
+    // if e.target.value is undefined - the timesheet entry is being updated and is not tracked by the event because it's a modal
+    if (e.target.value === "confirm") {
+      console.log("e.target.value is confirm", timesheetRecordStatusEntry);
+      newArr[index][name] = timesheetRecordStatusEntry;
+    } else {
+      console.log(e.target);
+      newArr[index][name] = e.target.value;
+    }
     console.log("updating TS by Emp state array that gets sent to DB", newArr);
     setTimesheetRecordsByEmployee(newArr);
     getColumnTotals(newArr);
@@ -584,19 +595,22 @@ function UpdateTimesheet(props) {
     return entry;
   };
 
-  const close = (modal) => {
-    if (modal.current === undefined || modal.current === null) {
-      return;
-    } else {
-      console.log("close button clicked");
-      modal.current.close();
-    }
+  const closeAlert = () => {
+    alertMessage.current.close();
+  };
+
+  const closeStatusEntry = () => {
+    timesheetStatusEntry.current.close();
+    // setTimesheetRecordIndex();
+    // setTimesheetRecordStatusEntry("");
   };
 
   const addStatusEntry = (recordStatus, statusIndex) => {
-    timesheetRecordIndex = statusIndex;
-    console.log(timesheetRecordIndex);
-    console.log(recordStatus);
+    // must update the timesheet record index via state because passing the index via props on the timesheet modal which is not changed when just a regular global variable ??because with state change, the timesheet modal component is re-rendered??
+    setTimesheetRecordIndex(statusIndex);
+    timesheetRecordStatusEntry = recordStatus;
+    console.log("timesheet record id", timesheetRecordIndex);
+    console.log("timesheet record status", recordStatus);
     timesheetStatusEntry.current.showModal();
     if (recordStatus === "") {
       timesheetStatusEntry.current.childNodes[1][0].value = "";
@@ -605,19 +619,22 @@ function UpdateTimesheet(props) {
     }
   };
 
+  const updateStatusEntry = (entry) => {
+    timesheetRecordStatusEntry = entry;
+  };
+
   return (
     <div>
-      <AlertMessage
-        ref={alertMessage}
-        close={() => close(alertMessage)}
-        message={message}
-      />
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
       <TimesheetStatusEntry
         ref={timesheetStatusEntry}
-        save={() =>
-          updateTimesheetRecord("TimesheetStatusEntry", timesheetRecordIndex)
-        }
-        close={() => close(timesheetStatusEntry)}
+        save={updateTimesheetRecord(
+          "TimesheetStatusEntry",
+          timesheetRecordIndex
+        )}
+        entry={timesheetRecordStatusEntry}
+        updateEntry={updateStatusEntry}
+        close={closeStatusEntry}
       />
       <dialog
         className="database-submit-dialog"
@@ -949,7 +966,7 @@ function UpdateTimesheet(props) {
                               </td>
                               <td className="timesheet-table-cell">
                                 <button
-                                  className="addbutton"
+                                  className="addbutton editStatusBtn"
                                   onClick={() =>
                                     addStatusEntry(
                                       record.TimesheetStatusEntry,

@@ -2161,9 +2161,15 @@ Specify # of total sub-levels?
   color: white;
   border-radius: 1.2rem;
   padding: 0.6rem 1.4rem;
-  /*margin-top: 23px;*/
   cursor: pointer;
 }
+
+.editStatusBtn {
+  border-radius: 0.5rem !important;
+  padding: 0.5rem !important;
+  font-size: 0.75rem !important;
+}
+
 .non-billable-category--holder {
   visibility: hidden;
 }
