@@ -22,7 +22,7 @@ function Login(props) {
       </div>
       <div className="kash_operations_home--content-holder">
         <div className="kash_operations_home--banner-heading">
-          <button
+          {/* <button
             type="submit"
             value="Submit"
             className="button sign_up-button"
@@ -31,7 +31,7 @@ function Login(props) {
             <p className="sign_up-button-text">
               {showSignUpForm ? "Login" : "Sign Up"}
             </p>
-          </button>
+          </button> */}
         </div>
         {showSignUpForm ? (
           <SignUpForm showSignUp={setShowSignUpForm} />

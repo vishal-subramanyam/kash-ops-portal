@@ -149,6 +149,10 @@ a {
   text-decoration: none !important;
 }
 
+.login-form--change-password-link:hover {
+  cursor: pointer;
+}
+
 .update-password--return-to-login {
   color: #ffb494;
 }
