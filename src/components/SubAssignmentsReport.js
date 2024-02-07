@@ -97,8 +97,8 @@ function ProjectsReport() {
           rows={transformedRows}
           columns={visibleColumns}
           getRowId={(row) => row.id}
-          columnVisibilityModel={columnVisibilityModel}
-          onColumnVisibilityModelChange={handleToggleColumnVisibility}
+          // columnVisibilityModel={columnVisibilityModel}
+          // onColumnVisibilityModelChange={handleToggleColumnVisibility}
         />
       </div>
       <AlertMessage ref={alertMessage} close={closeAlert} message={message} />

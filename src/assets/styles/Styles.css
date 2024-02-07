@@ -2094,6 +2094,35 @@ Specify # of total sub-levels?
   }
 }
 
+/* Timesheet Status Entry popup */
+.timesheet-status-modal-container {
+  background-color: #ddfaf8;
+}
+
+.timesheet-status-modal-container span {
+  color: #008cba;
+}
+
+.timesheet-status-modal-container form {
+  padding: 1rem;
+  font-weight: 400;
+}
+
+.timesheet-status-modal-container textarea {
+  border: 2px solid #5c9262;
+  border-radius: 3px;
+}
+
+.timesheet-status-modal-container textarea:focus {
+  border: 2px solid #5c9262;
+}
+
+.timesheet-status-modal-container button {
+  margin-top: 15px;
+  background-color: #008cba;
+  color: #fff;
+}
+
 .x-button {
   margin-left: calc(100% - 40px);
   position: relative;

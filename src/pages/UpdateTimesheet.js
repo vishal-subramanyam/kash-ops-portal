@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import AlertMessage from "../components/AlertMessage";
+import TimesheetStatusEntry from "../components/TimesheetStatusEntry";
 import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
 import { domain } from "../assets/api/apiEndpoints";
@@ -35,6 +36,8 @@ function UpdateTimesheet(props) {
   let subAssignmentByProjectFiltered = [];
   let reportingPeriodStartDate = useRef();
   let alertMessage = useRef();
+  let timesheetStatusEntry = useRef();
+  let timesheetRecordIndex;
   let [message, setMessage] = useState("");
   let [reportingPeriodStartDateState, setReportingPeriodStartDateState] =
     useState();
@@ -43,8 +46,6 @@ function UpdateTimesheet(props) {
   let selectedEmployee = useRef();
   let selectedProject = useRef();
   let taskTicketNumber = useRef();
-  let TimesheetTableBody = useRef();
-  // let TimesheetTableRow = useRef(null);
   let rowTotal = 0;
   let mondaysHours = 0;
   let tuesdaysHours = 0;
@@ -433,25 +434,14 @@ function UpdateTimesheet(props) {
   };
 
   const sendUploadTimesheetToDatabase = async (e) => {
-    console.log(
-      "current timesheet records by employee",
-      timesheetRecordsByEmployee
-    );
+    validateRequiredInputs(e.target);
     let currentRecords = timesheetRecordsByEmployee.filter((record) => {
       return Boolean(record.TimesheetEntryId);
     });
-    console.log(
-      "current records in state array of timesheet records on TS entry id",
-      currentRecords
-    );
 
     let newRecords = timesheetRecordsByEmployee.filter((record) => {
       return !Boolean(record.TimesheetEntryId);
     });
-    console.log(
-      "new records by TSs for filtering TS By Employee state array",
-      newRecords
-    );
     await updateCurrentTimesheetRecord(currentRecords);
     await addNewTimesheetRecord(newRecords);
     getTimesheetByEmployeeId(selectedEmployeeIdState, e);
@@ -594,13 +584,41 @@ function UpdateTimesheet(props) {
     return entry;
   };
 
-  const closeAlert = () => {
-    alertMessage.current.close();
+  const close = (modal) => {
+    if (modal.current === undefined || modal.current === null) {
+      return;
+    } else {
+      console.log("close button clicked");
+      modal.current.close();
+    }
+  };
+
+  const addStatusEntry = (recordStatus, statusIndex) => {
+    timesheetRecordIndex = statusIndex;
+    console.log(timesheetRecordIndex);
+    console.log(recordStatus);
+    timesheetStatusEntry.current.showModal();
+    if (recordStatus === "") {
+      timesheetStatusEntry.current.childNodes[1][0].value = "";
+    } else {
+      timesheetStatusEntry.current.childNodes[1][0].value = recordStatus;
+    }
   };
 
   return (
     <div>
-      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
+      <AlertMessage
+        ref={alertMessage}
+        close={() => close(alertMessage)}
+        message={message}
+      />
+      <TimesheetStatusEntry
+        ref={timesheetStatusEntry}
+        save={() =>
+          updateTimesheetRecord("TimesheetStatusEntry", timesheetRecordIndex)
+        }
+        close={() => close(timesheetStatusEntry)}
+      />
       <dialog
         className="database-submit-dialog"
         id="database-submit-dialog"
@@ -897,18 +915,14 @@ function UpdateTimesheet(props) {
                         <th scope="col">Total Hours</th>
                       </tr>
                     </thead>
-                    <tbody id="tabBod" ref={TimesheetTableBody}>
+                    <tbody id="tabBod">
                       {timesheetRecordsByEmployee
                         .sort(function (a, b) {
                           return a.TimesheetEntryId - b.TimesheetEntryId;
                         })
                         .map((record, i) => {
                           return (
-                            <tr
-                              key={i}
-                              className="timesheet-table-row"
-                              // ref={TimesheetTableRow}
-                            >
+                            <tr key={i} className="timesheet-table-row">
                               <td className="timesheet-table-cell">
                                 <FontAwesomeIcon
                                   className="delete-timesheet-record"
@@ -934,9 +948,18 @@ function UpdateTimesheet(props) {
                                 {record.TicketNum}
                               </td>
                               <td className="timesheet-table-cell">
-                                <textarea rows="2" cols="5">
-                                  {record.TimesheetStatusEntry}
-                                </textarea>
+                                <button
+                                  className="addbutton"
+                                  onClick={() =>
+                                    addStatusEntry(
+                                      record.TimesheetStatusEntry,
+                                      i
+                                    )
+                                  }
+                                  type="button"
+                                >
+                                  Edit Status
+                                </button>
                               </td>
                               <td className="timesheet-table-cell">
                                 <input
@@ -1057,28 +1080,9 @@ function UpdateTimesheet(props) {
                         })}
                     </tbody>
                     <tfoot>
-                      {/* <tr>
-                        <th colspan="6" scope="row">
-                          Hour Totals
-                        </th>
-                        <td className="monday-total-hours">{mondaysHours}</td>
-                        <td className="tuesday-total-hours">{tuesdaysHours}</td>
-                        <td className="wednesday-total-hours">
-                          {wednesdaysHours}
-                        </td>
-                        <td className="thursday-total-hours">
-                          {thursdaysHours}
-                        </td>
-                        <td className="friday-total-hours">{fridaysHours}</td>
-                        <td className="saturday-total-hours">
-                          {saturdaysHours}
-                        </td>
-                        <td className="sunday-total-hours">{sundaysHours}</td>
-                        <td className="grand-total-hours">{rowTotal}</td>
-                      </tr> */}
                       <tr>
-                        <th colspan="6" scope="row">
-                          Hour Totals
+                        <th colSpan="6" scope="row">
+                          Total Hours
                         </th>
                         <td className="monday-total-hours">{MondayHours}</td>
                         <td className="tuesday-total-hours">{TuesdayHours}</td>

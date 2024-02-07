@@ -144,8 +144,8 @@ function ProjectsReport(props) {
           rows={transformedRows}
           columns={visibleColumns}
           getRowId={(row) => row.id}
-          columnVisibilityModel={columnVisibilityModel}
-          onColumnVisibilityModelChange={handleToggleColumnVisibility}
+          // columnVisibilityModel={columnVisibilityModel}
+          // onColumnVisibilityModelChange={handleToggleColumnVisibility}
           slots={{
             toolbar: GridToolbar,
           }}

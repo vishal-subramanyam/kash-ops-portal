@@ -128,8 +128,8 @@ function TimesheetsReport(props) {
     TimesheetStatusEntry: item.TimesheetStatusEntry,
     MondayHours: item.MondayHours,
   }));
-  console.log(transformedRowsTS);
-  console.log(allTimesheetRecords);
+  // console.log(transformedRowsTS);
+  // console.log(allTimesheetRecords);
 
   const initialHiddenColumns = [
     "Billable",
@@ -183,6 +183,7 @@ function TimesheetsReport(props) {
   });
 
   const handleToggleColumnVisibility = (column) => {
+    console.log([column]);
     setColumnVisibilityModel((prevModel) => ({
       ...prevModel,
       [column]: !prevModel[column],
@@ -209,8 +210,8 @@ function TimesheetsReport(props) {
           rows={transformedRowsTS}
           columns={visibleColumns}
           getRowId={(row) => row.idTS}
-          columnVisibilityModel={columnVisibilityModel}
-          onColumnVisibilityModelChange={handleToggleColumnVisibility}
+          // columnVisibilityModel={columnVisibilityModel}
+          // onColumnVisibilityModelChange={handleToggleColumnVisibility}
           slots={{
             toolbar: GridToolbar,
           }}
