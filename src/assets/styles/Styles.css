@@ -461,9 +461,11 @@ input[type="text"] {
   padding: 1rem 1.2rem;
   margin: auto;
   opacity: 0;
-  width: clamp(300px, 50vw, 780px);
+  /* width: clamp(300px, 50vw, 780px); */
+  width: 70%;
   /*min-width: 40vw;*/
 }
+
 .database-submit-dialog .company-name--dialog-span {
   color: #8d3ebd;
 }
@@ -2106,11 +2108,13 @@ Specify # of total sub-levels?
 .timesheet-status-modal-container form {
   padding: 1rem;
   font-weight: 400;
+  width: 100%;
 }
 
 .timesheet-status-modal-container textarea {
   border: 2px solid #5c9262;
   border-radius: 3px;
+  width: 100%;
 }
 
 .timesheet-status-modal-container textarea:focus {

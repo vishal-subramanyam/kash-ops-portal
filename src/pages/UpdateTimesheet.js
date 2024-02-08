@@ -74,6 +74,7 @@ function UpdateTimesheet(props) {
     useState("");
   // let [taskBySubAssignmentState, setTaskBySubAssignmentState] = useState("");
   let subAssignmentTask = useRef();
+  let [subAssignmentTaskState, setSubAssignmentTaskState] = useState("");
   let [subAssignmentTitleDescriptor, setSubAssignmentTitleDescriptor] =
     useState("");
   let [allTimesheetRecords, setAlllTimesheetRecords] = useState([]);
@@ -362,9 +363,20 @@ function UpdateTimesheet(props) {
 
   const addToStagingSheet = () => {
     console.log(
-      selectedEmployee.current.value &&
-        reportingPeriodStartDate.current.value &&
-        selectedProject.current.value
+      "Selected Employee Ref: ",
+      selectedEmployee.current.value,
+      "Reporting Start Date Ref: ",
+      reportingPeriodStartDate.current.value,
+      "Selected Project Ref: ",
+      selectedProject.current.value,
+      "Sub Assignment State: ",
+      selectedSubAssignmentNameState,
+      "Sub Assignemtn Task - Segment 1 - Ref: ",
+      subAssignmentTask.current.value,
+      "Sub Assignemtn Task - Segment 1 - State: ",
+      subAssignmentTaskState,
+      "Ticket number Ref: ",
+      taskTicketNumber.current.value
     );
     if (
       selectedEmployee.current.value &&
@@ -461,13 +473,16 @@ function UpdateTimesheet(props) {
     // reset the project, sub assignment and tasks dropdowns and ticket number fields
     selectedProject.current.value = "";
     taskTicketNumber.current.value = "";
-    if (subAssignmentTask.current !== undefined) {
+    if (
+      subAssignmentTask.current !== undefined ||
+      subAssignmentTask.current !== null
+    ) {
       subAssignmentTask.current.value = "";
     }
     setSubAssignmentTitleDescriptor("");
     setSelectedProjectCompanyNameState("");
     setSelectedProjectSOWIDState("");
-    setSelectedSubAssignmentNameState();
+    setSelectedSubAssignmentNameState("");
     setSubAssignmentByProjectArr([]);
     setTasksBySubAssignment([]);
   };
@@ -535,7 +550,7 @@ function UpdateTimesheet(props) {
       return;
     } else {
       recordsAfterDelete = timesheetRecordsByEmployee.filter((record, i) => {
-        console.log(record);
+        // console.log(record);
         return i !== index;
       });
       console.log(recordsAfterDelete);
@@ -832,11 +847,35 @@ function UpdateTimesheet(props) {
 
             <div className="optional_sub-assignment_container">
               {subAssignmentByProjectArr.length === 0 ? (
-                <div className="optional_sub-assignment_holder">
-                  <p className="sub-assignment_title-text">
-                    Project Sub-Assignments
-                  </p>
-                </div>
+                <span>
+                  <div className="optional_sub-assignment_holder">
+                    <p className="sub-assignment_title-text">
+                      Project Sub-Assignments
+                    </p>
+                  </div>
+                  {/* Load the sub assignment and sub assignment task drop downs to the page but hide them on the dom to get around error that was being thrown when user tried to add record to sheet for a project that does not include a sub assignent or sub assignment task (segment 1) */}
+                  <div
+                    id="sub-assignment-content"
+                    style={{ visibility: "hidden" }}
+                  >
+                    <div className="w-10">
+                      <div>
+                        <label htmlFor="sub-assignment">Work Area</label>
+                      </div>
+                      <select id="sub-assignment">
+                        <option value=""></option>
+                      </select>
+                    </div>
+                    <div className="w-15">
+                      <div>
+                        <label htmlFor="sub-assignment-seg-1">Task Area</label>
+                      </div>
+                      <select id="sub-assignment-seg-1" ref={subAssignmentTask}>
+                        <option value=""></option>
+                      </select>
+                    </div>
+                  </div>
+                </span>
               ) : (
                 <span className="optional_sub-assignment_holder">
                   <div id="sub-assignment-title">
@@ -874,7 +913,13 @@ function UpdateTimesheet(props) {
                       <div>
                         <label htmlFor="sub-assignment-seg-1">Task Area</label>
                       </div>
-                      <select id="sub-assignment-seg-1" ref={subAssignmentTask}>
+                      <select
+                        id="sub-assignment-seg-1"
+                        ref={subAssignmentTask}
+                        onChange={(e) =>
+                          setSubAssignmentTaskState(e.target.value)
+                        }
+                      >
                         {tasksBySubAssignment.map((subTask, i) => {
                           return <option key={i}>{subTask.Segment1}</option>;
                         })}

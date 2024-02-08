@@ -128,8 +128,8 @@ function TimesheetsReport(props) {
     TimesheetStatusEntry: item.TimesheetStatusEntry,
     MondayHours: item.MondayHours,
   }));
-  // console.log(transformedRowsTS);
-  // console.log(allTimesheetRecords);
+  console.log(transformedRowsTS);
+  console.log(allTimesheetRecords);
 
   const initialHiddenColumns = [
     "Billable",
@@ -167,10 +167,20 @@ function TimesheetsReport(props) {
         width: 150,
         type: "date",
         valueGetter: (params) => {
+          let date = params.value;
+          let dateSplit = date.split("-");
           if (!params.value) {
-            return new Date(params.value);
+            return new Date(
+              parseInt(dateSplit[0]),
+              parseInt(dateSplit[1]) - 1,
+              parseInt(dateSplit[2])
+            );
           }
-          return new Date(params.value);
+          return new Date(
+            parseInt(dateSplit[0]),
+            parseInt(dateSplit[1]) - 1,
+            parseInt(dateSplit[2])
+          );
         },
       };
     } else {
