@@ -338,7 +338,7 @@ function EDITUpdateTimesheet(props) {
   };
 
   const validateRequiredInputs = (input) => {
-    // console.log(input);
+    console.log(input);
     let inputArr = [];
     if (Array.isArray(input) === false) {
       input.classList.remove("timesheet-option_invalid");
@@ -349,6 +349,7 @@ function EDITUpdateTimesheet(props) {
           inputArr.push(i.label);
           i.element.classList.add("timesheet-option_invalid");
         } else {
+          console.log(i, " validity true");
           i.element.classList.remove("timesheet-option_invalid");
         }
         alertMessage.current.showModal();
@@ -431,7 +432,6 @@ function EDITUpdateTimesheet(props) {
         ]);
       }
     } else {
-      console.log("Non-billable chosen");
       if (
         selectedEmployee.current.value &&
         reportingPeriodStartDate.current.value &&
@@ -463,6 +463,7 @@ function EDITUpdateTimesheet(props) {
           newTimesheetRecord,
         ]);
       } else {
+        console.log("non billable validation triggered");
         validateRequiredInputs([
           {
             label: "Employee",
@@ -525,21 +526,23 @@ function EDITUpdateTimesheet(props) {
     getTimesheetByEmployeeId(selectedEmployeeIdState, e);
     showConfirmationModal();
 
-    // reset the project, sub assignment and tasks dropdowns and ticket number fields
-    selectedProject.current.value = "";
-    taskTicketNumber.current.value = "";
-    if (
-      subAssignmentTask.current !== undefined ||
-      subAssignmentTask.current !== null
-    ) {
-      subAssignmentTask.current.value = "";
+    if (isBillable === true) {
+      // reset the project, sub assignment and tasks dropdowns and ticket number fields
+      selectedProject.current.value = "";
+      taskTicketNumber.current.value = "";
+      if (
+        subAssignmentTask.current !== undefined ||
+        subAssignmentTask.current !== null
+      ) {
+        subAssignmentTask.current.value = "";
+      }
+      setSubAssignmentTitleDescriptor("");
+      setSelectedProjectCompanyNameState("");
+      setSelectedProjectSOWIDState("");
+      setSelectedSubAssignmentNameState("");
+      setSubAssignmentByProjectArr([]);
+      setTasksBySubAssignment([]);
     }
-    setSubAssignmentTitleDescriptor("");
-    setSelectedProjectCompanyNameState("");
-    setSelectedProjectSOWIDState("");
-    setSelectedSubAssignmentNameState("");
-    setSubAssignmentByProjectArr([]);
-    setTasksBySubAssignment([]);
   };
 
   const updateCurrentTimesheetRecord = async (currentRecordArr) => {
@@ -610,7 +613,7 @@ function EDITUpdateTimesheet(props) {
       });
       console.log(recordsAfterDelete);
       setTimesheetRecordsByEmployee(recordsAfterDelete);
-
+      getColumnTotals(recordsAfterDelete);
       if (databaseRowId) {
         try {
           const response = await fetch(
@@ -847,7 +850,7 @@ function EDITUpdateTimesheet(props) {
                       ref={selectedProject}
                       required
                     >
-                      <option value=""></option>
+                      <option value="">- Choose an Option -</option>
                       {projectAndCompanyInfoArr.map((project, i) => {
                         return (
                           <option key={i} data-projectid={project.SowId}>
@@ -875,6 +878,7 @@ function EDITUpdateTimesheet(props) {
                       id="non-billable-category__dropdown-input"
                       className="add-timesheet-entry--form-input non-billable-category__dropdown-input"
                       ref={NonBillableReason}
+                      required
                     >
                       <option value="">- Choose an Option -</option>
                       <option value="Holiday">Holiday</option>
