@@ -364,70 +364,123 @@ function EDITUpdateTimesheet(props) {
   };
 
   const addToStagingSheet = () => {
-    console.log(
-      "Selected Employee Ref: ",
-      selectedEmployee.current.value,
-      "Reporting Start Date Ref: ",
-      reportingPeriodStartDate.current.value,
-      "Selected Project Ref: ",
-      selectedProject.current.value,
-      "Sub Assignment State: ",
-      selectedSubAssignmentNameState,
-      "Sub Assignemtn Task - Segment 1 - Ref: ",
-      subAssignmentTask.current.value,
-      "Sub Assignemtn Task - Segment 1 - State: ",
-      subAssignmentTaskState,
-      "Ticket number Ref: ",
-      taskTicketNumber.current.value
-    );
-    if (
-      selectedEmployee.current.value &&
-      reportingPeriodStartDate.current.value &&
-      selectedProject.current.value
-    ) {
-      newTimesheetRecord = {
-        Billable: "",
-        EmpId: selectedEmployeeIdState,
-        FridayHours: "0.00",
-        MondayHours: "0.00",
-        NonBillableReason: NonBillableReason.current.value,
-        PeriodStartDate: reportingPeriodStartDate.current.value,
-        SaturdayHours: "0.00",
-        SowId: selectedProjectSOWIDState,
-        CompanyName: selectedProjectCompanyNameState,
-        SubAssignment: selectedSubAssignmentNameState,
-        SubAssignmentSegment1: subAssignmentTask.current.value,
-        SubAssignmentSegment2: "",
-        TicketNum: taskTicketNumber.current.value,
-        SundayHours: "0.00",
-        ThursdayHours: "0.00",
-        TimesheetStatusEntry: "",
-        TuesdayHours: "0.00",
-        WednesdayHours: "0.00",
-      };
-      console.log("adding new record ", newTimesheetRecord);
-      setTimesheetRecordsByEmployee((prevState) => [
-        ...prevState,
-        newTimesheetRecord,
-      ]);
+    if (isBillable === true) {
+      console.log(
+        "Selected Employee Ref: ",
+        selectedEmployee.current.value,
+        "Reporting Start Date Ref: ",
+        reportingPeriodStartDate.current.value,
+        "Selected Project Ref: ",
+        selectedProject.current.value,
+        "Sub Assignment State: ",
+        selectedSubAssignmentNameState,
+        "Sub Assignemtn Task - Segment 1 - Ref: ",
+        subAssignmentTask.current.value,
+        "Sub Assignemtn Task - Segment 1 - State: ",
+        subAssignmentTaskState,
+        "Ticket number Ref: ",
+        taskTicketNumber.current.value
+      );
+      if (
+        selectedEmployee.current.value &&
+        reportingPeriodStartDate.current.value &&
+        selectedProject.current.value
+      ) {
+        newTimesheetRecord = {
+          Billable: "",
+          EmpId: selectedEmployeeIdState,
+          FridayHours: "0.00",
+          MondayHours: "0.00",
+          NonBillableReason: "N/A",
+          PeriodStartDate: reportingPeriodStartDate.current.value,
+          SaturdayHours: "0.00",
+          SowId: selectedProjectSOWIDState,
+          CompanyName: selectedProjectCompanyNameState,
+          SubAssignment: selectedSubAssignmentNameState,
+          SubAssignmentSegment1: subAssignmentTask.current.value,
+          SubAssignmentSegment2: "",
+          TicketNum: taskTicketNumber.current.value,
+          SundayHours: "0.00",
+          ThursdayHours: "0.00",
+          TimesheetStatusEntry: "",
+          TuesdayHours: "0.00",
+          WednesdayHours: "0.00",
+        };
+        console.log("adding new record ", newTimesheetRecord);
+        setTimesheetRecordsByEmployee((prevState) => [
+          ...prevState,
+          newTimesheetRecord,
+        ]);
+      } else {
+        validateRequiredInputs([
+          {
+            label: "Employee",
+            value: selectedEmployee.current.value,
+            element: selectedEmployee.current,
+          },
+          {
+            label: "Reporting Period Start Date",
+            value: reportingPeriodStartDate.current.value,
+            element: reportingPeriodStartDate.current,
+          },
+          {
+            label: "Project Description",
+            value: selectedProject.current.value,
+            element: selectedProject.current,
+          },
+        ]);
+      }
     } else {
-      validateRequiredInputs([
-        {
-          label: "Employee",
-          value: selectedEmployee.current.value,
-          element: selectedEmployee.current,
-        },
-        {
-          label: "Reporting Period Start Date",
-          value: reportingPeriodStartDate.current.value,
-          element: reportingPeriodStartDate.current,
-        },
-        {
-          label: "Project Description",
-          value: selectedProject.current.value,
-          element: selectedProject.current,
-        },
-      ]);
+      console.log("Non-billable chosen");
+      if (
+        selectedEmployee.current.value &&
+        reportingPeriodStartDate.current.value &&
+        NonBillableReason.current.value
+      ) {
+        newTimesheetRecord = {
+          Billable: "",
+          EmpId: selectedEmployeeIdState,
+          FridayHours: "0.00",
+          MondayHours: "0.00",
+          NonBillableReason: NonBillableReason.current.value,
+          PeriodStartDate: reportingPeriodStartDate.current.value,
+          SaturdayHours: "0.00",
+          SowId: selectedProjectSOWIDState,
+          CompanyName: selectedProjectCompanyNameState,
+          SubAssignment: selectedSubAssignmentNameState,
+          SubAssignmentSegment1: subAssignmentTask.current.value,
+          SubAssignmentSegment2: "",
+          TicketNum: taskTicketNumber.current.value,
+          SundayHours: "0.00",
+          ThursdayHours: "0.00",
+          TimesheetStatusEntry: "",
+          TuesdayHours: "0.00",
+          WednesdayHours: "0.00",
+        };
+        console.log("adding new record ", newTimesheetRecord);
+        setTimesheetRecordsByEmployee((prevState) => [
+          ...prevState,
+          newTimesheetRecord,
+        ]);
+      } else {
+        validateRequiredInputs([
+          {
+            label: "Employee",
+            value: selectedEmployee.current.value,
+            element: selectedEmployee.current,
+          },
+          {
+            label: "Reporting Period Start Date",
+            value: reportingPeriodStartDate.current.value,
+            element: reportingPeriodStartDate.current,
+          },
+          {
+            label: "Non-Billable Reason",
+            value: NonBillableReason.current.value,
+            element: NonBillableReason.current,
+          },
+        ]);
+      }
     }
   };
 
@@ -763,16 +816,20 @@ function EDITUpdateTimesheet(props) {
 
                 <div className="billable-toggle-switch-container">
                   <h6 className="billable-non-billable-label">Billable</h6>
-                  <label
-                    className="switch"
-                    onClick={() => console.log("toggle switch clicked")}
-                  >
-                    <input type="checkbox" />
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      onClick={(e) => {
+                        setIsBillable(!isBillable);
+                        setSubAssignmentByProjectArr([]);
+                      }}
+                    />
                     <span className="slider round"></span>
                   </label>
                   <h6 className="billable-non-billable-label">Non-Billable</h6>
                 </div>
 
+                {/* if isBillable state variable is true, show project dropdown and don't show non-billable dropdown. Otherwise, dont show project dropdown and show non-billable dropdown */}
                 {isBillable === true ? (
                   <div className="project-description--holder">
                     <label
@@ -819,7 +876,7 @@ function EDITUpdateTimesheet(props) {
                       className="add-timesheet-entry--form-input non-billable-category__dropdown-input"
                       ref={NonBillableReason}
                     >
-                      <option value="N/A">N/A</option>
+                      <option value="">- Choose an Option -</option>
                       <option value="Holiday">Holiday</option>
                       <option value="Vacation">Vacation</option>
                       <option value="Sick or Other PTO">
@@ -847,23 +904,6 @@ function EDITUpdateTimesheet(props) {
                   </div>
                   <input type="text" id="ticket-num" ref={taskTicketNumber} />
                 </div>
-                {/* <div className="time-billable--holder">
-                  <label
-                    htmlFor="time-billable__dropdown-input"
-                    className="time-billable__label"
-                  >
-                    Time Billable?
-                  </label>
-                  <select
-                    onchange="toggleBillReasonVisibility()"
-                    name="time-billable__dropdown-input"
-                    id="time-billable__dropdown-input"
-                    className="add-timesheet-entry--form-input time-billable__dropdown-input"
-                  >
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                  </select>
-                </div> */}
               </div>
             </div>
 
@@ -1157,7 +1197,7 @@ function EDITUpdateTimesheet(props) {
                     </tbody>
                     <tfoot>
                       <tr>
-                        <th colSpan="6" scope="row">
+                        <th colSpan="7" scope="row">
                           Total Hours
                         </th>
                         <td className="monday-total-hours">{MondayHours}</td>
