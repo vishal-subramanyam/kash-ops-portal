@@ -84,7 +84,7 @@ function EDITUpdateTimesheet(props) {
   let [BillableSundayHours, setBillableSundayHours] = useState(0);
   let [billableHoursTotal, setBillableHoursTotal] = useState(0);
   let [nonBillableHoursTotal, setNonBillableHoursTotal] = useState(0);
-  let [hoursGrandTotal, setHoursGrandTotal] = useState(0);
+  // let [hoursGrandTotal, setHoursGrandTotal] = useState(0);
   let [selectedProjectCompanyNameState, setSelectedProjectCompanyNameState] =
     useState("");
   let [selectedProjectSOWIDState, setSelectedProjectSOWIDState] = useState("");
@@ -172,22 +172,46 @@ function EDITUpdateTimesheet(props) {
   const getColumnTotals = (records) => {
     console.log(records);
     for (let i = 0; i < records.length; i++) {
-      billableRowTotal +=
-        parseFloat(records[i].MondayHours) +
-        parseFloat(records[i].TuesdayHours) +
-        parseFloat(records[i].WednesdayHours) +
-        parseFloat(records[i].ThursdayHours) +
-        parseFloat(records[i].FridayHours) +
-        parseFloat(records[i].SaturdayHours) +
-        parseFloat(records[i].SundayHours);
+      if (
+        records[i].NonBillableReason === "" ||
+        records[i].NonBillableReason === "N/A"
+      ) {
+        console.log("billable record: ", records[i]);
+        billableRowTotal +=
+          parseFloat(records[i].MondayHours) +
+          parseFloat(records[i].TuesdayHours) +
+          parseFloat(records[i].WednesdayHours) +
+          parseFloat(records[i].ThursdayHours) +
+          parseFloat(records[i].FridayHours) +
+          parseFloat(records[i].SaturdayHours) +
+          parseFloat(records[i].SundayHours);
 
-      billableMondaysHours += parseFloat(records[i].MondayHours);
-      billableTuesdaysHours += parseFloat(records[i].TuesdayHours);
-      billableWednesdaysHours += parseFloat(records[i].WednesdayHours);
-      billableThursdaysHours += parseFloat(records[i].ThursdayHours);
-      billableFridaysHours += parseFloat(records[i].FridayHours);
-      billableSaturdaysHours += parseFloat(records[i].SaturdayHours);
-      billableSundaysHours += parseFloat(records[i].SundayHours);
+        billableMondaysHours += parseFloat(records[i].MondayHours);
+        billableTuesdaysHours += parseFloat(records[i].TuesdayHours);
+        billableWednesdaysHours += parseFloat(records[i].WednesdayHours);
+        billableThursdaysHours += parseFloat(records[i].ThursdayHours);
+        billableFridaysHours += parseFloat(records[i].FridayHours);
+        billableSaturdaysHours += parseFloat(records[i].SaturdayHours);
+        billableSundaysHours += parseFloat(records[i].SundayHours);
+      } else {
+        console.log("non-billable record: ", records[i]);
+        nonBillableRowTotal +=
+          parseFloat(records[i].MondayHours) +
+          parseFloat(records[i].TuesdayHours) +
+          parseFloat(records[i].WednesdayHours) +
+          parseFloat(records[i].ThursdayHours) +
+          parseFloat(records[i].FridayHours) +
+          parseFloat(records[i].SaturdayHours) +
+          parseFloat(records[i].SundayHours);
+
+        nonBillableMondaysHours += parseFloat(records[i].MondayHours);
+        nonBillableTuesdaysHours += parseFloat(records[i].TuesdayHours);
+        nonBillableWednesdaysHours += parseFloat(records[i].WednesdayHours);
+        nonBillableThursdaysHours += parseFloat(records[i].ThursdayHours);
+        nonBillableFridaysHours += parseFloat(records[i].FridayHours);
+        nonBillableSaturdaysHours += parseFloat(records[i].SaturdayHours);
+        nonBillableSundaysHours += parseFloat(records[i].SundayHours);
+      }
     }
     setBillableMondayHours(billableMondaysHours);
     setBillableTuesdayHours(billableTuesdaysHours);
@@ -197,6 +221,15 @@ function EDITUpdateTimesheet(props) {
     setBillableSaturdayHours(billableSaturdaysHours);
     setBillableSundayHours(billableSundaysHours);
     setBillableHoursTotal(billableRowTotal);
+
+    setNonBillableMondayHours(nonBillableMondaysHours);
+    setNonBillableTuesdayHours(nonBillableTuesdaysHours);
+    setNonBillableWednesdayHours(nonBillableWednesdaysHours);
+    setNonBillableThursdayHours(nonBillableThursdaysHours);
+    setNonBillableFridayHours(nonBillableFridaysHours);
+    setNonBillableSaturdayHours(nonBillableSaturdaysHours);
+    setNonBillableSundayHours(nonBillableSundaysHours);
+    setNonBillableHoursTotal(nonBillableRowTotal);
   };
 
   const getTimesheetByEmployeeId = async (id, e) => {
