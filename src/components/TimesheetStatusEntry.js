@@ -19,10 +19,9 @@ const timesheetStatusEntry = forwardRef(function (props, ref) {
           cols={45}
           maxLength={7900}
           spellCheck={true}
+          defaultalue={props.entry}
           onChange={(e) => props.updateEntry(e.target.value)}
-        >
-          {props.entry}
-        </textarea>
+        ></textarea>
 
         <div>
           <button

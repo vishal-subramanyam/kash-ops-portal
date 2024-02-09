@@ -52,21 +52,38 @@ function EDITUpdateTimesheet(props) {
   let selectedProject = useRef();
   let taskTicketNumber = useRef();
   let NonBillableReason = useRef();
-  let rowTotal = 0;
-  let mondaysHours = 0;
-  let tuesdaysHours = 0;
-  let wednesdaysHours = 0;
-  let thursdaysHours = 0;
-  let fridaysHours = 0;
-  let saturdaysHours = 0;
-  let sundaysHours = 0;
-  let [MondayHours, setMondayHours] = useState(0);
-  let [TuesdayHours, setTuesdayHours] = useState(0);
-  let [WednesdayHours, setWednesdayHours] = useState(0);
-  let [ThursdayHours, setThursdayHours] = useState(0);
-  let [FridayHours, setFridayHours] = useState(0);
-  let [SaturdayHours, setSaturdayHours] = useState(0);
-  let [SundayHours, setSundayHours] = useState(0);
+  let billableRowTotal = 0;
+  let billableMondaysHours = 0;
+  let billableTuesdaysHours = 0;
+  let billableWednesdaysHours = 0;
+  let billableThursdaysHours = 0;
+  let billableFridaysHours = 0;
+  let billableSaturdaysHours = 0;
+  let billableSundaysHours = 0;
+  let nonBillableRowTotal = 0;
+  let nonBillableMondaysHours = 0;
+  let nonBillableTuesdaysHours = 0;
+  let nonBillableWednesdaysHours = 0;
+  let nonBillableThursdaysHours = 0;
+  let nonBillableFridaysHours = 0;
+  let nonBillableSaturdaysHours = 0;
+  let nonBillableSundaysHours = 0;
+  let [NonBillableMondayHours, setNonBillableMondayHours] = useState(0);
+  let [NonBillableTuesdayHours, setNonBillableTuesdayHours] = useState(0);
+  let [NonBillableWednesdayHours, setNonBillableWednesdayHours] = useState(0);
+  let [NonBillableThursdayHours, setNonBillableThursdayHours] = useState(0);
+  let [NonBillableFridayHours, setNonBillableFridayHours] = useState(0);
+  let [NonBillableSaturdayHours, setNonBillableSaturdayHours] = useState(0);
+  let [NonBillableSundayHours, setNonBillableSundayHours] = useState(0);
+  let [BillableMondayHours, setBillableMondayHours] = useState(0);
+  let [BillableTuesdayHours, setBillableTuesdayHours] = useState(0);
+  let [BillableWednesdayHours, setBillableWednesdayHours] = useState(0);
+  let [BillableThursdayHours, setBillableThursdayHours] = useState(0);
+  let [BillableFridayHours, setBillableFridayHours] = useState(0);
+  let [BillableSaturdayHours, setBillableSaturdayHours] = useState(0);
+  let [BillableSundayHours, setBillableSundayHours] = useState(0);
+  let [billableHoursTotal, setBillableHoursTotal] = useState(0);
+  let [nonBillableHoursTotal, setNonBillableHoursTotal] = useState(0);
   let [hoursGrandTotal, setHoursGrandTotal] = useState(0);
   let [selectedProjectCompanyNameState, setSelectedProjectCompanyNameState] =
     useState("");
@@ -91,22 +108,17 @@ function EDITUpdateTimesheet(props) {
     todayDate.setDate(todayDate.getDate() - ((todayDate.getDay() + 6) % 7));
     let prevMondayFormat = todayDate.toISOString().split("T")[0];
     return prevMondayFormat;
-  }); // To add to Timesheets table - PeriodStartDate
+  });
   let [projectAndCompanyInfoArr, setProjectAndCompanyInfoArr] = useState([]);
   let [subAssignmentByProjectArr, setSubAssignmentByProjectArr] = useState([]);
   let [tasksBySubAssignment, setTasksBySubAssignment] = useState([]);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
-  // let basicUserInfo = allEmployeesArr.filter((user) => {
-  //   return user.EmpId === props.loggedInUser.EmpId;
-  // });
-
   // create variable for logged in user details to use in conditional display of employee dropdown
   let basicUserInfo = props.loggedInUser;
 
   useEffect(() => {
     getAllProjects();
     getAllEmployees();
-    console.log("period start date monday", currentPrevMonday);
   }, []);
 
   const getAllEmployees = () => {
@@ -160,7 +172,7 @@ function EDITUpdateTimesheet(props) {
   const getColumnTotals = (records) => {
     console.log(records);
     for (let i = 0; i < records.length; i++) {
-      rowTotal +=
+      billableRowTotal +=
         parseFloat(records[i].MondayHours) +
         parseFloat(records[i].TuesdayHours) +
         parseFloat(records[i].WednesdayHours) +
@@ -169,22 +181,22 @@ function EDITUpdateTimesheet(props) {
         parseFloat(records[i].SaturdayHours) +
         parseFloat(records[i].SundayHours);
 
-      mondaysHours += parseFloat(records[i].MondayHours);
-      tuesdaysHours += parseFloat(records[i].TuesdayHours);
-      wednesdaysHours += parseFloat(records[i].WednesdayHours);
-      thursdaysHours += parseFloat(records[i].ThursdayHours);
-      fridaysHours += parseFloat(records[i].FridayHours);
-      saturdaysHours += parseFloat(records[i].SaturdayHours);
-      sundaysHours += parseFloat(records[i].SundayHours);
+      billableMondaysHours += parseFloat(records[i].MondayHours);
+      billableTuesdaysHours += parseFloat(records[i].TuesdayHours);
+      billableWednesdaysHours += parseFloat(records[i].WednesdayHours);
+      billableThursdaysHours += parseFloat(records[i].ThursdayHours);
+      billableFridaysHours += parseFloat(records[i].FridayHours);
+      billableSaturdaysHours += parseFloat(records[i].SaturdayHours);
+      billableSundaysHours += parseFloat(records[i].SundayHours);
     }
-    setMondayHours(mondaysHours);
-    setTuesdayHours(tuesdaysHours);
-    setWednesdayHours(wednesdaysHours);
-    setThursdayHours(thursdaysHours);
-    setFridayHours(fridaysHours);
-    setSaturdayHours(saturdaysHours);
-    setSundayHours(sundaysHours);
-    setHoursGrandTotal(rowTotal);
+    setBillableMondayHours(billableMondaysHours);
+    setBillableTuesdayHours(billableTuesdaysHours);
+    setBillableWednesdayHours(billableWednesdaysHours);
+    setBillableThursdayHours(billableThursdaysHours);
+    setBillableFridayHours(billableFridaysHours);
+    setBillableSaturdayHours(billableSaturdaysHours);
+    setBillableSundayHours(billableSundaysHours);
+    setBillableHoursTotal(billableRowTotal);
   };
 
   const getTimesheetByEmployeeId = async (id, e) => {
@@ -308,11 +320,12 @@ function EDITUpdateTimesheet(props) {
       e.target[e.target.selectedIndex].getAttribute("data-projectid");
 
     let selectedProjectDetails = e.target[e.target.selectedIndex].innerHTML;
+    console.log(selectedProjectDetails);
     // Get Company name and save to state
-    if (selectedProjectDetails) {
+    if (selectedProjectDetails !== "- Choose an Option -") {
       let selectedProjectCompanyName = selectedProjectDetails.split(" -")[0];
       setSelectedProjectCompanyNameState(selectedProjectCompanyName);
-      // Get SOW ID and save to state variable
+      // Get SOW ID and save to state variable - get the string that is between the parentheses
       let selectedProjectSOWID = selectedProjectDetails.match(/\((.*)\)/).pop();
       setSelectedProjectSOWIDState(selectedProjectSOWID);
     }
@@ -445,10 +458,10 @@ function EDITUpdateTimesheet(props) {
           NonBillableReason: NonBillableReason.current.value,
           PeriodStartDate: reportingPeriodStartDate.current.value,
           SaturdayHours: "0.00",
-          SowId: selectedProjectSOWIDState,
-          CompanyName: selectedProjectCompanyNameState,
-          SubAssignment: selectedSubAssignmentNameState,
-          SubAssignmentSegment1: subAssignmentTask.current.value,
+          SowId: "",
+          CompanyName: "",
+          SubAssignment: "",
+          SubAssignmentSegment1: "",
           SubAssignmentSegment2: "",
           TicketNum: taskTicketNumber.current.value,
           SundayHours: "0.00",
@@ -476,7 +489,7 @@ function EDITUpdateTimesheet(props) {
             element: reportingPeriodStartDate.current,
           },
           {
-            label: "Non-Billable Reason",
+            label: "Non-Billable Category",
             value: NonBillableReason.current.value,
             element: NonBillableReason.current,
           },
@@ -902,9 +915,11 @@ function EDITUpdateTimesheet(props) {
                   </div>
                 )}
 
-                <div className="w-10">
+                <div className="w-10 ticket-number">
                   <div>
-                    <label htmlFor="ticket-num">Ticket #</label>
+                    <label htmlFor="ticket-num">
+                      Ticket # <span>(optional)</span>
+                    </label>
                   </div>
                   <input type="text" id="ticket-num" ref={taskTicketNumber} />
                 </div>
@@ -1198,26 +1213,80 @@ function EDITUpdateTimesheet(props) {
                             </tr>
                           );
                         })}
+                      <tr>
+                        <th colSpan="7" scope="row">
+                          Total Billable Hours
+                        </th>
+                        <td className="monday-total-hours">
+                          {BillableMondayHours}
+                        </td>
+                        <td className="tuesday-total-hours">
+                          {BillableTuesdayHours}
+                        </td>
+                        <td className="wednesday-total-hours">
+                          {BillableWednesdayHours}
+                        </td>
+                        <td className="thursday-total-hours">
+                          {BillableThursdayHours}
+                        </td>
+                        <td className="friday-total-hours">
+                          {BillableFridayHours}
+                        </td>
+                        <td className="saturday-total-hours">
+                          {BillableSaturdayHours}
+                        </td>
+                        <td className="sunday-total-hours">
+                          {BillableSundayHours}
+                        </td>
+                        <td className="total-billable-hours">
+                          {billableHoursTotal}
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <th colSpan="7" scope="row">
+                          Total Non-Billable Hours
+                        </th>
+                        <td className="monday-total-hours">
+                          {NonBillableMondayHours}
+                        </td>
+                        <td className="tuesday-total-hours">
+                          {NonBillableTuesdayHours}
+                        </td>
+                        <td className="wednesday-total-hours">
+                          {NonBillableWednesdayHours}
+                        </td>
+                        <td className="thursday-total-hours">
+                          {NonBillableThursdayHours}
+                        </td>
+                        <td className="friday-total-hours">
+                          {NonBillableFridayHours}
+                        </td>
+                        <td className="saturday-total-hours">
+                          {NonBillableSaturdayHours}
+                        </td>
+                        <td className="sunday-total-hours">
+                          {NonBillableSundayHours}
+                        </td>
+                        <td className="grand-total-hours">
+                          {nonBillableHoursTotal}
+                        </td>
+                      </tr>
                     </tbody>
+
                     <tfoot>
                       <tr>
                         <th colSpan="7" scope="row">
-                          Total Hours
+                          Grand Total Hours
                         </th>
-                        <td className="monday-total-hours">{MondayHours}</td>
-                        <td className="tuesday-total-hours">{TuesdayHours}</td>
-                        <td className="wednesday-total-hours">
-                          {WednesdayHours}
-                        </td>
-                        <td className="thursday-total-hours">
-                          {ThursdayHours}
-                        </td>
-                        <td className="friday-total-hours">{FridayHours}</td>
-                        <td className="saturday-total-hours">
-                          {SaturdayHours}
-                        </td>
-                        <td className="sunday-total-hours">{SundayHours}</td>
-                        <td className="grand-total-hours">{hoursGrandTotal}</td>
+                        <td className="monday-total-hours">0</td>
+                        <td className="tuesday-total-hours">0</td>
+                        <td className="wednesday-total-hours">0</td>
+                        <td className="thursday-total-hours">0</td>
+                        <td className="friday-total-hours">0</td>
+                        <td className="saturday-total-hours">0</td>
+                        <td className="sunday-total-hours">0</td>
+                        <td className="grand-total-hours">0</td>
                       </tr>
                     </tfoot>
                   </table>

@@ -321,6 +321,16 @@ input:checked + .slider:before {
 }
 /* ////////////////////////////////////////////// */
 /* ////////////////////////////////////////////// */
+.ticket-number > div > label {
+  display: flex;
+  align-items: center;
+}
+
+.ticket-number > div > label > span {
+  color: hsl(180, 20%, 49%);
+  font-size: 0.65rem;
+  margin-left: 5px;
+}
 
 .optional_sub-assignment_holder {
   display: flex;
