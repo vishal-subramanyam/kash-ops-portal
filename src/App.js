@@ -13,6 +13,7 @@ import EditProject from "./pages/EditProject";
 import EditCompanyAdmin from "./pages/EditCompanyAdmin";
 import TimesheetsHub from "./pages/TimesheetsHub";
 import UpdateTimesheet from "./pages/UpdateTimesheet";
+import EDITUpdateTimesheet from "./pages/EDITUpdateTimesheet";
 import RequireAuth from "./components/RequireAuth";
 import UpdatePassword from "./pages/UpdatePassword";
 import { useAuth } from "./hooks/Authentication";
@@ -181,6 +182,17 @@ function App() {
           element={
             <RequireAuth>
               <UpdateTimesheet
+                loggedInUser={loggedInUserLocal}
+                admin={isAdminLocal}
+              />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/edit-update-timesheet"
+          element={
+            <RequireAuth>
+              <EDITUpdateTimesheet
                 loggedInUser={loggedInUserLocal}
                 admin={isAdminLocal}
               />
