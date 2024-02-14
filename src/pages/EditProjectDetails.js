@@ -41,14 +41,15 @@ function EditProjectDetails(props) {
       .then((res) => res.json())
       .then((res) => {
         // filter out duplicate projects from output
-        let removeDuplicateProject = Object.values(
-          res.data.reduce((c, e) => {
-            if (!c[e.ProjectCategory]) c[e.ProjectCategory] = e;
-            return c;
-          }, {})
-        );
+        // let removeDuplicateProject = Object.values(
+        //   res.data.reduce((c, e) => {
+        //     if (!c[e.ProjectCategory]) c[e.ProjectCategory] = e;
+        //     return c;
+        //   }, {})
+        // );
 
-        setAllProjectsArr(removeDuplicateProject);
+        // setAllProjectsArr(removeDuplicateProject);
+        setAllProjectsArr(res.data);
       })
       .catch((err) => {
         setMessage(
@@ -74,14 +75,15 @@ function EditProjectDetails(props) {
       .then((res) => res.json())
       .then((res) => {
         // filter out duplicate projects from output
-        let removeDuplicateProject = Object.values(
-          res.data.reduce((c, e) => {
-            if (!c[e.ProjectCategory]) c[e.ProjectCategory] = e;
-            return c;
-          }, {})
-        );
+        // let removeDuplicateProject = Object.values(
+        //   res.data.reduce((c, e) => {
+        //     if (!c[e.ProjectCategory]) c[e.ProjectCategory] = e;
+        //     return c;
+        //   }, {})
+        // );
 
-        setAllProjectsArr(removeDuplicateProject);
+        // setAllProjectsArr(removeDuplicateProject);
+        setAllProjectsArr(res.data);
       })
       .catch((err) => {
         setMessage(
