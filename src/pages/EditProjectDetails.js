@@ -272,6 +272,7 @@ function EditProjectDetails(props) {
                   Start Date
                   <input
                     type="date"
+                    defaultValue="mm/dd/yyyy"
                     className="add-project-form--form-input add-project--start-date-input"
                     id="add-project--start-date-input"
                     name="add-project--start-date-input"
@@ -286,6 +287,7 @@ function EditProjectDetails(props) {
                   End Date
                   <input
                     type="date"
+                    defaultValue="mm/dd/yyyy"
                     className="add-project-form--form-input add-project--end-date-input"
                     id="add-project--end-date-input"
                     name="add-project--end-date-input"
