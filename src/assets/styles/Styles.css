@@ -635,7 +635,7 @@ input:checked + .slider:before {
 }
 
 .timesheet-table-row-non-billable {
-  background-color: #54c488;
+  background-color: #d1ffe6;
 }
 
 .submit-to-server--embed-arrow {
@@ -1175,6 +1175,24 @@ input:checked + .slider:before {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+.edit-project-form-sow-input-readonly {
+  background-color: #d8c6e6 !important;
+}
+
+.edit-project-form-sow-input-readonly:focus {
+  outline: unset !important;
+}
+
+.update-project-btn {
+  margin-right: 1rem;
+  background-color: #a790b9 !important;
+  border-color: #a790b9 !important;
+}
+.delete-project-btn {
+  background-color: #2a2f2f !important;
+  border-color: #2a2f2f !important;
 }
 
 .add-project-form--add-project-button {
@@ -2331,7 +2349,7 @@ Specify # of total sub-levels?
 }
 
 .success-modal-container {
-  position: absolute;
+  /* position: absolute; */
   border: none;
   border-radius: 1rem;
   padding: 1rem 1.2rem;

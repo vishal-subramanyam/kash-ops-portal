@@ -333,7 +333,7 @@ function EditProject(props) {
     <div className="add-sub-assignment-page--body">
       <main className="add-sub-assignment__main-section max-width--main-container">
         <h1 className="add-sub-assignment-title form-page-title--lg-1">
-          Edit Project Details
+          Manage Project Sub Assignments
         </h1>
         <div className="edit_page__return-link-holder">
           <Link to="/clients-hub" className="return-link">

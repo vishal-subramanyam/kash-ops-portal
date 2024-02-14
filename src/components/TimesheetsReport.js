@@ -14,7 +14,7 @@ function TimesheetsReport(props) {
     ProjectCategory: true,
     FridayHours: true,
     MondayHours: true,
-    NonBillableReason: false,
+    NonBillableReason: true,
     PeriodStartDate: true,
     SaturdayHours: true,
     SowId: false,
@@ -25,7 +25,7 @@ function TimesheetsReport(props) {
     ThursdayHours: true,
     TicketNum: true,
     TimesheetEntryId: true,
-    TimesheetStatusEntry: false,
+    TimesheetStatusEntry: true,
     TuesdayHours: true,
     WednesdayHours: true,
   });
@@ -134,8 +134,7 @@ function TimesheetsReport(props) {
   const initialHiddenColumns = [
     "Billable",
     "SubAssignmentSegment2",
-    "NonBillableReason",
-    "TimesheetStatusEntry",
+    "Billable",
     "EmpId",
     "SowId",
   ];
@@ -143,12 +142,14 @@ function TimesheetsReport(props) {
   const customColumnOrder = [
     "idTS",
     "PeriodStartDate",
+    "NonBillableReason",
     "CompanyName",
     "FullName",
     "ProjectCategory",
     "SubAssignment",
     "SubAssignmentSegment1",
     "TicketNum",
+    "TimesheetStatusEntry",
     "MondayHours",
     "TuesdayHours",
     "WednesdayHours",
@@ -156,7 +157,6 @@ function TimesheetsReport(props) {
     "FridayHours",
     "SaturdayHours",
     "SundayHours",
-    "Billable",
   ];
 
   const columnList = customColumnOrder.map((item) => {
@@ -164,7 +164,7 @@ function TimesheetsReport(props) {
       return {
         field: item,
         headerName: item.replace(/([A-Z])/g, " $1").trim(),
-        width: 150,
+        width: 250,
         type: "date",
         valueGetter: (params) => {
           let date = params.value;
@@ -187,7 +187,7 @@ function TimesheetsReport(props) {
       return {
         field: item,
         headerName: item.replace(/([A-Z0-9])/g, " $1").trim(),
-        width: 150,
+        width: 250,
       };
     }
   });

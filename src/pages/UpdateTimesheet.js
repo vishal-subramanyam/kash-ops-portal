@@ -1020,7 +1020,7 @@ function UpdateTimesheet(props) {
                         <th scope="col">Task Area</th>
                         <th scope="col">Ticket #</th>
                         <th scope="col">Non-Billable Reason</th>
-                        <th scope="col">Status</th>
+                        <th scope="col">Task Notes</th>
                         <th scope="col">Mon</th>
                         <th scope="col">Tue</th>
                         <th scope="col">Wed</th>
@@ -1089,7 +1089,7 @@ function UpdateTimesheet(props) {
                                   }
                                   type="button"
                                 >
-                                  Edit Status
+                                  Edit Notes
                                 </button>
                               </td>
                               <td className="timesheet-table-cell">

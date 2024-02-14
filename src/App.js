@@ -19,6 +19,7 @@ import UpdatePassword from "./pages/UpdatePassword";
 import { useAuth } from "./hooks/Authentication";
 import ReportsHub from "./pages/ReportsHub";
 import EditProjectDetails from "./pages/EditProjectDetails";
+import EditCompanyDetails from "./pages/EditCompanyDetails";
 
 function App() {
   let { logout, user, loggedInUser, isAdmin } = useAuth();
@@ -149,10 +150,32 @@ function App() {
           }
         />
         <Route
+          path="/edit-project-details"
+          element={
+            <RequireAuth>
+              <EditProjectDetails
+                loggedInUser={loggedInUserLocal}
+                admin={isAdminLocal}
+              />
+            </RequireAuth>
+          }
+        />
+        <Route
           path="/edit-project"
           element={
             <RequireAuth>
               <EditProject
+                loggedInUser={loggedInUserLocal}
+                admin={isAdminLocal}
+              />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/edit-company-details"
+          element={
+            <RequireAuth>
+              <EditCompanyDetails
                 loggedInUser={loggedInUserLocal}
                 admin={isAdminLocal}
               />
@@ -194,17 +217,6 @@ function App() {
           element={
             <RequireAuth>
               <EDITUpdateTimesheet
-                loggedInUser={loggedInUserLocal}
-                admin={isAdminLocal}
-              />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/edit-project-details"
-          element={
-            <RequireAuth>
-              <EditProjectDetails
                 loggedInUser={loggedInUserLocal}
                 admin={isAdminLocal}
               />

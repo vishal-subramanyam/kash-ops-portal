@@ -114,7 +114,7 @@ function ProjectsReport(props) {
   const columnList = customColumnOrder.map((item) => ({
     field: item,
     headerName: item.replace(/([A-Z0-9])/g, " $1").trim(),
-    width: 150,
+    width: 250,
   }));
 
   const handleToggleColumnVisibility = (column) => {

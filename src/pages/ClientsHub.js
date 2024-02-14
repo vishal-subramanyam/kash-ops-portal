@@ -32,19 +32,6 @@ function ClientsHub(props) {
         </Link>
       </div>
       <div class="hub_page--main-actions-holder client_hub--main-action-holder">
-        {/* <!--a href="#" class="hub_page--main-action-link client_hub--main-action-link"> */}
-        {/* <p>View Client Information</p>
-        <svg
-          width="100"
-          height="46"
-          viewBox="0 0 100 46"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M0 12.8597H59.2665V32.988H0V12.8597Z" fill="#FA9B4B" />
-          <path d="M99.1037 23L59.2665 46V0L99.1037 23Z" fill="#FA9B4B" />
-        </svg> */}
-        {/* </a--> */}
         <Link
           to="/reports"
           class="hub_page--main-action-link client_hub--main-action-link"
@@ -100,10 +87,16 @@ function ClientsHub(props) {
               Edit Company (In Progress)
             </a> */}
             <Link
-              to="/edit-project"
+              to="/edit-project-details"
               class="edit-project-link hub_page--secondary-action-link client_hub--secondary-action-link"
             >
               Edit Project
+            </Link>
+            <Link
+              to="/edit-project"
+              class="edit-project-link hub_page--secondary-action-link client_hub--secondary-action-link"
+            >
+              Manage Project Sub Assignments
             </Link>
             {/* <a
               href="http://52.167.226.44:8080/ibi_apps/WFServlet.ibfs?IBFS1_action=RUNFEX&|IBFS_path=/WFC/Repository/KashDemo_Files/KASH_Operations/html-pages/external_html_and_assets/html/edit-company_contact-page.html"
@@ -111,7 +104,6 @@ function ClientsHub(props) {
             >
               Edit Company Contacts
             </a> */}
-            {console.log(props.loggedInUser)}
             {props.loggedInUser.AdminLevel === "Super Admin" ? (
               <Link
                 to="/edit-company-admin"
@@ -120,7 +112,7 @@ function ClientsHub(props) {
                 Edit Company Admins
               </Link>
             ) : (
-              ""
+              <></>
             )}
           </div>
         </div>
