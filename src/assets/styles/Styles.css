@@ -633,6 +633,11 @@ input:checked + .slider:before {
 .submit-timesheet--to-server_button:hover .submit-to-server--embed-arrow {
   transform: translate(0.25rem, 0) scale(1.2);
 }
+
+.timesheet-table-row-non-billable {
+  background-color: #54c488;
+}
+
 .submit-to-server--embed-arrow {
   display: inline;
   fill: #fff;
@@ -2342,4 +2347,8 @@ Specify # of total sub-levels?
 .success-modal-button {
   background-color: #0a3622 !important;
   color: #a3cfbb !important;
+}
+
+tfoot {
+  border-top-width: 0.5rem !important;
 }

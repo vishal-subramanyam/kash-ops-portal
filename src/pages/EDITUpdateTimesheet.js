@@ -648,13 +648,14 @@ function EDITUpdateTimesheet(props) {
     // If timesheet_entry_id is present, then run a fetch to delete record from database and remove from state array
     // If timesheet_entry_id is not present, the record does not yet exist in database and remove record from state array
     let recordsAfterDelete;
+    console.log(index);
     if (
       !window.confirm("Are you sure you want to delete this timesheet record?")
     ) {
       return;
     } else {
       recordsAfterDelete = timesheetRecordsByEmployee.filter((record, i) => {
-        // console.log(record);
+        console.log("record index: ", i, "record: ", record);
         return i !== index;
       });
       console.log(recordsAfterDelete);
@@ -1083,9 +1084,20 @@ function EDITUpdateTimesheet(props) {
                         .sort(function (a, b) {
                           return a.TimesheetEntryId - b.TimesheetEntryId;
                         })
+                        .filter((record) => {
+                          // filter out billable records
+                          return (
+                            record.NonBillableReason === "" ||
+                            record.NonBillableReason === "n/a" ||
+                            record.NonBillableReason === "N/A"
+                          );
+                        })
                         .map((record, i) => {
                           return (
-                            <tr key={i} className="timesheet-table-row">
+                            <tr
+                              key={i + "billable"}
+                              className="timesheet-table-row"
+                            >
                               <td className="timesheet-table-cell">
                                 <FontAwesomeIcon
                                   className="delete-timesheet-record"
@@ -1111,7 +1123,8 @@ function EDITUpdateTimesheet(props) {
                                 {record.TicketNum}
                               </td>
                               <td className="timesheet-table-cell">
-                                {record.NonBillableReason === ""
+                                {record.NonBillableReason === "" ||
+                                record.NonBillableReason === "n/a"
                                   ? "N/A"
                                   : record.NonBillableReason}
                               </td>
@@ -1276,6 +1289,197 @@ function EDITUpdateTimesheet(props) {
                         </td>
                       </tr>
 
+                      {/* Show the non-billable records seperately from billable records */}
+                      {timesheetRecordsByEmployee
+                        .sort(function (a, b) {
+                          return a.TimesheetEntryId - b.TimesheetEntryId;
+                        })
+                        .filter((record) => {
+                          // filter out billable records
+                          return (
+                            record.NonBillableReason !== "" &&
+                            record.NonBillableReason !== "n/a" &&
+                            record.NonBillableReason !== "N/A"
+                          );
+                        })
+                        .map((record, i) => {
+                          let recordIdTotal = timesheetRecordsByEmployee.filter(
+                            (rec) => {
+                              return (
+                                rec.NonBillableReason === "" ||
+                                rec.NonBillableReason === "n/a" ||
+                                rec.NonBillableReason === "N/A"
+                              );
+                            }
+                          );
+                          return (
+                            <tr
+                              key={i + "non-billable"}
+                              className="timesheet-table-row"
+                            >
+                              <td className="timesheet-table-cell">
+                                <FontAwesomeIcon
+                                  className="delete-timesheet-record"
+                                  icon={faTrashCan}
+                                  onClick={() =>
+                                    deleteTimesheetRow(
+                                      record.TimesheetEntryId,
+                                      i + recordIdTotal.length
+                                    )
+                                  }
+                                />
+                              </td>
+                              <td className="timesheet-table-cell">
+                                {record.CompanyName} - {record.SowId}
+                              </td>
+                              <td className="timesheet-table-cell">
+                                {record.SubAssignment}
+                              </td>
+                              <td className="timesheet-table-cell">
+                                {record.SubAssignmentSegment1}
+                              </td>
+                              <td className="timesheet-table-cell">
+                                {record.TicketNum}
+                              </td>
+                              <td className="timesheet-table-cell">
+                                {record.NonBillableReason === "" ||
+                                record.NonBillableReason === "n/a" ||
+                                record.NonBillableReason === "N/A"
+                                  ? "N/A"
+                                  : record.NonBillableReason}
+                              </td>
+                              <td className="timesheet-table-cell">
+                                <button
+                                  className="addbutton editStatusBtn"
+                                  onClick={() =>
+                                    addStatusEntry(
+                                      record.TimesheetStatusEntry,
+                                      i + recordIdTotal.length
+                                    )
+                                  }
+                                  type="button"
+                                >
+                                  Edit Status
+                                </button>
+                              </td>
+                              <td className="timesheet-table-cell">
+                                <input
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input monday-hours"
+                                  type="number"
+                                  min="0"
+                                  max="24"
+                                  step={0.25}
+                                  value={record.MondayHours}
+                                  autoComplete="off"
+                                  onChange={updateTimesheetRecord(
+                                    "MondayHours",
+                                    i + recordIdTotal.length
+                                  )}
+                                />
+                              </td>
+                              <td className="timesheet-table-cell">
+                                <input
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input tuesday-hours"
+                                  type="number"
+                                  min="0"
+                                  max="24"
+                                  step={0.25}
+                                  value={record.TuesdayHours}
+                                  autoComplete="off"
+                                  onChange={updateTimesheetRecord(
+                                    "TuesdayHours",
+                                    i + recordIdTotal.length
+                                  )}
+                                />
+                              </td>
+                              <td className="timesheet-table-cell">
+                                <input
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input wednesday-hours"
+                                  type="number"
+                                  min="0"
+                                  max="24"
+                                  step={0.25}
+                                  value={record.WednesdayHours}
+                                  autoComplete="off"
+                                  onChange={updateTimesheetRecord(
+                                    "WednesdayHours",
+                                    i + recordIdTotal.length
+                                  )}
+                                />
+                              </td>
+                              <td className="timesheet-table-cell">
+                                <input
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input thursday-hours"
+                                  type="number"
+                                  min="0"
+                                  max="24"
+                                  step={0.25}
+                                  value={record.ThursdayHours}
+                                  autoComplete="off"
+                                  onChange={updateTimesheetRecord(
+                                    "ThursdayHours",
+                                    i + recordIdTotal.length
+                                  )}
+                                />
+                              </td>
+                              <td className="timesheet-table-cell">
+                                <input
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input friday-hours"
+                                  type="number"
+                                  min="0"
+                                  max="24"
+                                  step={0.25}
+                                  value={record.FridayHours}
+                                  autoComplete="off"
+                                  onChange={updateTimesheetRecord(
+                                    "FridayHours",
+                                    i + recordIdTotal.length
+                                  )}
+                                />
+                              </td>
+                              <td className="timesheet-table-cell">
+                                <input
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input saturday-hours"
+                                  type="number"
+                                  min="0"
+                                  max="24"
+                                  step={0.25}
+                                  value={record.SaturdayHours}
+                                  autoComplete="off"
+                                  onChange={updateTimesheetRecord(
+                                    "SaturdayHours",
+                                    i + recordIdTotal.length
+                                  )}
+                                />
+                              </td>
+                              <td className="timesheet-table-cell">
+                                <input
+                                  className="weekly-hours-input add-timesheet-entry--form-input hours-input sunday-hours"
+                                  type="number"
+                                  min="0"
+                                  mx="24"
+                                  step={0.25}
+                                  value={record.SundayHours}
+                                  autoComplete="off"
+                                  onChange={updateTimesheetRecord(
+                                    "SundayHours",
+                                    i + recordIdTotal.length
+                                  )}
+                                />
+                              </td>
+                              <td className="row-total-hours">
+                                {parseFloat(record.MondayHours) +
+                                  parseFloat(record.TuesdayHours) +
+                                  parseFloat(record.WednesdayHours) +
+                                  parseFloat(record.ThursdayHours) +
+                                  parseFloat(record.FridayHours) +
+                                  parseFloat(record.SaturdayHours) +
+                                  parseFloat(record.SundayHours)}
+                              </td>
+                            </tr>
+                          );
+                        })}
+
                       <tr>
                         <th colSpan="7" scope="row">
                           Total Non-Billable Hours
@@ -1312,14 +1516,30 @@ function EDITUpdateTimesheet(props) {
                         <th colSpan="7" scope="row">
                           Grand Total Hours
                         </th>
-                        <td className="monday-total-hours">0</td>
-                        <td className="tuesday-total-hours">0</td>
-                        <td className="wednesday-total-hours">0</td>
-                        <td className="thursday-total-hours">0</td>
-                        <td className="friday-total-hours">0</td>
-                        <td className="saturday-total-hours">0</td>
-                        <td className="sunday-total-hours">0</td>
-                        <td className="grand-total-hours">0</td>
+                        <td className="monday-total-hours">
+                          {BillableMondayHours + NonBillableMondayHours}
+                        </td>
+                        <td className="tuesday-total-hours">
+                          {BillableTuesdayHours + NonBillableTuesdayHours}
+                        </td>
+                        <td className="wednesday-total-hours">
+                          {BillableWednesdayHours + NonBillableWednesdayHours}
+                        </td>
+                        <td className="thursday-total-hours">
+                          {BillableThursdayHours + NonBillableThursdayHours}
+                        </td>
+                        <td className="friday-total-hours">
+                          {BillableFridayHours + NonBillableFridayHours}
+                        </td>
+                        <td className="saturday-total-hours">
+                          {BillableSaturdayHours + NonBillableSaturdayHours}
+                        </td>
+                        <td className="sunday-total-hours">
+                          {BillableSundayHours + NonBillableSundayHours}
+                        </td>
+                        <td className="grand-total-hours">
+                          {billableHoursTotal + nonBillableHoursTotal}
+                        </td>
                       </tr>
                     </tfoot>
                   </table>

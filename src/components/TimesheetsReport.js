@@ -41,10 +41,10 @@ function TimesheetsReport(props) {
 
   useEffect(() => {
     if (props.loggedInUser.AdminLevel === "Super Admin") {
-      console.log("User is Super Admin");
+      console.log("User is Super Admin", props.loggedInUser);
       getAllTimesheets();
     } else {
-      console.log("User is basic or admin");
+      console.log("User is basic or admin", props.loggedInUser);
       getTimesheetsByEmpId();
     }
   }, []);

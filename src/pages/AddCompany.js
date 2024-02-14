@@ -170,7 +170,11 @@ function AddCompany() {
         <form method="dialog">
           <p>
             Company Added: <br />
-            <span id="company-name-span" ref={confirmModalCompanyName}></span>
+            <span
+              id="company-name-span"
+              ref={confirmModalCompanyName}
+            ></span>{" "}
+            <br />
             <span id="company-id-span" ref={confirmModalCompanyId}></span>
           </p>
           <div>

@@ -485,13 +485,6 @@ function AddProject(props) {
             </button>
           </form>
         </div>
-
-        {/* LIST OUT SUMMARY OF PROJECTS */}
-        {/* <iframe
-          src=""
-          id="project-list-summary_iframe"
-          className="project-list-summary_iframe"
-        ></iframe> */}
       </main>
     </div>
   );

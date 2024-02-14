@@ -39,6 +39,7 @@ function UpdateTimesheet(props) {
   let timesheetStatusEntry = useRef();
   // let timesheetRecordIndex = 0;
   let timesheetRecordStatusEntry = "";
+  let [isBillable, setIsBillable] = useState(true);
   let [timesheetRecordIndex, setTimesheetRecordIndex] = useState(0);
   // let [timesheetRecordStatusEntry, setTimesheetRecordStatusEntry] =
   //   useState("");
@@ -50,6 +51,7 @@ function UpdateTimesheet(props) {
   let selectedEmployee = useRef();
   let selectedProject = useRef();
   let taskTicketNumber = useRef();
+  let NonBillableReason = useRef();
   let rowTotal = 0;
   let mondaysHours = 0;
   let tuesdaysHours = 0;
@@ -307,10 +309,10 @@ function UpdateTimesheet(props) {
 
     let selectedProjectDetails = e.target[e.target.selectedIndex].innerHTML;
     // Get Company name and save to state
-    if (selectedProjectDetails) {
+    if (selectedProjectDetails !== "- Choose an Option -") {
       let selectedProjectCompanyName = selectedProjectDetails.split(" -")[0];
       setSelectedProjectCompanyNameState(selectedProjectCompanyName);
-      // Get SOW ID and save to state variable
+      // Get SOW ID and save to state variable - get the string that is between the parentheses
       let selectedProjectSOWID = selectedProjectDetails.match(/\((.*)\)/).pop();
       setSelectedProjectSOWIDState(selectedProjectSOWID);
     }
@@ -362,70 +364,123 @@ function UpdateTimesheet(props) {
   };
 
   const addToStagingSheet = () => {
-    console.log(
-      "Selected Employee Ref: ",
-      selectedEmployee.current.value,
-      "Reporting Start Date Ref: ",
-      reportingPeriodStartDate.current.value,
-      "Selected Project Ref: ",
-      selectedProject.current.value,
-      "Sub Assignment State: ",
-      selectedSubAssignmentNameState,
-      "Sub Assignemtn Task - Segment 1 - Ref: ",
-      subAssignmentTask.current.value,
-      "Sub Assignemtn Task - Segment 1 - State: ",
-      subAssignmentTaskState,
-      "Ticket number Ref: ",
-      taskTicketNumber.current.value
-    );
-    if (
-      selectedEmployee.current.value &&
-      reportingPeriodStartDate.current.value &&
-      selectedProject.current.value
-    ) {
-      newTimesheetRecord = {
-        Billable: "",
-        EmpId: selectedEmployeeIdState,
-        FridayHours: "0.00",
-        MondayHours: "0.00",
-        NonBillableReason: "",
-        PeriodStartDate: reportingPeriodStartDate.current.value,
-        SaturdayHours: "0.00",
-        SowId: selectedProjectSOWIDState,
-        CompanyName: selectedProjectCompanyNameState,
-        SubAssignment: selectedSubAssignmentNameState,
-        SubAssignmentSegment1: subAssignmentTask.current.value,
-        SubAssignmentSegment2: "",
-        TicketNum: taskTicketNumber.current.value,
-        SundayHours: "0.00",
-        ThursdayHours: "0.00",
-        TimesheetStatusEntry: "",
-        TuesdayHours: "0.00",
-        WednesdayHours: "0.00",
-      };
-      console.log("adding new record ", newTimesheetRecord);
-      setTimesheetRecordsByEmployee((prevState) => [
-        ...prevState,
-        newTimesheetRecord,
-      ]);
+    if (isBillable === true) {
+      console.log(
+        "Selected Employee Ref: ",
+        selectedEmployee.current.value,
+        "Reporting Start Date Ref: ",
+        reportingPeriodStartDate.current.value,
+        "Selected Project Ref: ",
+        selectedProject.current.value,
+        "Sub Assignment State: ",
+        selectedSubAssignmentNameState,
+        "Sub Assignemtn Task - Segment 1 - Ref: ",
+        subAssignmentTask.current.value,
+        "Sub Assignemtn Task - Segment 1 - State: ",
+        subAssignmentTaskState,
+        "Ticket number Ref: ",
+        taskTicketNumber.current.value
+      );
+      if (
+        selectedEmployee.current.value &&
+        reportingPeriodStartDate.current.value &&
+        selectedProject.current.value
+      ) {
+        newTimesheetRecord = {
+          Billable: "",
+          EmpId: selectedEmployeeIdState,
+          FridayHours: "0.00",
+          MondayHours: "0.00",
+          NonBillableReason: "N/A",
+          PeriodStartDate: reportingPeriodStartDate.current.value,
+          SaturdayHours: "0.00",
+          SowId: selectedProjectSOWIDState,
+          CompanyName: selectedProjectCompanyNameState,
+          SubAssignment: selectedSubAssignmentNameState,
+          SubAssignmentSegment1: subAssignmentTask.current.value,
+          SubAssignmentSegment2: "",
+          TicketNum: taskTicketNumber.current.value,
+          SundayHours: "0.00",
+          ThursdayHours: "0.00",
+          TimesheetStatusEntry: "",
+          TuesdayHours: "0.00",
+          WednesdayHours: "0.00",
+        };
+        console.log("adding new record ", newTimesheetRecord);
+        setTimesheetRecordsByEmployee((prevState) => [
+          ...prevState,
+          newTimesheetRecord,
+        ]);
+      } else {
+        validateRequiredInputs([
+          {
+            label: "Employee",
+            value: selectedEmployee.current.value,
+            element: selectedEmployee.current,
+          },
+          {
+            label: "Reporting Period Start Date",
+            value: reportingPeriodStartDate.current.value,
+            element: reportingPeriodStartDate.current,
+          },
+          {
+            label: "Project Description",
+            value: selectedProject.current.value,
+            element: selectedProject.current,
+          },
+        ]);
+      }
     } else {
-      validateRequiredInputs([
-        {
-          label: "Employee",
-          value: selectedEmployee.current.value,
-          element: selectedEmployee.current,
-        },
-        {
-          label: "Reporting Period Start Date",
-          value: reportingPeriodStartDate.current.value,
-          element: reportingPeriodStartDate.current,
-        },
-        {
-          label: "Project Description",
-          value: selectedProject.current.value,
-          element: selectedProject.current,
-        },
-      ]);
+      if (
+        selectedEmployee.current.value &&
+        reportingPeriodStartDate.current.value &&
+        NonBillableReason.current.value
+      ) {
+        newTimesheetRecord = {
+          Billable: "",
+          EmpId: selectedEmployeeIdState,
+          FridayHours: "0.00",
+          MondayHours: "0.00",
+          NonBillableReason: NonBillableReason.current.value,
+          PeriodStartDate: reportingPeriodStartDate.current.value,
+          SaturdayHours: "0.00",
+          SowId: "",
+          CompanyName: "",
+          SubAssignment: "",
+          SubAssignmentSegment1: "",
+          SubAssignmentSegment2: "",
+          TicketNum: taskTicketNumber.current.value,
+          SundayHours: "0.00",
+          ThursdayHours: "0.00",
+          TimesheetStatusEntry: "",
+          TuesdayHours: "0.00",
+          WednesdayHours: "0.00",
+        };
+        console.log("adding new record ", newTimesheetRecord);
+        setTimesheetRecordsByEmployee((prevState) => [
+          ...prevState,
+          newTimesheetRecord,
+        ]);
+      } else {
+        console.log("non billable validation triggered");
+        validateRequiredInputs([
+          {
+            label: "Employee",
+            value: selectedEmployee.current.value,
+            element: selectedEmployee.current,
+          },
+          {
+            label: "Reporting Period Start Date",
+            value: reportingPeriodStartDate.current.value,
+            element: reportingPeriodStartDate.current,
+          },
+          {
+            label: "Non-Billable Category",
+            value: NonBillableReason.current.value,
+            element: NonBillableReason.current,
+          },
+        ]);
+      }
     }
   };
 
@@ -470,21 +525,23 @@ function UpdateTimesheet(props) {
     getTimesheetByEmployeeId(selectedEmployeeIdState, e);
     showConfirmationModal();
 
-    // reset the project, sub assignment and tasks dropdowns and ticket number fields
-    selectedProject.current.value = "";
-    taskTicketNumber.current.value = "";
-    if (
-      subAssignmentTask.current !== undefined ||
-      subAssignmentTask.current !== null
-    ) {
-      subAssignmentTask.current.value = "";
+    if (isBillable === true) {
+      // reset the project, sub assignment and tasks dropdowns and ticket number fields
+      selectedProject.current.value = "";
+      taskTicketNumber.current.value = "";
+      if (
+        subAssignmentTask.current !== undefined ||
+        subAssignmentTask.current !== null
+      ) {
+        subAssignmentTask.current.value = "";
+      }
+      setSubAssignmentTitleDescriptor("");
+      setSelectedProjectCompanyNameState("");
+      setSelectedProjectSOWIDState("");
+      setSelectedSubAssignmentNameState("");
+      setSubAssignmentByProjectArr([]);
+      setTasksBySubAssignment([]);
     }
-    setSubAssignmentTitleDescriptor("");
-    setSelectedProjectCompanyNameState("");
-    setSelectedProjectSOWIDState("");
-    setSelectedSubAssignmentNameState("");
-    setSubAssignmentByProjectArr([]);
-    setTasksBySubAssignment([]);
   };
 
   const updateCurrentTimesheetRecord = async (currentRecordArr) => {
@@ -555,7 +612,7 @@ function UpdateTimesheet(props) {
       });
       console.log(recordsAfterDelete);
       setTimesheetRecordsByEmployee(recordsAfterDelete);
-
+      getColumnTotals(recordsAfterDelete);
       if (databaseRowId) {
         try {
           const response = await fetch(
@@ -759,175 +816,170 @@ function UpdateTimesheet(props) {
                   />
                 </div>
 
-                <div className="project-description--holder">
-                  <label
-                    htmlFor="project-description__dropdown-input"
-                    className="project-description__label"
-                  >
-                    Project Description <br />
-                    <span>(SOW I.D.)</span>
+                <div className="billable-toggle-switch-container">
+                  <h6 className="billable-non-billable-label">Billable</h6>
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      onClick={(e) => {
+                        setIsBillable(!isBillable);
+                        setSubAssignmentByProjectArr([]);
+                      }}
+                    />
+                    <span className="slider round"></span>
                   </label>
-                  <select
-                    name="project-description__dropdown-input"
-                    id="project-description__dropdown-input"
-                    className="add-timesheet-entry--form-input project-description__dropdown-input"
-                    onChange={getSelectedProjectData}
-                    ref={selectedProject}
-                    required
-                  >
-                    <option value=""></option>
-                    {projectAndCompanyInfoArr.map((project, i) => {
-                      return (
-                        <option key={i} data-projectid={project.SowId}>
-                          {project.CompanyName +
-                            " - " +
-                            project.ProjectCategory +
-                            " (" +
-                            project.SowId +
-                            ")"}
-                        </option>
-                      );
-                    })}
-                  </select>
+                  <h6 className="billable-non-billable-label">Non-Billable</h6>
                 </div>
 
-                <div className="w-10">
+                {/* if isBillable state variable is true, show project dropdown and don't show non-billable dropdown. Otherwise, dont show project dropdown and show non-billable dropdown */}
+                {isBillable === true ? (
+                  <div className="project-description--holder">
+                    <label
+                      htmlFor="project-description__dropdown-input"
+                      className="project-description__label"
+                    >
+                      Project Description <br />
+                      <span>(SOW I.D.)</span>
+                    </label>
+                    <select
+                      name="project-description__dropdown-input"
+                      id="project-description__dropdown-input"
+                      className="add-timesheet-entry--form-input project-description__dropdown-input"
+                      onChange={getSelectedProjectData}
+                      ref={selectedProject}
+                      required
+                    >
+                      <option value="">- Choose an Option -</option>
+                      {projectAndCompanyInfoArr.map((project, i) => {
+                        return (
+                          <option key={i} data-projectid={project.SowId}>
+                            {project.CompanyName +
+                              " - " +
+                              project.ProjectCategory +
+                              " (" +
+                              project.SowId +
+                              ")"}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                ) : (
+                  <div className="non-billable-category--holder">
+                    <label
+                      htmlFor="non-billable-category__dropdown-input"
+                      className="non-billable-category__label"
+                    >
+                      Non-Billable Category
+                    </label>
+                    <select
+                      name="non-billable-category__dropdown-input"
+                      id="non-billable-category__dropdown-input"
+                      className="add-timesheet-entry--form-input non-billable-category__dropdown-input"
+                      ref={NonBillableReason}
+                      required
+                    >
+                      <option value="">- Choose an Option -</option>
+                      <option value="Holiday">Holiday</option>
+                      <option value="Vacation">Vacation</option>
+                      <option value="Sick or Other PTO">
+                        Sick or Other PTO
+                      </option>
+                      <option value="Travel (Non-billable)">
+                        Travel (Non-billable)
+                      </option>
+                      <option value="Sales">Sales</option>
+                      <option value="Client Time (Non-Billable)">
+                        Client Time (Non-Billable)
+                      </option>
+                      <option value="Assigned Admin Project">
+                        Assigned Admin Project
+                      </option>
+                      <option value="General Admin">General Admin</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                )}
+
+                <div className="w-10 ticket-number">
                   <div>
-                    <label htmlFor="ticket-num">Ticket #</label>
+                    <label htmlFor="ticket-num">
+                      Ticket # <span>(optional)</span>
+                    </label>
                   </div>
                   <input type="text" id="ticket-num" ref={taskTicketNumber} />
                 </div>
-                {/* <!--div className="time-billable--holder">
-                        <label htmlFor="time-billable__dropdown-input" className="time-billable__label">
-                            Time Billable?
-                        </label>
-                        <select onchange="toggleBillReasonVisibility()" name="time-billable__dropdown-input" id="time-billable__dropdown-input" className="add-timesheet-entry--form-input time-billable__dropdown-input">
-                            <option value="Yes">
-                                Yes
-                            </option>
-                            <option value="No">
-                                No
-                            </option>
-                        </select>
-                    </div-->
-
-                <div className="non-billable-category--holder">
-                  <label
-                    htmlFor="non-billable-category__dropdown-input"
-                    className="non-billable-category__label"
-                  >
-                    Non-Billable Category
-                  </label>
-                  <select
-                    name="non-billable-category__dropdown-input"
-                    id="non-billable-category__dropdown-input"
-                    className="add-timesheet-entry--form-input non-billable-category__dropdown-input"
-                  >
-                    <option value="n/a">N/A</option>
-                    <option value="Holiday">Holiday</option>
-                    <option value="Vacation">Vacation</option>
-                    <option value="Sick or Other PTO">Sick or Other PTO</option>
-                    <option value="Travel (Non-billable)">
-                      Travel (Non-billable)
-                    </option>
-                    <option value="Sales">Sales</option>
-                    <option value="Client Time (Non-Billable)">
-                      Client Time (Non-Billable)
-                    </option>
-                    <option value="Assigned Admin Project">
-                      Assigned Admin Project
-                    </option>
-                    <option value="General Admin">General Admin</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-                */}
               </div>
             </div>
 
             <div className="optional_sub-assignment_container">
-              {subAssignmentByProjectArr.length === 0 ? (
-                <span>
-                  <div className="optional_sub-assignment_holder">
-                    <p className="sub-assignment_title-text">
-                      Project Sub-Assignments
-                    </p>
-                  </div>
-                  {/* Load the sub assignment and sub assignment task drop downs to the page but hide them on the dom to get around error that was being thrown when user tried to add record to sheet for a project that does not include a sub assignent or sub assignment task (segment 1) */}
-                  <div
-                    id="sub-assignment-content"
-                    style={{ visibility: "hidden" }}
+              <span
+                className={
+                  subAssignmentByProjectArr.length === 0
+                    ? "sub-project-section"
+                    : "optional_sub-assignment_holder"
+                }
+              >
+                <div id="sub-assignment-title">
+                  <p className="sub-assignment_title-text">
+                    Project Sub-Assignments
+                  </p>
+                  <span
+                    id="sub-assignment-title-descriptor"
+                    className={
+                      subAssignmentByProjectArr.length === 0
+                        ? "hide-sub-project-title-heading"
+                        : ""
+                    }
                   >
-                    <div className="w-10">
-                      <div>
-                        <label htmlFor="sub-assignment">Work Area</label>
-                      </div>
-                      <select id="sub-assignment">
-                        <option value=""></option>
-                      </select>
+                    {subAssignmentTitleDescriptor}
+                  </span>
+                </div>
+                <div
+                  id="sub-assignment-content"
+                  className={
+                    subAssignmentByProjectArr.length === 0
+                      ? "hide-sub-project-section"
+                      : ""
+                  }
+                >
+                  <div className="w-10">
+                    <div>
+                      <label htmlFor="sub-assignment">Work Area</label>
                     </div>
-                    <div className="w-15">
-                      <div>
-                        <label htmlFor="sub-assignment-seg-1">Task Area</label>
-                      </div>
-                      <select id="sub-assignment-seg-1" ref={subAssignmentTask}>
-                        <option value=""></option>
-                      </select>
-                    </div>
+                    <select id="sub-assignment" onChange={selectSubAssignment}>
+                      <option value=""></option>
+                      {subAssignmentByProjectArr.map((subProject, i) => {
+                        return (
+                          <option
+                            key={i}
+                            data-subprojectid={subProject.ProjectSubTaskId}
+                            data-subprojectname={subProject.SubTaskTitle}
+                          >
+                            {subProject.SubTaskTitle}
+                          </option>
+                        );
+                      })}
+                    </select>
                   </div>
-                </span>
-              ) : (
-                <span className="optional_sub-assignment_holder">
-                  <div id="sub-assignment-title">
-                    <p className="sub-assignment_title-text">
-                      Project Sub-Assignments
-                    </p>
-                    <span id="sub-assignment-title-descriptor">
-                      {subAssignmentTitleDescriptor}
-                    </span>
-                  </div>
-                  <div id="sub-assignment-content">
-                    <div className="w-10">
-                      <div>
-                        <label htmlFor="sub-assignment">Work Area</label>
-                      </div>
-                      <select
-                        id="sub-assignment"
-                        onChange={selectSubAssignment}
-                      >
-                        <option value=""></option>
-                        {subAssignmentByProjectArr.map((subProject, i) => {
-                          return (
-                            <option
-                              key={i}
-                              data-subprojectid={subProject.ProjectSubTaskId}
-                              data-subprojectname={subProject.SubTaskTitle}
-                            >
-                              {subProject.SubTaskTitle}
-                            </option>
-                          );
-                        })}
-                      </select>
+                  <div className="w-15">
+                    <div>
+                      <label htmlFor="sub-assignment-seg-1">Task Area</label>
                     </div>
-                    <div className="w-15">
-                      <div>
-                        <label htmlFor="sub-assignment-seg-1">Task Area</label>
-                      </div>
-                      <select
-                        id="sub-assignment-seg-1"
-                        ref={subAssignmentTask}
-                        onChange={(e) =>
-                          setSubAssignmentTaskState(e.target.value)
-                        }
-                      >
-                        {tasksBySubAssignment.map((subTask, i) => {
-                          return <option key={i}>{subTask.Segment1}</option>;
-                        })}
-                      </select>
-                    </div>
+                    <select
+                      id="sub-assignment-seg-1"
+                      ref={subAssignmentTask}
+                      onChange={(e) =>
+                        setSubAssignmentTaskState(e.target.value)
+                      }
+                    >
+                      {tasksBySubAssignment.map((subTask, i) => {
+                        return <option key={i}>{subTask.Segment1}</option>;
+                      })}
+                    </select>
                   </div>
-                </span>
-              )}
+                </div>
+              </span>
             </div>
 
             <div className="w-5">
@@ -944,6 +996,7 @@ function UpdateTimesheet(props) {
           </div>
         </form>
 
+        {/* Hide timesheet table if there are no records in state array. */}
         {timesheetRecordsByEmployee.length === 0 ? (
           ""
         ) : (
@@ -966,6 +1019,7 @@ function UpdateTimesheet(props) {
                         <th scope="col">Work Area</th>
                         <th scope="col">Task Area</th>
                         <th scope="col">Ticket #</th>
+                        <th scope="col">Non-Billable Reason</th>
                         <th scope="col">Status</th>
                         <th scope="col">Mon</th>
                         <th scope="col">Tue</th>
@@ -984,7 +1038,16 @@ function UpdateTimesheet(props) {
                         })
                         .map((record, i) => {
                           return (
-                            <tr key={i} className="timesheet-table-row">
+                            <tr
+                              key={i}
+                              className={
+                                record.NonBillableReason === "" ||
+                                record.NonBillableReason === "n/a" ||
+                                record.NonBillableReason === "N/A"
+                                  ? "timesheet-table-row-billable"
+                                  : "timesheet-table-row-non-billable"
+                              }
+                            >
                               <td className="timesheet-table-cell">
                                 <FontAwesomeIcon
                                   className="delete-timesheet-record"
@@ -1008,6 +1071,12 @@ function UpdateTimesheet(props) {
                               </td>
                               <td className="timesheet-table-cell">
                                 {record.TicketNum}
+                              </td>
+                              <td className="timesheet-table-cell">
+                                {record.NonBillableReason === "" ||
+                                record.NonBillableReason === "n/a"
+                                  ? "N/A"
+                                  : record.NonBillableReason}
                               </td>
                               <td className="timesheet-table-cell">
                                 <button
@@ -1143,7 +1212,7 @@ function UpdateTimesheet(props) {
                     </tbody>
                     <tfoot>
                       <tr>
-                        <th colSpan="6" scope="row">
+                        <th colSpan="7" scope="row">
                           Total Hours
                         </th>
                         <td className="monday-total-hours">{MondayHours}</td>
