@@ -39,6 +39,7 @@ function UpdateTimesheet(props) {
   let timesheetStatusEntry = useRef();
   // let timesheetRecordIndex = 0;
   let timesheetRecordStatusEntry = "";
+  let isBillableSwitch = useRef();
   let [isBillable, setIsBillable] = useState(true);
   let [timesheetRecordIndex, setTimesheetRecordIndex] = useState(0);
   // let [timesheetRecordStatusEntry, setTimesheetRecordStatusEntry] =
@@ -230,6 +231,22 @@ function UpdateTimesheet(props) {
 
   const getSelectedEmployeeId = (e) => {
     validateRequiredInputs(e.target);
+
+    if (selectedProject.current !== null) {
+      selectedProject.current.value = "";
+    }
+    setSubAssignmentTitleDescriptor("");
+    setSubAssignmentByProjectArr([]);
+    setTasksBySubAssignment([]);
+    setSelectedProjectSOWIDState("");
+    setSelectedProjectCompanyNameState("");
+    setSelectedSubAssignmentNameState("");
+    subAssignmentTask.current.value = "";
+    taskTicketNumber.current.value = "";
+    if (isBillable === false) {
+      isBillableSwitch.current.click();
+    }
+
     let selectedEmployeeId =
       e.target[e.target.selectedIndex].getAttribute("data-employeeid");
     setSelectedEmployeeIdState(selectedEmployeeId);
@@ -303,6 +320,10 @@ function UpdateTimesheet(props) {
 
   const getSelectedProjectData = async (e) => {
     validateRequiredInputs(e.target);
+    // reset ticket #, sub assignment and sub assignment segment 1 from previous selection
+    setSelectedSubAssignmentNameState("");
+    subAssignmentTask.current.value = "";
+    taskTicketNumber.current.value = "";
 
     selectedProjectId =
       e.target[e.target.selectedIndex].getAttribute("data-projectid");
@@ -821,6 +842,7 @@ function UpdateTimesheet(props) {
                   <label className="switch">
                     <input
                       type="checkbox"
+                      ref={isBillableSwitch}
                       onClick={(e) => {
                         setIsBillable(!isBillable);
                         setSubAssignmentByProjectArr([]);
