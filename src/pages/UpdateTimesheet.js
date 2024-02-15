@@ -87,19 +87,39 @@ function UpdateTimesheet(props) {
   let [timesheetRecordsToDatabase, setTimesheetRecordsToDatabase] = useState(
     []
   );
-  let [currentPrevMonday, setCurrentPrevMonday] = useState(() => {
-    let todayDate = new Date();
-    todayDate.setDate(todayDate.getDate() - ((todayDate.getDay() + 6) % 7));
-    let prevMondayFormat = todayDate.toISOString().split("T")[0];
-    return prevMondayFormat;
-  }); // To add to Timesheets table - PeriodStartDate
   let [projectAndCompanyInfoArr, setProjectAndCompanyInfoArr] = useState([]);
   let [subAssignmentByProjectArr, setSubAssignmentByProjectArr] = useState([]);
   let [tasksBySubAssignment, setTasksBySubAssignment] = useState([]);
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
-  // let basicUserInfo = allEmployeesArr.filter((user) => {
-  //   return user.EmpId === props.loggedInUser.EmpId;
-  // });
+  let [currentPrevMonday, setCurrentPrevMonday] = useState(() => {
+    let dayToday = new Date();
+    // dayToday.setDate(dayToday.getDate() - ((dayToday.getDay() + 6) % 7));
+    // let prevMondayFormat = dayToday.toISOString().split("T")[0];
+    // return prevMondayFormat;
+    function appendLeadingZero(val) {
+      if (val < 10) {
+        return `0${val}`;
+      } else {
+        return val;
+      }
+    }
+
+    if (dayToday.getDay() === 1) {
+      return `${dayToday.getFullYear()}-${appendLeadingZero(
+        dayToday.getMonth() + 1
+      )}-${appendLeadingZero(dayToday.getDate())}`;
+    } else if (dayToday.getDay() === 0) {
+      dayToday.setDate(dayToday.getDate() - (dayToday.getDay() + 6));
+      return `${dayToday.getFullYear()}-${appendLeadingZero(
+        dayToday.getMonth() + 1
+      )}-${appendLeadingZero(dayToday.getDate())}`;
+    } else {
+      dayToday.setDate(dayToday.getDate() - (dayToday.getDay() - 1));
+      return `${dayToday.getFullYear()}-${appendLeadingZero(
+        dayToday.getMonth() + 1
+      )}-${appendLeadingZero(dayToday.getDate())}`;
+    }
+  });
 
   // create variable for logged in user details to use in conditional display of employee dropdown
   let basicUserInfo = props.loggedInUser;
