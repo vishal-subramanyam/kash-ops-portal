@@ -18,6 +18,9 @@ function EditProjectDetails(props) {
   let projectStartDateInput = useRef();
   let projectEndDateInput = useRef();
   let estimatedHoursInput = useRef();
+  let selectedCompanyDropdown = useRef();
+  let selectedCompanyOption = useRef();
+  let [selectedCompanyIdState, setSelectedCompanyIdState] = useState();
   let [allProjectsArr, setAllProjectsArr] = useState([]);
   let [message, setMessage] = useState("");
   let [allCompaniesProjectsArr, setAllCompaniesProjectsArr] = useState([]);
@@ -46,7 +49,7 @@ function EditProjectDetails(props) {
     })
       .then((res) => res.json())
       .then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         // set state array that queries PROJECTS_AND_COMPANY_INFO_TABLE
         setAllCompaniesProjectsArr(res.data);
 
@@ -85,6 +88,7 @@ function EditProjectDetails(props) {
     })
       .then((res) => res.json())
       .then((res) => {
+        console.log(res.data);
         setAllCompaniesProjectsArr(res.data);
 
         // filter all companies and projects array to remove duplicate company values
@@ -108,36 +112,11 @@ function EditProjectDetails(props) {
       });
   };
 
-  const getAllProjects = async () => {
-    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        _keyword_: "KASH_OPERATIONS_CREATED_PROJECTS_TABLE",
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        // filter out duplicate projects from output
-        // let removeDuplicateProject = Object.values(
-        //   res.data.reduce((c, e) => {
-        //     if (!c[e.ProjectCategory]) c[e.ProjectCategory] = e;
-        //     return c;
-        //   }, {})
-        // );
-
-        // setAllProjectsArr(removeDuplicateProject);
-        setAllProjectsArr(res.data);
-      })
-      .catch((err) => {
-        setMessage(
-          alertMessageDisplay(`Unable to get projects from database. ${err}`)
-        );
-        alertMessage.current.showModal();
-      });
+  const getAllProjectsByCompany = async (id) => {
+    let filteredProjects = allCompaniesProjectsArr.filter((project) => {
+      return id === project.CompanyId;
+    });
+    setAllProjectsArr(filteredProjects);
   };
 
   // PROJECTS_AND_COMPANY_BY_COMPANY_ADMIN_TABLE;
@@ -174,7 +153,22 @@ function EditProjectDetails(props) {
       });
   };
 
-  const onNameChange = (e, i) => {
+  const onCompanyNameChange = (e) => {
+    selectedProjectDropdown.current.value = "";
+    projectCategoryInput.current.value = "";
+    statementOfWorkIdInput.current.value = "";
+    projectStatusInput.current.value = "";
+    projectStartDateInput.current.value = "";
+    projectEndDateInput.current.value = "";
+    estimatedHoursInput.current.value = "";
+
+    let selectedCompanyId =
+      e.target.children[e.target.selectedIndex].getAttribute("data-companyid");
+    setSelectedCompanyIdState(selectedCompanyId);
+    getAllProjectsByCompany(selectedCompanyId);
+  };
+
+  const onProjectNameChange = (e, i) => {
     let selectedProjectSowId =
       e.target.children[e.target.selectedIndex].getAttribute("data-projectid");
     let selectedProjectFromDropdown = allProjectsArr.filter((project, i) => {
@@ -253,6 +247,7 @@ function EditProjectDetails(props) {
         TotalProjectedHours: formDetailsArr[6][1],
         CurrentStatus: formDetailsArr[3][1],
       }));
+      getAllProjectsByCompany(selectedCompanyIdState);
       setMessage(alertMessageDisplay("Project Updated."));
       successMessage.current.showModal();
     } catch (error) {
@@ -380,6 +375,35 @@ function EditProjectDetails(props) {
           >
             <div className="add-project-form--project-details">
               <label
+                for="company-form--name-input"
+                className="company-form--name-label"
+              >
+                Companies
+                <select
+                  required="required"
+                  type="text"
+                  className="add-company-form-input company-form--name-input"
+                  id="company-form--name-input"
+                  name="company-form--name-input"
+                  ref={selectedCompanyDropdown}
+                  onChange={onCompanyNameChange}
+                >
+                  <option value="">- Choose A Company -</option>
+                  {allCompaniesRemoveDuplicateArr.map((company, i) => {
+                    return (
+                      <option
+                        key={i}
+                        value={company.CompanyName}
+                        data-companyid={company.CompanyId}
+                        ref={selectedCompanyOption}
+                      >
+                        {company.CompanyName}
+                      </option>
+                    );
+                  })}
+                </select>
+              </label>
+              <label
                 htmlFor="edit-add-project-form--project-name-dropdown"
                 className="add-project-form--company-name-label"
               >
@@ -390,7 +414,7 @@ function EditProjectDetails(props) {
                   id="add-project-form--company-name-input"
                   name="edit-add-project-form--project-name-dropdown"
                   ref={selectedProjectDropdown}
-                  onChange={onNameChange}
+                  onChange={onProjectNameChange}
                 >
                   <option value="">- Choose A Project -</option>
                   {allProjectsArr.map((project, i) => {
@@ -427,9 +451,10 @@ function EditProjectDetails(props) {
                 htmlFor="edit-project--sow-input"
                 className="add-project--sow-label"
               >
-                Statement of Work ID
-                <br />
-                <span className="parenthetical-sub-label">(SOW I.D.)</span>
+                <div className="edit-project-sow-label-container">
+                  Statement of Work ID
+                  <span className="parenthetical-sub-label"> (SOW I.D.)</span>
+                </div>
                 <input
                   readOnly
                   type="text"
