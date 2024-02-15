@@ -15,7 +15,7 @@ function EditCompanyDetails(props) {
   let companyStateInput = useRef();
   let companyZipInput = useRef();
   let companyCountryInput = useRef();
-  let companyNameDropdown = useRef();
+  let selectedCompanyDropdown = useRef();
   let selectedCompanyOption = useRef();
   let [message, setMessage] = useState();
   let [selectedCurrentCompany, setSelectedCurrentCompany] = useState({});
@@ -82,7 +82,7 @@ function EditCompanyDetails(props) {
     let selectedCompanyId =
       e.target.children[e.target.selectedIndex].getAttribute("data-companyid");
     let selectedCompanyFromDropdown = allCompaniesArr.filter((company, i) => {
-      return selectedCompanyId === company.SowId;
+      return selectedCompanyId === company.CompanyId;
     });
     console.log(selectedCompanyFromDropdown);
     if (selectedCompanyId === null) {
@@ -107,15 +107,108 @@ function EditCompanyDetails(props) {
     companyAddressInput.current.value = company[0].CompanyAddress;
     companyCityInput.current.value = company[0].CompanyLocationCity;
     companyStateInput.current.value = company[0].CompanyLocationState;
-    companyZipInput.current.value = company[0].CompanyZipcode;
+    companyZipInput.current.value = company[0].CompanyZipCode;
     companyCountryInput.current.value = company[0].CompanyLocationCountry;
   };
 
-  const updateCompany = () => {
-    console.log("update company");
+  const updateCompany = async (e) => {
+    e.preventDefault();
+    if (selectedCompanyDropdown.current.value === "") {
+      setMessage(alertMessageDisplay("Please select a company to update."));
+      alertMessage.current.showModal();
+      return;
+    }
+    let formDetails = new FormData(editCompanyForm.current);
+    let formDetailsArr = [];
+
+    for (const entry of formDetails) {
+      formDetailsArr.push(entry);
+    }
+    console.log(formDetailsArr);
+    try {
+      const response = await fetch(
+        `${domain}GenericTransactionService/processTransactionForUpdate`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            data: [
+              {
+                CompanyAddress: formDetailsArr[3][1],
+                CompanyName: formDetailsArr[1][1],
+                ExternalUsername: "-",
+                CompanyId: formDetailsArr[2][1],
+                CompanyLocationState: formDetailsArr[5][1],
+                CompanyLocationCountry: formDetailsArr[7][1],
+                CompanyLocationCity: formDetailsArr[4][1],
+                CompanyZipCode: formDetailsArr[6][1],
+              },
+            ],
+            _keyword_: "KASH_OPERATIONS_COMPANY_TABLE",
+            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+          }),
+        }
+      );
+      const data = await response.json();
+      setSelectedCurrentCompany((prevState) => ({
+        ...prevState,
+        CompanyAddress: formDetailsArr[3][1],
+        CompanyName: formDetailsArr[1][1],
+        CompanyLocationState: formDetailsArr[5][1],
+        CompanyLocationCountry: formDetailsArr[7][1],
+        CompanyLocationCity: formDetailsArr[4][1],
+        CompanyZipCode: formDetailsArr[6][1],
+      }));
+      setMessage(alertMessageDisplay("Company Updated."));
+      successMessage.current.showModal();
+    } catch (error) {
+      setMessage(
+        alertMessageDisplay(`Unable to update company. Error: ${error}`)
+      );
+      alertMessage.current.showModal();
+    }
   };
-  const deleteCompany = () => {
-    console.log("delete company");
+  const deleteCompany = async (e) => {
+    e.preventDefault();
+    console.log(selectedCompanyDropdown.current.value);
+    console.log(selectedCurrentCompany);
+    // make sure a project is selected in dropdown before user can delete
+    if (selectedCompanyDropdown.current.value === "") {
+      setMessage(alertMessageDisplay("Please select a company to delete."));
+      alertMessage.current.showModal();
+      return;
+    }
+    try {
+      const response = await fetch(
+        `${domain}/GenericTransactionService/processTransactionForDelete`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            data: [
+              {
+                CompanyId: selectedCurrentCompany.CompanyId,
+              },
+            ],
+            _keyword_: "KASH_OPERATIONS_COMPANY_TABLE",
+            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+          }),
+        }
+      );
+      setMessage(alertMessageDisplay("Company Deleted"));
+      successMessage.current.showModal();
+    } catch (error) {
+      setMessage(
+        alertMessageDisplay(`Unable to delete company. Error: ${error}`)
+      );
+      alertMessage.current.showModal();
+    }
+    editCompanyForm.current.reset();
+    setSelectedCurrentCompany({});
   };
 
   const alertMessageDisplay = (entry) => {
@@ -173,14 +266,14 @@ function EditCompanyDetails(props) {
                 for="company-form--name-input"
                 className="company-form--name-label"
               >
-                Company
+                Companies
                 <select
                   required="required"
                   type="text"
                   className="add-company-form-input company-form--name-input"
                   id="company-form--name-input"
                   name="company-form--name-input"
-                  ref={companyNameDropdown}
+                  ref={selectedCompanyDropdown}
                   onChange={onNameChange}
                 >
                   <option value="">- Choose A Company -</option>
@@ -218,9 +311,10 @@ function EditCompanyDetails(props) {
               >
                 Company ID
                 <input
+                  readOnly
                   required="required"
                   type="text"
-                  className="add-company-form-input company-form--id-input"
+                  className="add-company-form-input company-form--id-input company-form--id-input-readonly"
                   id="company-form--id-input"
                   name="company-form--id-input"
                   ref={companyIdInput}

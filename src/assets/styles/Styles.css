@@ -881,6 +881,14 @@ input:checked + .slider:before {
   background-color: #f2fcff;
 }
 
+.company-form--id-input-readonly {
+  background-color: #5fb8d6 !important;
+}
+
+.company-form--id-input-readonly:focus {
+  outline: unset !important;
+}
+
 /* .add-company-form label > .company-form--city-input,
 .add-company-form label > .company-form--state-input,
 .add-company-form label > .company-form--zip_code-input,
@@ -1191,6 +1199,16 @@ input:checked + .slider:before {
   border-color: #a790b9 !important;
 }
 .delete-project-btn {
+  background-color: #2a2f2f !important;
+  border-color: #2a2f2f !important;
+}
+
+.update-company-btn {
+  margin-right: 1rem;
+  background-color: var(--kashtech_operations--main-blue) !important;
+  border-color: var(--kashtech_operations--main-blue) !important;
+}
+.delete-company-btn {
   background-color: #2a2f2f !important;
   border-color: #2a2f2f !important;
 }

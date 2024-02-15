@@ -61,11 +61,11 @@ function LoginForm(props) {
             ref={passwordInput}
           />
         </label>
-        <div className="login-form--change-password-link">
-          {/* <Link to="/update-password"> */}
+        {/*<div className="login-form--change-password-link">
+          <Link to="/update-password">
           <p onClick={checkEmail}>Forgot Password</p>
-          {/* </Link> */}
-        </div>
+          </Link> 
+        </div>*/}
       </div>
       <button
         type="submit"

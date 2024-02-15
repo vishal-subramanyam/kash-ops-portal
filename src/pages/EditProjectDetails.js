@@ -305,7 +305,7 @@ function EditProjectDetails(props) {
                 htmlFor="edit-add-project-form--project-name-dropdown"
                 className="add-project-form--company-name-label"
               >
-                Project
+                Projects
                 <select
                   required="required"
                   className="add-project-form--company-name-input"
