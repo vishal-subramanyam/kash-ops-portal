@@ -1203,6 +1203,28 @@ input:checked + .slider:before {
   border-color: #2a2f2f !important;
 }
 
+.edit-user-dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.update-user-btn {
+  margin-right: 1rem;
+  background-color: #706aaa !important;
+  border-color: #706aaa !important;
+}
+
+.delete-user-btn {
+  background-color: #fa9b4b !important;
+  border-color: #fa9b4b !important;
+}
+
+.edit-user-username {
+  margin-bottom: 1rem !important;
+}
+
 .update-company-btn {
   margin-right: 1rem;
   background-color: var(--kashtech_operations--main-blue) !important;
@@ -2000,7 +2022,6 @@ Specify # of total sub-levels?
   padding: 1rem 0;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
   align-items: flex-start;
   background-color: var(--mini_form--background-color, #fdefdb);
   border-radius: 0.7rem;
@@ -2387,4 +2408,8 @@ Specify # of total sub-levels?
 
 tfoot {
   border-top-width: 0.5rem !important;
+}
+
+.edit-user-form-container label {
+  margin: 0.5rem 0rem;
 }

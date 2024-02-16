@@ -238,7 +238,7 @@ function EditCompanyAdmin(props) {
         }
       }
     }
-    console.log(adminFullnames);
+    console.log(adminFullnames.sort());
     setAllAdminsPerCompany(adminFullnames);
   };
 

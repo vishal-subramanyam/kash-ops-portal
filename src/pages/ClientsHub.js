@@ -80,12 +80,12 @@ function ClientsHub(props) {
             <h2 class="activity_hub--admin_links_title client_hub--admin_links_title client_hub--edit-title">
               Edit
             </h2>
-            {/* <a
-              href="#"
-              class="edit-company-link hub_page--secondary-action-link client_hub--secondary-action-link"
+            <Link
+              to="/edit-company-details"
+              class="edit-project-link hub_page--secondary-action-link client_hub--secondary-action-link"
             >
-              Edit Company (In Progress)
-            </a> */}
+              Edit Company
+            </Link>
             <Link
               to="/edit-project-details"
               class="edit-project-link hub_page--secondary-action-link client_hub--secondary-action-link"

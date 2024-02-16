@@ -220,9 +220,9 @@ function EditEmployeeInfo(props) {
           >
             <div className="roles_and_responsibilities--mini-form manage_roles_and_tasks--form">
               <h2>Edit Employee Information</h2>
-              <form ref={editUserForm}>
+              <form ref={editUserForm} className="edit-user-form-container">
                 <label
-                  className="manage_roles--employee_label"
+                  className="manage_roles--employee_label edit-user-dropdown"
                   htmlFor="EMP_ID"
                 >
                   Employee
@@ -230,29 +230,24 @@ function EditEmployeeInfo(props) {
                     <option value="Select an Employee">
                       -Select an Employee-
                     </option>
-                    {allUsersArr
-                      .sort(function (a, b) {
-                        return a.EmpId - b.EmpId;
-                      })
-                      .map((employee, i) => {
-                        return (
-                          <option
-                            data-employeeid={employee.EmpId}
-                            value={`${employee.FirstName} ${employee.LastName}`}
-                            key={i}
-                          >
-                            {`${employee.FirstName} ${employee.LastName}`}
-                          </option>
-                        );
-                      })}
+                    {allUsersArr.map((employee, i) => {
+                      return (
+                        <option
+                          data-employeeid={employee.EmpId}
+                          value={`${employee.FirstName} ${employee.LastName}`}
+                          key={i}
+                        >
+                          {`${employee.FirstName} ${employee.LastName}`}
+                        </option>
+                      );
+                    })}
                   </select>
                 </label>
 
                 <div className="employee-info-form">
                   <div className="left_group_inputs">
-                    <br />
                     <label
-                      className="manage_roles--employee_label"
+                      className="manage_roles--employee_label esit-user-username"
                       htmlFor="manage_employees--first-name"
                     >
                       Username
@@ -264,7 +259,6 @@ function EditEmployeeInfo(props) {
                       ref={usernameDisplay}
                     ></p>
                     <label htmlFor="admin-level-designation">Admin Level</label>
-                    {console.log(isAdminLocal)}
                     {isAdminLocal === '"Super Admin"' ? (
                       <select
                         name="admin-level-designation"
@@ -286,18 +280,6 @@ function EditEmployeeInfo(props) {
                         ref={adminLevelDesignation}
                       />
                     )}
-                    <br />
-                    {/* <label htmlFor="userName">
-                Username
-                <input
-                  // style={{ display: "none" }}
-                  id="userName"
-                  className="form-control"
-                  value={selectedCurrentUser.KashOperationsUsn}
-                  readOnly
-                />
-              </label> */}
-
                     <label
                       className="manage_roles--employee_label"
                       htmlFor="manage_employees--first-name"
@@ -398,10 +380,16 @@ function EditEmployeeInfo(props) {
                       ></input>
                     </label>
                     <div className="buttonContainer">
-                      <button className="btn btn-primary" onClick={updateUser}>
+                      <button
+                        className="btn btn-primary update-user-btn"
+                        onClick={updateUser}
+                      >
                         Update
                       </button>
-                      <button className="btn btn-danger" onClick={deleteUser}>
+                      <button
+                        className="btn btn-danger delete-user-btn"
+                        onClick={deleteUser}
+                      >
                         Delete User
                       </button>
                     </div>

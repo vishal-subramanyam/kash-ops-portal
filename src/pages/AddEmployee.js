@@ -31,10 +31,11 @@ function AddEmployee(props) {
   let [allUsersArr, setAllUsersArr] = useState([]);
 
   let requiredInputs = [
-    firstNameInput,
-    lastNameInput,
-    userIDInput,
-    usernameInput,
+    firstNameInput.current.value,
+    lastNameInput.current.value,
+    userIDInput.current.value,
+    usernameInput.current.value,
+    adminLevelDesignation.current.value,
   ];
 
   useEffect(() => {
@@ -270,7 +271,7 @@ function AddEmployee(props) {
               >
                 First Name
                 <input
-                  required="required"
+                  required
                   type="text"
                   className="add-employee-form-input employee-form--firstname-input"
                   id="employee-form--firstname-input"
@@ -278,7 +279,6 @@ function AddEmployee(props) {
                   ref={firstNameInput}
                 />
               </label>
-
               <label
                 htmlFor="employee-form--lastname-input"
                 className="employee-form--lastname-label"

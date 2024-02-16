@@ -49,8 +49,6 @@ function EditProject(props) {
 
   //   on page load, fetch companies from DB
   useEffect(() => {
-    console.log("use effect to get all companies and projects");
-
     if (props.loggedInUser.AdminLevel === "Super Admin") {
       getAllCompaniesProjects();
     } else {
@@ -59,9 +57,6 @@ function EditProject(props) {
   }, []);
 
   useEffect(() => {
-    console.log(
-      "use effect that calls function to get all sub categories when consolidated sub cat state array changes"
-    );
     getProjectAndSubcategories();
     // populateSubAssignmentsWorkArea();
   }, [consolidatedSubCategories]);

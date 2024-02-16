@@ -201,14 +201,14 @@ function EditCompanyDetails(props) {
         alertMessageDisplay(`${selectedCurrentCompany.CompanyName} is Deleted.`)
       );
       successMessage.current.showModal();
+      editCompanyForm.current.reset();
+      setSelectedCurrentCompany({});
     } catch (error) {
       setMessage(
         alertMessageDisplay(`Unable to delete company. Error: ${error}`)
       );
       alertMessage.current.showModal();
     }
-    editCompanyForm.current.reset();
-    setSelectedCurrentCompany({});
   };
 
   const alertMessageDisplay = (entry) => {
