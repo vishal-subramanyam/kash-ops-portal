@@ -30,6 +30,7 @@ function EditProjectDetails(props) {
 
   useEffect(() => {
     if (props.loggedInUser.AdminLevel === "Super Admin") {
+      console.log("useEffect triggered");
       getAllCompaniesProjects();
     } else {
       getAllCompaniesProjectsByCompAdmin();
@@ -37,7 +38,6 @@ function EditProjectDetails(props) {
   }, [selectedCurrentProject]);
 
   const getAllCompaniesProjects = () => {
-    console.log("get all companies and related projects from database");
     fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
@@ -241,39 +241,27 @@ function EditProjectDetails(props) {
         }),
       });
 
-      setSelectedCurrentProject((prevState) => ({
-        ...prevState,
-        SowId: formDetailsArr[3][1],
-        ProjectCategory: formDetailsArr[2][1],
-        OriginalStartDate: formDetailsArr[5][1],
-        OriginalEndDate: formDetailsArr[6][1],
-        TotalProjectedHours: formDetailsArr[7][1],
-        CurrentStatus: formDetailsArr[4][1],
-      }));
-      selectedCompanyDropdown.current.value = "";
-      selectedProjectDropdown.current.value = "";
-      projectCategoryInput.current.value = "";
-      statementOfWorkIdInput.current.value = "";
-      projectStatusInput.current.value = "";
-      projectStartDateInput.current.value = "";
-      projectEndDateInput.current.value = "";
-      estimatedHoursInput.current.value = "";
-
-      setMessage(alertMessageDisplay("Project Updated."));
+      setMessage(
+        alertMessageDisplay(
+          `${selectedCurrentProject.ProjectCategory} (${selectedCurrentProject.SowId}) is updated.`
+        )
+      );
       successMessage.current.showModal();
+      setAllProjectsArr([]);
+      setSelectedCompanyIdState("");
+      setSelectedCurrentProject({});
+      editProjectForm.current.reset();
     } catch (error) {
       setMessage(
         alertMessageDisplay(`Unable to update project. Error: ${error}`)
       );
       alertMessage.current.showModal();
     }
-    getAllProjectsByCompany(selectedCompanyIdState);
   };
 
-  const deleteProject = async (e) => {
+  const deleteProject = (e) => {
     console.log("delete project");
     e.preventDefault();
-    console.log(selectedProjectDropdown.current.value);
     // make sure a project is selected in dropdown before user can delete
     if (selectedProjectDropdown.current.value === "") {
       setMessage(alertMessageDisplay("Please select a project to delete."));
@@ -281,7 +269,7 @@ function EditProjectDetails(props) {
       return;
     }
     try {
-      const response = await fetch(
+      const response = fetch(
         `${domain}/GenericTransactionService/processTransactionForDelete`,
         {
           method: "POST",
@@ -299,16 +287,22 @@ function EditProjectDetails(props) {
           }),
         }
       );
-      setMessage(alertMessageDisplay("Project Deleted"));
+      setMessage(
+        alertMessageDisplay(
+          `${selectedCurrentProject.ProjectCategory} (${selectedCurrentProject.SowId}) is deleted.`
+        )
+      );
       successMessage.current.showModal();
+      setAllProjectsArr([]);
+      setSelectedCompanyIdState("");
+      setSelectedCurrentProject({});
+      editProjectForm.current.reset();
     } catch (error) {
       setMessage(
         alertMessageDisplay(`Unable to delete project. Error: ${error}`)
       );
       alertMessage.current.showModal();
     }
-    editProjectForm.current.reset();
-    setSelectedCurrentProject({});
   };
 
   const alertMessageDisplay = (entry) => {
@@ -327,27 +321,6 @@ function EditProjectDetails(props) {
         clost={closeAlert}
         message={message}
       />
-      {/* <dialog
-        className="database-submit-dialog"
-        id="database-submit-dialog"
-        ref={confirmationSubmitDialoguePopup}
-      >
-        <form
-          method="dialog"
-          style={{ display: "flex", flexDirection: "column" }}
-        >
-          <p>Project Updated</p>
-          <div>
-            <button
-              className="dialog-modal-confirm-button"
-              id="dialog-modal-confirm-button"
-              value="confirm"
-            >
-              OK
-            </button>
-          </div>
-        </form>
-      </dialog> */}
 
       <main className="add-project-page__main-section max-width--main-container">
         <h1 className="add-project-title form-page-title--lg-1">

@@ -111,7 +111,7 @@ function EditCompanyDetails(props) {
     companyCountryInput.current.value = company[0].CompanyLocationCountry;
   };
 
-  const updateCompany = async (e) => {
+  const updateCompany = (e) => {
     e.preventDefault();
     if (selectedCompanyDropdown.current.value === "") {
       setMessage(alertMessageDisplay("Please select a company to update."));
@@ -126,7 +126,7 @@ function EditCompanyDetails(props) {
     }
     console.log(formDetailsArr);
     try {
-      const response = await fetch(
+      const response = fetch(
         `${domain}GenericTransactionService/processTransactionForUpdate`,
         {
           method: "POST",
@@ -151,21 +151,19 @@ function EditCompanyDetails(props) {
           }),
         }
       );
-      const data = await response.json();
-      setSelectedCurrentCompany((prevState) => ({
-        ...prevState,
-        CompanyAddress: formDetailsArr[3][1],
-        CompanyName: formDetailsArr[1][1],
-        CompanyLocationState: formDetailsArr[5][1],
-        CompanyLocationCountry: formDetailsArr[7][1],
-        CompanyLocationCity: formDetailsArr[4][1],
-        CompanyZipCode: formDetailsArr[6][1],
-      }));
-      setMessage(alertMessageDisplay("Company Updated."));
+
+      setMessage(
+        alertMessageDisplay(`${selectedCurrentCompany.CompanyName} is updated.`)
+      );
       successMessage.current.showModal();
+
+      setSelectedCurrentCompany({});
+      editCompanyForm.current.reset();
     } catch (error) {
       setMessage(
-        alertMessageDisplay(`Unable to update company. Error: ${error}`)
+        alertMessageDisplay(
+          `Unable to update ${selectedCurrentCompany.CompanyName}. Error: ${error}`
+        )
       );
       alertMessage.current.showModal();
     }
@@ -199,7 +197,9 @@ function EditCompanyDetails(props) {
           }),
         }
       );
-      setMessage(alertMessageDisplay("Company Deleted"));
+      setMessage(
+        alertMessageDisplay(`${selectedCurrentCompany.CompanyName} is Deleted.`)
+      );
       successMessage.current.showModal();
     } catch (error) {
       setMessage(
