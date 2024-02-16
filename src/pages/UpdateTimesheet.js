@@ -93,7 +93,8 @@ function UpdateTimesheet(props) {
   let [allEmployeesArr, setAllEmployeesArr] = useState([]);
   let [currentPrevMonday, setCurrentPrevMonday] = useState(() => {
     let dayToday = new Date();
-    // dayToday.setDate(dayToday.getDate() - ((dayToday.getDay() + 6) % 7));
+    // // dayToday.setDate(dayToday.getDate() - ((dayToday.getDay() + 6) % 7)); // This works before 12am on the VM machine that that prev monday is correct and not one off
+    // dayToday.setDate(dayToday.getDate() - ((dayToday.getDay() + 7) % 7)); // This works after 12am on the VM machine so that the prev monday is correct and not Tuesday - one off
     // let prevMondayFormat = dayToday.toISOString().split("T")[0];
     // return prevMondayFormat;
     function appendLeadingZero(val) {
