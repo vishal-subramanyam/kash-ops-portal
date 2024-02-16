@@ -128,7 +128,6 @@ function UpdateTimesheet(props) {
   useEffect(() => {
     getAllProjects();
     getAllEmployees();
-    console.log("period start date monday", currentPrevMonday);
   }, []);
 
   const getAllEmployees = () => {

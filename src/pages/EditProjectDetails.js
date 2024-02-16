@@ -36,8 +36,9 @@ function EditProjectDetails(props) {
     }
   }, [selectedCurrentProject]);
 
-  const getAllCompaniesProjects = async () => {
-    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
+  const getAllCompaniesProjects = () => {
+    console.log("get all companies and related projects from database");
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -74,8 +75,8 @@ function EditProjectDetails(props) {
       });
   };
 
-  const getAllCompaniesProjectsByCompAdmin = async () => {
-    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
+  const getAllCompaniesProjectsByCompAdmin = () => {
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -112,10 +113,13 @@ function EditProjectDetails(props) {
       });
   };
 
-  const getAllProjectsByCompany = async (id) => {
+  const getAllProjectsByCompany = (id) => {
+    console.log(selectedCurrentProject);
+    console.log(allCompaniesProjectsArr);
     let filteredProjects = allCompaniesProjectsArr.filter((project) => {
       return id === project.CompanyId;
     });
+    console.log(filteredProjects);
     setAllProjectsArr(filteredProjects);
   };
 
@@ -199,7 +203,7 @@ function EditProjectDetails(props) {
     estimatedHoursInput.current.value = project[0].TotalProjectedHours;
   };
 
-  const updateProject = async (e) => {
+  const updateProject = (e) => {
     e.preventDefault();
     console.log("update project");
 
@@ -214,40 +218,47 @@ function EditProjectDetails(props) {
     for (const entry of formDetails) {
       formDetailsArr.push(entry);
     }
+    console.log(formDetailsArr);
     try {
-      const response = await fetch(
-        `${domain}GenericTransactionService/processTransactionForUpdate`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            data: [
-              {
-                SowId: formDetailsArr[2][1],
-                ProjectCategory: formDetailsArr[1][1],
-                OriginalStartDate: formDetailsArr[4][1],
-                OriginalEndDate: formDetailsArr[5][1],
-                TotalProjectedHours: formDetailsArr[6][1],
-                CurrentStatus: formDetailsArr[3][1],
-              },
-            ],
-            _keyword_: "KASH_OPERATIONS_CREATED_PROJECTS_TABLE",
-            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
-          }),
-        }
-      );
-      const data = await response.json();
+      fetch(`${domain}GenericTransactionService/processTransactionForUpdate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: [
+            {
+              SowId: formDetailsArr[3][1],
+              ProjectCategory: formDetailsArr[2][1],
+              OriginalStartDate: formDetailsArr[5][1],
+              OriginalEndDate: formDetailsArr[6][1],
+              TotalProjectedHours: formDetailsArr[7][1],
+              CurrentStatus: formDetailsArr[4][1],
+            },
+          ],
+          _keyword_: "KASH_OPERATIONS_CREATED_PROJECTS_TABLE",
+          secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+        }),
+      });
+
       setSelectedCurrentProject((prevState) => ({
         ...prevState,
-        ProjectCategory: formDetailsArr[1][1],
-        OriginalStartDate: formDetailsArr[4][1],
-        OriginalEndDate: formDetailsArr[5][1],
-        TotalProjectedHours: formDetailsArr[6][1],
-        CurrentStatus: formDetailsArr[3][1],
+        SowId: formDetailsArr[3][1],
+        ProjectCategory: formDetailsArr[2][1],
+        OriginalStartDate: formDetailsArr[5][1],
+        OriginalEndDate: formDetailsArr[6][1],
+        TotalProjectedHours: formDetailsArr[7][1],
+        CurrentStatus: formDetailsArr[4][1],
       }));
-      getAllProjectsByCompany(selectedCompanyIdState);
+      selectedCompanyDropdown.current.value = "";
+      selectedProjectDropdown.current.value = "";
+      projectCategoryInput.current.value = "";
+      statementOfWorkIdInput.current.value = "";
+      projectStatusInput.current.value = "";
+      projectStartDateInput.current.value = "";
+      projectEndDateInput.current.value = "";
+      estimatedHoursInput.current.value = "";
+
       setMessage(alertMessageDisplay("Project Updated."));
       successMessage.current.showModal();
     } catch (error) {
@@ -256,6 +267,7 @@ function EditProjectDetails(props) {
       );
       alertMessage.current.showModal();
     }
+    getAllProjectsByCompany(selectedCompanyIdState);
   };
 
   const deleteProject = async (e) => {
