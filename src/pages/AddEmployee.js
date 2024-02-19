@@ -141,16 +141,14 @@ function AddEmployee(props) {
 
   const validateRequiredInputs = async (e) => {
     e.preventDefault();
-    console.log(allUsersArr);
+
     let userNameExistsArr = allUsersArr.filter(
       (userName) => userName.KashOperationsUsn === usernameInput.current.value
     );
     let userIdExistsArr = allUsersArr.filter(
       (userId) => userId.EmpId === userIDInput.current.value
     );
-    console.log(userNameExistsArr);
-    console.log(userIdExistsArr);
-    console.log(usernameInput.current.value);
+
     // if employee id exists, the response will be a array containing the employee object
     if (userIdExistsArr.length !== 0) {
       setMessage(
