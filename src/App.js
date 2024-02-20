@@ -68,7 +68,7 @@ function App() {
           </button>
         </span>
       ) : (
-        ""
+        <></>
       )}
       <Routes>
         <Route path="/login" element={<Login />} />

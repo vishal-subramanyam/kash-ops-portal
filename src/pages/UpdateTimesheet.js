@@ -166,6 +166,7 @@ function UpdateTimesheet(props) {
     })
       .then((res) => res.json())
       .then((res) => {
+        console.log(res.data);
         setProjectAndCompanyInfoArr(res.data);
       })
       .catch((err) => {
