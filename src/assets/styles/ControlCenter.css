@@ -1,0 +1,8 @@
+.ControlCenter--container {
+  padding: 1rem;
+}
+
+/* Hide sidebar selector on mobile version */
+.ControlCenter--desktop-sidebar {
+  display: none;
+}

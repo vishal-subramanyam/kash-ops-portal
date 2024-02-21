@@ -13,7 +13,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 2rem;
+  padding: 0 1.2rem 0 0.75rem;
   height: 70px;
   /* margin-bottom: 1rem; */
 }
@@ -24,11 +24,13 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 23rem;
+  max-width: 20rem;
+  padding-left: 0;
 }
 
 .NavBar--nav-links-list a {
   text-decoration: none;
+  margin-right: 0.5rem;
 }
 
 .NavBar--user-hub-link-container:hover {
@@ -161,5 +163,12 @@ body {
   100% {
     opacity: 0;
     transform: translateY(-250px);
+  }
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  .NavBar--nav-links-list {
+    width: 20rem;
+    padding-left: 2rem;
   }
 }
