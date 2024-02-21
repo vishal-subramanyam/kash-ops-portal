@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useAuth } from "./hooks/Authentication";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./App.css";
 import HomePage from "./pages/HomePage";
@@ -16,8 +17,8 @@ import UpdateTimesheet from "./pages/UpdateTimesheet";
 import EDITUpdateTimesheet from "./pages/EDITUpdateTimesheet";
 import RequireAuth from "./components/RequireAuth";
 import UpdatePassword from "./pages/UpdatePassword";
-import { useAuth } from "./hooks/Authentication";
 import ReportsHub from "./pages/ReportsHub";
+import NavBar from "./components/NavBar";
 import EditProjectDetails from "./pages/EditProjectDetails";
 import EditCompanyDetails from "./pages/EditCompanyDetails";
 
@@ -31,45 +32,11 @@ function App() {
 
   let navigate = useNavigate();
   let location = useLocation();
-  const userLogout = () => {
-    logout();
-    navigate("/login");
-  };
 
-  const changePW = () => {
-    navigate("/update-password");
-  };
   return (
     <div className="App">
-      {/* hide change password and logout buttons if username in local storage is "null" because value in local storage is a string */}
-      {username !== "null" ? (
-        <span className="user-control-btns">
-          {location.pathname === "/update-password" ? (
-            ""
-          ) : (
-            <button
-              style={{ width: "110px", marginTop: "5px" }}
-              type="submit"
-              value="Submit"
-              className="button sign_up-button"
-              onClick={changePW}
-            >
-              <p className="sign_up-button-text">Change Password</p>
-            </button>
-          )}
-          <button
-            style={{ float: "right", marginTop: "10px" }}
-            type="submit"
-            value="Submit"
-            className="button sign_up-button"
-            onClick={userLogout}
-          >
-            <p className="sign_up-button-text">Logout</p>
-          </button>
-        </span>
-      ) : (
-        <></>
-      )}
+      {/* hide NavBar if username in local storage is "null" because value in local storage is a string */}
+      {username !== "null" ? <NavBar userInfo={loggedInUserLocal} /> : <></>}
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route
