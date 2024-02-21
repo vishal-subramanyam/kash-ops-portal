@@ -1,9 +1,13 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/Authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/NavBar.css";
 
 function NavBar(props) {
+  let { logout } = useAuth();
+  let navigate = useNavigate();
   let [showProfileLinks, setShowProfileLinks] = useState(false);
 
   console.log(props.userInfo);
@@ -14,6 +18,15 @@ function NavBar(props) {
   } else {
     profileNavLinks += "";
   }
+
+  const userLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+  const changePW = () => {
+    navigate("/update-password");
+  };
 
   return (
     <nav>
@@ -134,8 +147,12 @@ function NavBar(props) {
                 x
               </span>
             </li>
-            <li className="NavBar--logout-link">Logout</li>
-            <li className="NavBar--change-password-link">Change Password</li>
+            <li className="NavBar--logout-link" onClick={userLogout}>
+              Logout
+            </li>
+            <li className="NavBar--change-password-link" onClick={changePW}>
+              Change Password
+            </li>
           </ol>
         </div>
       </div>

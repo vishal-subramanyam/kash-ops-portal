@@ -50,10 +50,6 @@ nav {
   border-bottom: 2px solid #297ab4;
 }
 
-main {
-  padding: 1rem;
-}
-
 .NavBar--profile-nav-link {
   display: none;
 }

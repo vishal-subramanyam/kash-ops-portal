@@ -88,7 +88,7 @@ p {
 
 body {
   font-family: "Inter", "Arial", sans-serif;
-  padding: 1rem;
+  /* padding: 1rem; */
   margin: 0;
 }
 
@@ -107,7 +107,8 @@ input[type="text"] {
 .max-width--main-container {
   max-width: 1300px;
   margin: 0 auto;
-  padding-bottom: 2rem;
+  /* padding-bottom: 2rem; */
+  padding: 1rem;
 }
 .timesheet-update__main-section select {
   background-color: #ebffef;

@@ -782,7 +782,7 @@ function EDITUpdateTimesheet(props) {
         </form>
       </dialog>
       <NavBar userInfo={props.loggedInUser} />
-      <main className="timesheet-update__main-section max-width--main-container">
+      <main className="timesheet-update__main-section max-width--main-container timesheet-update--main-container">
         <h1 className="weeklytimesheet__page-title form-page-title--lg-1">
           EDIT Update Weekly Timesheet
         </h1>
