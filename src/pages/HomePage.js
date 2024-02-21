@@ -19,13 +19,6 @@ function HomePage(props) {
         >
           KASH Tech Operations
         </h1>
-        <p className="kash_operations_home--user-welcome-msg">
-          Welcome,{" "}
-          <span id="kash_ops_user--first-name">
-            {props.loggedInUser.FirstName}
-          </span>
-          !
-        </p>
       </div>
       <section className="kash_operations_home--catgories-holder max-width--main-container">
         {/* if logged in user is not an admin, hide employee and clients hubs */}

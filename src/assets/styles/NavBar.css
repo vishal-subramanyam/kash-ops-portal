@@ -2,15 +2,11 @@ body {
   padding: unset;
 }
 
-.user-control-btns {
-  display: none;
+.NavBar--svg-logo {
+  height: 2.5rem;
 }
 
-svg {
-  height: 65px;
-}
-
-nav {
+.NavBar {
   -webkit-box-shadow: 0 4px 12px -6px #222;
   -moz-box-shadow: 0 4px 12px -6px #222;
   box-shadow: 0 4px 12px -6px #222;
@@ -18,7 +14,7 @@ nav {
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
-  height: 93px;
+  height: 70px;
   /* margin-bottom: 1rem; */
 }
 
@@ -28,7 +24,19 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 17rem;
+  width: 23rem;
+}
+
+.NavBar--nav-links-list a {
+  text-decoration: none;
+}
+
+.NavBar--user-hub-link-container:hover {
+  color: #ffa564;
+}
+
+.NavBar--control-center-link-container:hover {
+  color: #297ab4;
 }
 
 .NavBar--user-icon svg {
@@ -36,6 +44,7 @@ nav {
   border: 2px solid #ffa564;
   padding: 0.5rem;
   border-radius: 50%;
+  height: 0.8rem;
 }
 
 .NavBar--user-icon:hover {
@@ -44,14 +53,24 @@ nav {
 
 .NavBar--user-hub-link {
   border-bottom: 2px solid #ff922d;
+  font-size: 0.8rem;
 }
 
 .NavBar--control-center-link {
   border-bottom: 2px solid #297ab4;
+  font-size: 0.8rem;
 }
 
-.NavBar--profile-nav-link {
-  display: none;
+.NavBar--profile-nav-link-hide {
+  /* display: none; */
+  position: absolute;
+  display: block;
+  height: 132px;
+  width: 244px;
+  right: 3rem;
+  top: 2rem;
+  box-shadow: 0px 0px 8px #ccc;
+  animation: slideOut 0.5s ease 0s 1 normal forwards;
 }
 
 .NavBar--profile-nav-link-show {
@@ -65,7 +84,8 @@ nav {
   box-shadow: 0px 0px 8px #ccc;
 }
 
-.NavBar--profile-nav-link-show ol {
+.NavBar--profile-nav-link-show ol,
+.NavBar--profile-nav-link-hide ol {
   list-style: none;
   padding-left: unset;
   margin-bottom: unset;
@@ -85,9 +105,10 @@ nav {
   display: flex;
 }
 
+/* close - x - icon on nav dropdown link div */
 .NavBar--username-nav-display span:last-child {
-  margin-bottom: 22px;
-  margin-left: 50px;
+  margin-bottom: 15px;
+  margin-left: 45px;
   color: #ff922d;
 }
 
@@ -99,10 +120,7 @@ nav {
   color: #20a1ff;
 }
 
-.NavBar--logout-link {
-  background-color: #ffe6d4;
-}
-
+.NavBar--logout-link,
 .NavBar--change-password-link {
   background-color: #fff;
 }
@@ -119,7 +137,7 @@ nav {
 .NavBar--logout-link:hover,
 .NavBar--change-password-link:hover {
   cursor: pointer;
-  background-color: #fdbc8d;
+  background-color: #ffe6d4;
 }
 
 @keyframes slideIn {
@@ -131,5 +149,17 @@ nav {
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-250px);
   }
 }
