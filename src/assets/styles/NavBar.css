@@ -1,0 +1,117 @@
+body {
+  padding: unset;
+}
+
+.user-control-btns {
+  display: none;
+}
+
+svg {
+  height: 65px;
+}
+
+nav {
+  -webkit-box-shadow: 0 4px 12px -6px #222;
+  -moz-box-shadow: 0 4px 12px -6px #222;
+  box-shadow: 0 4px 12px -6px #222;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  height: 93px;
+  margin-bottom: 1rem;
+}
+
+.NavBar--nav-links-list {
+  list-style: none;
+  margin-bottom: unset;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 17rem;
+}
+
+.NavBar--user-icon svg {
+  color: #336045;
+  border: 2px solid #ffa564;
+  padding: 0.5rem;
+  border-radius: 50%;
+}
+
+.NavBar--user-icon:hover {
+  cursor: pointer;
+}
+
+.NavBar--user-hub-link {
+  border-bottom: 2px solid #ff922d;
+}
+
+.NavBar--control-center-link {
+  border-bottom: 2px solid #297ab4;
+}
+
+main {
+  padding: 1rem;
+}
+
+.NavBar--profile-nav-link {
+  display: none;
+}
+
+.NavBar--profile-nav-link-show {
+  position: absolute;
+  display: block;
+  height: 132px;
+  width: 244px;
+  right: 3rem;
+  top: 2rem;
+  animation: slideIn 2s ease 0s 1 normal forwards;
+}
+
+.NavBar--profile-nav-link-show ol {
+  list-style: none;
+  padding-left: unset;
+  margin-bottom: unset;
+  height: 100%;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.NavBar--username-nav-display {
+  background-color: #dff2ff;
+  display: flex;
+  align-items: center;
+}
+
+.NavBar--username-display {
+  color: #20a1ff;
+}
+
+.NavBar--logout-link {
+  background-color: #ffe6d4;
+}
+
+.NavBar--change-password-link {
+  background-color: #fff;
+}
+
+.NavBar--profile-nav-link-show li {
+  padding: 0.5rem 0.75rem;
+  height: 33.333%;
+}
+
+.NavBar--username-nav-display-label {
+  margin-right: 0.5rem;
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-250px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

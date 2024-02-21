@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { domain } from "../assets/api/apiEndpoints";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import NavBar from "../components/NavBar";
 
 function EDITUpdateTimesheet(props) {
   let selectedProjectId; // To add to Timesheets table - SowId
@@ -780,7 +781,7 @@ function EDITUpdateTimesheet(props) {
           </div>
         </form>
       </dialog>
-
+      <NavBar userInfo={props.loggedInUser} />
       <main className="timesheet-update__main-section max-width--main-container">
         <h1 className="weeklytimesheet__page-title form-page-title--lg-1">
           EDIT Update Weekly Timesheet
