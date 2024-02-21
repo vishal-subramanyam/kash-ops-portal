@@ -124,10 +124,15 @@ function NavBar(props) {
         <div className={profileNavLinks}>
           <ol>
             <li className="NavBar--username-nav-display">
-              <p className="NavBar--username-nav-display-label">User:</p>
-              <p className="NavBar--username-display">
-                {props.userInfo.KashOperationsUsn}
-              </p>
+              <span>
+                <p className="NavBar--username-nav-display-label">User:</p>
+                <p className="NavBar--username-display">
+                  {props.userInfo.KashOperationsUsn}
+                </p>
+              </span>
+              <span onClick={() => setShowProfileLinks(!showProfileLinks)}>
+                x
+              </span>
             </li>
             <li className="NavBar--logout-link">Logout</li>
             <li className="NavBar--change-password-link">Change Password</li>

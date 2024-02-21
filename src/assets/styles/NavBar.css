@@ -81,6 +81,21 @@ main {
   background-color: #dff2ff;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+}
+
+.NavBar--username-nav-display span:first-child {
+  display: flex;
+}
+
+.NavBar--username-nav-display span:last-child {
+  margin-bottom: 22px;
+  margin-left: 50px;
+  color: #ff922d;
+}
+
+.NavBar--username-nav-display span:last-child:hover {
+  cursor: pointer;
 }
 
 .NavBar--username-display {
@@ -102,6 +117,12 @@ main {
 
 .NavBar--username-nav-display-label {
   margin-right: 0.5rem;
+}
+
+.NavBar--logout-link:hover,
+.NavBar--change-password-link:hover {
+  cursor: pointer;
+  background-color: #fdbc8d;
 }
 
 @keyframes slideIn {
