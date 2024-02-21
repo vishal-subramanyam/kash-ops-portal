@@ -65,7 +65,7 @@ main {
   width: 244px;
   right: 3rem;
   top: 2rem;
-  animation: slideIn 2s ease 0s 1 normal forwards;
+  animation: slideIn 0.5s ease 0s 1 normal forwards;
 }
 
 .NavBar--profile-nav-link-show ol {
