@@ -131,7 +131,10 @@ function NavBar(props) {
           <Link to="/" className="NavBar--user-hub-link-container">
             <li className="NavBar--user-hub-link">User Hub</li>
           </Link>
-          <Link to="/" className="NavBar--control-center-link-container">
+          <Link
+            to="/control-center"
+            className="NavBar--control-center-link-container"
+          >
             <li className="NavBar--control-center-link">Control Center</li>
           </Link>
           <p className="kash_operations_home--user-welcome-msg">

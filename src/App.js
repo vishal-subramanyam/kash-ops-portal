@@ -21,6 +21,7 @@ import ReportsHub from "./pages/ReportsHub";
 import NavBar from "./components/NavBar";
 import EditProjectDetails from "./pages/EditProjectDetails";
 import EditCompanyDetails from "./pages/EditCompanyDetails";
+import ControlCenter from "./pages/ControlCenter";
 
 function App() {
   let { logout, user, loggedInUser, isAdmin } = useAuth();
@@ -184,6 +185,17 @@ function App() {
           element={
             <RequireAuth>
               <EDITUpdateTimesheet
+                loggedInUser={loggedInUserLocal}
+                admin={isAdminLocal}
+              />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/control-center"
+          element={
+            <RequireAuth>
+              <ControlCenter
                 loggedInUser={loggedInUserLocal}
                 admin={isAdminLocal}
               />
