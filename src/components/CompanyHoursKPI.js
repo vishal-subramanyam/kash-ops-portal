@@ -8,7 +8,7 @@ function CompanyHoursKPI(props) {
         {props.hoursBilled}/{props.avgHoursPerCompany}
       </h1>
       <section>
-        <p>Total Hours Billed / Avg Hours per Company</p>
+        <h5>Total Hours Billed / Avg Hours per Company</h5>
       </section>
     </article>
   );

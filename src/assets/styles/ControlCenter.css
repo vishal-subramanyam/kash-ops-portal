@@ -2,6 +2,10 @@
   padding: 1rem;
 }
 
+.ControlCenter--page-title {
+  color: #047ca3;
+}
+
 /* Hide sidebar selector on mobile version */
 .ControlCenter--desktop-sidebar {
   display: none;

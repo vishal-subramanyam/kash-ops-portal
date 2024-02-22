@@ -5,6 +5,9 @@ import KPI from "../components/KPI";
 import ProjectHoursKPI from "../components/ProjectHoursKPI";
 import CompanyHoursKPI from "../components/CompanyHoursKPI";
 import PieChartKPI from "../components/PieChartKPI";
+import LineChartKPI from "../components/LineChartKPI";
+import BarChartKPI from "../components/BarChartKPI";
+import HorizontalBarChartKPI from "../components/HorizontalBarChartKPI";
 
 function ControlCenter(props) {
   return (
@@ -26,7 +29,7 @@ function ControlCenter(props) {
             </svg>
             <p>Return to Operations Hub</p>
           </Link>
-          <h1 class="kash_operations--hub-title clients-hub-page-title">
+          <h1 class="kash_operations--hub-title clients-hub-page-title ControlCenter--page-title">
             Control Center
           </h1>
         </div>
@@ -65,14 +68,23 @@ function ControlCenter(props) {
             <KPI value="500" caption="Avg Hours Billed Per Resource" />
             <KPI value="15" caption="Company Admins" />
             <KPI value="6" caption="Companies with Projects" />
-            <ProjectHoursKPI hoursBilled="3000" hoursAlloted="5000" />
+            <ProjectHoursKPI
+              hoursBilled="3000"
+              hoursAllotted="5000"
+              percentage={(3000 / 5000) * 100 + "%"}
+            />
             <KPI value="12" caption="Active Projects" />
             <CompanyHoursKPI hoursBilled="50000" avgHoursPerCompany="3500" />
             <KPI value="4" caption="Projects with time < 100" />
           </section>
 
           {/* KPI Charts and Graphs Section */}
-          <section>{/* <PieChartKPI /> */}</section>
+          <section>
+            <PieChartKPI />
+            <LineChartKPI />
+            <BarChartKPI />
+            <HorizontalBarChartKPI />
+          </section>
         </main>
       </div>
     </div>
