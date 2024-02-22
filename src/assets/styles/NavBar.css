@@ -168,7 +168,12 @@ body {
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
   .NavBar--nav-links-list {
-    width: 20rem;
-    padding-left: 2rem;
+    width: 23rem;
+  }
+}
+
+@media only screen and (min-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  .NavBar--nav-links-list {
+    width: 23rem;
   }
 }

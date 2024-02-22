@@ -1041,9 +1041,9 @@ function UpdateTimesheet(props) {
 
         {/* Hide timesheet table if there are no records in state array. */}
         {timesheetRecordsByEmployee.length === 0 ? (
-          ""
+          <></>
         ) : (
-          <span>
+          <div>
             <div className="hours_and_text-status">
               <div className="timesheet__daily-hours-holder">
                 <h2 className="daily-hours--title">
@@ -1302,7 +1302,7 @@ function UpdateTimesheet(props) {
                 />
               </svg>
             </button>
-          </span>
+          </div>
         )}
         {/* <!--button id="submit-for-review-button" type="button" onclick="submitTimesheetForReview()" className="submit-timesheet--to-server_button">
             Submit for Review <svg className="submit-to-server--embed-arrow" width="32" height="28" viewBox="0 0 32 28" fill="none" xmlns="http://www.w3.org/2000/svg">

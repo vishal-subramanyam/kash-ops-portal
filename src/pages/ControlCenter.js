@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../assets/styles/ControlCenter.css";
 import KPI from "../components/KPI";
+import ProjectHoursKPI from "../components/ProjectHoursKPI";
+import CompanyHoursKPI from "../components/CompanyHoursKPI";
+import PieChartKPI from "../components/PieChartKPI";
 
 function ControlCenter(props) {
   return (
@@ -56,7 +59,22 @@ function ControlCenter(props) {
           </ul>
 
           {/* KPI section */}
-          <KPI value="15" caption="Companies with Projects" />
+          <section>
+            <KPI value="15" caption="Companies with Projects" />
+            <KPI value="10" caption="Employees Assigned" />
+            <KPI value="500" caption="Avg Hours Billed Per Resource" />
+            <KPI value="15" caption="Company Admins" />
+            <KPI value="6" caption="Companies with Projects" />
+            <ProjectHoursKPI hoursBilled="3000" hoursAlloted="5000" />
+            <KPI value="12" caption="Active Projects" />
+            <CompanyHoursKPI hoursBilled="50000" avgHoursPerCompany="3500" />
+            <KPI value="4" caption="Projects with time < 100" />
+          </section>
+
+          {/* KPI Charts and Graphs Section */}
+          <section>
+            <PieChartKPI />
+          </section>
         </main>
       </div>
     </div>
