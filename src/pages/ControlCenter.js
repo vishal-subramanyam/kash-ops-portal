@@ -72,9 +72,7 @@ function ControlCenter(props) {
           </section>
 
           {/* KPI Charts and Graphs Section */}
-          <section>
-            <PieChartKPI />
-          </section>
+          <section>{/* <PieChartKPI /> */}</section>
         </main>
       </div>
     </div>

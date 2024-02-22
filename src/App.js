@@ -26,11 +26,11 @@ import ControlCenter from "./pages/ControlCenter";
 function App() {
   let { logout, user, loggedInUser, isAdmin } = useAuth();
   let username = window.localStorage.getItem("user");
+
   let loggedInUserLocal = JSON.parse(
     window.localStorage.getItem("loggedInUserInfo")
   );
   let isAdminLocal = window.localStorage.getItem("adminLevel");
-
   let navigate = useNavigate();
   let location = useLocation();
 
