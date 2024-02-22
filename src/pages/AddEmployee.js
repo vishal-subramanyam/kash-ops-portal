@@ -30,13 +30,13 @@ function AddEmployee(props) {
   let [adminCheckbox, setAdminCheckbox] = useState(false);
   let [allUsersArr, setAllUsersArr] = useState([]);
 
-  let requiredInputs = [
-    firstNameInput.current.value,
-    lastNameInput.current.value,
-    userIDInput.current.value,
-    usernameInput.current.value,
-    adminLevelDesignation.current.value,
-  ];
+  // let requiredInputs = [
+  //   firstNameInput.current.value,
+  //   lastNameInput.current.value,
+  //   userIDInput.current.value,
+  //   usernameInput.current.value,
+  //   adminLevelDesignation.current.value,
+  // ];
 
   useEffect(() => {
     getAllUsers();
