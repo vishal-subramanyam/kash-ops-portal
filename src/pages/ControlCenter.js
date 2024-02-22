@@ -54,36 +54,41 @@ function ControlCenter(props) {
         </select>
 
         <main className="ControlCenter--main-content">
-          <h2>Selected Company</h2>
+          <h2 className="ControlCenter--selected-company-heading">
+            Selected Company
+          </h2>
           {/* tabs */}
           <ul className="ControlCenter--tabs-container">
-            <li>Monthly</li>
-            <li>Lifetime</li>
+            <li className="ControlCenter--tab-active">Monthly</li>
+            <li className="ControlCenter--tab">Lifetime</li>
           </ul>
 
-          {/* KPI section */}
-          <section>
-            <KPI value="15" caption="Companies with Projects" />
-            <KPI value="10" caption="Employees Assigned" />
-            <KPI value="500" caption="Avg Hours Billed Per Resource" />
-            <KPI value="15" caption="Company Admins" />
-            <KPI value="6" caption="Companies with Projects" />
-            <ProjectHoursKPI
-              hoursBilled="3000"
-              hoursAllotted="5000"
-              percentage={(3000 / 5000) * 100 + "%"}
-            />
-            <KPI value="12" caption="Active Projects" />
-            <CompanyHoursKPI hoursBilled="50000" avgHoursPerCompany="3500" />
-            <KPI value="4" caption="Projects with time < 100" />
-          </section>
+          <section className="ControlCenter--KPI-section-container">
+            {/* KPI section */}
+            <section>
+              <KPI value="15" caption="Companies with Projects" />
+              <KPI value="10" caption="Employees Assigned" />
+              <KPI value="500" caption="Avg Hours Billed Per Resource" />
+              <KPI value="15" caption="Company Admins" />
+              <KPI value="6" caption="Companies with Projects" />
+              <ProjectHoursKPI
+                hoursBilled="3000"
+                hoursAllotted="5000"
+                percentage={(3000 / 5000) * 100 + "%"}
+              />
+              <KPI value="12" caption="Active Projects" />
+              <CompanyHoursKPI hoursBilled="50000" avgHoursPerCompany="3500" />
+              <KPI value="4" caption="Projects with time < 100" />
+            </section>
 
-          {/* KPI Charts and Graphs Section */}
+            {/* KPI Charts and Graphs Section 
           <section>
             <PieChartKPI />
             <LineChartKPI />
             <BarChartKPI />
             <HorizontalBarChartKPI />
+          </section>
+          */}
           </section>
         </main>
       </div>

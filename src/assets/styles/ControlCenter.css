@@ -1,12 +1,52 @@
 .ControlCenter--container {
+  width: 100vw;
+}
+
+.ControlCenter--container header {
   padding: 1rem;
 }
 
 .ControlCenter--page-title {
-  color: #047ca3;
+  color: var(--kashtech_operations--main-blue);
+  margin: 0 0 0 1rem;
+}
+
+.ControlCenter--mobile-company-selector {
+  border: 1px solid var(--kashtech_operations--main-blue);
+}
+
+.ControlCenter--selected-company-heading {
+  text-align: center;
+  margin-top: 1rem;
 }
 
 /* Hide sidebar selector on mobile version */
 .ControlCenter--desktop-sidebar {
   display: none;
+}
+
+.ControlCenter--tabs-container {
+  width: 100%;
+  padding: 0;
+  margin: -1px;
+  list-style: none;
+  display: flex;
+  align-items: end;
+}
+
+.ControlCenter--tabs-container li {
+  width: 50%;
+  height: 45px;
+  /* -webkit-box-shadow: 8px 12px 25px 2px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 8px 12px 25px 2px rgba(0, 0, 0, 0.4);
+  box-shadow: 8px 12px 25px 2px rgba(0, 0, 0, 0.4); */
+}
+
+.ControlCenter--tab-active {
+  height: 55px !important;
+  background-color: var(--kashtech_operations--blue-darken1);
+}
+
+.ControlCenter--KPI-section-container {
+  background-color: var(--kashtech_operations--blue-darken1);
 }
