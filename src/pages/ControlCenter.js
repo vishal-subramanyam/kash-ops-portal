@@ -10,8 +10,8 @@ import BarChartKPI from "../components/BarChartKPI";
 import HorizontalBarChartKPI from "../components/HorizontalBarChartKPI";
 
 function ControlCenter(props) {
-  let [tabActive, setTabActive] = useState(true);
-  // let [tabNotActive, setTabNotActive] = useState(true);
+  let [tabActive, setTabActive] = useState("tab1");
+  let [showMonthlyKPI, setShowMonthlyKPI] = useState(true);
   let controlCenterKPITabActive = "ControlCenter--tab-active";
   let controlCenterKPITabNotActive = "ControlCenter--tab-not-active";
 
@@ -74,22 +74,21 @@ function ControlCenter(props) {
             <li className="ControlCenter--tab-not-active">Lifetime</li> */}
             <li
               className={
-                tabActive
+                tabActive === "tab1"
                   ? controlCenterKPITabActive
                   : controlCenterKPITabNotActive
               }
-              onClick={() =>
-                tabActive ? setTabActive(false) : setTabActive(true)
-              }
+              onClick={() => setTabActive("tab1")}
             >
               Monthly
             </li>
             <li
               className={
-                tabActive
-                  ? controlCenterKPITabNotActive
-                  : controlCenterKPITabActive
+                tabActive === "tab2"
+                  ? controlCenterKPITabActive
+                  : controlCenterKPITabNotActive
               }
+              onClick={() => setTabActive("tab2")}
             >
               Lifetime
             </li>

@@ -87,3 +87,15 @@
 .ControlCenter--KPI-section-container-active section {
   padding: 1rem 0;
 }
+
+@media only screen and (min-device-width: 280px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 1) {
+}
+
+@media only screen and (min-device-width: 568px) and (max-device-width: 768px) and (-webkit-min-device-pixel-ratio: 1) {
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+}
+
+@media only screen and (min-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+}
