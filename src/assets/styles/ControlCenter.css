@@ -32,21 +32,58 @@
   list-style: none;
   display: flex;
   align-items: end;
+  overflow: hidden;
 }
 
 .ControlCenter--tabs-container li {
   width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bolder;
   height: 45px;
-  /* -webkit-box-shadow: 8px 12px 25px 2px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 8px 12px 25px 2px rgba(0, 0, 0, 0.4);
   -moz-box-shadow: 8px 12px 25px 2px rgba(0, 0, 0, 0.4);
-  box-shadow: 8px 12px 25px 2px rgba(0, 0, 0, 0.4); */
+  box-shadow: 8px 12px 25px 2px rgba(0, 0, 0, 0.4);
+}
+
+.ControlCenter--tabs-container li:hover {
+  height: 50px;
+  cursor: pointer;
+}
+
+.ControlCenter--tab-not-active {
+  height: 45px;
+  color: var(--kashtech_operations--blue-darken1);
+  background-color: #a2c9d5;
+  z-index: 0;
 }
 
 .ControlCenter--tab-active {
   height: 55px !important;
+  background-color: var(--kashtech_operations--blue-darken1) !important;
+  color: #a2c9d5 !important;
+  z-index: 4;
+}
+
+.ControlCenter--KPI-section-container-active {
   background-color: var(--kashtech_operations--blue-darken1);
 }
 
-.ControlCenter--KPI-section-container {
-  background-color: var(--kashtech_operations--blue-darken1);
+.ControlCenter--KPI-section-container-active article {
+  color: var(--kashtech_operations--blue-darken1);
+  background-color: #a2c9d5;
+  width: 75%;
+  height: 15rem;
+  margin: 0.5rem auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.ControlCenter--KPI-section-container-active section {
+  padding: 1rem 0;
 }

@@ -13,6 +13,7 @@ function NavBar(props) {
   console.log(props.userInfo);
   let profileNavLinks = "NavBar--profile-nav-link";
   //   update profile nav link class to show the links when profile icon is clicked
+  // if showProfileLinks state variable is equal to true
   if (showProfileLinks) {
     profileNavLinks += "-show";
   } else {

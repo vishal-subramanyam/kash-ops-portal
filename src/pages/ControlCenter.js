@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../assets/styles/ControlCenter.css";
 import KPI from "../components/KPI";
@@ -10,6 +10,17 @@ import BarChartKPI from "../components/BarChartKPI";
 import HorizontalBarChartKPI from "../components/HorizontalBarChartKPI";
 
 function ControlCenter(props) {
+  let [tabActive, setTabActive] = useState(true);
+  // let [tabNotActive, setTabNotActive] = useState(true);
+  let controlCenterKPITabActive = "ControlCenter--tab-active";
+  let controlCenterKPITabNotActive = "ControlCenter--tab-not-active";
+
+  // if (tabActive) {
+  //   controlCenterKPITabs += "-active";
+  // } else {
+  //   controlCenterKPITabs += "-not-active";
+  // }
+
   return (
     <div className="ControlCenter--container">
       <header>
@@ -59,11 +70,32 @@ function ControlCenter(props) {
           </h2>
           {/* tabs */}
           <ul className="ControlCenter--tabs-container">
-            <li className="ControlCenter--tab-active">Monthly</li>
-            <li className="ControlCenter--tab">Lifetime</li>
+            {/* <li className="ControlCenter--tab-active">Monthly</li>
+            <li className="ControlCenter--tab-not-active">Lifetime</li> */}
+            <li
+              className={
+                tabActive
+                  ? controlCenterKPITabActive
+                  : controlCenterKPITabNotActive
+              }
+              onClick={() =>
+                tabActive ? setTabActive(false) : setTabActive(true)
+              }
+            >
+              Monthly
+            </li>
+            <li
+              className={
+                tabActive
+                  ? controlCenterKPITabNotActive
+                  : controlCenterKPITabActive
+              }
+            >
+              Lifetime
+            </li>
           </ul>
 
-          <section className="ControlCenter--KPI-section-container">
+          <section className="ControlCenter--KPI-section-container-active">
             {/* KPI section */}
             <section>
               <KPI value="15" caption="Companies with Projects" />
