@@ -12,14 +12,10 @@ import HorizontalBarChartKPI from "../components/HorizontalBarChartKPI";
 function ControlCenter(props) {
   let [tabActive, setTabActive] = useState("tab1");
   let [showMonthlyKPI, setShowMonthlyKPI] = useState(true);
-  let controlCenterKPITabActive = "ControlCenter--tab-active";
-  let controlCenterKPITabNotActive = "ControlCenter--tab-not-active";
-
-  // if (tabActive) {
-  //   controlCenterKPITabs += "-active";
-  // } else {
-  //   controlCenterKPITabs += "-not-active";
-  // }
+  let controlCenterKPITabActive =
+    "ControlCenter--tab ControlCenter--tab-active";
+  let controlCenterKPITabNotActive =
+    "ControlCenter--tab ControlCenter--tab-not-active";
 
   return (
     <div className="ControlCenter--container">
@@ -80,7 +76,7 @@ function ControlCenter(props) {
               }
               onClick={() => setTabActive("tab1")}
             >
-              Monthly
+              <span>Monthly</span>
             </li>
             <li
               className={
@@ -90,7 +86,7 @@ function ControlCenter(props) {
               }
               onClick={() => setTabActive("tab2")}
             >
-              Lifetime
+              <span>Lifetime</span>
             </li>
           </ul>
 
