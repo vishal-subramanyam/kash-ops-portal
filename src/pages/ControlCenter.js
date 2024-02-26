@@ -90,33 +90,65 @@ function ControlCenter(props) {
             </li>
           </ul>
 
-          <section className="ControlCenter--KPI-section-container-active">
-            {/* KPI section */}
-            <section>
-              <KPI value="15" caption="Companies with Projects" />
-              <KPI value="10" caption="Employees Assigned" />
-              <KPI value="500" caption="Avg Hours Billed Per Resource" />
-              <KPI value="15" caption="Company Admins" />
-              <KPI value="6" caption="Companies with Projects" />
-              <ProjectHoursKPI
-                hoursBilled="3000"
-                hoursAllotted="5000"
-                percentage={(3000 / 5000) * 100 + "%"}
-              />
-              <KPI value="12" caption="Active Projects" />
-              <CompanyHoursKPI hoursBilled="50000" avgHoursPerCompany="3500" />
-              <KPI value="4" caption="Projects with time < 100" />
-            </section>
+          {tabActive === "tab1" ? (
+            <section className="ControlCenter--KPI-section-container ControlCenter--KPI-section-container-active">
+              {/* KPI section */}
+              <section className="ControlCenter--KPI-section-wrapper">
+                <KPI value="15" caption="Companies with Projects" />
+                <KPI value="10" caption="Employees Assigned" />
+                <KPI value="500" caption="Avg Hours Billed Per Resource" />
+                <KPI value="15" caption="Company Admins" />
+                <ProjectHoursKPI
+                  className="project-hours-KPI-article"
+                  hoursBilled="3000"
+                  hoursAllotted="5000"
+                  percentage={(3000 / 5000) * 100 + "%"}
+                />
+                <KPI value="12" caption="Active Projects" />
+                <CompanyHoursKPI
+                  hoursBilled="50000"
+                  avgHoursPerCompany="3500"
+                />
+                <KPI value="4" caption="Projects with time < 100" />
+              </section>
 
-            {/* KPI Charts and Graphs Section 
-          <section>
-            <PieChartKPI />
-            <LineChartKPI />
-            <BarChartKPI />
-            <HorizontalBarChartKPI />
-          </section>
-          */}
-          </section>
+              {/* KPI Charts and Graphs Section */}
+              <section className="ControlCenter--chart-section-wrapper">
+                <PieChartKPI className="pie-chart-kpi" />
+                <LineChartKPI className="line-chart-kpi" />
+                <BarChartKPI className="bar-chart-kpi" />
+                <HorizontalBarChartKPI className="horizontal-bar-chart-kpi" />
+              </section>
+            </section>
+          ) : (
+            // Lifelong KPI representation
+            <section className="ControlCenter--KPI-section-container ControlCenter--KPI-section-container-active">
+              {/* KPI section */}
+              <section className="ControlCenter--KPI-section-wrapper">
+                <KPI value="0" caption="Companies with Projects" />
+                <KPI value="0" caption="Employees Assigned" />
+                <KPI value="0" caption="Avg Hours Billed Per Resource" />
+                <KPI value="0" caption="Company Admins" />
+                <ProjectHoursKPI
+                  className="project-hours-KPI-article"
+                  hoursBilled="0"
+                  hoursAllotted="0"
+                  percentage={(0 / 1) * 100 + "%"}
+                />
+                <KPI value="12" caption="Active Projects" />
+                <CompanyHoursKPI hoursBilled="0" avgHoursPerCompany="0" />
+                <KPI value="0" caption="Projects with time < 100" />
+              </section>
+
+              {/* KPI Charts and Graphs Section */}
+              <section className="ControlCenter--chart-section-wrapper">
+                <PieChartKPI className="pie-chart-kpi" />
+                <LineChartKPI className="line-chart-kpi" />
+                <BarChartKPI className="bar-chart-kpi" />
+                <HorizontalBarChartKPI className="horizontal-bar-chart-kpi" />
+              </section>
+            </section>
+          )}
         </main>
       </div>
     </div>

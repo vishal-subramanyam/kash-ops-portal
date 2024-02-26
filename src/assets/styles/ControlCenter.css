@@ -12,7 +12,9 @@
 }
 
 .ControlCenter--mobile-company-selector {
-  border: 1px solid var(--kashtech_operations--main-blue);
+  border: 3px solid var(--kashtech_operations--main-blue);
+  border-radius: 5%;
+  margin-left: 2rem;
 }
 
 .ControlCenter--selected-company-heading {
@@ -80,7 +82,11 @@
   background-color: var(--kashtech_operations--blue-darken1);
 }
 
-.ControlCenter--KPI-section-container-active article {
+.ControlCenter--KPI-section-wrapper {
+  padding: 1rem 0;
+}
+
+.ControlCenter--KPI-section-container article {
   color: var(--kashtech_operations--blue-darken1);
   background-color: #a2c9d5;
   width: 75%;
@@ -92,20 +98,51 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  border-radius: 5%;
+  box-shadow: -10px 1px 15px rgba(0, 0, 0, 0.4);
 }
 
-.ControlCenter--KPI-section-container-active section {
-  padding: 1rem 0;
+.ControlCenter--chart-section-wrapper {
+  background-color: #76dda6;
+  padding: 2rem 0;
 }
 
-@media only screen and (min-device-width: 280px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 1) {
+.ControlCenter--chart-section-wrapper div {
+  width: 85%;
+  background-color: #b9e1ed;
+  margin-bottom: 1rem;
+  margin: 0 auto 1rem auto;
+  border-radius: 5%;
+  box-shadow: -10px 1px 15px rgba(0, 0, 0, 0.4);
 }
 
-@media only screen and (min-device-width: 568px) and (max-device-width: 768px) and (-webkit-min-device-pixel-ratio: 1) {
+/* @media only screen and (min-device-width: 280px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 1) {
+} */
+
+@media only screen and (min-device-width: 568px) and (max-device-width: 768px) {
+  .ControlCenter--KPI-section-wrapper {
+    display: grid;
+    grid-template-columns: 50% 50%;
+  }
 }
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  .ControlCenter--KPI-section-wrapper {
+    display: grid;
+    grid-template-columns: 33.3% 33.3% 33.3%;
+  }
+
+  .ControlCenter--desktop-sidebar {
+    display: block;
+  }
+  .ControlCenter--mobile-company-selector {
+    display: none;
+  }
 }
 
 @media only screen and (min-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  .ControlCenter--KPI-section-wrapper {
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+  }
 }
