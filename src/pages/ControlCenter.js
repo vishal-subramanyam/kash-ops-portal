@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { Link } from "react-router-dom";
 import "../assets/styles/ControlCenter.css";
 import KPI from "../components/KPI";
@@ -8,15 +8,18 @@ import PieChartKPI from "../components/PieChartKPI";
 import LineChartKPI from "../components/LineChartKPI";
 import BarChartKPI from "../components/BarChartKPI";
 import HorizontalBarChartKPI from "../components/HorizontalBarChartKPI";
+import LoadingData from "../components/LoadingData";
+import { useCompanyProjects, useCompanyAdmins } from "../hooks/Fetch";
 
 function ControlCenter(props) {
   let [tabActive, setTabActive] = useState("tab1");
-  let [showMonthlyKPI, setShowMonthlyKPI] = useState(true);
   let controlCenterKPITabActive =
     "ControlCenter--tab ControlCenter--tab-active";
   let controlCenterKPITabNotActive =
     "ControlCenter--tab ControlCenter--tab-not-active";
-
+  let companyProjects = useCompanyProjects();
+  let companyAdmins = useCompanyAdmins();
+  console.log(companyProjects);
   return (
     <div className="ControlCenter--container">
       <header>
@@ -43,17 +46,16 @@ function ControlCenter(props) {
       </header>
 
       <div className="ControlCenter--main-content-container">
-        <aside className="ControlCenter--desktop-sidebar">
+        {/* <aside className="ControlCenter--desktop-sidebar">
           <ol>
             <li>Overall</li>
             <li>Company 1</li>
             <li>Company 2</li>
             <li>Company 3</li>
           </ol>
-        </aside>
+        </aside> */}
 
         <select className="ControlCenter--mobile-company-selector">
-          <option value="">- Make a Selection -</option>
           <option value="Overall">Overall</option>
           <option value="Company 1">Company 1</option>
           <option value="Company 2">Company 2</option>
@@ -66,8 +68,6 @@ function ControlCenter(props) {
           </h2>
           {/* tabs */}
           <ul className="ControlCenter--tabs-container">
-            {/* <li className="ControlCenter--tab-active">Monthly</li>
-            <li className="ControlCenter--tab-not-active">Lifetime</li> */}
             <li
               className={
                 tabActive === "tab1"
@@ -91,20 +91,30 @@ function ControlCenter(props) {
           </ul>
 
           {tabActive === "tab1" ? (
+            // Monthly Tab KPI Display
             <section className="ControlCenter--KPI-section-container ControlCenter--KPI-section-container-active">
               {/* KPI section */}
               <section className="ControlCenter--KPI-section-wrapper">
-                <KPI value="15" caption="Companies with Projects" />
-                <KPI value="10" caption="Employees Assigned" />
+                <KPI
+                  value={companyProjects.monthly}
+                  caption="Companies with Projects"
+                />
+                <KPI
+                  // value="10"
+                  caption="Employees Assigned"
+                />
                 <KPI value="500" caption="Avg Hours Billed Per Resource" />
-                <KPI value="15" caption="Company Admins" />
+                <KPI value={companyAdmins.length} caption="Company Admins" />
                 <ProjectHoursKPI
                   className="project-hours-KPI-article"
                   hoursBilled="3000"
                   hoursAllotted="5000"
                   percentage={(3000 / 5000) * 100 + "%"}
                 />
-                <KPI value="12" caption="Active Projects" />
+                <KPI
+                  value={companyProjects.monthlyActive}
+                  caption="Active Projects"
+                />
                 <CompanyHoursKPI
                   hoursBilled="50000"
                   avgHoursPerCompany="3500"
@@ -121,21 +131,27 @@ function ControlCenter(props) {
               </section>
             </section>
           ) : (
-            // Lifelong KPI representation
+            // Lifetime KPI Display
             <section className="ControlCenter--KPI-section-container ControlCenter--KPI-section-container-active">
               {/* KPI section */}
               <section className="ControlCenter--KPI-section-wrapper">
-                <KPI value="0" caption="Companies with Projects" />
+                <KPI
+                  value={companyProjects.lifetime}
+                  caption="Companies with Projects"
+                />
                 <KPI value="0" caption="Employees Assigned" />
                 <KPI value="0" caption="Avg Hours Billed Per Resource" />
-                <KPI value="0" caption="Company Admins" />
+                <KPI value={companyAdmins.length} caption="Company Admins" />
                 <ProjectHoursKPI
                   className="project-hours-KPI-article"
                   hoursBilled="0"
                   hoursAllotted="0"
                   percentage={(0 / 1) * 100 + "%"}
                 />
-                <KPI value="12" caption="Active Projects" />
+                <KPI
+                  value={companyProjects.lifetimeActive}
+                  caption="Active Projects"
+                />
                 <CompanyHoursKPI hoursBilled="0" avgHoursPerCompany="0" />
                 <KPI value="0" caption="Projects with time < 100" />
               </section>

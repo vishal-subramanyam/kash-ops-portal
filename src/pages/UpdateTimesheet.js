@@ -429,7 +429,7 @@ function UpdateTimesheet(props) {
         selectedProject.current.value
       ) {
         newTimesheetRecord = {
-          Billable: "",
+          Billable: "YES",
           EmpId: selectedEmployeeIdState,
           FridayHours: "0.00",
           MondayHours: "0.00",
@@ -479,7 +479,7 @@ function UpdateTimesheet(props) {
         NonBillableReason.current.value
       ) {
         newTimesheetRecord = {
-          Billable: "",
+          Billable: "NO",
           EmpId: selectedEmployeeIdState,
           FridayHours: "0.00",
           MondayHours: "0.00",
