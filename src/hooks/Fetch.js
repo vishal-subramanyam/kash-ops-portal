@@ -109,3 +109,152 @@ export const useCompanyAdmins = () => {
   }, []);
   return companyAdmins;
 };
+
+// Get number of hours billed by users and divide by number of user that billed hours
+
+export const useBilledHours = () => {
+  let [billedHours, setBilledHours] = useState([]);
+
+  useEffect(() => {
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "TIMESHEET_BY_USER_HOURS_BILLED_TABLE",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setBilledHours(res.data);
+      })
+      .catch((err) => {
+        return err;
+      });
+  }, []);
+  let convertedNums = billedHours.map((num) => parseFloat(num.Sum));
+  let totalHours = convertedNums.reduce((a, c) => a + c, 0);
+  let avgHours = totalHours / billedHours.length;
+  return avgHours;
+};
+
+// Get the toal projected hours on all projects and the total hours billed on projects
+export const useBilledAndProjectedHours = () => {
+  let [billedHoursByProject, setBilledHoursByProject] = useState([]);
+  let [totalProjectedHours, setTotalProjectedHours] = useState([]);
+  let hoursBilledAndProjected = { totalBilledHours: 0, totalProjectedHours: 0 };
+
+  useEffect(() => {
+    // fetch the total hours billed by project
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "TOTAL_HOURS_BILLED_BY_PROJECT_TABLE",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setBilledHoursByProject(res.data);
+      })
+      .catch((err) => {
+        return err;
+      });
+
+    // fetch the sum of project total hours of each project
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "TOTAL_PROJECTED_HOURS_TABLE",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res.data);
+        setTotalProjectedHours(res.data);
+      })
+      .catch((err) => {
+        return err;
+      });
+  }, []);
+  console.log(totalProjectedHours);
+  // convert billed hours to number
+  let convertedNums = billedHoursByProject.map((num) =>
+    parseFloat(num.TotalBilledHours)
+  );
+  // get the sum of billed hours
+  let totalHoursBilled = convertedNums.reduce((a, c) => a + c, 0);
+  // console.log(totalHoursBilled, totalProjectedHours[0].TotalProjectedHours);
+  if (totalProjectedHours.length !== 0) {
+    hoursBilledAndProjected.totalBilledHours = totalHoursBilled;
+    hoursBilledAndProjected.totalProjectedHours = parseFloat(
+      totalProjectedHours[0].TotalProjectedHours
+    );
+  }
+
+  return hoursBilledAndProjected;
+};
+
+// GET HOURS BILLED PER COMPANY AND TOTAL NUMBER OF COMPANIES
+
+export const useAvgHoursPerCompany = () => {
+  let [totalHoursPerCompany, setTotalHoursPerCompany] = useState([]);
+  let [companies, setCompanies] = useState([]);
+
+  useEffect(() => {
+    // Get total hours billed per company projects
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "HOURS_BILLED_BY_COMPANY_PROJECT_TABLE",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setTotalHoursPerCompany(res.data);
+      })
+      .catch((err) => {
+        return err;
+      });
+
+    // Get list of companies
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "KASH_OPERATIONS_COMPANY_TABLE",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setCompanies(res.data);
+      })
+      .catch((err) => {
+        return err;
+      });
+  }, []);
+
+  let convertedNums = totalHoursPerCompany.map((company) =>
+    parseFloat(company.TotalBilledHours)
+  );
+  let totalHours = convertedNums.reduce((a, c) => a + c, 0);
+  let avgHoursByCompany = totalHours / companies.length;
+  console.log(avgHoursByCompany);
+  return avgHoursByCompany.toFixed(2);
+};

@@ -9,17 +9,26 @@ import LineChartKPI from "../components/LineChartKPI";
 import BarChartKPI from "../components/BarChartKPI";
 import HorizontalBarChartKPI from "../components/HorizontalBarChartKPI";
 import LoadingData from "../components/LoadingData";
-import { useCompanyProjects, useCompanyAdmins } from "../hooks/Fetch";
+import {
+  useCompanyProjects,
+  useCompanyAdmins,
+  useBilledHours,
+  useBilledAndProjectedHours,
+  useAvgHoursPerCompany,
+} from "../hooks/Fetch";
 
 function ControlCenter(props) {
-  let [tabActive, setTabActive] = useState("tab1");
+  let [tabActive, setTabActive] = useState("tab2");
   let controlCenterKPITabActive =
     "ControlCenter--tab ControlCenter--tab-active";
   let controlCenterKPITabNotActive =
     "ControlCenter--tab ControlCenter--tab-not-active";
   let companyProjects = useCompanyProjects();
   let companyAdmins = useCompanyAdmins();
-  console.log(companyProjects);
+  let avgBilledHours = useBilledHours();
+  let billedAndProjectedHours = useBilledAndProjectedHours();
+  let avgHoursPerCompany = useAvgHoursPerCompany();
+  console.log(avgHoursPerCompany);
   return (
     <div className="ControlCenter--container">
       <header>
@@ -103,23 +112,20 @@ function ControlCenter(props) {
                   // value="10"
                   caption="Employees Assigned"
                 />
-                <KPI value="500" caption="Avg Hours Billed Per Resource" />
+                <KPI value="0" caption="Avg Hours Billed Per Resource" />
                 <KPI value={companyAdmins.length} caption="Company Admins" />
                 <ProjectHoursKPI
                   className="project-hours-KPI-article"
-                  hoursBilled="3000"
-                  hoursAllotted="5000"
-                  percentage={(3000 / 5000) * 100 + "%"}
+                  hoursBilled="0"
+                  hoursAllotted="0"
+                  percentage={(0 / 1) * 100 + "%"}
                 />
                 <KPI
                   value={companyProjects.monthlyActive}
                   caption="Active Projects"
                 />
-                <CompanyHoursKPI
-                  hoursBilled="50000"
-                  avgHoursPerCompany="3500"
-                />
-                <KPI value="4" caption="Projects with time < 100" />
+                <CompanyHoursKPI hoursBilled="0" avgHoursPerCompany="0" />
+                <KPI value="0" caption="Projects with time < 100" />
               </section>
 
               {/* KPI Charts and Graphs Section */}
@@ -140,19 +146,31 @@ function ControlCenter(props) {
                   caption="Companies with Projects"
                 />
                 <KPI value="0" caption="Employees Assigned" />
-                <KPI value="0" caption="Avg Hours Billed Per Resource" />
+                <KPI
+                  value={avgBilledHours.toFixed(2)}
+                  caption="Avg Hours Billed Per Resource"
+                />
                 <KPI value={companyAdmins.length} caption="Company Admins" />
                 <ProjectHoursKPI
                   className="project-hours-KPI-article"
-                  hoursBilled="0"
-                  hoursAllotted="0"
-                  percentage={(0 / 1) * 100 + "%"}
+                  hoursBilled={billedAndProjectedHours.totalBilledHours}
+                  hoursAllotted={billedAndProjectedHours.totalProjectedHours}
+                  percentage={
+                    (
+                      (billedAndProjectedHours.totalBilledHours /
+                        billedAndProjectedHours.totalProjectedHours) *
+                      100
+                    ).toFixed(2) + "%"
+                  }
                 />
                 <KPI
                   value={companyProjects.lifetimeActive}
                   caption="Active Projects"
                 />
-                <CompanyHoursKPI hoursBilled="0" avgHoursPerCompany="0" />
+                <CompanyHoursKPI
+                  hoursBilled={billedAndProjectedHours.totalBilledHours}
+                  avgHoursPerCompany={avgHoursPerCompany}
+                />
                 <KPI value="0" caption="Projects with time < 100" />
               </section>
 
