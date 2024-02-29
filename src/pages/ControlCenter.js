@@ -28,10 +28,9 @@ function ControlCenter(props) {
   let companyAdmins = useCompanyAdmins(); // Number of company admins
   let billedHoursDetailed = useBilledHours(); // Avg Hours Billed KPI
   let billedAndProjectedHours = useBilledAndProjectedHours(); // Hours Billed and Hours Projected/Alloted KPI
-  let avgHoursPerCompany = useAvgHoursPerCompany(); // Total Hours Billed / Avg Hours Per Company KPI
+  let companiesAndHoursPerCompany = useAvgHoursPerCompany(); // Total Hours Billed / Avg Hours Per Company KPI
   let hoursBilledAndProjectedByCompanyProject =
     useBilledAndProjectedHoursByCompany();
-  console.log(avgHoursPerCompany);
 
   return (
     <div className="ControlCenter--container">
@@ -70,9 +69,16 @@ function ControlCenter(props) {
 
         <select className="ControlCenter--mobile-company-selector">
           <option value="Overall">Overall</option>
-          <option value="Company 1">Company 1</option>
-          <option value="Company 2">Company 2</option>
-          <option value="Company 3">Company 3</option>
+          {companiesAndHoursPerCompany.companies.map((company) => {
+            return (
+              <option
+                value={company.CompanyName}
+                data-companyid={company.CompanyId}
+              >
+                {company.CompanyName}
+              </option>
+            );
+          })}
         </select>
 
         <main className="ControlCenter--main-content">
@@ -176,7 +182,7 @@ function ControlCenter(props) {
                   />
                   <CompanyHoursKPI
                     hoursBilled={billedAndProjectedHours.totalBilledHours}
-                    avgHoursPerCompany={avgHoursPerCompany.avgHours}
+                    avgHoursPerCompany={companiesAndHoursPerCompany.avgHours}
                   />
                   <KPI
                     value={
