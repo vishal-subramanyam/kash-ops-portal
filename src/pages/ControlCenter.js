@@ -15,6 +15,7 @@ import {
   useBilledHours,
   useBilledAndProjectedHours,
   useAvgHoursPerCompany,
+  useBilledAndProjectedHoursByCompany,
 } from "../hooks/Fetch";
 
 function ControlCenter(props) {
@@ -23,12 +24,15 @@ function ControlCenter(props) {
     "ControlCenter--tab ControlCenter--tab-active";
   let controlCenterKPITabNotActive =
     "ControlCenter--tab ControlCenter--tab-not-active";
-  let companyProjects = useCompanyProjects();
-  let companyAdmins = useCompanyAdmins();
-  let avgBilledHours = useBilledHours();
-  let billedAndProjectedHours = useBilledAndProjectedHours();
-  let avgHoursPerCompany = useAvgHoursPerCompany();
+  let companyProjects = useCompanyProjects(); // Number of company projects
+  let companyAdmins = useCompanyAdmins(); // Number of company admins
+  let billedHoursDetailed = useBilledHours(); // Avg Hours Billed KPI
+  let billedAndProjectedHours = useBilledAndProjectedHours(); // Hours Billed and Hours Projected/Alloted KPI
+  let avgHoursPerCompany = useAvgHoursPerCompany(); // Total Hours Billed / Avg Hours Per Company KPI
+  let hoursBilledAndProjectedByCompanyProject =
+    useBilledAndProjectedHoursByCompany();
   console.log(avgHoursPerCompany);
+
   return (
     <div className="ControlCenter--container">
       <header>
@@ -99,90 +103,101 @@ function ControlCenter(props) {
             </li>
           </ul>
 
-          {tabActive === "tab1" ? (
-            // Monthly Tab KPI Display
-            <section className="ControlCenter--KPI-section-container ControlCenter--KPI-section-container-active">
-              {/* KPI section */}
-              <section className="ControlCenter--KPI-section-wrapper">
-                <KPI
-                  value={companyProjects.monthly}
-                  caption="Companies with Projects"
-                />
-                <KPI
-                  // value="10"
-                  caption="Employees Assigned"
-                />
-                <KPI value="0" caption="Avg Hours Billed Per Resource" />
-                <KPI value={companyAdmins.length} caption="Company Admins" />
-                <ProjectHoursKPI
-                  className="project-hours-KPI-article"
-                  hoursBilled="0"
-                  hoursAllotted="0"
-                  percentage={(0 / 1) * 100 + "%"}
-                />
-                <KPI
-                  value={companyProjects.monthlyActive}
-                  caption="Active Projects"
-                />
-                <CompanyHoursKPI hoursBilled="0" avgHoursPerCompany="0" />
-                <KPI value="0" caption="Projects with time < 100" />
-              </section>
+          <Suspense fallback={<LoadingData />}>
+            {tabActive === "tab1" ? (
+              // Monthly Tab KPI Display
+              <section className="ControlCenter--KPI-section-container ControlCenter--KPI-section-container-active">
+                {/* KPI section */}
+                <section className="ControlCenter--KPI-section-wrapper">
+                  <KPI
+                    value={companyProjects.monthly}
+                    caption="Companies with Projects"
+                  />
+                  <KPI
+                    // value="10"
+                    caption="Employees Assigned"
+                  />
+                  <KPI value="0" caption="Avg Hours Billed Per Resource" />
+                  <KPI value="0" caption="Company Admins" />
+                  <ProjectHoursKPI
+                    className="project-hours-KPI-article"
+                    hoursBilled="0"
+                    hoursAllotted="0"
+                    percentage={(0 / 1) * 100 + "%"}
+                  />
+                  <KPI
+                    value={companyProjects.monthlyActive}
+                    caption="Active Projects"
+                  />
+                  <CompanyHoursKPI hoursBilled="0" avgHoursPerCompany="0" />
+                  <KPI value="0" caption="Projects with time < 100" />
+                </section>
 
-              {/* KPI Charts and Graphs Section */}
-              <section className="ControlCenter--chart-section-wrapper">
-                <PieChartKPI className="pie-chart-kpi" />
-                <LineChartKPI className="line-chart-kpi" />
-                <BarChartKPI className="bar-chart-kpi" />
-                <HorizontalBarChartKPI className="horizontal-bar-chart-kpi" />
+                {/* KPI Charts and Graphs Section */}
+                <section className="ControlCenter--chart-section-wrapper">
+                  <PieChartKPI className="pie-chart-kpi" />
+                  <LineChartKPI className="line-chart-kpi" />
+                  <BarChartKPI className="bar-chart-kpi" />
+                  <HorizontalBarChartKPI className="horizontal-bar-chart-kpi" />
+                </section>
               </section>
-            </section>
-          ) : (
-            // Lifetime KPI Display
-            <section className="ControlCenter--KPI-section-container ControlCenter--KPI-section-container-active">
-              {/* KPI section */}
-              <section className="ControlCenter--KPI-section-wrapper">
-                <KPI
-                  value={companyProjects.lifetime}
-                  caption="Companies with Projects"
-                />
-                <KPI value="0" caption="Employees Assigned" />
-                <KPI
-                  value={avgBilledHours.toFixed(2)}
-                  caption="Avg Hours Billed Per Resource"
-                />
-                <KPI value={companyAdmins.length} caption="Company Admins" />
-                <ProjectHoursKPI
-                  className="project-hours-KPI-article"
-                  hoursBilled={billedAndProjectedHours.totalBilledHours}
-                  hoursAllotted={billedAndProjectedHours.totalProjectedHours}
-                  percentage={
-                    (
-                      (billedAndProjectedHours.totalBilledHours /
-                        billedAndProjectedHours.totalProjectedHours) *
-                      100
-                    ).toFixed(2) + "%"
-                  }
-                />
-                <KPI
-                  value={companyProjects.lifetimeActive}
-                  caption="Active Projects"
-                />
-                <CompanyHoursKPI
-                  hoursBilled={billedAndProjectedHours.totalBilledHours}
-                  avgHoursPerCompany={avgHoursPerCompany}
-                />
-                <KPI value="0" caption="Projects with time < 100" />
-              </section>
+            ) : (
+              // Lifetime KPI Display
+              <section className="ControlCenter--KPI-section-container ControlCenter--KPI-section-container-active">
+                {/* KPI section */}
+                <section className="ControlCenter--KPI-section-wrapper">
+                  <KPI
+                    value={companyProjects.lifetime}
+                    caption="Companies with Projects"
+                  />
+                  <KPI value="0" caption="Employees Assigned" />
+                  <KPI
+                    value={billedHoursDetailed.avgHoursBilledOverall}
+                    caption="Avg Hours Billed Per Resource"
+                  />
+                  <KPI
+                    value={companyAdmins.allAdmins.length}
+                    caption="Company Admins"
+                  />
+                  <ProjectHoursKPI
+                    hoursBilled={billedAndProjectedHours.totalBilledHours}
+                    hoursAllotted={billedAndProjectedHours.totalProjectedHours}
+                    percentage={
+                      (
+                        (billedAndProjectedHours.totalBilledHours /
+                          billedAndProjectedHours.totalProjectedHours) *
+                        100
+                      ).toFixed(2) + "%"
+                    }
+                  />
+                  <KPI
+                    value={companyProjects.lifetimeActive}
+                    caption="Active Projects"
+                  />
+                  <CompanyHoursKPI
+                    hoursBilled={billedAndProjectedHours.totalBilledHours}
+                    avgHoursPerCompany={avgHoursPerCompany.avgHours}
+                  />
+                  <KPI
+                    value={
+                      hoursBilledAndProjectedByCompanyProject.filter(
+                        (project) => project.ProjectBurnTime <= 300
+                      ).length
+                    }
+                    caption="Projects with < 300 hours"
+                  />
+                </section>
 
-              {/* KPI Charts and Graphs Section */}
-              <section className="ControlCenter--chart-section-wrapper">
-                <PieChartKPI className="pie-chart-kpi" />
-                <LineChartKPI className="line-chart-kpi" />
-                <BarChartKPI className="bar-chart-kpi" />
-                <HorizontalBarChartKPI className="horizontal-bar-chart-kpi" />
+                {/* KPI Charts and Graphs Section */}
+                <section className="ControlCenter--chart-section-wrapper">
+                  <PieChartKPI className="pie-chart-kpi" />
+                  <LineChartKPI className="line-chart-kpi" />
+                  <BarChartKPI className="bar-chart-kpi" />
+                  <HorizontalBarChartKPI className="horizontal-bar-chart-kpi" />
+                </section>
               </section>
-            </section>
-          )}
+            )}
+          </Suspense>
         </main>
       </div>
     </div>

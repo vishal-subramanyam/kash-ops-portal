@@ -3,7 +3,7 @@ import "../assets/styles/ControlCenter.css";
 
 function ProjectHoursKPI(props) {
   return (
-    <article>
+    <article className="ControlCenter--project-hours-KPI-article">
       <section>
         <h1>
           {props.hoursBilled}/{props.hoursAllotted}

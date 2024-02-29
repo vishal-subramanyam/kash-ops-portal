@@ -3,7 +3,7 @@ import "../assets/styles/ControlCenter.css";
 
 function CompanyHoursKPI(props) {
   return (
-    <article>
+    <article className="ControlCenter--hours-billed-avg-per-company-kpi">
       <h1>
         {props.hoursBilled}/{props.avgHoursPerCompany}
       </h1>

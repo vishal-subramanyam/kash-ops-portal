@@ -10,6 +10,7 @@ export const useCompanyProjects = () => {
     lifetime: 0,
     monthlyActive: 0,
     lifetimeActive: 0,
+    companyProjects: companyProjects,
   };
 
   useEffect(() => {
@@ -78,9 +79,12 @@ export const useCompanyProjects = () => {
 };
 
 export const useCompanyAdmins = () => {
+  let [adminUsers, setAdminUsers] = useState([]);
   let [companyAdmins, setCompanyAdmins] = useState([]);
+  let admins = { allAdmins: [], adminsPerCompany: [] };
 
   useEffect(() => {
+    // Get all users who are Admins or Super Admins
     fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
@@ -93,7 +97,7 @@ export const useCompanyAdmins = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        let admins = res.data.filter((admin) => {
+        let filteredOutAdmins = res.data.filter((admin) => {
           if (
             admin.AdminLevel === "Super Admin" ||
             admin.AdminLevel === "Admin"
@@ -101,21 +105,50 @@ export const useCompanyAdmins = () => {
             return admin;
           }
         });
-        setCompanyAdmins(admins);
+        setAdminUsers(filteredOutAdmins);
+      })
+      .catch((err) => {
+        return err;
+      });
+
+    // Get the Company Admins
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "KASH_OPERATIONS_COMPANY_ADMIN_ROLE_TABLE",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setCompanyAdmins(res.data);
       })
       .catch((err) => {
         return err;
       });
   }, []);
-  return companyAdmins;
+
+  admins.allAdmins.push(...adminUsers);
+  admins.adminsPerCompany.push(...companyAdmins);
+  return admins;
 };
 
-// Get number of hours billed by users and divide by number of user that billed hours
+// Get number of hours billed by users and divide by number of users that billed hours
 
 export const useBilledHours = () => {
   let [billedHours, setBilledHours] = useState([]);
+  let [billedHoursPerCompanyProject, setBilledHoursPerCompanyProject] =
+    useState([]);
+  let totalHoursBilledDetailed = {
+    hoursBilledPerProject: [],
+    avgHoursBilledOverall: 0,
+  };
 
   useEffect(() => {
+    // Get the total hours billed by users
     fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
@@ -133,18 +166,47 @@ export const useBilledHours = () => {
       .catch((err) => {
         return err;
       });
+
+    // Get the total of hours billed by users per company project
+
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "TIMESHEET_USER_HOURS_BILLED_PER_COMPANY_PROJECT_TABLE",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setBilledHoursPerCompanyProject(res.data);
+      })
+      .catch((err) => {
+        return err;
+      });
   }, []);
   let convertedNums = billedHours.map((num) => parseFloat(num.Sum));
   let totalHours = convertedNums.reduce((a, c) => a + c, 0);
-  let avgHours = totalHours / billedHours.length;
-  return avgHours;
+  let avgOverallHours = totalHours / billedHours.length;
+
+  totalHoursBilledDetailed.hoursBilledPerProject.push(
+    ...billedHoursPerCompanyProject
+  );
+  totalHoursBilledDetailed.avgHoursBilledOverall = avgOverallHours.toFixed(2);
+  return totalHoursBilledDetailed;
 };
 
 // Get the toal projected hours on all projects and the total hours billed on projects
 export const useBilledAndProjectedHours = () => {
   let [billedHoursByProject, setBilledHoursByProject] = useState([]);
   let [totalProjectedHours, setTotalProjectedHours] = useState([]);
-  let hoursBilledAndProjected = { totalBilledHours: 0, totalProjectedHours: 0 };
+  let hoursBilledAndProjected = {
+    totalBilledHours: 0,
+    totalProjectedHours: 0,
+    hoursDetailArr: [],
+  };
 
   useEffect(() => {
     // fetch the total hours billed by project
@@ -201,6 +263,7 @@ export const useBilledAndProjectedHours = () => {
     );
   }
 
+  hoursBilledAndProjected.hoursDetailArr.push(...billedHoursByProject);
   return hoursBilledAndProjected;
 };
 
@@ -256,5 +319,49 @@ export const useAvgHoursPerCompany = () => {
   let totalHours = convertedNums.reduce((a, c) => a + c, 0);
   let avgHoursByCompany = totalHours / companies.length;
   console.log(avgHoursByCompany);
-  return avgHoursByCompany.toFixed(2);
+  let companiesAndHoursBilled = {
+    companies: companies,
+    avgHours: avgHoursByCompany.toFixed(2),
+  };
+  return companiesAndHoursBilled;
+};
+
+// Get the hours billed and projected per company project
+export const useBilledAndProjectedHoursByCompany = () => {
+  let [companyProjects, setCompanyProjects] = useState([]);
+
+  useEffect(() => {
+    fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "HOURS_BILLED_AND_PROJECTED_BY_COMPANY_PROJECT_TABLE",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setCompanyProjects(res.data);
+      })
+      .catch((err) => {
+        return err;
+      });
+  }, []);
+  console.log(companyProjects);
+
+  // convert string values of total projected hours and total billed hours per company project
+  let projectsByCompanyDateWithBurnTime = companyProjects.map((project) => ({
+    CompanyName: project.CompanyName,
+    ProjectCategory: project.ProjectCategory,
+    SowId: project.SowId,
+    TotalBilledHours: parseFloat(project.TotalBilledHours),
+    TotalProjectedHours: parseFloat(project.TotalProjectedHours),
+    ProjectBurnTime:
+      parseFloat(project.TotalProjectedHours) -
+      parseFloat(project.TotalBilledHours),
+  }));
+
+  return projectsByCompanyDateWithBurnTime;
 };

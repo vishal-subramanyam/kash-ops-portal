@@ -120,6 +120,25 @@
   opacity: 0.3;
 }
 
+.ControlCenter--hours-billed-avg-per-company-kpi h1 {
+  width: 90%;
+  font-size: 2rem;
+}
+
+.ControlCenter--project-hours-KPI-article section h1 {
+  width: 90%;
+}
+
+.ControlCenter--project-hours-KPI-article section {
+  width: 100%;
+}
+
+.ControlCenter--project-hours-KPI-article section h1 {
+  width: 70%;
+  font-size: 1.5rem;
+  margin: 0 auto;
+}
+
 /* @media only screen and (min-device-width: 280px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 1) {
 } */
 
@@ -140,6 +159,10 @@
     grid-template-columns: 33.3% 33.3% 33.3%;
   }
 
+  .ControlCenter--chart-section-wrapper {
+    display: grid;
+    grid-template-columns: 50% 50%;
+  }
   /* .ControlCenter--desktop-sidebar {
     display: block;
     background-color: var(--kashtech_operations--characteristic-pink-1);
@@ -158,5 +181,10 @@
   .ControlCenter--KPI-section-wrapper {
     display: grid;
     grid-template-columns: 25% 25% 25% 25%;
+  }
+
+  .ControlCenter--chart-section-wrapper {
+    display: grid;
+    grid-template-columns: 33.3% 33.3% 33.3%;
   }
 }
