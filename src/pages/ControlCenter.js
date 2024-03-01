@@ -1,7 +1,8 @@
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useReducer } from "react";
 import { Link } from "react-router-dom";
 import "../assets/styles/ControlCenter.css";
 import KPI from "../components/KPI";
+import KPITEST from "../components/KPITEST";
 import ProjectHoursKPI from "../components/ProjectHoursKPI";
 import CompanyHoursKPI from "../components/CompanyHoursKPI";
 import PieChartKPI from "../components/PieChartKPI";
@@ -18,6 +19,36 @@ import {
   useBilledAndProjectedHoursByCompany,
 } from "../hooks/Fetch";
 
+function projectsReducer(projects, action) {
+  switch (action.type) {
+    // case "added": {
+    //   return [
+    //     ...tasks,
+    //     {
+    //       id: action.id,
+    //       text: action.text,
+    //       done: false,
+    //     },
+    //   ];
+    // }
+    case "changed": {
+      return projects.map((p) => {
+        if (p.id === action.project.id) {
+          return action.project;
+        } else {
+          return p;
+        }
+      });
+    }
+    // case "deleted": {
+    //   return tasks.filter((t) => t.id !== action.id);
+    // }
+    default: {
+      throw Error("Unknown action: " + action.type);
+    }
+  }
+}
+
 function ControlCenter(props) {
   let [tabActive, setTabActive] = useState("tab2");
   let controlCenterKPITabActive =
@@ -31,6 +62,15 @@ function ControlCenter(props) {
   let companiesAndHoursPerCompany = useAvgHoursPerCompany(); // Total Hours Billed / Avg Hours Per Company KPI
   let hoursBilledAndProjectedByCompanyProject =
     useBilledAndProjectedHoursByCompany();
+
+  console.log(companyProjects);
+  const updateKPIByCompanyId = (e) => {
+    console.log(
+      e.target[e.target.selectedIndex].value,
+      e.target[e.target.selectedIndex].getAttribute("data-companyid")
+    );
+    // Get the number of projects per company id
+  };
 
   return (
     <div className="ControlCenter--container">
@@ -67,7 +107,10 @@ function ControlCenter(props) {
           </ol>
         </aside> */}
 
-        <select className="ControlCenter--mobile-company-selector">
+        <select
+          className="ControlCenter--mobile-company-selector"
+          onChange={updateKPIByCompanyId}
+        >
           <option value="Overall">Overall</option>
           {companiesAndHoursPerCompany.companies.map((company) => {
             return (
@@ -152,6 +195,7 @@ function ControlCenter(props) {
               <section className="ControlCenter--KPI-section-container ControlCenter--KPI-section-container-active">
                 {/* KPI section */}
                 <section className="ControlCenter--KPI-section-wrapper">
+                  <KPITEST />
                   <KPI
                     value={companyProjects.lifetime}
                     caption="Companies with Projects"
