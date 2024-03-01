@@ -198,7 +198,7 @@ export const useBilledHours = () => {
   return totalHoursBilledDetailed;
 };
 
-// Get the toal projected hours on all projects and the total hours billed on projects
+// Get the total projected hours on all projects and the total hours billed on projects
 export const useBilledAndProjectedHours = () => {
   let [billedHoursByProject, setBilledHoursByProject] = useState([]);
   let [totalProjectedHours, setTotalProjectedHours] = useState([]);

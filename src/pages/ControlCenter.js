@@ -63,7 +63,20 @@ function ControlCenter(props) {
   let hoursBilledAndProjectedByCompanyProject =
     useBilledAndProjectedHoursByCompany();
 
-  console.log(companyProjects);
+  console.log(
+    "projects:",
+    companyProjects,
+    "admins:",
+    companyAdmins,
+    "billed hours detailed:",
+    billedHoursDetailed,
+    "billed and projected hours:",
+    billedAndProjectedHours,
+    "companies and hours per company:",
+    companiesAndHoursPerCompany,
+    "hours billed and projected by company project:",
+    hoursBilledAndProjectedByCompanyProject
+  );
   const updateKPIByCompanyId = (e) => {
     console.log(
       e.target[e.target.selectedIndex].value,

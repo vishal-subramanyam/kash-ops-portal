@@ -3,6 +3,33 @@ import "../assets/styles/ControlCenter.css";
 import { domain } from "../assets/api/apiEndpoints";
 // import { useCompanyProjects } from "../hooks/Fetch";
 
+let KPIData = {
+  project: {
+    monthly: 0,
+    lifetime: 0,
+    monthlyActive: 0,
+    lifetimeActive: 0,
+    companyProjects: [],
+  },
+  admins: {
+    allAdmins: [],
+    adminsPerCompany: [],
+  },
+  totalHoursBilledDetailed: {
+    hoursBilledPerProject: [],
+    avgHoursBilledOverall: 0,
+  },
+  companiesAndHoursPerCompany: {
+    companies: [],
+    avgHours: 0,
+  },
+  hoursBilledAndProjected: {
+    totalBilledHours: 0,
+    totalProjectedHours: 0,
+    hoursDetailArr: [],
+  },
+};
+
 function projectsReducer(projects, action) {
   switch (action.type) {
     case "initialize": {
@@ -10,7 +37,11 @@ function projectsReducer(projects, action) {
     }
     case "add project": {
       return {
+        monthly: 0,
         lifetime: projects.lifetime + 1,
+        monthlyActive: 0,
+        lifetimeActive: 0,
+        companyProjects: projects.companyProjects,
       };
     }
     case "changed": {
@@ -24,7 +55,11 @@ function projectsReducer(projects, action) {
     }
     case "remove project": {
       return {
+        monthly: 0,
         lifetime: projects.lifetime - 1,
+        monthlyActive: 0,
+        lifetimeActive: 0,
+        companyProjects: projects.companyProjects,
       };
     }
     default: {
@@ -121,7 +156,7 @@ function KPI(props) {
 
   return (
     <article>
-      <h1>{projects.companyProjects.length}</h1>
+      <h1>{projects.lifetime}</h1>
       <button onClick={() => dispatchProjects({ type: "remove project" })}>
         -
       </button>
