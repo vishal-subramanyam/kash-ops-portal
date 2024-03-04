@@ -1,4 +1,10 @@
-import React, { useState, Suspense, useReducer } from "react";
+import React, {
+  useEffect,
+  useState,
+  Suspense,
+  useReducer,
+  useCallback,
+} from "react";
 import { Link } from "react-router-dom";
 import "../assets/styles/ControlCenter.css";
 import KPI from "../components/KPI";
@@ -10,6 +16,7 @@ import LineChartKPI from "../components/LineChartKPI";
 import BarChartKPI from "../components/BarChartKPI";
 import HorizontalBarChartKPI from "../components/HorizontalBarChartKPI";
 import LoadingData from "../components/LoadingData";
+import { domain } from "../assets/api/apiEndpoints";
 import {
   useCompanyProjects,
   useCompanyAdmins,
@@ -18,31 +25,436 @@ import {
   useAvgHoursPerCompany,
   useBilledAndProjectedHoursByCompany,
 } from "../hooks/Fetch";
+let currentDate = new Date();
+let currentDateUnix = Date.parse(currentDate);
+// ============================================================================
+// FETCH PROJECTS AND COMPANY DATA
+// ============================================================================
 
-function projectsReducer(projects, action) {
+// const getCompanyProjects = () => {
+//   fetch(`${domain}GenericResultBuilderService/buildResults`, {
+//     method: "POST",
+//     headers: {
+//       Accept: "application/json, text/plain, */*",
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       _keyword_: "PROJECTS_AND_COMPANY_INFO_TABLE",
+//     }),
+//   })
+//     .then((res) => res.json())
+//     .then((res) => {
+//       // Calculate all projects which have a start and end date that include the current month
+//       let monthlyNumOfProjects = res.data.filter((project) => {
+//         let projectStartDate = Date.parse(project.OriginalStartDate);
+//         let projectEndDate = Date.parse(project.OriginalEndDate);
+
+//         if (
+//           currentDateUnix >= projectStartDate &&
+//           currentDateUnix <= projectEndDate
+//         ) {
+//           return project;
+//         }
+//       });
+
+//       // Calculate all active projects
+//       let activeLifetimeNumOfProjects = res.data.filter((project) => {
+//         if (project.CurrentStatus === "Active") {
+//           return project;
+//         }
+//       });
+
+//       // Calculate all active projects which have a start and end date that include the current month
+//       let activeMonthlyNumOfProjects = res.data.filter((project) => {
+//         let projectStartDate = Date.parse(project.OriginalStartDate);
+//         let projectEndDate = Date.parse(project.OriginalEndDate);
+
+//         if (
+//           currentDateUnix >= projectStartDate &&
+//           currentDateUnix <= projectEndDate &&
+//           project.CurrentStatus === "Active"
+//         ) {
+//           return project;
+//         }
+//       });
+//       console.log(res.data);
+//       return {
+//         projects: {
+//           monthly: monthlyNumOfProjects.length,
+//           lifetime: res.data.length,
+//           monthlyActive: activeMonthlyNumOfProjects.length,
+//           lifetimeActive: activeLifetimeNumOfProjects.length,
+//           companyProjects: res.data,
+//         },
+//       };
+//       // dispatchKPI({
+//       //   type: "initialize",
+//       //   payload: {
+//       //     ...KPIData,
+//       //     projects: {
+//       //       monthly: monthlyNumOfProjects.length,
+//       //       lifetime: res.data.length,
+//       //       monthlyActive: activeMonthlyNumOfProjects.length,
+//       //       lifetimeActive: activeLifetimeNumOfProjects.length,
+//       //       companyProjects: res.data,
+//       //     },
+//       //   },
+//       // });
+//     })
+//     .catch((err) => {
+//       return err;
+//     });
+// };
+
+// // ============================================================================
+// // FETCH ADMINS AND COMPANY ADMINS
+// // ============================================================================
+
+// const getAllAdmins = () => {
+//   // Get all users who are Admins or Super Admins
+//   fetch(`${domain}GenericResultBuilderService/buildResults`, {
+//     method: "POST",
+//     headers: {
+//       Accept: "application/json, text/plain, */*",
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       _keyword_: "KASH_OPERATIONS_USER_TABLE",
+//     }),
+//   })
+//     .then((res) => res.json())
+//     .then((res) => {
+//       let filteredOutAdmins = res.data.filter((admin) => {
+//         if (
+//           admin.AdminLevel === "Super Admin" ||
+//           admin.AdminLevel === "Admin"
+//         ) {
+//           return admin;
+//         }
+//       });
+//       return filteredOutAdmins;
+//       // dispatchKPI({
+//       //   type: "initialize",
+//       //   payload: {
+//       //     ...KPIData,
+//       //     admins: {
+//       //       allAdmins: filteredOutAdmins,
+//       //     },
+//       //   },
+//       // });
+//     })
+//     .catch((err) => {
+//       return err;
+//     });
+// };
+
+// const getCompanyAdmins = () => {
+//   // Get the Company Admins
+//   fetch(`${domain}GenericResultBuilderService/buildResults`, {
+//     method: "POST",
+//     headers: {
+//       Accept: "application/json, text/plain, */*",
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       _keyword_: "KASH_OPERATIONS_COMPANY_ADMIN_ROLE_TABLE",
+//     }),
+//   })
+//     .then((res) => res.json())
+//     .then((res) => {
+//       console.log(res.data);
+//       return res.data;
+//       // dispatchKPI({
+//       //   type: "initialize",
+//       //   payload: {
+//       //     ...KPIData,
+//       //     admins: {
+//       //       adminsPerCompany: res.data,
+//       //     },
+//       //   },
+//       // });
+//     })
+//     .catch((err) => {
+//       return err;
+//     });
+// };
+// // ====================================================================================
+// // Get number of hours billed by users and divide by number of users that billed hours
+// // ====================================================================================
+
+// const getBilledHours = () => {
+//   // Get the total hours billed by users
+//   fetch(`${domain}GenericResultBuilderService/buildResults`, {
+//     method: "POST",
+//     headers: {
+//       Accept: "application/json, text/plain, */*",
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       _keyword_: "TIMESHEET_BY_USER_HOURS_BILLED_TABLE",
+//     }),
+//   })
+//     .then((res) => res.json())
+//     .then((res) => {
+//       // setBilledHours(res.data);
+//       let convertedNums = res.data.map((num) => parseFloat(num.Sum));
+//       let totalHours = convertedNums.reduce((a, c) => a + c, 0);
+//       let avgOverallHours = totalHours / res.data.length;
+//       return avgOverallHours.toFixed(2);
+//       // dispatchKPI({
+//       //   type: "initialize",
+//       //   payload: {
+//       //     ...initialKPI,
+//       //     totalHoursBilledDetailed: {
+//       //       avgHoursBilledOverall: avgOverallHours.toFixed(2),
+//       //     },
+//       //   },
+//       // });
+//     })
+//     .catch((err) => {
+//       return err;
+//     });
+// };
+
+// const hoursBilledPerProject = () => {
+//   // Get the total of hours billed by users per company project
+
+//   fetch(`${domain}GenericResultBuilderService/buildResults`, {
+//     method: "POST",
+//     headers: {
+//       Accept: "application/json, text/plain, */*",
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       _keyword_: "TIMESHEET_USER_HOURS_BILLED_PER_COMPANY_PROJECT_TABLE",
+//     }),
+//   })
+//     .then((res) => res.json())
+//     .then((res) => {
+//       // setBilledHoursPerCompanyProject(res.data);
+//       return res.data;
+//       // dispatchKPI({
+//       //   type: "initialize",
+//       //   payload: {
+//       //     ...initialKPI,
+//       //     totalHoursBilledDetailed: {
+//       //       hoursBilledPerProject: res.data,
+//       //     },
+//       //   },
+//       // });
+//     })
+//     .catch((err) => {
+//       return err;
+//     });
+// };
+// // ====================================================================================
+// // GET TOTAL HOURS BILLED BY PROJECT
+// // ====================================================================================
+// // Get the total projected hours on all projects and the total hours billed on projects
+// const useBilledAndProjectedHours = () => {
+//   let [billedHoursByProject, setBilledHoursByProject] = useState([]);
+//   let [totalProjectedHours, setTotalProjectedHours] = useState([]);
+//   let hoursBilledAndProjected = {
+//     totalBilledHours: 0,
+//     totalProjectedHours: 0,
+//     hoursDetailArr: [],
+//   };
+
+//     // fetch the total hours billed by project
+//     fetch(`${domain}GenericResultBuilderService/buildResults`, {
+//       method: "POST",
+//       headers: {
+//         Accept: "application/json, text/plain, */*",
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         _keyword_: "TOTAL_HOURS_BILLED_BY_PROJECT_TABLE",
+//       }),
+//     })
+//       .then((res) => res.json())
+//       .then((res) => {
+//         setBilledHoursByProject(res.data);
+//       })
+//       .catch((err) => {
+//         return err;
+//       });
+
+//     // fetch the sum of project total hours of each project
+//     fetch(`${domain}GenericResultBuilderService/buildResults`, {
+//       method: "POST",
+//       headers: {
+//         Accept: "application/json, text/plain, */*",
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         _keyword_: "TOTAL_PROJECTED_HOURS_TABLE",
+//       }),
+//     })
+//       .then((res) => res.json())
+//       .then((res) => {
+//         console.log(res.data);
+//         setTotalProjectedHours(res.data);
+//       })
+//       .catch((err) => {
+//         return err;
+//       });
+
+//   console.log(totalProjectedHours);
+//   // convert billed hours to number
+//   let convertedNums = billedHoursByProject.map((num) =>
+//     parseFloat(num.TotalBilledHours)
+//   );
+//   // get the sum of billed hours
+//   let totalHoursBilled = convertedNums.reduce((a, c) => a + c, 0);
+//   // console.log(totalHoursBilled, totalProjectedHours[0].TotalProjectedHours);
+//   if (totalProjectedHours.length !== 0) {
+//     hoursBilledAndProjected.totalBilledHours = totalHoursBilled;
+//     hoursBilledAndProjected.totalProjectedHours = parseFloat(
+//       totalProjectedHours[0].TotalProjectedHours
+//     );
+//   }
+
+//   hoursBilledAndProjected.hoursDetailArr.push(...billedHoursByProject);
+//   return hoursBilledAndProjected;
+// };
+
+// // ============================================================
+// // GET HOURS BILLED PER COMPANY AND TOTAL NUMBER OF COMPANIES
+// // ============================================================
+
+// export const useAvgHoursPerCompany = () => {
+//   let [totalHoursPerCompany, setTotalHoursPerCompany] = useState([]);
+//   let [companies, setCompanies] = useState([]);
+
+//   useEffect(() => {
+//     // Get total hours billed per company projects
+//     fetch(`${domain}GenericResultBuilderService/buildResults`, {
+//       method: "POST",
+//       headers: {
+//         Accept: "application/json, text/plain, */*",
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         _keyword_: "HOURS_BILLED_BY_COMPANY_PROJECT_TABLE",
+//       }),
+//     })
+//       .then((res) => res.json())
+//       .then((res) => {
+//         setTotalHoursPerCompany(res.data);
+//       })
+//       .catch((err) => {
+//         return err;
+//       });
+
+//     // Get list of companies
+//     fetch(`${domain}GenericResultBuilderService/buildResults`, {
+//       method: "POST",
+//       headers: {
+//         Accept: "application/json, text/plain, */*",
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         _keyword_: "KASH_OPERATIONS_COMPANY_TABLE",
+//       }),
+//     })
+//       .then((res) => res.json())
+//       .then((res) => {
+//         setCompanies(res.data);
+//       })
+//       .catch((err) => {
+//         return err;
+//       });
+//   }, []);
+
+//   let convertedNums = totalHoursPerCompany.map((company) =>
+//     parseFloat(company.TotalBilledHours)
+//   );
+//   let totalHours = convertedNums.reduce((a, c) => a + c, 0);
+//   let avgHoursByCompany = totalHours / companies.length;
+//   console.log(avgHoursByCompany);
+//   let companiesAndHoursBilled = {
+//     companies: companies,
+//     avgHours: avgHoursByCompany.toFixed(2),
+//   };
+//   return companiesAndHoursBilled;
+// };
+
+// // Get the hours billed and projected per company project
+// export const useBilledAndProjectedHoursByCompany = () => {
+//   let [companyProjects, setCompanyProjects] = useState([]);
+
+//   useEffect(() => {
+//     fetch(`${domain}GenericResultBuilderService/buildResults`, {
+//       method: "POST",
+//       headers: {
+//         Accept: "application/json, text/plain, */*",
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         _keyword_: "HOURS_BILLED_AND_PROJECTED_BY_COMPANY_PROJECT_TABLE",
+//       }),
+//     })
+//       .then((res) => res.json())
+//       .then((res) => {
+//         setCompanyProjects(res.data);
+//       })
+//       .catch((err) => {
+//         return err;
+//       });
+//   }, []);
+//   console.log(companyProjects);
+
+//   // convert string values of total projected hours and total billed hours per company project
+//   let projectsByCompanyDateWithBurnTime = companyProjects.map((project) => ({
+//     CompanyName: project.CompanyName,
+//     ProjectCategory: project.ProjectCategory,
+//     SowId: project.SowId,
+//     TotalBilledHours: parseFloat(project.TotalBilledHours),
+//     TotalProjectedHours: parseFloat(project.TotalProjectedHours),
+//     ProjectBurnTime:
+//       parseFloat(project.TotalProjectedHours) -
+//       parseFloat(project.TotalBilledHours),
+//   }));
+
+//   return projectsByCompanyDateWithBurnTime;
+// };
+
+// ====================================================================================
+// REDUCER FUNCTION
+// ====================================================================================
+
+function kpiReducer(state, action) {
   switch (action.type) {
-    // case "added": {
-    //   return [
-    //     ...tasks,
-    //     {
-    //       id: action.id,
-    //       text: action.text,
-    //       done: false,
-    //     },
-    //   ];
-    // }
-    case "changed": {
-      return projects.map((p) => {
-        if (p.id === action.project.id) {
-          return action.project;
-        } else {
-          return p;
-        }
-      });
+    case "initialize": {
+      return action.payload;
     }
-    // case "deleted": {
-    //   return tasks.filter((t) => t.id !== action.id);
-    // }
+    case "add project": {
+      return {
+        monthly: 0,
+        lifetime: state.lifetime + 1,
+        monthlyActive: 0,
+        lifetimeActive: 0,
+        companyProjects: [],
+      };
+    }
+    case "changed": {
+      // return project.map((p) => {
+      //   if (p.id === action.project.id) {
+      //     return action.project;
+      //   } else {
+      //     return p;
+      //   }
+      // });
+    }
+    case "remove project": {
+      return {
+        monthly: 0,
+        lifetime: state.lifetime - 1,
+        monthlyActive: 0,
+        lifetimeActive: 0,
+        companyProjects: [],
+      };
+    }
     default: {
       throw Error("Unknown action: " + action.type);
     }
@@ -50,39 +462,155 @@ function projectsReducer(projects, action) {
 }
 
 function ControlCenter(props) {
+  // let currentDate = new Date();
+  // let currentDateUnix = Date.parse(currentDate);
   let [tabActive, setTabActive] = useState("tab2");
   let controlCenterKPITabActive =
     "ControlCenter--tab ControlCenter--tab-active";
   let controlCenterKPITabNotActive =
     "ControlCenter--tab ControlCenter--tab-not-active";
-  let companyProjects = useCompanyProjects(); // Number of company projects
-  let companyAdmins = useCompanyAdmins(); // Number of company admins
-  let billedHoursDetailed = useBilledHours(); // Avg Hours Billed KPI
-  let billedAndProjectedHours = useBilledAndProjectedHours(); // Hours Billed and Hours Projected/Alloted KPI
-  let companiesAndHoursPerCompany = useAvgHoursPerCompany(); // Total Hours Billed / Avg Hours Per Company KPI
-  let hoursBilledAndProjectedByCompanyProject =
-    useBilledAndProjectedHoursByCompany();
+  let initialKPI = {
+    projects: {
+      monthly: 0,
+      lifetime: 0,
+      monthlyActive: 0,
+      lifetimeActive: 0,
+      companyProjects: [],
+    },
+    admins: {
+      allAdmins: [],
+      adminsPerCompany: [],
+    },
+    totalHoursBilledDetailed: {
+      hoursBilledPerProject: [],
+      avgHoursBilledOverall: 0,
+    },
+    companiesAndHoursPerCompany: {
+      companies: [],
+      avgHours: 0,
+    },
+    hoursBilledAndProjected: {
+      totalBilledHours: 0,
+      totalProjectedHours: 0,
+      hoursDetailArr: [],
+    },
+    hoursBilledAndProjectedByCompanyProject: {
+      calcBurntimeArr: [],
+    },
+  };
+  let useCallbackDependency = true;
+  let [KPIData, dispatchKPI] = useReducer(kpiReducer, initialKPI);
+  let promiseResolutionValues = [];
+  //  let companyProjects = useCompanyProjects(); // Number of company projects
+  //  let companyAdmins = useCompanyAdmins(); // Number of company admins
+  //  let billedHoursDetailed = useBilledHours(); // Avg Hours Billed KPI
+  //  let billedAndProjectedHours = useBilledAndProjectedHours(); // Hours Billed and Hours Projected/Alloted KPI
+  //  let companiesAndHoursPerCompany = useAvgHoursPerCompany(); // Total Hours Billed / Avg Hours Per Company KPI
+  //  let hoursBilledAndProjectedByCompanyProject =
+  //    useBilledAndProjectedHoursByCompany();
 
-  console.log(
-    "projects:",
-    companyProjects,
-    "admins:",
-    companyAdmins,
-    "billed hours detailed:",
-    billedHoursDetailed,
-    "billed and projected hours:",
-    billedAndProjectedHours,
-    "companies and hours per company:",
-    companiesAndHoursPerCompany,
-    "hours billed and projected by company project:",
-    hoursBilledAndProjectedByCompanyProject
-  );
+  // const onReloadNeeded = useCallback(async () => {
+  //   const projects = getCompanyProjects();
+  //   const admins = getAllAdmins();
+  //   const compAdmins = getCompanyAdmins();
+  //   const billedHrs = getBilledHours();
+  //   const billedHrsByProject = hoursBilledPerProject();
+  // });
+
+  Promise.allSettled([
+    // companyProjects,
+    // companyAdmins,
+    // billedHoursDetailed,
+    // companiesAndHoursPerCompany,
+    // billedAndProjectedHours,
+    // hoursBilledAndProjectedByCompanyProject,
+  ]).then((values) => {
+    console.log(values);
+    promiseResolutionValues.push(...values);
+
+    //   dispatchKPI({
+    //     type: "initialize",
+    //     payload: {
+    //       projects: {
+    //         monthly: values[0].value.monthly,
+    //         lifetime: values[0].value.lifetime,
+    //         monthlyActive: values[0].value.monthlyActive,
+    //         lifetimeActive: values[0].value.lifetimeActive,
+    //         companyProjects: values[0].value.companyProjects,
+    //       },
+    //       admins: {
+    //         allAdmins: values[1].value.allAdmins,
+    //         adminsPerCompany: values[1].value.adminsPerCompany,
+    //       },
+    //       totalHoursBilledDetailed: {
+    //         hoursBilledPerProject: values[2].value.hoursBilledPerProject,
+    //         avgHoursBilledOverall: values[2].value.avgHoursBilledOverall,
+    //       },
+    //       companiesAndHoursPerCompany: {
+    //         companies: values[3].value.companies,
+    //         avgHours: values[3].value.avgHours,
+    //       },
+    //       hoursBilledAndProjected: {
+    //         totalBilledHours: values[4].value.totalBilledHours,
+    //         totalProjectedHours: values[4].value.totalProjectedHours,
+    //         hoursDetailArr: values[4].value.hoursDetailArr,
+    //       },
+    //       hoursBilledAndProjectedByCompanyProject: {
+    //         calcBurntimeArr: values[5].value,
+    //       },
+    //     },
+    //   });
+
+    //   //   return;
+  });
+  console.log(promiseResolutionValues);
+
+  useEffect(() => {
+    console.log(promiseResolutionValues);
+
+    // console.log(
+    //   "projects:",
+    //   companyProjects,
+    //   "admins:",
+    //   companyAdmins,
+    //   "billed hours detailed:",
+    //   billedHoursDetailed,
+    //   "billed and projected hours:",
+    //   billedAndProjectedHours,
+    //   "companies and hours per company:",
+    //   companiesAndHoursPerCompany,
+    //   "hours billed and projected by company project:",
+    //   hoursBilledAndProjectedByCompanyProject
+    // );
+  }, []);
+  console.log(KPIData);
+
+  // console.log(
+  //   "projects:",
+  //   companyProjects,
+  //   "admins:",
+  //   companyAdmins,
+  //   "billed hours detailed:",
+  //   billedHoursDetailed,
+  //   "billed and projected hours:",
+  //   billedAndProjectedHours,
+  //   "companies and hours per company:",
+  //   companiesAndHoursPerCompany,
+  //   "hours billed and projected by company project:",
+  //   hoursBilledAndProjectedByCompanyProject
+  // );
   const updateKPIByCompanyId = (e) => {
-    console.log(
-      e.target[e.target.selectedIndex].value,
-      e.target[e.target.selectedIndex].getAttribute("data-companyid")
-    );
-    // Get the number of projects per company id
+    console.log(e.target[e.target.selectedIndex].value);
+
+    // if the selection value is 'overall' run dispatch from useEffect to reset kpi data
+    if (e.target[e.target.selectedIndex].value === "Overall") {
+      console.log("reset kpi with dispatch from useEffect");
+    } else {
+      // Get the KPI data per company id
+      let selectedCompanyId =
+        e.target[e.target.selectedIndex].getAttribute("data-companyid");
+      console.log(selectedCompanyId);
+    }
   };
 
   return (
@@ -125,7 +653,7 @@ function ControlCenter(props) {
           onChange={updateKPIByCompanyId}
         >
           <option value="Overall">Overall</option>
-          {companiesAndHoursPerCompany.companies.map((company) => {
+          {/* {companiesAndHoursPerCompany.companies.map((company) => {
             return (
               <option
                 value={company.CompanyName}
@@ -134,7 +662,7 @@ function ControlCenter(props) {
                 {company.CompanyName}
               </option>
             );
-          })}
+          })} */}
         </select>
 
         <main className="ControlCenter--main-content">
@@ -172,7 +700,7 @@ function ControlCenter(props) {
                 {/* KPI section */}
                 <section className="ControlCenter--KPI-section-wrapper">
                   <KPI
-                    value={companyProjects.monthly}
+                    value={initialKPI.projects.monthly}
                     caption="Companies with Projects"
                   />
                   <KPI
@@ -188,7 +716,7 @@ function ControlCenter(props) {
                     percentage={(0 / 1) * 100 + "%"}
                   />
                   <KPI
-                    value={companyProjects.monthlyActive}
+                    value={initialKPI.projects.monthlyActive}
                     caption="Active Projects"
                   />
                   <CompanyHoursKPI hoursBilled="0" avgHoursPerCompany="0" />
@@ -208,45 +736,54 @@ function ControlCenter(props) {
               <section className="ControlCenter--KPI-section-container ControlCenter--KPI-section-container-active">
                 {/* KPI section */}
                 <section className="ControlCenter--KPI-section-wrapper">
-                  <KPITEST />
                   <KPI
-                    value={companyProjects.lifetime}
+                    value={KPIData.projects.lifetime}
                     caption="Companies with Projects"
                   />
                   <KPI value="0" caption="Employees Assigned" />
                   <KPI
-                    value={billedHoursDetailed.avgHoursBilledOverall}
+                    value={
+                      KPIData.totalHoursBilledDetailed.avgHoursBilledOverall
+                    }
                     caption="Avg Hours Billed Per Resource"
                   />
                   <KPI
-                    value={companyAdmins.allAdmins.length}
+                    value={KPIData.admins.allAdmins.length}
                     caption="Company Admins"
                   />
                   <ProjectHoursKPI
-                    hoursBilled={billedAndProjectedHours.totalBilledHours}
-                    hoursAllotted={billedAndProjectedHours.totalProjectedHours}
+                    hoursBilled={
+                      KPIData.hoursBilledAndProjected.totalBilledHours
+                    }
+                    hoursAllotted={
+                      KPIData.hoursBilledAndProjected.totalProjectedHours
+                    }
                     percentage={
                       (
-                        (billedAndProjectedHours.totalBilledHours /
-                          billedAndProjectedHours.totalProjectedHours) *
+                        (KPIData.hoursBilledAndProjected.totalBilledHours /
+                          KPIData.hoursBilledAndProjected.totalProjectedHours) *
                         100
                       ).toFixed(2) + "%"
                     }
                   />
                   <KPI
-                    value={companyProjects.lifetimeActive}
+                    value={KPIData.projects.lifetimeActive}
                     caption="Active Projects"
                   />
                   <CompanyHoursKPI
-                    hoursBilled={billedAndProjectedHours.totalBilledHours}
-                    avgHoursPerCompany={companiesAndHoursPerCompany.avgHours}
+                    hoursBilled={
+                      KPIData.hoursBilledAndProjected.totalBilledHours
+                    }
+                    avgHoursPerCompany={
+                      KPIData.companiesAndHoursPerCompany.avgHours
+                    }
                   />
                   <KPI
-                    value={
-                      hoursBilledAndProjectedByCompanyProject.filter(
-                        (project) => project.ProjectBurnTime <= 300
-                      ).length
-                    }
+                    // value={
+                    //   KPIData.hoursBilledAndProjectedByCompanyProject.calcBurntimeArr.filter(
+                    //     (project) => project.ProjectBurnTime <= 300
+                    //   ).length
+                    // }
                     caption="Projects with < 300 hours"
                   />
                 </section>
