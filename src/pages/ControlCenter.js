@@ -262,14 +262,6 @@ const hoursBilledPerProject = () => {
 // ====================================================================================
 // Get the total projected hours on all projects and the total hours billed on projects
 const getTotalBilledHours = () => {
-  //   let [billedHoursByProject, setBilledHoursByProject] = useState([]);
-  //   let [totalProjectedHours, setTotalProjectedHours] = useState([]);
-  //   let hoursBilledAndProjected = {
-  //     totalBilledHours: 0,
-  //     totalProjectedHours: 0,
-  //     hoursDetailArr: [],
-  //   };
-
   // fetch the total hours billed by project
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
@@ -289,6 +281,13 @@ const getTotalBilledHours = () => {
       );
       // get the sum of billed hours
       let totalHoursBilled = convertedNums.reduce((a, c) => a + c, 0);
+      console.log(totalHoursBilled);
+      console.log(res.data);
+      let hoursDetail = {
+        hoursBilled: totalHoursBilled,
+        hoursDeatilArr: res.data,
+      };
+      console.log(hoursDetail);
       return totalHoursBilled;
     })
     .catch((err) => {
@@ -320,16 +319,6 @@ const getTotalProjectedHours = () => {
       return err;
     });
 
-  // console.log(totalHoursBilled, totalProjectedHours[0].TotalProjectedHours);
-  // if (totalProjectedHours.length !== 0) {
-  //   hoursBilledAndProjected.totalBilledHours = totalHoursBilled;
-  //   hoursBilledAndProjected.totalProjectedHours = parseFloat(
-  //     totalProjectedHours[0].TotalProjectedHours
-  //   );
-  // }
-
-  // hoursBilledAndProjected.hoursDetailArr.push(...billedHoursByProject);
-  // return hoursBilledAndProjected;
   return response;
 };
 
@@ -594,7 +583,7 @@ function ControlCenter(props) {
   let admins = getAllAdmins();
   let companyAdmins = getCompanyAdmins();
   let avgBilledHours = getAvgBilledHours();
-  let billedHoursByProject = hoursBilledPerProject();
+  let billedHoursByUserByProject = hoursBilledPerProject();
   let totalBilledHours = getTotalBilledHours();
   let totalProjectedHours = getTotalProjectedHours();
   let avgHoursPerCompany = getAvgHoursPerCompany();
@@ -606,7 +595,7 @@ function ControlCenter(props) {
       admins,
       companyAdmins,
       avgBilledHours,
-      billedHoursByProject,
+      billedHoursByUserByProject,
       totalBilledHours,
       totalProjectedHours,
       avgHoursPerCompany,
@@ -632,16 +621,16 @@ function ControlCenter(props) {
             avgHoursBilledOverall: values[3].value,
           },
           companiesAndHoursPerCompany: {
-            companies: values[3].value.companies,
-            avgHours: values[3].value.avgHours,
+            companies: values[7].value.companies,
+            avgHours: values[7].value.avgHours,
           },
           hoursBilledAndProjected: {
-            totalBilledHours: values[4].value.totalBilledHours,
-            totalProjectedHours: values[4].value.totalProjectedHours,
-            hoursDetailArr: values[4].value.hoursDetailArr,
+            totalBilledHours: values[5].value,
+            totalProjectedHours: values[6].value,
+            hoursDetailArr: values[5].value.hoursDetailArr, // unable to get the array with details because the getTotalBilledHours function throws an error when returning an object containing the total hours billed value and hours detail array
           },
           hoursBilledAndProjectedByCompanyProject: {
-            calcBurntimeArr: values[5].value,
+            calcBurntimeArr: values[8].value,
           },
         },
       });
@@ -650,20 +639,6 @@ function ControlCenter(props) {
 
   useEffect(() => {
     resolvePromisesAndDispatch();
-    // console.log(
-    //   "projects:",
-    //   companyProjects,
-    //   "admins:",
-    //   companyAdmins,
-    //   "billed hours detailed:",
-    //   billedHoursDetailed,
-    //   "billed and projected hours:",
-    //   billedAndProjectedHours,
-    //   "companies and hours per company:",
-    //   companiesAndHoursPerCompany,
-    //   "hours billed and projected by company project:",
-    //   hoursBilledAndProjectedByCompanyProject
-    // );
   }, []);
 
   const updateKPIByCompanyId = (e) => {
@@ -846,11 +821,11 @@ function ControlCenter(props) {
                     }
                   />
                   <KPI
-                    // value={
-                    //   KPIData.hoursBilledAndProjectedByCompanyProject.calcBurntimeArr.filter(
-                    //     (project) => project.ProjectBurnTime <= 300
-                    //   ).length
-                    // }
+                    value={
+                      KPIData.hoursBilledAndProjectedByCompanyProject.calcBurntimeArr.filter(
+                        (project) => project.ProjectBurnTime <= 300
+                      ).length
+                    }
                     caption="Projects with < 300 hours"
                   />
                 </section>
