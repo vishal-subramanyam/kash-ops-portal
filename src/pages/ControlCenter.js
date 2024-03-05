@@ -32,7 +32,7 @@ let currentDateUnix = Date.parse(currentDate);
 // ============================================================================
 
 const getCompanyProjects = () => {
-  fetch(`${domain}GenericResultBuilderService/buildResults`, {
+  let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -77,7 +77,7 @@ const getCompanyProjects = () => {
           return project;
         }
       });
-      console.log(res.data);
+
       return {
         projects: {
           monthly: monthlyNumOfProjects.length,
@@ -104,6 +104,8 @@ const getCompanyProjects = () => {
     .catch((err) => {
       return err;
     });
+
+  return response;
 };
 
 // ============================================================================
@@ -112,7 +114,7 @@ const getCompanyProjects = () => {
 
 const getAllAdmins = () => {
   // Get all users who are Admins or Super Admins
-  fetch(`${domain}GenericResultBuilderService/buildResults`, {
+  let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -146,11 +148,13 @@ const getAllAdmins = () => {
     .catch((err) => {
       return err;
     });
+
+  return response;
 };
 
 const getCompanyAdmins = () => {
   // Get the Company Admins
-  fetch(`${domain}GenericResultBuilderService/buildResults`, {
+  let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -177,14 +181,16 @@ const getCompanyAdmins = () => {
     .catch((err) => {
       return err;
     });
+
+  return response;
 };
 // ====================================================================================
 // Get number of hours billed by users and divide by number of users that billed hours
 // ====================================================================================
 
-const getBilledHours = () => {
+const getAvgBilledHours = () => {
   // Get the total hours billed by users
-  fetch(`${domain}GenericResultBuilderService/buildResults`, {
+  let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -214,12 +220,14 @@ const getBilledHours = () => {
     .catch((err) => {
       return err;
     });
+
+  return response;
 };
 
 const hoursBilledPerProject = () => {
   // Get the total of hours billed by users per company project
 
-  fetch(`${domain}GenericResultBuilderService/buildResults`, {
+  let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -246,12 +254,14 @@ const hoursBilledPerProject = () => {
     .catch((err) => {
       return err;
     });
+
+  return response;
 };
 // ====================================================================================
 // GET TOTAL HOURS BILLED BY PROJECT
 // ====================================================================================
 // Get the total projected hours on all projects and the total hours billed on projects
-const getBilledAndProjectedHours = () => {
+const getTotalBilledHours = () => {
   //   let [billedHoursByProject, setBilledHoursByProject] = useState([]);
   //   let [totalProjectedHours, setTotalProjectedHours] = useState([]);
   //   let hoursBilledAndProjected = {
@@ -261,7 +271,7 @@ const getBilledAndProjectedHours = () => {
   //   };
 
   // fetch the total hours billed by project
-  fetch(`${domain}GenericResultBuilderService/buildResults`, {
+  let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -284,11 +294,12 @@ const getBilledAndProjectedHours = () => {
     .catch((err) => {
       return err;
     });
+  return response;
 };
 
 const getTotalProjectedHours = () => {
   // fetch the sum of project total hours of each project
-  fetch(`${domain}GenericResultBuilderService/buildResults`, {
+  let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -303,7 +314,7 @@ const getTotalProjectedHours = () => {
       console.log(res.data);
       let totalProjectedHours = res.data;
       console.log(totalProjectedHours);
-      //  return parseFloat(totalProjectedHours[0].TotalProjectedHours)
+      return parseFloat(totalProjectedHours[0].TotalProjectedHours);
     })
     .catch((err) => {
       return err;
@@ -319,6 +330,7 @@ const getTotalProjectedHours = () => {
 
   // hoursBilledAndProjected.hoursDetailArr.push(...billedHoursByProject);
   // return hoursBilledAndProjected;
+  return response;
 };
 
 // ============================================================
@@ -327,7 +339,7 @@ const getTotalProjectedHours = () => {
 
 const getCompanies = () => {
   // Get list of companies
-  fetch(`${domain}GenericResultBuilderService/buildResults`, {
+  let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -344,11 +356,12 @@ const getCompanies = () => {
     .catch((err) => {
       return err;
     });
+  return response;
 };
 
 const getAvgHoursPerCompany = () => {
   // Get total hours billed per company projects
-  fetch(`${domain}GenericResultBuilderService/buildResults`, {
+  let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -375,9 +388,11 @@ const getAvgHoursPerCompany = () => {
       let totalHours = convertedNums.reduce((a, c) => a + c, 0);
       let avgHoursByCompany = totalHours / companies.length;
       console.log(avgHoursByCompany);
+      let avgHoursByCompanyConsolidated = avgHoursByCompany.toFixed(2);
+      console.log(avgHoursByCompanyConsolidated);
       let companiesAndHoursBilled = {
         companies: companies,
-        avgHours: avgHoursByCompany.toFixed(2),
+        avgHours: parseFloat(avgHoursByCompanyConsolidated),
       };
       console.log(
         "companies and hours billed object:",
@@ -388,13 +403,15 @@ const getAvgHoursPerCompany = () => {
     .catch((err) => {
       return err;
     });
+
+  return response;
 };
 
 // Get the hours billed and projected per company project
 const getBilledAndProjectedHoursByCompany = () => {
   // let [companyProjects, setCompanyProjects] = useState([]);
 
-  fetch(`${domain}GenericResultBuilderService/buildResults`, {
+  let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -425,7 +442,64 @@ const getBilledAndProjectedHoursByCompany = () => {
     .catch((err) => {
       return err;
     });
+  return response;
 };
+
+// let projects = getCompanyProjects();
+// let admins = getAllAdmins();
+// let companyAdmins = getCompanyAdmins();
+// let billedHours = getBilledHours();
+// let billedHoursByProject = hoursBilledPerProject();
+// let billedAndProjectedHours = getBilledAndProjectedHours();
+// let totalProjectedHours = getTotalProjectedHours();
+// let avgHoursPerCompany = getAvgHoursPerCompany();
+// let billedAndProjectedHoursByCompany = getBilledAndProjectedHoursByCompany();
+
+// Promise.allSettled([
+//   projects,
+//   admins,
+//   companyAdmins,
+//   billedHours,
+//   billedHoursByProject,
+//   billedAndProjectedHours,
+//   totalProjectedHours,
+//   avgHoursPerCompany,
+//   billedAndProjectedHoursByCompany,
+// ]).then((values) => {
+//   console.log(values);
+//     // dispatchKPI({
+//     //   type: "initialize",
+//     //   payload: {
+//     //     projects: {
+//     //       monthly: values[0].value.monthly,
+//     //       lifetime: values[0].value.lifetime,
+//     //       monthlyActive: values[0].value.monthlyActive,
+//     //       lifetimeActive: values[0].value.lifetimeActive,
+//     //       companyProjects: values[0].value.companyProjects,
+//     //     },
+//     //     admins: {
+//     //       allAdmins: values[1].value.allAdmins,
+//     //       adminsPerCompany: values[1].value.adminsPerCompany,
+//     //     },
+//     //     totalHoursBilledDetailed: {
+//     //       hoursBilledPerProject: values[2].value.hoursBilledPerProject,
+//     //       avgHoursBilledOverall: values[2].value.avgHoursBilledOverall,
+//     //     },
+//     //     companiesAndHoursPerCompany: {
+//     //       companies: values[3].value.companies,
+//     //       avgHours: values[3].value.avgHours,
+//     //     },
+//     //     hoursBilledAndProjected: {
+//     //       totalBilledHours: values[4].value.totalBilledHours,
+//     //       totalProjectedHours: values[4].value.totalProjectedHours,
+//     //       hoursDetailArr: values[4].value.hoursDetailArr,
+//     //     },
+//     //     hoursBilledAndProjectedByCompanyProject: {
+//     //       calcBurntimeArr: values[5].value,
+//     //     },
+//     //   },
+//     // });
+// });
 
 // ====================================================================================
 // REDUCER FUNCTION
@@ -490,7 +564,7 @@ function ControlCenter(props) {
       adminsPerCompany: [],
     },
     totalHoursBilledDetailed: {
-      hoursBilledPerProject: [],
+      hoursBilledByUserPerProject: [],
       avgHoursBilledOverall: 0,
     },
     companiesAndHoursPerCompany: {
@@ -516,73 +590,66 @@ function ControlCenter(props) {
   //  let companiesAndHoursPerCompany = useAvgHoursPerCompany(); // Total Hours Billed / Avg Hours Per Company KPI
   //  let hoursBilledAndProjectedByCompanyProject =
   //    useBilledAndProjectedHoursByCompany();
-  const projects = getCompanyProjects();
-  const admins = getAllAdmins();
-  const companyAdmins = getCompanyAdmins();
-  const billedHours = getBilledHours();
-  const billedHoursByProject = hoursBilledPerProject();
-  const billedAndProjectedHours = getBilledAndProjectedHours();
-  const totalProjectedHours = getTotalProjectedHours();
-  const avgHoursPerCompany = getAvgHoursPerCompany();
-  const billedAndProjectedHoursByCompany =
-    getBilledAndProjectedHoursByCompany();
+  let projects = getCompanyProjects();
+  let admins = getAllAdmins();
+  let companyAdmins = getCompanyAdmins();
+  let avgBilledHours = getAvgBilledHours();
+  let billedHoursByProject = hoursBilledPerProject();
+  let totalBilledHours = getTotalBilledHours();
+  let totalProjectedHours = getTotalProjectedHours();
+  let avgHoursPerCompany = getAvgHoursPerCompany();
+  let billedAndProjectedHoursByCompany = getBilledAndProjectedHoursByCompany();
 
-  const resolvePromisesAndDispatch = useCallback(async () => {
-    // const projects = getCompanyProjects();
-    // const admins = getAllAdmins();
-    // const compAdmins = getCompanyAdmins();
-    // const billedHrs = getBilledHours();
-    // const billedHrsByProject = hoursBilledPerProject();
-  });
-
-  Promise.allSettled([
-    projects,
-    admins,
-    companyAdmins,
-    billedHours,
-    billedHoursByProject,
-    billedAndProjectedHours,
-    totalProjectedHours,
-    avgHoursPerCompany,
-    billedAndProjectedHoursByCompany,
-  ]).then((values) => {
-    console.log(values);
-    //   dispatchKPI({
-    //     type: "initialize",
-    //     payload: {
-    //       projects: {
-    //         monthly: values[0].value.monthly,
-    //         lifetime: values[0].value.lifetime,
-    //         monthlyActive: values[0].value.monthlyActive,
-    //         lifetimeActive: values[0].value.lifetimeActive,
-    //         companyProjects: values[0].value.companyProjects,
-    //       },
-    //       admins: {
-    //         allAdmins: values[1].value.allAdmins,
-    //         adminsPerCompany: values[1].value.adminsPerCompany,
-    //       },
-    //       totalHoursBilledDetailed: {
-    //         hoursBilledPerProject: values[2].value.hoursBilledPerProject,
-    //         avgHoursBilledOverall: values[2].value.avgHoursBilledOverall,
-    //       },
-    //       companiesAndHoursPerCompany: {
-    //         companies: values[3].value.companies,
-    //         avgHours: values[3].value.avgHours,
-    //       },
-    //       hoursBilledAndProjected: {
-    //         totalBilledHours: values[4].value.totalBilledHours,
-    //         totalProjectedHours: values[4].value.totalProjectedHours,
-    //         hoursDetailArr: values[4].value.hoursDetailArr,
-    //       },
-    //       hoursBilledAndProjectedByCompanyProject: {
-    //         calcBurntimeArr: values[5].value,
-    //       },
-    //     },
-    //   });
-  });
+  const resolvePromisesAndDispatch = useCallback(() => {
+    Promise.allSettled([
+      projects,
+      admins,
+      companyAdmins,
+      avgBilledHours,
+      billedHoursByProject,
+      totalBilledHours,
+      totalProjectedHours,
+      avgHoursPerCompany,
+      billedAndProjectedHoursByCompany,
+    ]).then((values) => {
+      console.log(values);
+      dispatchKPI({
+        type: "initialize",
+        payload: {
+          projects: {
+            monthly: values[0].value.projects.monthly,
+            lifetime: values[0].value.projects.lifetime,
+            monthlyActive: values[0].value.projects.monthlyActive,
+            lifetimeActive: values[0].value.projects.lifetimeActive,
+            companyProjects: values[0].value.projects.companyProjects,
+          },
+          admins: {
+            allAdmins: values[1].value,
+            adminsPerCompany: values[2].value,
+          },
+          totalHoursBilledDetailed: {
+            hoursBilledByUserPerProject: values[4].value,
+            avgHoursBilledOverall: values[3].value,
+          },
+          companiesAndHoursPerCompany: {
+            companies: values[3].value.companies,
+            avgHours: values[3].value.avgHours,
+          },
+          hoursBilledAndProjected: {
+            totalBilledHours: values[4].value.totalBilledHours,
+            totalProjectedHours: values[4].value.totalProjectedHours,
+            hoursDetailArr: values[4].value.hoursDetailArr,
+          },
+          hoursBilledAndProjectedByCompanyProject: {
+            calcBurntimeArr: values[5].value,
+          },
+        },
+      });
+    });
+  }, []);
 
   useEffect(() => {
-    getAvgHoursPerCompany();
+    resolvePromisesAndDispatch();
     // console.log(
     //   "projects:",
     //   companyProjects,
@@ -598,22 +665,7 @@ function ControlCenter(props) {
     //   hoursBilledAndProjectedByCompanyProject
     // );
   }, []);
-  console.log(KPIData);
 
-  // console.log(
-  //   "projects:",
-  //   companyProjects,
-  //   "admins:",
-  //   companyAdmins,
-  //   "billed hours detailed:",
-  //   billedHoursDetailed,
-  //   "billed and projected hours:",
-  //   billedAndProjectedHours,
-  //   "companies and hours per company:",
-  //   companiesAndHoursPerCompany,
-  //   "hours billed and projected by company project:",
-  //   hoursBilledAndProjectedByCompanyProject
-  // );
   const updateKPIByCompanyId = (e) => {
     console.log(e.target[e.target.selectedIndex].value);
 
