@@ -37,16 +37,8 @@ function ReportsHub(props) {
           KASH Tech Operations
         </h1>
       </header>
-      <nav>
-        <ul>
-          <li>Projects</li>
-          <li>Sub Assignments</li>
-          <li>Timesheets</li>
-        </ul>
-      </nav>
 
       <main>
-        <ProjectsReport loggedInUser={props.loggedInUser} />
         <TimesheetsReport loggedInUser={props.loggedInUser} />
       </main>
     </>
