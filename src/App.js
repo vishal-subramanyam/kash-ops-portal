@@ -22,6 +22,7 @@ import NavBar from "./components/NavBar";
 import EditProjectDetails from "./pages/EditProjectDetails";
 import EditCompanyDetails from "./pages/EditCompanyDetails";
 import ControlCenter from "./pages/ControlCenter";
+import EmployeesDetail from "./pages/EmployeesDetail";
 
 function App() {
   let { logout, user, loggedInUser, isAdmin } = useAuth();
@@ -84,6 +85,17 @@ function App() {
           element={
             <RequireAuth>
               <EmployeeRoleAndResponsibilities />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/employees-detail"
+          element={
+            <RequireAuth>
+              <EmployeesDetail
+                loggedInUser={loggedInUserLocal}
+                admin={isAdminLocal}
+              />
             </RequireAuth>
           }
         />

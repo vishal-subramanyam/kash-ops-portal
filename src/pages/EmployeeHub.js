@@ -53,7 +53,7 @@ function EmployeeHub() {
       <div className="hub_page--main-actions-holder employee_hub--main-action-holder">
         {/* View report redirects to a new portal */}
         <Link
-          to="/reports"
+          to="/employees-detail"
           className="hub_page--main-action-link employee_hub--main-action-link"
         >
           <p>View Reports</p>
