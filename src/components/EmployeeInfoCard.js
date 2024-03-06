@@ -6,13 +6,13 @@ function EmployeeInfoCard(props) {
     <section className="EmployeeInfoCard--section-container">
       <div className="EmployeeInfoCard--employee-detail-section">
         <section className="EmployeeInfoCard--employee-name-id-username-section">
-          <h1 className="EmployeeInfoCard--employee-name">Garrett Anderson</h1>
+          <h3 className="EmployeeInfoCard--employee-name">Garrett Anderson</h3>
           <div className="EmployeeInfoCard--employee-username">
-            <label>Username:</label>
+            <h6>Username:</h6>
             <span>ganderson</span>
           </div>
           <div className="EmployeeInfoCard--employee-id">
-            <lable>EMP_ID</lable>
+            <h6>EMP_ID:</h6>
             <span>411065</span>
           </div>
         </section>
