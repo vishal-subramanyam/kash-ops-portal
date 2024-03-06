@@ -708,9 +708,9 @@ function ControlCenter(props) {
         </select>
 
         <main className="ControlCenter--main-content">
-          <h2 className="ControlCenter--selected-company-heading">
+          {/* <h2 className="ControlCenter--selected-company-heading">
             Selected Company
-          </h2>
+          </h2> */}
           {/* tabs */}
           <ul className="ControlCenter--tabs-container">
             <li
@@ -765,13 +765,14 @@ function ControlCenter(props) {
                   <KPI value="0" caption="Projects with time < 100" />
                 </section>
 
-                {/* KPI Charts and Graphs Section */}
+                {/* KPI Charts and Graphs Section 
                 <section className="ControlCenter--chart-section-wrapper">
                   <PieChartKPI className="pie-chart-kpi" />
                   <LineChartKPI className="line-chart-kpi" />
                   <BarChartKPI className="bar-chart-kpi" />
                   <HorizontalBarChartKPI className="horizontal-bar-chart-kpi" />
                 </section>
+                */}
               </section>
             ) : (
               // Lifetime KPI Display
@@ -830,13 +831,14 @@ function ControlCenter(props) {
                   />
                 </section>
 
-                {/* KPI Charts and Graphs Section */}
+                {/* KPI Charts and Graphs Section
                 <section className="ControlCenter--chart-section-wrapper">
                   <PieChartKPI className="pie-chart-kpi" />
                   <LineChartKPI className="line-chart-kpi" />
                   <BarChartKPI className="bar-chart-kpi" />
                   <HorizontalBarChartKPI className="horizontal-bar-chart-kpi" />
                 </section>
+                 */}
               </section>
             )}
           </Suspense>
