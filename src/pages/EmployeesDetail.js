@@ -13,11 +13,11 @@ function EmployeesDetail(props) {
 
   return (
     <main className="EmployeesDetail--container">
-      <div className="kash_operations--upper-section-holder">
-        <h1 className="add-employee__page-title form-page-title--lg-1">
+      <div className="kash_operations--upper-section-holder EmployeesDetail--upper-section-holder">
+        <h1 className="add-employee__page-title form-page-title--lg-1 EmployeesDetail--page-title">
           Employees Detail
         </h1>
-        <div className="edit_page__return-link-holder">
+        <div className="edit_page__return-link-holder EmployeesDetail--return-link-holder">
           <Link to="/employee-hub">
             <svg
               width="80"

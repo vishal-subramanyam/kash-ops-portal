@@ -8,11 +8,11 @@ function EmployeeInfoCard(props) {
         <section className="EmployeeInfoCard--employee-name-id-username-section">
           <h3 className="EmployeeInfoCard--employee-name">Garrett Anderson</h3>
           <div className="EmployeeInfoCard--employee-username">
-            <h6>Username:</h6>
+            <label>Username:</label>
             <span>ganderson</span>
           </div>
           <div className="EmployeeInfoCard--employee-id">
-            <h6>EMP_ID:</h6>
+            <label>EMP_ID:</label>
             <span>411065</span>
           </div>
         </section>
@@ -39,7 +39,9 @@ function EmployeeInfoCard(props) {
         <ol>
           <li>
             <label>Email:</label>
-            <span> Garrett.Anderson@kashtechllc.com</span>
+            <span className="EmployeeInfoCard--employee-email">
+              Garrett.Anderson@kashtechllc.com
+            </span>
           </li>
           <li>
             <label>Phone:</label>
