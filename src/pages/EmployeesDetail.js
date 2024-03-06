@@ -59,7 +59,13 @@ function EmployeesDetail(props) {
         </li>
       </ul>
 
-      <EmployeeInfoCard />
+      {tabActive === "cardTab" ? (
+        <div className="EmployeesDetail--info-card-container">
+          <EmployeeInfoCard />
+        </div>
+      ) : (
+        <div className="EmployeesDetail--table-detail-container"></div>
+      )}
     </main>
   );
 }

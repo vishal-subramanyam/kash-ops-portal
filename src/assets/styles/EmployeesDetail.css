@@ -37,15 +37,11 @@
 
 .EmployeesDetail--tab-not-active {
   height: 45px;
-  /* color: var(--kashtech_operations--blue-darken1);
-  background-color: #a2c9d5; */
   z-index: 0;
 }
 
 .EmployeesDetail--tab-active {
   height: 55px !important;
-  /* background-color: var(--kashtech_operations--blue-darken1) !important;
-  color: #a2c9d5 !important; */
   z-index: 4;
 }
 
