@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, startTransition } from "react";
 import { useAuth } from "./hooks/Authentication";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./App.css";
@@ -28,7 +28,6 @@ import { createResource } from "./hooks/FetchUsers";
 
 function App() {
   let resource = createResource();
-  // let allUsers = resource.users.read();
   let { logout, user, loggedInUser, isAdmin } = useAuth();
   let username = window.localStorage.getItem("user");
 
@@ -38,12 +37,12 @@ function App() {
   let isAdminLocal = window.localStorage.getItem("adminLevel");
   let navigate = useNavigate();
   let location = useLocation();
-  // console.log(allUsers);
+
   return (
-    <Suspense fallback={<LoadingData />}>
-      <div className="App">
-        {/* hide NavBar if username in local storage is "null" because value in local storage is a string */}
-        {username !== "null" ? <NavBar userInfo={loggedInUserLocal} /> : <></>}
+    <div className="App">
+      {/* hide NavBar if username in local storage is "null" because value in local storage is a string */}
+      {username !== "null" ? <NavBar userInfo={loggedInUserLocal} /> : <></>}
+      <Suspense fallback={<LoadingData />}>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route
@@ -103,6 +102,7 @@ function App() {
                 <EmployeesDetail
                   loggedInUser={loggedInUserLocal}
                   admin={isAdminLocal}
+                  users={resource.users}
                 />
               </RequireAuth>
             }
@@ -234,8 +234,8 @@ function App() {
             }
           />
         </Routes>
-      </div>
-    </Suspense>
+      </Suspense>
+    </div>
   );
 }
 

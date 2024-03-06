@@ -38,6 +38,7 @@ const fetchUsers = () => {
   })
     .then((res) => res.json())
     .then((res) => {
+      console.log("all users: ", res.data);
       return res.data;
     })
     .catch((err) => {

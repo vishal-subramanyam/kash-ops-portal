@@ -15,6 +15,10 @@ function EmployeeInfoCard(props) {
             <label>EMP_ID:</label>
             <span>411065</span>
           </div>
+          <div className="EmployeeInfoCard--employee-level">
+            <label>User level:</label>
+            <span>Super Admin</span>
+          </div>
         </section>
         <section className="EmployeeInfoCard--employee-type">
           <label>Contract Type:</label>
