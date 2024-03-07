@@ -113,7 +113,7 @@ function ProjectsReport(props) {
 
   const columnList = customColumnOrder.map((item) => ({
     field: item,
-    headerName: item.replace(/([A-Z0-9])/g, " $1").trim(),
+    headerName: item.replace(/([A-Z0-9])/g, " $1").trim(), // Add a space between capital letters and numbers
     width: 250,
   }));
 

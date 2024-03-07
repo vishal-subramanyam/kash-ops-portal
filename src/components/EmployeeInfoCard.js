@@ -65,7 +65,13 @@ function EmployeeInfoCard(props) {
           <li>
             <label>Location:</label>
             <span>
-              {props.city + ", " + props.state + " - " + props.country}
+              {props.city === "" ||
+              props.state === "" ||
+              props.country === "" ? (
+                <></>
+              ) : (
+                props.city + ", " + props.state + " - " + props.country
+              )}
             </span>
           </li>
         </ol>

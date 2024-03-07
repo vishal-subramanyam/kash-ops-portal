@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "../assets/styles/HomePage.css";
 import "../assets/styles/EmployeesDetail.css";
 import EmployeeInfoCard from "../components/EmployeeInfoCard";
+import UsersReport from "../components/UsersReport";
 
 function EmployeesDetail(props) {
   let [tabActive, setTabActive] = useState("cardTab");
@@ -82,7 +83,9 @@ function EmployeesDetail(props) {
           })}
         </div>
       ) : (
-        <div className="EmployeesDetail--table-detail-container"></div>
+        <div className="EmployeesDetail--table-detail-container">
+          <UsersReport users={allUsers} />
+        </div>
       )}
     </main>
   );
