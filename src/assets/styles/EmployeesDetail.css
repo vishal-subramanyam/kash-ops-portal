@@ -115,6 +115,9 @@
 .EmployeeInfoCard--employee-id label,
 .EmployeeInfoCard--employee-username label {
   font-weight: 300;
+}
+
+.EmployeeInfoCard--section-container label {
   margin-right: 5px;
 }
 
