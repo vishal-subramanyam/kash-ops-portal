@@ -62,7 +62,24 @@ function EmployeesDetail(props) {
 
       {tabActive === "cardTab" ? (
         <div className="EmployeesDetail--info-card-container">
-          <EmployeeInfoCard />
+          {allUsers.map((user) => {
+            return (
+              <EmployeeInfoCard
+                firstName={user.FirstName}
+                lastName={user.LastName}
+                username={user.KashOperationsUsn}
+                empId={user.EmpId}
+                adminLevel={user.AdminLevel}
+                employeeType={user.EmployeeType}
+                email={user.EmailAddress}
+                phone={user.PhoneNumber}
+                city={user.EmpLocationCity}
+                state={user.EmpLocationState}
+                country={user.EmpLocationCountry}
+                contractorName={user.EmployeeContractorName}
+              />
+            );
+          })}
         </div>
       ) : (
         <div className="EmployeesDetail--table-detail-container"></div>

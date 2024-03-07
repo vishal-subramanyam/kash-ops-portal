@@ -1,41 +1,52 @@
 import React from "react";
 import "../assets/styles/EmployeesDetail.css";
+import ProjectSubCategory from "./ProjectSubCategory";
 
 function EmployeeInfoCard(props) {
   return (
     <section className="EmployeeInfoCard--section-container">
       <div className="EmployeeInfoCard--employee-detail-section">
         <section className="EmployeeInfoCard--employee-name-id-username-section">
-          <h3 className="EmployeeInfoCard--employee-name">Garrett Anderson</h3>
+          <h3 className="EmployeeInfoCard--employee-name">
+            {props.firstName + " " + props.lastName}
+          </h3>
           <div className="EmployeeInfoCard--employee-username">
             <label>Username:</label>
-            <span>ganderson</span>
+            <span>{props.username}</span>
           </div>
           <div className="EmployeeInfoCard--employee-id">
             <label>EMP_ID:</label>
-            <span>411065</span>
+            <span>{props.empId}</span>
           </div>
           <div className="EmployeeInfoCard--employee-level">
             <label>User level:</label>
-            <span>Super Admin</span>
+            <span>{props.adminLevel}</span>
           </div>
         </section>
         <section className="EmployeeInfoCard--employee-type">
-          <label>Contract Type:</label>
-          <span>W-2</span>
-
-          {/* If employee type is contractor/ 1099-C  
-          <div>
-            <label>Contract Type:</label>
-            <span className="EmployeeInfoCard--contractor">1099-C</span>
-          </div>
-          <div>
-            <label>Contract Name:</label>
-            <span className="EmployeeInfoCard--contractor-name">
-              Contractor Name
-            </span>
-          </div>
-          */}
+          {props.employeeType === "W-2" ||
+          props.employeeType === "" ||
+          props.employeeType === "-" ? (
+            <div>
+              <label>Contract Type:</label>
+              <span>{props.employeeType}</span>
+            </div>
+          ) : (
+            <div>
+              <div>
+                <label>Contract Type:</label>
+                <span className="EmployeeInfoCard--contractor">
+                  {props.employeeType}
+                </span>
+              </div>
+              <div>
+                <label>Contract Name:</label>
+                <span className="EmployeeInfoCard--contractor-name">
+                  {props.contractorName}
+                </span>
+              </div>
+            </div>
+          )}
         </section>
       </div>
 
@@ -44,16 +55,18 @@ function EmployeeInfoCard(props) {
           <li>
             <label>Email:</label>
             <span className="EmployeeInfoCard--employee-email">
-              Garrett.Anderson@kashtechllc.com
+              {props.email}
             </span>
           </li>
           <li>
             <label>Phone:</label>
-            <span>407-718-1889</span>
+            <span>{props.phone}</span>
           </li>
           <li>
             <label>Location:</label>
-            <span>Longwood, Florida - United States</span>
+            <span>
+              {props.city + ", " + props.state + " - " + props.country}
+            </span>
           </li>
         </ol>
       </section>
