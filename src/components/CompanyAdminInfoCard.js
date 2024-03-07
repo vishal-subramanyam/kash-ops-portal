@@ -1,7 +1,7 @@
 import React from "react";
 import "../assets/styles/EmployeesDetail.css";
 
-function EmployeeInfoCard(props) {
+function CompanyAdminInfoCard(props) {
   return (
     <section className="EmployeeInfoCard--section-container">
       <div className="EmployeeInfoCard--employee-detail-section">
@@ -77,12 +77,8 @@ function EmployeeInfoCard(props) {
           </li>
         </ol>
       </section>
-
-      <section className="EmployeeInfoCard--employee-hours-billed-section">
-        <label>Hours Billed:</label>
-      </section>
     </section>
   );
 }
 
-export default EmployeeInfoCard;
+export default CompanyAdminInfoCard;

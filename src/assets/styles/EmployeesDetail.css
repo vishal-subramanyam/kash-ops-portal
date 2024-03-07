@@ -26,7 +26,7 @@
 .EmployeesDetail--tabs-container {
   width: 100%;
   padding: 0;
-  margin: 0px;
+  margin: -1px;
   list-style: none;
   display: flex;
   align-items: end;
@@ -86,15 +86,20 @@
   color: #ff981c;
 }
 
+.EmployeesDetail--company-admin-tab {
+  background-color: #dbf0f6;
+  color: #255463;
+}
+
 .EmployeesDetail--info-card-container {
-  background-color: #d6f1d1;
-  padding: 0.5rem 0.5rem;
+  background-color: #a2d299;
+  padding: 1.5rem 0.5rem;
 }
 
 .EmployeeInfoCard--section-container {
   background-color: #fff;
   max-width: 90%;
-  margin: 1rem auto;
+  margin: 0 auto 1rem auto;
   padding: 1rem;
   border-radius: 5px;
   -webkit-box-shadow: 0px 12px 25px 2px rgba(197, 197, 197, 0.4);
@@ -144,8 +149,12 @@
 }
 
 .EmployeesDetail--table-detail-container {
-  background-color: #f9ecdb;
+  background-color: #ffe1bd;
   padding: 1rem 0;
+}
+
+.EmployeesDetail--company-admin-detail-container {
+  background-color: #dbf0f6;
 }
 
 .report-container.UsersReport--report-container {
@@ -158,6 +167,28 @@
   box-shadow: 0px 12px 25px 2px rgba(197, 197, 197, 0.4);
 }
 
-.MuiDataGrid-toolbarContainer button {
+.EmployeesDetail--table-detail-container .MuiDataGrid-toolbarContainer button {
   color: #ff981c;
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  .EmployeeInfoCard--employee-detail-section {
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+  }
+}
+
+@media only screen and (min-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  .EmployeeInfoCard--employee-detail-section {
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+  }
+
+  .EmployeeInfoCard--employee-contact-info-section ol {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+  }
 }

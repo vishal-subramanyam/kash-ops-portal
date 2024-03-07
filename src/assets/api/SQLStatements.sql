@@ -42,3 +42,4 @@ JOIN kash_operations_created_projects_table AS Projects
 ON Timesheets.sow_id = Projects.sow_id
 WHERE Timesheets.non_billable_reason = 'n/a' OR Timesheets.non_billable_reason = 'N/A' OR Timesheets.non_billable_reason = ''
 GROUP BY Users.First_Name, Users.Last_Name, Users.Emp_Id, Timesheets.sow_id, Projects.company_id;
+

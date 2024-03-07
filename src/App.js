@@ -27,7 +27,7 @@ import LoadingData from "./components/LoadingData";
 import { createResource } from "./hooks/FetchUsers";
 
 function App() {
-  let resource = createResource();
+  let resource = createResource(); // Access the fetch functions to get the pertinent users data
   let { logout, user, loggedInUser, isAdmin } = useAuth();
   let username = window.localStorage.getItem("user");
 

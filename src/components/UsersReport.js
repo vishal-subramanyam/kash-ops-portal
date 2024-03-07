@@ -6,8 +6,7 @@ import "../assets/styles/EmployeesDetail.css";
 function UsersReport(props) {
   let [columnVisibilityModel, setColumnVisibilityModel] = useState({
     EmpId: true,
-    FirstName: true,
-    LastName: true,
+    Name: true,
     KashOperationsUsn: true,
     AdminLevel: true,
     EmployeeType: true,
@@ -23,8 +22,7 @@ function UsersReport(props) {
   const transformedRows = props.users.map((item, i) => ({
     id: i,
     EmpId: item.EmpId,
-    FirstName: item.FirstName,
-    LastName: item.LastName,
+    Name: item.FirstName + " " + item.LastName,
     KashOperationsUsn: item.KashOperationsUsn,
     AdminLevel: item.AdminLevel,
     EmployeeType: item.EmployeeType,
@@ -39,9 +37,8 @@ function UsersReport(props) {
   //   const initialHiddenColumns = ["TotalProjectedHours"];
 
   const customColumnOrder = [
+    "Name",
     "EmpId",
-    "FirstName",
-    "LastName",
     "KashOperationsUsn",
     "AdminLevel",
     "EmployeeType",

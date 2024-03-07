@@ -4,6 +4,7 @@ import "../assets/styles/HomePage.css";
 import "../assets/styles/EmployeesDetail.css";
 import EmployeeInfoCard from "../components/EmployeeInfoCard";
 import UsersReport from "../components/UsersReport";
+import CompanyAdminInfoCard from "../components/CompanyAdminInfoCard";
 
 function EmployeesDetail(props) {
   let [tabActive, setTabActive] = useState("cardTab");
@@ -12,7 +13,7 @@ function EmployeesDetail(props) {
   let employeeInfoCardTabNotActive =
     "EmployeesDetail--tab EmployeesDetail--tab-not-active";
   let allUsers = props.users.read();
-  console.log(allUsers);
+  console.log(props.loggedInUser);
   return (
     <main className="EmployeesDetail--container">
       <div className="kash_operations--upper-section-holder EmployeesDetail--upper-section-holder">
@@ -59,9 +60,54 @@ function EmployeesDetail(props) {
         >
           <span>Table</span>
         </li>
+        <li
+          className={
+            tabActive === "companyTab"
+              ? employeeInfoCardTabActive +
+                " EmployeesDetail--company-admin-tab"
+              : employeeInfoCardTabNotActive +
+                " EmployeesDetail--company-admin-tab"
+          }
+          onClick={() => setTabActive("companyTab")}
+        >
+          <span>Company Admins</span>
+        </li>
       </ul>
 
-      {tabActive === "cardTab" ? (
+      {/* If logged in user is a Super Admin show the three tabs */}
+
+      {props.loggedInUser.AdminLevel === "Super Admin" ? (
+        tabActive === "cardTab" ? (
+          <div className="EmployeesDetail--info-card-container">
+            {allUsers.map((user) => {
+              return (
+                <EmployeeInfoCard
+                  firstName={user.FirstName}
+                  lastName={user.LastName}
+                  username={user.KashOperationsUsn}
+                  empId={user.EmpId}
+                  adminLevel={user.AdminLevel}
+                  employeeType={user.EmployeeType}
+                  email={user.EmailAddress}
+                  phone={user.PhoneNumber}
+                  city={user.EmpLocationCity}
+                  state={user.EmpLocationState}
+                  country={user.EmpLocationCountry}
+                  contractorName={user.EmployeeContractorName}
+                />
+              );
+            })}
+          </div>
+        ) : tabActive === "tableTab" ? (
+          <div className="EmployeesDetail--table-detail-container">
+            <UsersReport users={allUsers} />
+          </div>
+        ) : (
+          <div className="EmployeesDetail--company-admin-detail-container">
+            <CompanyAdminInfoCard />
+          </div>
+        )
+      ) : tabActive === "cardTab" ? (
         <div className="EmployeesDetail--info-card-container">
           {allUsers.map((user) => {
             return (
