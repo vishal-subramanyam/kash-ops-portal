@@ -24,7 +24,7 @@ import EditCompanyDetails from "./pages/EditCompanyDetails";
 import ControlCenter from "./pages/ControlCenter";
 import EmployeesDetail from "./pages/EmployeesDetail";
 import LoadingData from "./components/LoadingData";
-import { createResource } from "./hooks/FetchUsers";
+import { createResource } from "./hooks/FetchData";
 
 function App() {
   let resource = createResource(); // Access the fetch functions to get the pertinent users data
@@ -103,6 +103,7 @@ function App() {
                   loggedInUser={loggedInUserLocal}
                   admin={isAdminLocal}
                   users={resource.users}
+                  companyAdmins={resource.companyAdmins}
                 />
               </RequireAuth>
             }

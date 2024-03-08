@@ -13,7 +13,8 @@ function EmployeesDetail(props) {
   let employeeInfoCardTabNotActive =
     "EmployeesDetail--tab EmployeesDetail--tab-not-active";
   let allUsers = props.users.read();
-  console.log(props.loggedInUser);
+  let allCompanyAdmins = props.companyAdmins.read();
+  console.log(allCompanyAdmins);
   return (
     <main className="EmployeesDetail--container">
       <div className="kash_operations--upper-section-holder EmployeesDetail--upper-section-holder">
