@@ -15,6 +15,16 @@ function EmployeesDetail(props) {
   let allUsers = props.users.read();
   let allCompanyAdmins = props.companyAdmins.read();
   console.log(allCompanyAdmins);
+  //   filter allCompanyAdmins array to remove duplicate company names
+  let distinctCompanies = Object.values(
+    allCompanyAdmins.reduce((c, e) => {
+      if (!c[e.CompanyName]) {
+        c[e.CompanyName] = e;
+      }
+      return c;
+    }, {})
+  );
+  console.log(distinctCompanies);
   return (
     <main className="EmployeesDetail--container">
       <div className="kash_operations--upper-section-holder EmployeesDetail--upper-section-holder">
@@ -105,7 +115,15 @@ function EmployeesDetail(props) {
           </div>
         ) : (
           <div className="EmployeesDetail--company-admin-detail-container">
-            <CompanyAdminInfoCard />
+            {distinctCompanies.map((company) => {
+              return (
+                <CompanyAdminInfoCard
+                  companyName={company.CompanyName}
+                  companyId={company.CompanyId}
+                  companyAdminsArr={allCompanyAdmins}
+                />
+              );
+            })}
           </div>
         )
       ) : tabActive === "cardTab" ? (

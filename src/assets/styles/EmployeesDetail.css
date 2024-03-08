@@ -26,7 +26,7 @@
 .EmployeesDetail--tabs-container {
   width: 100%;
   padding: 0;
-  margin: -1px;
+  margin: 0px;
   list-style: none;
   display: flex;
   align-items: end;
@@ -155,6 +155,7 @@
 
 .EmployeesDetail--company-admin-detail-container {
   background-color: #dbf0f6;
+  padding: 1rem 0;
 }
 
 .report-container.UsersReport--report-container {
@@ -169,6 +170,21 @@
 
 .EmployeesDetail--table-detail-container .MuiDataGrid-toolbarContainer button {
   color: #ff981c;
+}
+
+.CompanyAdminInfoCard--employee-detail-section-container {
+  list-style: none;
+  padding-left: unset;
+}
+
+.CompanyAdminInfoCard--employee-detail-section {
+  border-bottom: 2px solid #ccc;
+  margin: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.CompanyAdminInfoCard--employee-name {
+  font-weight: 900;
 }
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {

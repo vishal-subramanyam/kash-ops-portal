@@ -4,79 +4,95 @@ import "../assets/styles/EmployeesDetail.css";
 function CompanyAdminInfoCard(props) {
   return (
     <section className="EmployeeInfoCard--section-container">
-      <div className="EmployeeInfoCard--employee-detail-section">
-        <section className="EmployeeInfoCard--employee-name-id-username-section">
-          <h3 className="EmployeeInfoCard--employee-name">
-            {props.firstName + " " + props.lastName}
-          </h3>
-          <div className="EmployeeInfoCard--employee-username">
-            <label>Username:</label>
-            <span>{props.username}</span>
-          </div>
-          <div className="EmployeeInfoCard--employee-id">
-            <label>EMP_ID:</label>
-            <span>{props.empId}</span>
-          </div>
-        </section>
-        <section className="EmployeeInfoCard--employee-type">
-          {props.employeeType === "W-2" ||
-          props.employeeType === "" ||
-          props.employeeType === "-" ? (
-            <div>
-              <div>
-                <label>Contract Type:</label>
-                <span>{props.employeeType}</span>
-              </div>
-              <div className="EmployeeInfoCard--employee-level">
-                <label>User level:</label>
-                <span>{props.adminLevel}</span>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <div>
-                <label>Contract Type:</label>
-                <span className="EmployeeInfoCard--contractor">
-                  {props.employeeType}
-                </span>
-              </div>
-              <div>
-                <label>Contract Name:</label>
-                <span className="EmployeeInfoCard--contractor-name">
-                  {props.contractorName}
-                </span>
-              </div>
-            </div>
-          )}
-        </section>
-      </div>
+      <h3 className="EmployeeInfoCard--employee-name">{props.companyName}</h3>
+      {console.log(props.companyId, props.companyAdminsArr)}
 
-      <section className="EmployeeInfoCard--employee-contact-info-section">
-        <ol>
-          <li>
-            <label>Email:</label>
-            <span className="EmployeeInfoCard--employee-email">
-              {props.email}
-            </span>
-          </li>
-          <li>
-            <label>Phone:</label>
-            <span>{props.phone}</span>
-          </li>
-          <li>
-            <label>Location:</label>
-            <span>
-              {props.city === "" ||
-              props.state === "" ||
-              props.country === "" ? (
-                <></>
-              ) : (
-                props.city + ", " + props.state + " - " + props.country
-              )}
-            </span>
-          </li>
-        </ol>
-      </section>
+      <ol className="CompanyAdminInfoCard--employee-detail-section-container">
+        {props.companyAdminsArr.map((admin) => {
+          if (props.companyId === admin.CompanyId) {
+            return (
+              <li className="CompanyAdminInfoCard--employee-detail-section EmployeeInfoCard--employee-detail-section">
+                <section className="EmployeeInfoCard--employee-name-id-username-section">
+                  <div className="CompanyAdminInfoCard--employee-name">
+                    {admin.FirstName + " " + admin.LastName}
+                  </div>
+                  <div className="EmployeeInfoCard--employee-username">
+                    <label>Username:</label>
+                    <span>{admin.KashOperationsUsn}</span>
+                  </div>
+                  <div className="EmployeeInfoCard--employee-id">
+                    <label>EMP_ID:</label>
+                    <span>{admin.EmpId}</span>
+                  </div>
+                </section>
+                <section className="EmployeeInfoCard--employee-type">
+                  {/*show contractor type and name if employee type is 1099-C  */}
+                  {admin.EmployeeType === "W-2" ||
+                  admin.EmployeeType === "" ||
+                  admin.EmployeeType === "-" ? (
+                    <div>
+                      <div>
+                        <label>Contract Type:</label>
+                        <span>{admin.EmployeeType}</span>
+                      </div>
+                      <div className="EmployeeInfoCard--employee-level">
+                        <label>User level:</label>
+                        <span>{admin.AdminLevel}</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div>
+                        <label>Contract Type:</label>
+                        <span className="EmployeeInfoCard--contractor">
+                          {admin.EmployeeType}
+                        </span>
+                      </div>
+                      <div>
+                        <label>Contract Name:</label>
+                        <span className="EmployeeInfoCard--contractor-name">
+                          {admin.EmployeeContractorName}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </section>
+
+                <section className="EmployeeInfoCard--employee-contact-info-section">
+                  <ol>
+                    <li>
+                      <label>Email:</label>
+                      <span className="EmployeeInfoCard--employee-email">
+                        {admin.EmailAddress}
+                      </span>
+                    </li>
+                    <li>
+                      <label>Phone:</label>
+                      <span>{admin.PhoneNumber}</span>
+                    </li>
+                    <li>
+                      <label>Location:</label>
+                      <span>
+                        {admin.EmpLocationCity === "" ||
+                        admin.EmpLocationState === "" ||
+                        admin.EmpLocationCountry === "" ? (
+                          <></>
+                        ) : (
+                          admin.EmpLocationCity +
+                          ", " +
+                          admin.EmpLocationState +
+                          " - " +
+                          admin.EmpLocationCountry
+                        )}
+                      </span>
+                    </li>
+                  </ol>
+                </section>
+              </li>
+            );
+          }
+        })}
+      </ol>
     </section>
   );
 }
