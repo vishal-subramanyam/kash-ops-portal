@@ -74,7 +74,7 @@ function EmployeesDetail(props) {
         </li>
       </ul>
 
-      {/* If logged in user is a Super Admin show the three tabs */}
+      {/* If logged in user is a Super Admin show the three tabs otherwise just show the two tabs - employee info card and table tabs */}
 
       {props.loggedInUser.AdminLevel === "Super Admin" ? (
         tabActive === "cardTab" ? (
