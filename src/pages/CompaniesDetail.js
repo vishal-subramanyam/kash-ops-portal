@@ -5,6 +5,14 @@ import "../assets/styles/CompaniesDetail.css";
 import CompanyInfoCard from "../components/CompanyInfoCard";
 
 function CompaniesDetail(props) {
+  let companies = props.companies.read();
+  let projects = props.companyProjects.read();
+  let admins = props.companyAdmins.read();
+  let contacts = props.companyContacts.read();
+  let hoursBilledProjected = props.hoursBilledProjected.read();
+
+  console.log("Hours Billed", hoursBilledProjected);
+
   return (
     <main className="CompaniesDetail--content-container">
       <div className="kash_operations--upper-section-holder EmployeesDetail--upper-section-holder CompaniesDetail--upper-section-holder">
@@ -31,7 +39,26 @@ function CompaniesDetail(props) {
       </div>
 
       <div className="CompaniesDetail--info-card-container">
-        <CompanyInfoCard />
+        {companies.map((company) => {
+          return (
+            <CompanyInfoCard
+              name={company.CompanyName}
+              id={company.CompanyId}
+              projects={projects.companyProjects.filter(
+                (project) => company.CompanyId === project.CompanyId
+              )}
+              admins={admins.filter(
+                (admin) => company.CompanyId === admin.CompanyId
+              )}
+              contacts={contacts.filter(
+                (contact) => company.CompanyId === contact.CompanyId
+              )}
+              hoursPerProject={hoursBilledProjected.filter(
+                (project) => company.CompanyId === project.CompanyId
+              )}
+            />
+          );
+        })}
       </div>
     </main>
   );

@@ -1,14 +1,19 @@
 import "../assets/styles/CompaniesDetail.css";
 
 function CompanyInfoCard(props) {
+  let projects = props.projects;
+  let admins = props.admins;
+  let contacts = props.contacts;
+  let hoursPerProject = props.hoursPerProject;
+  console.log(hoursPerProject);
   return (
     <section className="CompanyInfoCard--info-card">
       <header>
         <div>
-          <h1>Swisher International</h1>
+          <h1>{props.name}</h1>
           <div>
             <label>Company ID</label>
-            <span>SWR20240101</span>
+            <span>{props.id}</span>
           </div>
         </div>
 
@@ -17,11 +22,13 @@ function CompanyInfoCard(props) {
           <div className="CompanyInfoCard--projects-active">
             <div>
               <h3>Active</h3>
-              <p>1</p>
+              <p>
+                {projects.filter((c) => c.CurrentStatus === "Active").length}
+              </p>
             </div>
             <div>
               <h3>Total</h3>
-              <p>3</p>
+              <p>{projects.length}</p>
             </div>
           </div>
         </div>
@@ -31,16 +38,15 @@ function CompanyInfoCard(props) {
         <section className="CompanyInfoCard--admin-detail">
           <h3>Company Admins: </h3>
           <ul>
-            <li>Kevin Munley</li>
-            <li>Doug Monson</li>
-            <li>Kahren Tomvassian</li>
-            <li>Alex Gardner</li>
+            {admins.map((admin) => {
+              return <li>{admin.FirstName + " " + admin.LastName}</li>;
+            })}
           </ul>
         </section>
 
         <section className="CompanyInfoCard--contact-detail">
           <h3>Client Contacts: </h3>
-          <ul>
+          {/* <ul>
             <li>
               <span>Herbert Corea</span>
               <label> - Director of IT Services</label>
@@ -57,32 +63,41 @@ function CompanyInfoCard(props) {
               <span>Jessica Dunton</span>
               <label> - Business Analyst</label>
             </li>
-          </ul>
+          </ul> */}
         </section>
       </section>
 
       <section className="CompanyInfoCard--projects-section">
+        <h3>Projects</h3>
         <ul>
-          <li>
-            <article className="CompanyInfoDetail--project-detail">
-              <h4>Power BI Migration</h4>
-              <label>Hours</label>
-              <div className="CompanyInfoDetail--project-progress-bar-container">
-                <span>
-                  <label>Billed: </label>
-                  <p>280</p>
-                </span>
-                <span>
-                  <label>Projected: </label>
-                  <p>300</p>
-                </span>
+          {hoursPerProject.length === 0 ? (
+            <></>
+          ) : (
+            hoursPerProject.map((project) => {
+              return (
+                <li>
+                  <article className="CompanyInfoDetail--project-detail">
+                    <h4>{project.ProjectCategory}</h4>
+                    <label>Hours</label>
+                    <div className="CompanyInfoDetail--project-progress-bar-container">
+                      <span>
+                        <label>Billed: </label>
+                        <p>{project.TotalBilledHours}</p>
+                      </span>
+                      <span>
+                        <label>Projected: </label>
+                        <p>{project.TotalProjectedHours}</p>
+                      </span>
 
-                <div className="CompanyInfoDetail--project-progress-bar"></div>
-              </div>
-            </article>
-          </li>
+                      <div className="CompanyInfoDetail--project-progress-bar"></div>
+                    </div>
+                  </article>
+                </li>
+              );
+            })
+          )}
 
-          <li>
+          {/* <li>
             <article className="CompanyInfoDetail--project-detail project-detail_over-billed">
               <h4>WebFOCUS Administration</h4>
               <label>Hours</label>
@@ -99,7 +114,7 @@ function CompanyInfoCard(props) {
                 <div className="CompanyInfoDetail--project-progress-bar"></div>
               </div>
             </article>
-          </li>
+          </li> */}
         </ul>
       </section>
     </section>

@@ -190,7 +190,13 @@ function App() {
                 <CompaniesDetail
                   loggedInUser={loggedInUserLocal}
                   admin={isAdminLocal}
+                  companies={resource.companies}
+                  companyProjects={resource.companyProjects}
                   companyAdmins={resource.companyAdmins}
+                  companyContacts={resource.companyContacts}
+                  hoursBilledProjected={
+                    resource.billedAndProjectedHoursByCompany
+                  }
                 />
               </RequireAuth>
             }

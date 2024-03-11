@@ -21,7 +21,7 @@ const wrapPromise = (promise) => {
   return {
     read() {
       if (status === "pending") {
-        console.log("status is pending: ", promise);
+        console.log("Fetch data status is pending: ", promise);
         throw suspender;
       } else if (status === "error") {
         throw result;
@@ -37,13 +37,14 @@ const wrapPromise = (promise) => {
 export const createResource = () => {
   return {
     users: wrapPromise(fetchUsers()),
+    companies: wrapPromise(getCompanies()),
     companyAdmins: wrapPromise(fetchCompanyAdmins()),
     companyProjects: wrapPromise(getCompanyProjects()),
+    companyContacts: wrapPromise(getCompanyContacts()),
     avgBilledHours: wrapPromise(getAvgBilledHours()),
     hoursBilledPerProject: wrapPromise(hoursBilledPerProject()),
     totalBilledHours: wrapPromise(getTotalBilledHours()),
     totalProjectedHours: wrapPromise(getTotalProjectedHours()),
-    companies: wrapPromise(getCompanies()),
     avgHoursPerCompany: wrapPromise(getAvgHoursPerCompany()),
     billedAndProjectedHoursByCompany: wrapPromise(
       getBilledAndProjectedHoursByCompany()
@@ -67,7 +68,7 @@ const fetchUsers = () => {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log("Users: ", res.data);
+      // console.log("Users: ", res.data);
       return res.data;
     })
     .catch((err) => {
@@ -90,7 +91,7 @@ const fetchCompanyAdmins = () => {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log("Company Admins with Company Details: ", res.data);
+      // console.log("Company Admins with Company Details: ", res.data);
       return res.data;
     })
     .catch((err) => {
@@ -99,6 +100,28 @@ const fetchCompanyAdmins = () => {
   return response;
 };
 
+// Get Company Contacts
+const getCompanyContacts = () => {
+  let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      _keyword_: "KASH_OPERATIONS_COMPANY_CONTACT_TABLE",
+    }),
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      // console.log("Company Contacts: ", res.data);
+      return res.data;
+    })
+    .catch((err) => {
+      alert(`Unable to load company contacts from database. Error: ${err}`);
+    });
+  return response;
+};
 // ============================================================================
 // FETCH PROJECTS AND COMPANY DATA
 // ============================================================================
@@ -148,21 +171,19 @@ const getCompanyProjects = () => {
           return project;
         }
       });
-      console.log("Company Project Data: ", {
+      // console.log("Company Project Data: ", {
+      //   monthly: monthlyNumOfProjects.length,
+      //   lifetime: res.data.length,
+      //   monthlyActive: activeMonthlyNumOfProjects.length,
+      //   lifetimeActive: activeLifetimeNumOfProjects.length,
+      //   companyProjects: res.data,
+      // });
+      return {
         monthly: monthlyNumOfProjects.length,
         lifetime: res.data.length,
         monthlyActive: activeMonthlyNumOfProjects.length,
         lifetimeActive: activeLifetimeNumOfProjects.length,
         companyProjects: res.data,
-      });
-      return {
-        projects: {
-          monthly: monthlyNumOfProjects.length,
-          lifetime: res.data.length,
-          monthlyActive: activeMonthlyNumOfProjects.length,
-          lifetimeActive: activeLifetimeNumOfProjects.length,
-          companyProjects: res.data,
-        },
       };
     })
     .catch((err) => {
@@ -190,18 +211,18 @@ const getAvgBilledHours = () => {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log(
-        "Timesheet Details Grouped by Users Billed Hours: ",
-        res.data
-      );
+      // console.log(
+      //   "Timesheet Details Grouped by Users Billed Hours: ",
+      //   res.data
+      // );
       let convertedNums = res.data.map((num) => parseFloat(num.Sum));
       let totalHours = convertedNums.reduce((a, c) => a + c, 0);
       let avgOverallHours = totalHours / res.data.length;
-      console.log(
-        "Timesheet Details Grouped by Users Billed Hours (Converted Hours from string to num): ",
-        convertedNums
-      );
-      console.log("Avg Hours Billed: ", avgOverallHours);
+      // console.log(
+      //   "Timesheet Details Grouped by Users Billed Hours (Converted Hours from string to num): ",
+      //   convertedNums
+      // );
+      // console.log("Avg Hours Billed: ", avgOverallHours);
       return avgOverallHours.toFixed(2);
     })
     .catch((err) => {
@@ -225,7 +246,7 @@ const hoursBilledPerProject = () => {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log("Timesheet Hours Billed By Company Project: ", res.data);
+      // console.log("Timesheet Hours Billed By Company Project: ", res.data);
       return res.data;
     })
     .catch((err) => {
@@ -252,24 +273,25 @@ const getTotalBilledHours = () => {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log("Arr of Hours Billed: ", res.data);
+      // console.log("Arr of Hours Billed: ", res.data);
       // convert billed hours to number
       let convertedNums = res.data.map((num) =>
         parseFloat(num.TotalBilledHours)
       );
-      console.log(
-        "Arr of Hours Billed (Converted Hours to num): ",
-        convertedNums
-      );
+      // console.log(
+      //   "Arr of Hours Billed (Converted Hours to num): ",
+      //   convertedNums
+      // );
       // get the sum of billed hours
       let totalHoursBilled = convertedNums.reduce((a, c) => a + c, 0);
-      console.log("Total Hours Billed: ", totalHoursBilled);
+      // console.log("Total Hours Billed: ", totalHoursBilled);
       let hoursDetail = {
         hoursBilled: totalHoursBilled,
         hoursDeatilArr: res.data,
       };
-      console.log("Total Hours Detail: ", hoursDetail);
-      return totalHoursBilled;
+      // console.log("Total Hours Detail: ", hoursDetail);
+      // return totalHoursBilled;
+      return hoursDetail;
     })
     .catch((err) => {
       return err;
@@ -291,7 +313,7 @@ const getTotalProjectedHours = () => {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log("Total Projected Hours: ", res.data);
+      // console.log("Total Projected Hours: ", res.data);
       let totalProjectedHours = res.data;
       return parseFloat(totalProjectedHours[0].TotalProjectedHours);
     })
@@ -320,7 +342,7 @@ const getCompanies = () => {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log("List of companies: ", res.data);
+      // console.log("List of companies: ", res.data);
       return res.data;
     })
     .catch((err) => {
@@ -344,7 +366,7 @@ const getAvgHoursPerCompany = () => {
     .then((res) => res.json())
     .then((res) => {
       // filter out repeated companies
-      console.log("Hours Billed by Company Project: ", res.data);
+      // console.log("Hours Billed by Company Project: ", res.data);
       let companies = Object.values(
         res.data.reduce((c, e) => {
           if (!c[e.CompanyName]) c[e.CompanyName] = e;
@@ -357,17 +379,17 @@ const getAvgHoursPerCompany = () => {
       );
       let totalHours = convertedNums.reduce((a, c) => a + c, 0);
       let avgHoursByCompany = totalHours / companies.length;
-      console.log("Total Hours: ", totalHours, "Avg Hours", avgHoursByCompany);
+      // console.log("Total Hours: ", totalHours, "Avg Hours", avgHoursByCompany);
       let avgHoursByCompanyConsolidated = avgHoursByCompany.toFixed(2);
-      console.log(avgHoursByCompanyConsolidated);
+      // console.log(avgHoursByCompanyConsolidated);
       let companiesAndHoursBilled = {
         companies: companies,
         avgHours: parseFloat(avgHoursByCompanyConsolidated),
       };
-      console.log(
-        "companies and hours billed object:",
-        companiesAndHoursBilled
-      );
+      // console.log(
+      //   "companies and hours billed object:",
+      //   companiesAndHoursBilled
+      // );
       return companiesAndHoursBilled;
     })
     .catch((err) => {
@@ -395,6 +417,7 @@ const getBilledAndProjectedHoursByCompany = () => {
 
       // convert string values of total projected hours and total billed hours per company project
       let projectsByCompanyDateWithBurnTime = res.data.map((project) => ({
+        CompanyId: project.CompanyId,
         CompanyName: project.CompanyName,
         ProjectCategory: project.ProjectCategory,
         SowId: project.SowId,
@@ -404,7 +427,7 @@ const getBilledAndProjectedHoursByCompany = () => {
           parseFloat(project.TotalProjectedHours) -
           parseFloat(project.TotalBilledHours),
       }));
-
+      console.log(projectsByCompanyDateWithBurnTime);
       return projectsByCompanyDateWithBurnTime;
     })
     .catch((err) => {
