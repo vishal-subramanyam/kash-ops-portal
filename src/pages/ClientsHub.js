@@ -33,7 +33,7 @@ function ClientsHub(props) {
       </div>
       <div class="hub_page--main-actions-holder client_hub--main-action-holder">
         <Link
-          to="/reports"
+          to="/companies-detail"
           class="hub_page--main-action-link client_hub--main-action-link"
         >
           <p>View Reports</p>

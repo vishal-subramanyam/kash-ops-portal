@@ -7,12 +7,12 @@ import CompanyInfoCard from "../components/CompanyInfoCard";
 function CompaniesDetail(props) {
   return (
     <main className="CompaniesDetail--content-container">
-      <div className="kash_operations--upper-section-holder EmployeesDetail--upper-section-holder">
+      <div className="kash_operations--upper-section-holder EmployeesDetail--upper-section-holder CompaniesDetail--upper-section-holder">
         <h1 className="add-employee__page-title form-page-title--lg-1 EmployeesDetail--page-title">
-          Employees Detail
+          Companies Detail
         </h1>
-        <div className="edit_page__return-link-holder EmployeesDetail--return-link-holder">
-          <Link to="/employee-hub">
+        <div className="edit_page__return-link-holder CompaniesDetail--return-link-holder">
+          <Link to="/clients-hub">
             <svg
               width="80"
               height="134"
@@ -25,11 +25,14 @@ function CompaniesDetail(props) {
                 fill="#255463"
               />
             </svg>
-            <p className="return-link-text">Return to Employees</p>
+            <p className="return-link-text">Return to Clients</p>
           </Link>
         </div>
       </div>
-      <CompanyInfoCard />
+
+      <div className="CompaniesDetail--info-card-container">
+        <CompanyInfoCard />
+      </div>
     </main>
   );
 }

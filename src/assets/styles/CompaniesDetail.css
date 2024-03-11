@@ -1,3 +1,11 @@
+.CompaniesDetail--page-title {
+  color: #255463;
+}
+
+.CompaniesDetail--info-card-container {
+  background-color: #dbf0f6;
+}
+
 .CompanyInfoCard--info-card {
   background-color: #fff;
   max-width: 90%;
