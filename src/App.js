@@ -23,6 +23,7 @@ import EditProjectDetails from "./pages/EditProjectDetails";
 import EditCompanyDetails from "./pages/EditCompanyDetails";
 import ControlCenter from "./pages/ControlCenter";
 import EmployeesDetail from "./pages/EmployeesDetail";
+import CompaniesDetail from "./pages/CompaniesDetail";
 import LoadingData from "./components/LoadingData";
 import { createResource } from "./hooks/FetchData";
 
@@ -178,6 +179,18 @@ function App() {
                 <EditCompanyAdmin
                   loggedInUser={loggedInUserLocal}
                   admin={isAdminLocal}
+                />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/companies-detail"
+            element={
+              <RequireAuth>
+                <CompaniesDetail
+                  loggedInUser={loggedInUserLocal}
+                  admin={isAdminLocal}
+                  companyAdmins={resource.companyAdmins}
                 />
               </RequireAuth>
             }

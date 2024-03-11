@@ -24,7 +24,7 @@
 }
 
 .EmployeesDetail--tabs-container {
-  width: 100%;
+  width: 70%;
   padding: 0;
   margin: 0px;
   list-style: none;
@@ -40,6 +40,7 @@
   justify-content: center;
   font-weight: bolder;
   height: 45px;
+  text-align: center;
 }
 
 .EmployeesDetail--tab-active span {
@@ -49,7 +50,6 @@
   width: 100%;
   z-index: 0;
   height: 55px;
-  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
