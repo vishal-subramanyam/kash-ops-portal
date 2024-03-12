@@ -74,59 +74,83 @@ function CompanyInfoCard(props) {
             <></>
           ) : (
             hoursPerProject.map((project) => {
-              return (
-                <li>
-                  {/* If percentage of total projected hours/ total billed hours is 80% or greater, add  CompanyInfoDetail--project-overdue class to project  */}
-                  <article className="CompanyInfoDetail--project-detail">
-                    <h6>{project.ProjectCategory}</h6>
-                    <label className="CompanyInfoDetail--hours-label">
-                      Hours
-                    </label>
-                    <div className="CompanyInfoDetail--project-progress-bar-container">
-                      <div className="CompanyInfoDetail--hours-heading">
-                        <span>
-                          <label>Billed: </label>
-                          <p>{project.TotalBilledHours}</p>
-                        </span>
-                        <span>
-                          <label>Projected: </label>
-                          <p>{project.TotalProjectedHours}</p>
-                        </span>
-                      </div>
+              if (
+                (project.TotalBilledHours / project.TotalProjectedHours) *
+                  100 <=
+                70
+              ) {
+                return (
+                  <li>
+                    {/* If percentage of total projected hours/ total billed hours is 80% or greater, add  CompanyInfoDetail--project-overdue class to project  */}
+                    <article className="CompanyInfoDetail--project-detail">
+                      <h6>{project.ProjectCategory}</h6>
+                      <label className="CompanyInfoDetail--hours-label">
+                        Hours
+                      </label>
+                      <div className="CompanyInfoDetail--project-progress-bar-container">
+                        <div className="CompanyInfoDetail--hours-heading">
+                          <span>
+                            <label>Billed: </label>
+                            <p>{project.TotalBilledHours}</p>
+                          </span>
+                          <span>
+                            <label>Projected: </label>
+                            <p>{project.TotalProjectedHours}</p>
+                          </span>
+                        </div>
 
-                      <div className="CompanyInfoDetail--project-progress-bar-wrapper">
-                        <div className="CompanyInfoDetail--project-progress-bar"></div>
+                        <div className="CompanyInfoDetail--project-progress-bar-wrapper">
+                          <div className="CompanyInfoDetail--project-progress-bar"></div>
+                        </div>
                       </div>
-                    </div>
-                  </article>
-                </li>
-              );
+                    </article>
+                  </li>
+                );
+              } else {
+                return (
+                  <li>
+                    {/* If percentage of total projected hours/ total billed hours is 70% or greater, add  CompanyInfoDetail--project-overdue class to project  */}
+                    <article className="CompanyInfoDetail--project-detail CompanyInfoCard--project-detail_over-billed">
+                      <h6>{project.ProjectCategory}</h6>
+                      <label className="CompanyInfoDetail--hours-label">
+                        Hours
+                      </label>
+                      <div className="CompanyInfoDetail--project-progress-bar-container">
+                        <div className="CompanyInfoDetail--hours-heading">
+                          <span>
+                            <label>Billed: </label>
+                            <p>{project.TotalBilledHours}</p>
+                          </span>
+                          <span>
+                            <label>Projected: </label>
+                            <p>{project.TotalProjectedHours}</p>
+                          </span>
+                        </div>
+
+                        <div className="CompanyInfoDetail--project-progress-bar-wrapper">
+                          <div
+                            className="CompanyInfoDetail--project-progress-bar CompanyInfoCard--project-detail_over-billed-progress-bar"
+                            style={{
+                              width:
+                                (project.TotalBilledHours /
+                                  project.TotalProjectedHours) *
+                                  100 >=
+                                100
+                                  ? "100%"
+                                  : (project.TotalBilledHours /
+                                      project.TotalProjectedHours) *
+                                      100 +
+                                    "%",
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                    </article>
+                  </li>
+                );
+              }
             })
           )}
-
-          <li>
-            {/* If percentage of total projected hours/ total billed hours is 80% or greater, add  CompanyInfoDetail--project-overdue class to project  */}
-            <article className="CompanyInfoDetail--project-detail CompanyInfoCard--project-detail_over-billed">
-              <h6>Power BI Migration</h6>
-              <label className="CompanyInfoDetail--hours-label">Hours</label>
-              <div className="CompanyInfoDetail--project-progress-bar-container">
-                <div className="CompanyInfoDetail--hours-heading">
-                  <span>
-                    <label>Billed: </label>
-                    <p>000</p>
-                  </span>
-                  <span>
-                    <label>Projected: </label>
-                    <p>000</p>
-                  </span>
-                </div>
-
-                <div className="CompanyInfoDetail--project-progress-bar-wrapper">
-                  <div className="CompanyInfoDetail--project-progress-bar CompanyInfoCard--project-detail_over-billed-progress-bar"></div>
-                </div>
-              </div>
-            </article>
-          </li>
         </ul>
       </section>
     </section>
