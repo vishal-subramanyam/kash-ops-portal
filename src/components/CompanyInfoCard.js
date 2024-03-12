@@ -9,10 +9,10 @@ function CompanyInfoCard(props) {
   return (
     <section className="CompanyInfoCard--info-card">
       <header>
-        <div>
+        <div className="CompanyInfoCard--company-name-display">
           <h1>{props.name}</h1>
-          <div>
-            <label>Company ID</label>
+          <div className="CompanyInfoCard--company-id-display">
+            <label>Company ID:</label>
             <span>{props.id}</span>
           </div>
         </div>
@@ -21,13 +21,13 @@ function CompanyInfoCard(props) {
           <label>Projects</label>
           <div className="CompanyInfoCard--projects-active">
             <div>
-              <h3>Active</h3>
+              <h5>Active</h5>
               <p>
                 {projects.filter((c) => c.CurrentStatus === "Active").length}
               </p>
             </div>
             <div>
-              <h3>Total</h3>
+              <h5>Total</h5>
               <p>{projects.length}</p>
             </div>
           </div>
@@ -36,7 +36,7 @@ function CompanyInfoCard(props) {
 
       <section className="CompanyInfoCard--admin-contact-section">
         <section className="CompanyInfoCard--admin-detail">
-          <h3>Company Admins: </h3>
+          <h4>Company Admins: </h4>
           <ul>
             {admins.map((admin) => {
               return <li>{admin.FirstName + " " + admin.LastName}</li>;
@@ -45,8 +45,8 @@ function CompanyInfoCard(props) {
         </section>
 
         <section className="CompanyInfoCard--contact-detail">
-          <h3>Client Contacts: </h3>
-          {/* <ul>
+          <h4>Client Contacts: </h4>
+          <ul>
             <li>
               <span>Herbert Corea</span>
               <label> - Director of IT Services</label>
@@ -63,12 +63,12 @@ function CompanyInfoCard(props) {
               <span>Jessica Dunton</span>
               <label> - Business Analyst</label>
             </li>
-          </ul> */}
+          </ul>
         </section>
       </section>
 
       <section className="CompanyInfoCard--projects-section">
-        <h3>Projects</h3>
+        <h4>Projects</h4>
         <ul>
           {hoursPerProject.length === 0 ? (
             <></>
@@ -76,20 +76,27 @@ function CompanyInfoCard(props) {
             hoursPerProject.map((project) => {
               return (
                 <li>
-                  <article className="CompanyInfoDetail--project-detail">
-                    <h4>{project.ProjectCategory}</h4>
-                    <label>Hours</label>
+                  {/* If percentage of total projected hours/ total billed hours is 80% or greater, add  CompanyInfoDetail--project-overdue class to project  */}
+                  <article className="CompanyInfoDetail--project-detail CompanyInfoDetail--project-overdue">
+                    <h6>{project.ProjectCategory}</h6>
+                    <label className="CompanyInfoDetail--hours-label">
+                      Hours
+                    </label>
                     <div className="CompanyInfoDetail--project-progress-bar-container">
-                      <span>
-                        <label>Billed: </label>
-                        <p>{project.TotalBilledHours}</p>
-                      </span>
-                      <span>
-                        <label>Projected: </label>
-                        <p>{project.TotalProjectedHours}</p>
-                      </span>
+                      <div className="CompanyInfoDetail--hours-heading">
+                        <span>
+                          <label>Billed: </label>
+                          <p>{project.TotalBilledHours}</p>
+                        </span>
+                        <span>
+                          <label>Projected: </label>
+                          <p>{project.TotalProjectedHours}</p>
+                        </span>
+                      </div>
 
-                      <div className="CompanyInfoDetail--project-progress-bar"></div>
+                      <div className="CompanyInfoDetail--project-progress-bar-wrapper">
+                        <div className="CompanyInfoDetail--project-progress-bar"></div>
+                      </div>
                     </div>
                   </article>
                 </li>

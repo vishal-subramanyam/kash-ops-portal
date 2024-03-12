@@ -15,3 +15,131 @@
   border-radius: 5px;
   box-shadow: 0px 12px 25px 2px rgba(197, 197, 197, 0.4);
 }
+
+.CompanyInfoCard--info-card header {
+  border-bottom: 1px solid #dedede;
+  padding: 0 0 1rem 0;
+}
+
+.CompanyInfoCard--info-card header h1,
+.CompanyInfoCard--company-id-display label,
+.CompanyInfoCard--company-id-display span {
+  font-weight: 300;
+}
+
+.CompanyInfoCard--company-id-display {
+  color: #44a5ff;
+  display: flex;
+  justify-content: space-between;
+  width: 87%;
+}
+
+.CompanyInfoCard--projects-num-display {
+  display: flex;
+  justify-content: space-between;
+  /* width: 90%; */
+  align-items: center;
+}
+
+.CompanyInfoCard--projects-active {
+  display: flex;
+}
+
+.CompanyInfoCard--projects-active div {
+  text-align: right;
+  padding: 0 0.5rem;
+}
+.CompanyInfoCard--projects-active div:first-child {
+  border-right: 2px solid #e2e2e2;
+}
+
+.CompanyInfoCard--projects-active div:first-child h5 {
+  color: #73ddff;
+}
+
+.CompanyInfoCard--projects-active div:last-child h5 {
+  color: #c0ced6;
+}
+.CompanyInfoCard--projects-section h4 {
+  border-bottom: 1px solid #dedede;
+}
+
+.CompanyInfoCard--admin-contact-section h4 {
+  color: #68c9ff;
+  font-weight: 400;
+  border-bottom: 1px solid #dedede;
+  width: 85%;
+  padding: 1rem 0 0.5rem 0;
+}
+
+.CompanyInfoCard--admin-detail li {
+  font-weight: 300;
+}
+
+.CompanyInfoCard--admin-contact-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.CompanyInfoCard--projects-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.CompanyInfoCard--projects-section li {
+  margin: 1rem 0;
+}
+
+.CompanyInfoDetail--project-progress-bar-wrapper {
+  box-shadow: inset 0px 0px 3px 2px #ccc;
+  height: 1.5rem;
+  border-radius: 12px;
+}
+.CompanyInfoDetail--project-progress-bar {
+  height: 1.5rem;
+  width: 80%;
+  border-radius: 12px;
+  background: rgb(37, 74, 214);
+  background: linear-gradient(
+    90deg,
+    rgba(37, 74, 214, 1) 0%,
+    rgba(147, 242, 255, 1) 100%
+  );
+  box-shadow: 0px 3px 5px 0px #ccc;
+}
+
+.CompanyInfoDetail--project-detail {
+  background-color: #def2fe;
+  padding: 1rem;
+  border-radius: 5px;
+}
+
+.CompanyInfoDetail--project-detail h6 {
+  font-weight: 300;
+}
+
+.CompanyInfoDetail--hours-label {
+  color: #808080;
+  font-weight: 900 !important;
+}
+
+.CompanyInfoDetail--project-progress-bar-container span {
+  color: #808080;
+  font-weight: 400;
+}
+
+.CompanyInfoDetail--hours-heading label {
+  font-weight: 400;
+}
+
+.CompanyInfoDetail--hours-heading {
+  display: flex;
+  justify-content: space-between;
+}
+
+.CompanyInfoDetail--hours-heading span:first-child {
+  text-align: left;
+}
+.CompanyInfoDetail--hours-heading span:last-child {
+  text-align: right;
+}
