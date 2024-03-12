@@ -77,7 +77,7 @@ function CompanyInfoCard(props) {
               return (
                 <li>
                   {/* If percentage of total projected hours/ total billed hours is 80% or greater, add  CompanyInfoDetail--project-overdue class to project  */}
-                  <article className="CompanyInfoDetail--project-detail CompanyInfoDetail--project-overdue">
+                  <article className="CompanyInfoDetail--project-detail">
                     <h6>{project.ProjectCategory}</h6>
                     <label className="CompanyInfoDetail--hours-label">
                       Hours
@@ -104,24 +104,29 @@ function CompanyInfoCard(props) {
             })
           )}
 
-          {/* <li>
-            <article className="CompanyInfoDetail--project-detail project-detail_over-billed">
-              <h4>WebFOCUS Administration</h4>
-              <label>Hours</label>
+          <li>
+            {/* If percentage of total projected hours/ total billed hours is 80% or greater, add  CompanyInfoDetail--project-overdue class to project  */}
+            <article className="CompanyInfoDetail--project-detail CompanyInfoCard--project-detail_over-billed">
+              <h6>Power BI Migration</h6>
+              <label className="CompanyInfoDetail--hours-label">Hours</label>
               <div className="CompanyInfoDetail--project-progress-bar-container">
-                <span>
-                  <label>Billed: </label>
-                  <p>150</p>
-                </span>
-                <span>
-                  <label>Projected: </label>
-                  <p>150</p>
-                </span>
+                <div className="CompanyInfoDetail--hours-heading">
+                  <span>
+                    <label>Billed: </label>
+                    <p>000</p>
+                  </span>
+                  <span>
+                    <label>Projected: </label>
+                    <p>000</p>
+                  </span>
+                </div>
 
-                <div className="CompanyInfoDetail--project-progress-bar"></div>
+                <div className="CompanyInfoDetail--project-progress-bar-wrapper">
+                  <div className="CompanyInfoDetail--project-progress-bar CompanyInfoCard--project-detail_over-billed-progress-bar"></div>
+                </div>
               </div>
             </article>
-          </li> */}
+          </li>
         </ul>
       </section>
     </section>
