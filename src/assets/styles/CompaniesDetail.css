@@ -137,7 +137,7 @@
   background-color: #def2fe;
   padding: 1rem;
   border-radius: 5px;
-  max-height: 230px;
+  /* max-height: 230px; */
   display: flex;
   flex-direction: column;
   max-width: 295px;
