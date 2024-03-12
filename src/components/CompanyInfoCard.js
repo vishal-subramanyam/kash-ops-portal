@@ -18,7 +18,7 @@ function CompanyInfoCard(props) {
         </div>
 
         <div className="CompanyInfoCard--projects-num-display">
-          <label>Projects</label>
+          <label>Projects:</label>
           <div className="CompanyInfoCard--projects-active">
             <div>
               <h5>Active</h5>
@@ -100,7 +100,21 @@ function CompanyInfoCard(props) {
                         </div>
 
                         <div className="CompanyInfoDetail--project-progress-bar-wrapper">
-                          <div className="CompanyInfoDetail--project-progress-bar"></div>
+                          <div
+                            className="CompanyInfoDetail--project-progress-bar"
+                            style={{
+                              width:
+                                (project.TotalBilledHours /
+                                  project.TotalProjectedHours) *
+                                  100 <=
+                                20
+                                  ? "20%"
+                                  : (project.TotalBilledHours /
+                                      project.TotalProjectedHours) *
+                                      100 +
+                                    "%",
+                            }}
+                          ></div>
                         </div>
                       </div>
                     </article>
