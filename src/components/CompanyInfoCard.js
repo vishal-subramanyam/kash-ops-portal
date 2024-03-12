@@ -36,7 +36,7 @@ function CompanyInfoCard(props) {
 
       <section className="CompanyInfoCard--admin-contact-section">
         <section className="CompanyInfoCard--admin-detail">
-          <h4>Company Admins: </h4>
+          <h6>Company Admins: </h6>
           <ul>
             {admins.map((admin) => {
               return <li>{admin.FirstName + " " + admin.LastName}</li>;
@@ -45,11 +45,14 @@ function CompanyInfoCard(props) {
         </section>
 
         <section className="CompanyInfoCard--contact-detail">
-          <h4>Client Contacts: </h4>
-          <ul>
+          <h6>Client Contacts: </h6>
+          {/* <ul>
             <li>
               <span>Herbert Corea</span>
-              <label> - Director of IT Services</label>
+              <label className="CompanyInfoCard--client-contact-title">
+                {" "}
+                - Director of IT Services
+              </label>
             </li>
             <li>
               <span>Marcus Pierce</span>
@@ -63,7 +66,7 @@ function CompanyInfoCard(props) {
               <span>Jessica Dunton</span>
               <label> - Business Analyst</label>
             </li>
-          </ul>
+          </ul> */}
         </section>
       </section>
 

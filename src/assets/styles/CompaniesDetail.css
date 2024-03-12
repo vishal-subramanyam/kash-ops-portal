@@ -31,15 +31,21 @@
   color: #44a5ff;
   display: flex;
   justify-content: space-between;
-  width: 87%;
-  /* max-width: 195px; */
 }
 
 .CompanyInfoCard--projects-num-display {
   display: flex;
   justify-content: space-between;
-  /* max-width: 223px; */
-  align-items: center;
+  align-items: end;
+  margin-top: 5px;
+}
+
+.CompanyInfoCard--projects-section {
+  margin-top: 3rem;
+}
+
+.CompanyInfoCard--projects-num-display label {
+  margin-bottom: 0;
 }
 
 .CompanyInfoCard--projects-active {
@@ -63,18 +69,37 @@
 }
 .CompanyInfoCard--projects-section h4 {
   border-bottom: 1px solid #dedede;
+  padding-bottom: 0.5rem;
 }
 
-.CompanyInfoCard--admin-contact-section h4 {
+.CompanyInfoCard--admin-contact-section h6 {
   color: #68c9ff;
   font-weight: 400;
   border-bottom: 1px solid #dedede;
-  width: 85%;
   padding: 1rem 0 0.5rem 0;
+  max-width: 10rem;
 }
 
 .CompanyInfoCard--admin-detail li {
-  font-weight: 300;
+  margin-bottom: 0.5rem;
+}
+
+.CompanyInfoCard--admin-detail li,
+.CompanyInfoCard--contact-detail li {
+  font-size: 16px;
+  font-weight: 200;
+}
+
+.CompanyInfoCard--contact-detail span {
+  margin-right: 4px;
+}
+
+.CompanyInfoCard--client-contact-title {
+  font-style: italic;
+}
+
+.CompanyInfoCard--contact-detail label {
+  text-transform: italic;
 }
 
 .CompanyInfoCard--admin-contact-section ul {
@@ -112,6 +137,12 @@
   background-color: #def2fe;
   padding: 1rem;
   border-radius: 5px;
+  max-height: 230px;
+  display: flex;
+  flex-direction: column;
+  max-width: 295px;
+  height: 100%;
+  justify-content: space-between;
 }
 
 .CompanyInfoDetail--project-detail h6 {
@@ -167,11 +198,64 @@
     display: flex;
     justify-content: space-between;
   }
+
+  .CompanyInfoCard--company-id-display {
+    justify-content: unset;
+  }
+
+  .CompanyInfoCard--admin-contact-section {
+    display: grid;
+    grid-template-columns: 45% 55%;
+  }
+
+  .CompanyInfoCard--contact-detail {
+    border-left: 3px solid #dedede;
+    padding-left: 1rem;
+  }
+
+  .CompanyInfoCard--projects-section ul {
+    display: grid;
+    grid-template-columns: 30% 30% 30%;
+    grid-gap: 1rem;
+  }
+
+  .CompanyInfoCard--admin-contact-section h6 {
+    width: 70%;
+  }
 }
 
-@media only screen and (min-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+@media only screen and (min-device-width: 1024px) {
   .CompanyInfoCard--info-card header {
     display: flex;
     justify-content: space-between;
+  }
+
+  .CompanyInfoCard--company-id-display {
+    justify-content: unset;
+  }
+
+  .CompanyInfoCard--admin-contact-section {
+    display: grid;
+    grid-template-columns: 45% 55%;
+  }
+
+  .CompanyInfoCard--contact-detail {
+    border-left: 3px solid #dedede;
+    padding-left: 1rem;
+  }
+
+  .CompanyInfoCard--projects-section ul {
+    display: grid;
+    grid-template-columns: 50% 50%;
+  }
+
+  .CompanyInfoCard--admin-contact-section h6 {
+    width: 70%;
+  }
+
+  .CompanyInfoCard--projects-section ul {
+    display: grid;
+    grid-template-columns: 30% 30% 30%;
+    grid-gap: 1rem;
   }
 }
