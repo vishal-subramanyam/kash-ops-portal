@@ -46,8 +46,8 @@ export const createResource = () => {
     totalBilledHours: wrapPromise(getTotalBilledHours()),
     totalProjectedHours: wrapPromise(getTotalProjectedHours()),
     avgHoursPerCompany: wrapPromise(getAvgHoursPerCompany()),
-    billedAndProjectedHoursByCompany: wrapPromise(
-      getBilledAndProjectedHoursByCompany()
+    projectsBilledAndProjectedHoursByCompany: wrapPromise(
+      getProjectsBilledAndProjectedHoursByCompany()
     ),
   };
 };
@@ -400,7 +400,7 @@ const getAvgHoursPerCompany = () => {
 };
 
 // Get the hours billed and projected per company project
-const getBilledAndProjectedHoursByCompany = () => {
+const getProjectsBilledAndProjectedHoursByCompany = () => {
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {

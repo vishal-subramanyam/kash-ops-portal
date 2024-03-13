@@ -5,8 +5,7 @@ function CompanyInfoCard(props) {
   let admins = props.admins;
   let contacts = props.contacts;
   let hoursPerProject = props.hoursPerProject;
-  console.log(hoursPerProject);
-  console.log(projects);
+
   return (
     <section className="CompanyInfoCard--info-card">
       <header>
@@ -24,12 +23,15 @@ function CompanyInfoCard(props) {
             <div>
               <h5>Active</h5>
               <p>
-                {projects.filter((c) => c.CurrentStatus === "Active").length}
+                {
+                  hoursPerProject.filter((c) => c.CurrentStatus === "Active")
+                    .length
+                }
               </p>
             </div>
             <div>
               <h5>Total</h5>
-              <p>{projects.length}</p>
+              <p>{hoursPerProject.length}</p>
             </div>
           </div>
         </div>
@@ -95,7 +97,12 @@ function CompanyInfoCard(props) {
                         <div className="CompanyInfoDetail--hours-heading">
                           <span>
                             <label>Billed: </label>
-                            <p>{project.TotalBilledHours}</p>
+                            <p>
+                              {console.log(project.TotalBilledHours)}
+                              {isNaN(project.TotalBilledHours) === true
+                                ? "0"
+                                : project.TotalBilledHours}
+                            </p>
                           </span>
                           <span>
                             <label>Projected: </label>
@@ -137,7 +144,11 @@ function CompanyInfoCard(props) {
                         <div className="CompanyInfoDetail--hours-heading">
                           <span>
                             <label>Billed: </label>
-                            <p>{project.TotalBilledHours}</p>
+                            <p>
+                              {isNaN(project.TotalBilledHours) === true
+                                ? "0"
+                                : project.TotalBilledHours}
+                            </p>
                           </span>
                           <span>
                             <label>Projected: </label>

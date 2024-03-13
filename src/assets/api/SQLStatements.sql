@@ -51,3 +51,21 @@ join kash_operations_company_table as company
 on comp_admin.company_id = company.company_id
 join kash_operations_user_table as users
 on comp_admin.emp_id = users.emp_id
+
+
+-- Great created projects per company with timesheet billed hours
+SELECT Projects.project_category, Projects.sow_id, Companies.company_id, Companies.company_name, Projects.total_projected_hours, SUM(Timesheets.monday_hours +Timesheets.tuesday_hours +Timesheets.wednesday_hours + Timesheets.thursday_hours + Timesheets.friday_hours +Timesheets.saturday_hours + Timesheets.sunday_hours) AS Total_Billed_Hours
+FROM kash_operations_created_projects_table AS Projects 
+JOIN kash_operations_company_table AS Companies ON Projects.company_id = Companies.company_id 
+JOIN kash_operations_timesheet_table AS Timesheets
+ON Projects.sow_id = Timesheets.sow_id 
+WHERE Timesheets.non_billable_reason = 'n/a' OR Timesheets.non_billable_reason = 'N/A' OR Timesheets.non_billable_reason = '' 
+GROUP BY Projects.project_category, Projects.sow_id, Companies.company_name, Companies.company_id
+ORDER BY Companies.company_name
+
+-- Below query is more efficient than the aboves to get all project data including billed hours and company info
+
+select Projects.project_category, Projects.sow_id, Projects.total_projected_hours, Companies.CurrentStatus, All_Timesheets.Total_Hours_Billed, Companies.company_id, Companies.company_name from kash_operations_created_projects_table as projects 
+LEFT OUTER JOIN (select Timesheets.sow_id, SUM(Timesheets.monday_hours +Timesheets.tuesday_hours +Timesheets.wednesday_hours + Timesheets.thursday_hours + Timesheets.friday_hours +Timesheets.saturday_hours + Timesheets.sunday_hours) as Total_Hours_Billed from kash_operations_timesheet_table as Timesheets group by Timesheets.sow_id) as All_Timesheets
+ON Projects.sow_id = All_Timesheets.sow_id
+join kash_operations_company_table as Companies on Projects.company_id = Companies.company_id

@@ -9,10 +9,10 @@ function CompaniesDetail(props) {
   let projects = props.companyProjects.read();
   let admins = props.companyAdmins.read();
   let contacts = props.companyContacts.read();
-  let hoursBilledProjected = props.hoursBilledProjected.read();
+  let projectsHoursBilledProjected = props.projectsHoursBilledProjected.read();
 
   console.log("projects", projects);
-
+  console.log("Projects with hours:", projectsHoursBilledProjected);
   return (
     <main className="CompaniesDetail--content-container">
       <div className="kash_operations--upper-section-holder EmployeesDetail--upper-section-holder CompaniesDetail--upper-section-holder">
@@ -53,7 +53,7 @@ function CompaniesDetail(props) {
               contacts={contacts.filter(
                 (contact) => company.CompanyId === contact.CompanyId
               )}
-              hoursPerProject={hoursBilledProjected.filter(
+              hoursPerProject={projectsHoursBilledProjected.filter(
                 (project) => company.CompanyId === project.CompanyId
               )}
             />

@@ -194,8 +194,8 @@ function App() {
                   companyProjects={resource.companyProjects}
                   companyAdmins={resource.companyAdmins}
                   companyContacts={resource.companyContacts}
-                  hoursBilledProjected={
-                    resource.billedAndProjectedHoursByCompany
+                  projectsHoursBilledProjected={
+                    resource.projectsBilledAndProjectedHoursByCompany
                   }
                 />
               </RequireAuth>
