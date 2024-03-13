@@ -172,6 +172,7 @@
   color: #ff981c;
 }
 
+.CompanyAdminInfoCard--employee-contact-info-section,
 .CompanyAdminInfoCard--employee-detail-section-container {
   list-style: none;
   padding-left: unset;
@@ -189,22 +190,39 @@
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
   .EmployeeInfoCard--employee-detail-section {
-    display: flex;
-    justify-content: space-between;
-    width: 70%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+  }
+
+  .CompanyAdminInfoCard--employee-detail-header {
+    display: grid;
+    grid-template-columns: 50% 50%;
   }
 }
 
 @media only screen and (min-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
   .EmployeeInfoCard--employee-detail-section {
-    display: flex;
-    justify-content: space-between;
-    width: 70%;
+    display: grid;
+    grid-template-columns: 50% 50%;
   }
 
+  .CompanyAdminInfoCard--employee-detail-header {
+    display: grid;
+    grid-template-columns: 50% 50%;
+  }
   .EmployeeInfoCard--employee-contact-info-section ol {
-    display: flex;
-    justify-content: space-between;
-    width: 90%;
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    grid-gap: 1rem;
+  }
+
+  .EmployeeInfoCard--employee-contact-info-section {
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    grid-gap: 1rem;
+  }
+
+  .EmployeeInfoCard--employee-contact-info-section li {
+    font-size: 14px;
   }
 }

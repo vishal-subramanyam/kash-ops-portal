@@ -46,6 +46,10 @@ function EmployeeInfoCard(props) {
                   {props.contractorName}
                 </span>
               </div>
+              <div className="EmployeeInfoCard--employee-level">
+                <label>User level:</label>
+                <span>{props.adminLevel}</span>
+              </div>
             </div>
           )}
         </section>

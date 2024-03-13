@@ -11,52 +11,59 @@ function CompanyAdminInfoCard(props) {
         {props.companyAdminsArr.map((admin) => {
           if (props.companyId === admin.CompanyId) {
             return (
-              <li className="CompanyAdminInfoCard--employee-detail-section EmployeeInfoCard--employee-detail-section">
-                <section className="EmployeeInfoCard--employee-name-id-username-section">
-                  <div className="CompanyAdminInfoCard--employee-name">
-                    {admin.FirstName + " " + admin.LastName}
-                  </div>
-                  <div className="EmployeeInfoCard--employee-username">
-                    <label>Username:</label>
-                    <span>{admin.KashOperationsUsn}</span>
-                  </div>
-                  <div className="EmployeeInfoCard--employee-id">
-                    <label>EMP_ID:</label>
-                    <span>{admin.EmpId}</span>
-                  </div>
-                </section>
-                <section className="EmployeeInfoCard--employee-type">
-                  {/*show contractor type and name if employee type is 1099-C  */}
-                  {admin.EmployeeType === "W-2" ||
-                  admin.EmployeeType === "" ||
-                  admin.EmployeeType === "-" ? (
-                    <div>
-                      <div>
-                        <label>Contract Type:</label>
-                        <span>{admin.EmployeeType}</span>
-                      </div>
-                      <div className="EmployeeInfoCard--employee-level">
-                        <label>User level:</label>
-                        <span>{admin.AdminLevel}</span>
-                      </div>
+              <li className="CompanyAdminInfoCard--employee-detail-section">
+                <div className="CompanyAdminInfoCard--employee-detail-header">
+                  <section className="EmployeeInfoCard--employee-name-id-username-section">
+                    <div className="CompanyAdminInfoCard--employee-name">
+                      {admin.FirstName + " " + admin.LastName}
                     </div>
-                  ) : (
-                    <div>
-                      <div>
-                        <label>Contract Type:</label>
-                        <span className="EmployeeInfoCard--contractor">
-                          {admin.EmployeeType}
-                        </span>
-                      </div>
-                      <div>
-                        <label>Contract Name:</label>
-                        <span className="EmployeeInfoCard--contractor-name">
-                          {admin.EmployeeContractorName}
-                        </span>
-                      </div>
+                    <div className="EmployeeInfoCard--employee-username">
+                      <label>Username:</label>
+                      <span>{admin.KashOperationsUsn}</span>
                     </div>
-                  )}
-                </section>
+                    <div className="EmployeeInfoCard--employee-id">
+                      <label>EMP_ID:</label>
+                      <span>{admin.EmpId}</span>
+                    </div>
+                  </section>
+
+                  <section className="EmployeeInfoCard--employee-type">
+                    {/*show contractor type and name if employee type is 1099-C  */}
+                    {admin.EmployeeType === "W-2" ||
+                    admin.EmployeeType === "" ||
+                    admin.EmployeeType === "-" ? (
+                      <div>
+                        <div>
+                          <label>Contract Type:</label>
+                          <span>{admin.EmployeeType}</span>
+                        </div>
+                        <div className="EmployeeInfoCard--employee-level">
+                          <label>User level:</label>
+                          <span>{admin.AdminLevel}</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        <div>
+                          <label>Contract Type:</label>
+                          <span className="EmployeeInfoCard--contractor">
+                            {admin.EmployeeType}
+                          </span>
+                        </div>
+                        <div>
+                          <label>Contract Name:</label>
+                          <span className="EmployeeInfoCard--contractor-name">
+                            {admin.EmployeeContractorName}
+                          </span>
+                        </div>
+                        <div className="EmployeeInfoCard--employee-level">
+                          <label>User level:</label>
+                          <span>{admin.AdminLevel}</span>
+                        </div>
+                      </div>
+                    )}
+                  </section>
+                </div>
 
                 <section className="EmployeeInfoCard--employee-contact-info-section">
                   <ol>

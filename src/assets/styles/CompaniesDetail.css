@@ -25,6 +25,7 @@
 .CompanyInfoCard--company-id-display label,
 .CompanyInfoCard--company-id-display span {
   font-weight: 300;
+  margin-right: 5px;
 }
 
 .CompanyInfoCard--company-id-display {
