@@ -113,6 +113,7 @@
 }
 
 .CompanyInfoCard--projects-section li {
+  animation: 4s linear 0s infinite alternate show-projects;
   margin: 1rem 0;
 }
 
