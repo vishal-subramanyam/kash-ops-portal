@@ -113,7 +113,7 @@
 }
 
 .CompanyInfoCard--projects-section li {
-  animation: 4s linear 0s infinite alternate show-projects;
+  /* animation: 4s linear 0s 2 show-projects; */
   margin: 1rem 0;
 }
 
@@ -258,5 +258,17 @@
     display: grid;
     grid-template-columns: 30% 30% 30%;
     grid-gap: 1rem;
+  }
+}
+
+/* For animation fo project articles at bottom of company info card */
+@keyframes show-projects {
+  from {
+    /* pushes element down past the viewport */
+    transform: translateX(-110vw);
+  }
+  to {
+    /* returns element to its default position */
+    transform: translateX(0);
   }
 }

@@ -6,6 +6,7 @@ function CompanyInfoCard(props) {
   let contacts = props.contacts;
   let hoursPerProject = props.hoursPerProject;
   console.log(hoursPerProject);
+  console.log(projects);
   return (
     <section className="CompanyInfoCard--info-card">
       <header>
