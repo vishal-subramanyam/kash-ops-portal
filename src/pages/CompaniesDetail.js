@@ -11,7 +11,7 @@ function CompaniesDetail(props) {
   let contacts = props.companyContacts.read();
   let hoursBilledProjected = props.hoursBilledProjected.read();
 
-  console.log("Hours Billed", hoursBilledProjected);
+  console.log("projects", projects);
 
   return (
     <main className="CompaniesDetail--content-container">
