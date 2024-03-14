@@ -27,6 +27,7 @@ a {
 }
 .kash_operations_home--user-welcome-msg {
   font-size: 0.8rem;
+  margin-right: 0.5rem;
 }
 .kash_operations_home--catgories-holder {
   position: relative;

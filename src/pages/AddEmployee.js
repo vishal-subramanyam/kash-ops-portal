@@ -343,6 +343,7 @@ function AddEmployee(props) {
                     value="Basic User"
                     ref={adminLevelDesignation}
                     required
+                    readOnly
                   />
                 )}
               </div>
@@ -453,13 +454,16 @@ function AddEmployee(props) {
               className="employee-form--country-label"
             >
               Employee Role
-              <input
-                type="text"
+              <select
                 className="add-employee-form-input employee-form--country-input"
                 id="employee-form--role-input"
                 name="employee-form--role-input"
                 ref={employeeRoleType}
-              />
+              >
+                <option value=""></option>
+                <option value="W-2">W-2</option>
+                <option value="1099">1099-C</option>
+              </select>
             </label>
 
             <label

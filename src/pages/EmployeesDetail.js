@@ -71,62 +71,9 @@ function EmployeesDetail(props) {
         >
           <span>Table</span>
         </li>
-        <li
-          className={
-            tabActive === "companyTab"
-              ? employeeInfoCardTabActive +
-                " EmployeesDetail--company-admin-tab"
-              : employeeInfoCardTabNotActive +
-                " EmployeesDetail--company-admin-tab"
-          }
-          onClick={() => setTabActive("companyTab")}
-        >
-          <span>Company Admins</span>
-        </li>
       </ul>
 
-      {/* If logged in user is a Super Admin show the three tabs otherwise just show the two tabs - employee info card and table tabs */}
-
-      {props.loggedInUser.AdminLevel === "Super Admin" ? (
-        tabActive === "cardTab" ? (
-          <div className="EmployeesDetail--info-card-container">
-            {allUsers.map((user) => {
-              return (
-                <EmployeeInfoCard
-                  firstName={user.FirstName}
-                  lastName={user.LastName}
-                  username={user.KashOperationsUsn}
-                  empId={user.EmpId}
-                  adminLevel={user.AdminLevel}
-                  employeeType={user.EmployeeType}
-                  email={user.EmailAddress}
-                  phone={user.PhoneNumber}
-                  city={user.EmpLocationCity}
-                  state={user.EmpLocationState}
-                  country={user.EmpLocationCountry}
-                  contractorName={user.EmployeeContractorName}
-                />
-              );
-            })}
-          </div>
-        ) : tabActive === "tableTab" ? (
-          <div className="EmployeesDetail--table-detail-container">
-            <UsersReport users={allUsers} />
-          </div>
-        ) : (
-          <div className="EmployeesDetail--company-admin-detail-container">
-            {distinctCompanies.map((company) => {
-              return (
-                <CompanyAdminInfoCard
-                  companyName={company.CompanyName}
-                  companyId={company.CompanyId}
-                  companyAdminsArr={allCompanyAdmins}
-                />
-              );
-            })}
-          </div>
-        )
-      ) : tabActive === "cardTab" ? (
+      {tabActive === "cardTab" ? (
         <div className="EmployeesDetail--info-card-container">
           {allUsers.map((user) => {
             return (

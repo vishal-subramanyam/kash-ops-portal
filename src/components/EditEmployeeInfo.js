@@ -7,6 +7,7 @@ import "../assets/styles/EditEmployeeInfo.css";
 
 function EditEmployeeInfo(props) {
   let isAdminLocal = window.localStorage.getItem("adminLevel");
+  let loggedInUserInfo = window.localStorage.getItem("loggedInUserInfo");
   let selectedEmployeeFromDropdown;
   let initialAdminOption = [{ AdminLevel: "" }];
   let adminLevelDesignation = useRef();
@@ -18,6 +19,9 @@ function EditEmployeeInfo(props) {
   let employeeLocationCity = useRef();
   let employeeLocationState = useRef();
   let employeeLocationCountry = useRef();
+  let employeeRoleType = useRef();
+  let employeeContractorName = useRef();
+  let [isContractor, setIsContractor] = useState(false);
   let editUserForm = useRef();
   let alertMessage = useRef();
   let successMessage = useRef();
@@ -35,6 +39,7 @@ function EditEmployeeInfo(props) {
   // hide popup for editting user details
   const hideLightbox = () => {
     editUserPopup.current.style.display = "none";
+    usernameDisplay.current.innerHTML = "";
     editUserForm.current.reset();
   };
 
@@ -61,6 +66,7 @@ function EditEmployeeInfo(props) {
       });
   };
 
+  // Force selection of Admin choice and remove selection attribute
   const setAdminOption = (selectedUser) => {
     for (let i = 0; i < adminLevelDesignation.current.childNodes.length; i++) {
       let adminSelectionChoice =
@@ -76,6 +82,18 @@ function EditEmployeeInfo(props) {
     }
   };
 
+  const setEmployeeRoleOption = (selectedUser) => {
+    for (let i = 0; i < employeeRoleType.current.childNodes.length; i++) {
+      let empRoleSelectionChoice =
+        employeeRoleType.current.childNodes[i].getAttribute("value");
+      if (empRoleSelectionChoice === selectedUser[0].EmployeeType) {
+        employeeRoleType.current.childNodes[i].setAttribute("selected", true);
+      } else if (empRoleSelectionChoice !== selectedUser[0].EmployeeType) {
+        employeeRoleType.current.childNodes[i].removeAttribute("selected");
+      }
+    }
+  };
+
   const onNameChange = async (e, i) => {
     let selectedEmployeeId =
       e.target.children[e.target.selectedIndex].getAttribute("data-employeeid");
@@ -83,12 +101,24 @@ function EditEmployeeInfo(props) {
     selectedEmployeeFromDropdown = allUsersArr.filter((user, i) => {
       return selectedEmployeeId === user.EmpId;
     });
+
+    if (selectedEmployeeFromDropdown.EmployeeType === "1099-C") {
+      setIsContractor(true);
+      console.log("trying to update state to true for isContractor");
+    }
+
+    console.log(selectedEmployeeFromDropdown);
     setUserDetailInputs(selectedEmployeeFromDropdown);
+
+    // Selecting the admin level from dropdown
     if (selectedEmployeeFromDropdown.AdminLevel === "Super Admin") {
       setAdminOption(selectedEmployeeFromDropdown);
+      setEmployeeRoleOption(selectedEmployeeFromDropdown);
     } else {
       adminLevelDesignation.current.value =
         selectedEmployeeFromDropdown[0].AdminLevel;
+      employeeRoleType.current.value =
+        selectedEmployeeFromDropdown[0].EmployeeType;
     }
     setSelectedCurrentUser(...selectedEmployeeFromDropdown);
   };
@@ -102,6 +132,7 @@ function EditEmployeeInfo(props) {
     employeeLocationCity.current.value = user[0].EmpLocationCity;
     employeeLocationState.current.value = user[0].EmpLocationState;
     employeeLocationCountry.current.value = user[0].EmpLocationCountry;
+    // employeeRoleType.current.value = user[0].EmployeeType;
   };
 
   const updateUser = async (e) => {
@@ -126,6 +157,7 @@ function EditEmployeeInfo(props) {
                 LastName: lastNameInput.current.value,
                 EmpId: selectedCurrentUser.EmpId,
                 AdminLevel: adminLevelDesignation.current.value,
+                EmployeeType: employeeRoleType.current.value,
               },
             ],
             _keyword_: "KASH_OPERATIONS_USER_TABLE",
@@ -145,6 +177,7 @@ function EditEmployeeInfo(props) {
         LastName: lastNameInput.current.value,
         EmpId: selectedCurrentUser.EmpId,
         AdminLevel: adminLevelDesignation.current.value,
+        EmployeeType: employeeRoleType.current.value,
       }));
       setMessage(alertMessageDisplay("User Updated."));
       successMessage.current.showModal();
@@ -280,6 +313,59 @@ function EditEmployeeInfo(props) {
                         ref={adminLevelDesignation}
                       />
                     )}
+
+                    <label htmlFor="employee-role-designation">
+                      Employee Role
+                    </label>
+                    {isAdminLocal === '"Super Admin"' ? (
+                      <select
+                        name="employee-role-designation"
+                        id="employee-role-designation"
+                        className="employee-role-designation"
+                        ref={employeeRoleType}
+                      >
+                        <option value=""></option>
+                        <option value="W-2">W-2</option>
+                        <option value="1099-C">1099-C</option>
+                      </select>
+                    ) : (
+                      <input
+                        name="employee-role-designation"
+                        id="employee-role-designation"
+                        className="employee-role-designation"
+                        readOnly
+                        ref={employeeRoleType}
+                      />
+                    )}
+
+                    {/* If logged-in user is a 1099-C type employee, show contractor name input. Dont show if user employee role is W-2 */}
+                    {console.log("IS selected user contractor:", isContractor)}
+                    {isContractor === true ? (
+                      <div>
+                        <label htmlFor="employee-role-designation">
+                          Employee Contractor Name
+                        </label>
+                        {isAdminLocal === '"Super Admin"' ? (
+                          <input
+                            name="employee-contractor-name"
+                            id="employee-contractor-name"
+                            className="employee-contractor-name"
+                            ref={employeeContractorName}
+                          />
+                        ) : (
+                          <input
+                            name="employee-contractor-name"
+                            id="employee-contractor-name"
+                            className="employee-contractor-name"
+                            readOnly
+                            ref={employeeContractorName}
+                          />
+                        )}
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+
                     <label
                       className="manage_roles--employee_label"
                       htmlFor="manage_employees--first-name"
@@ -379,6 +465,7 @@ function EditEmployeeInfo(props) {
                         ref={employeeLocationCountry}
                       ></input>
                     </label>
+
                     <div className="buttonContainer">
                       <button
                         className="btn btn-primary update-user-btn"

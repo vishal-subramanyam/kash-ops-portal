@@ -69,3 +69,6 @@ select Projects.project_category, Projects.sow_id, Projects.total_projected_hour
 LEFT OUTER JOIN (select Timesheets.sow_id, SUM(Timesheets.monday_hours +Timesheets.tuesday_hours +Timesheets.wednesday_hours + Timesheets.thursday_hours + Timesheets.friday_hours +Timesheets.saturday_hours + Timesheets.sunday_hours) as Total_Hours_Billed from kash_operations_timesheet_table as Timesheets group by Timesheets.sow_id) as All_Timesheets
 ON Projects.sow_id = All_Timesheets.sow_id
 join kash_operations_company_table as Companies on Projects.company_id = Companies.company_id
+
+
+select Projects.project_category, Projects.sow_id, Projects.total_projected_hours, Projects.current_status, All_Timesheets.Total_Hours_Billed, Companies.company_id, Companies.company_name from kash_operations_created_projects_table as projects LEFT OUTER JOIN (select Timesheets.sow_id, SUM(Timesheets.monday_hours +Timesheets.tuesday_hours +Timesheets.wednesday_hours + Timesheets.thursday_hours + Timesheets.friday_hours +Timesheets.saturday_hours + Timesheets.sunday_hours) as Total_Hours_Billed from kash_operations_timesheet_table as Timesheets group by Timesheets.sow_id) as All_Timesheets ON Projects.sow_id = All_Timesheets.sow_id join kash_operations_company_table as Companies on Projects.company_id = Companies.company_id

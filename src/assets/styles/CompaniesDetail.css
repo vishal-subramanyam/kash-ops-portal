@@ -3,8 +3,13 @@
 }
 
 .CompaniesDetail--info-card-container {
-  background-color: #dbf0f6;
+  background-color: #a2d299;
   padding: 2rem 0;
+}
+
+.CompaniesDetail--company-admin-detail-container {
+  background-color: #dbf0f6;
+  padding: 1rem 0;
 }
 
 .CompanyInfoCard--info-card {

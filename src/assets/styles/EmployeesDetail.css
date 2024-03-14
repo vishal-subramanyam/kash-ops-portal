@@ -153,11 +153,6 @@
   padding: 1rem 0;
 }
 
-.EmployeesDetail--company-admin-detail-container {
-  background-color: #dbf0f6;
-  padding: 1rem 0;
-}
-
 .report-container.UsersReport--report-container {
   width: 90%;
   background-color: #fff;
@@ -188,6 +183,10 @@
   font-weight: 900;
 }
 
+.EmployeeInfoCard--contractor,
+.EmployeeInfoCard--contractor-name {
+  color: #0766f5 !important;
+}
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
   .EmployeeInfoCard--employee-detail-section {
     display: grid;
@@ -210,13 +209,8 @@
     display: grid;
     grid-template-columns: 50% 50%;
   }
-  .EmployeeInfoCard--employee-contact-info-section ol {
-    display: grid;
-    grid-template-columns: 33% 33% 33%;
-    grid-gap: 1rem;
-  }
 
-  .EmployeeInfoCard--employee-contact-info-section {
+  .EmployeeInfoCard--employee-contact-info-section ol {
     display: grid;
     grid-template-columns: 33% 33% 33%;
     grid-gap: 1rem;
