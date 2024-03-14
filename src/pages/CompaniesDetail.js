@@ -3,30 +3,15 @@ import { Link } from "react-router-dom";
 import "../assets/styles/HomePage.css";
 import "../assets/styles/CompaniesDetail.css";
 import CompanyInfoCard from "../components/CompanyInfoCard";
-import CompanyAdminInfoCard from "../components/CompanyAdminInfoCard";
 
 function CompaniesDetail(props) {
-  let [tabActive, setTabActive] = useState("cardTab");
-  let employeeInfoCardTabActive =
-    "EmployeesDetail--tab EmployeesDetail--tab-active";
-  let employeeInfoCardTabNotActive =
-    "EmployeesDetail--tab EmployeesDetail--tab-not-active";
   let companies = props.companies.read();
   let projects = props.companyProjects.read();
   let admins = props.companyAdmins.read();
   let contacts = props.companyContacts.read();
   let projectsHoursBilledProjected = props.projectsHoursBilledProjected.read();
   let loggedInUserInfo = props.loggedInUser;
-  //   filter allCompanyAdmins array to remove duplicate company names
-  let distinctCompanies = Object.values(
-    admins.reduce((c, e) => {
-      if (!c[e.CompanyName]) {
-        c[e.CompanyName] = e;
-      }
-      return c;
-    }, {})
-  );
-  console.log(distinctCompanies);
+
   console.log("projects", projects);
   console.log("Projects with hours:", projectsHoursBilledProjected);
   return (
@@ -54,67 +39,28 @@ function CompaniesDetail(props) {
         </div>
       </div>
 
-      <ul className="EmployeesDetail--tabs-container">
-        <li
-          className={
-            tabActive === "cardTab"
-              ? employeeInfoCardTabActive + " EmployeesDetail--card-tab"
-              : employeeInfoCardTabNotActive + " EmployeesDetail--card-tab"
-          }
-          onClick={() => setTabActive("cardTab")}
-        >
-          <span>Card</span>
-        </li>
-        <li
-          className={
-            tabActive === "companyTab"
-              ? employeeInfoCardTabActive +
-                " EmployeesDetail--company-admin-tab"
-              : employeeInfoCardTabNotActive +
-                " EmployeesDetail--company-admin-tab"
-          }
-          onClick={() => setTabActive("companyTab")}
-        >
-          <span>Company Admins</span>
-        </li>
-      </ul>
-
-      {tabActive === "cardTab" ? (
-        <div className="CompaniesDetail--info-card-container">
-          {companies.map((company) => {
-            return (
-              <CompanyInfoCard
-                name={company.CompanyName}
-                id={company.CompanyId}
-                projects={projects.companyProjects.filter(
-                  (project) => company.CompanyId === project.CompanyId
-                )}
-                admins={admins.filter(
-                  (admin) => company.CompanyId === admin.CompanyId
-                )}
-                contacts={contacts.filter(
-                  (contact) => company.CompanyId === contact.CompanyId
-                )}
-                hoursPerProject={projectsHoursBilledProjected.filter(
-                  (project) => company.CompanyId === project.CompanyId
-                )}
-              />
-            );
-          })}
-        </div>
-      ) : (
-        <div className="CompaniesDetail--company-admin-detail-container">
-          {distinctCompanies.map((company) => {
-            return (
-              <CompanyAdminInfoCard
-                companyName={company.CompanyName}
-                companyId={company.CompanyId}
-                companyAdminsArr={admins}
-              />
-            );
-          })}
-        </div>
-      )}
+      <div className="CompaniesDetail--info-card-container">
+        {companies.map((company) => {
+          return (
+            <CompanyInfoCard
+              name={company.CompanyName}
+              id={company.CompanyId}
+              projects={projects.companyProjects.filter(
+                (project) => company.CompanyId === project.CompanyId
+              )}
+              admins={admins.filter(
+                (admin) => company.CompanyId === admin.CompanyId
+              )}
+              contacts={contacts.filter(
+                (contact) => company.CompanyId === contact.CompanyId
+              )}
+              hoursPerProject={projectsHoursBilledProjected.filter(
+                (project) => company.CompanyId === project.CompanyId
+              )}
+            />
+          );
+        })}
+      </div>
     </main>
   );
 }

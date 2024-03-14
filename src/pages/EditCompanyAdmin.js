@@ -4,12 +4,15 @@ import SuccessMessage from "../components/SuccessMessage";
 import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
 import { domain } from "../assets/api/apiEndpoints";
+import CompanyAdminInfoCard from "../components/CompanyAdminInfoCard";
 
 function EditCompanyAdmin(props) {
+  let [tabActive, setTabActive] = useState("editTab");
   let companyRemoveAdminForm = useRef();
   let companyAddAdminForm = useRef();
   let alertMessage = useRef();
   let successMessage = useRef();
+  let companyAdmins = props.companyAdmins.read();
   let [message, setMessage] = useState("");
   let [allAdmins, setAllAdmins] = useState([]);
   let [allCompanies, setAllCompanies] = useState([]);
@@ -27,6 +30,20 @@ function EditCompanyAdmin(props) {
   let [companyIdToRemoveAdmin, setCompanyIdToRemoveAdmin] = useState();
   let [adminEmpIdToRemoveFromCompany, setAdminEmpIdToRemoveFromCompany] =
     useState();
+  let employeeInfoCardTabActive =
+    "EmployeesDetail--tab EmployeesDetail--tab-active";
+  let employeeInfoCardTabNotActive =
+    "EmployeesDetail--tab EmployeesDetail--tab-not-active";
+  //   filter allCompanyAdmins array to remove duplicate company names
+  let distinctCompanies = Object.values(
+    companyAdmins.reduce((c, e) => {
+      if (!c[e.CompanyName]) {
+        c[e.CompanyName] = e;
+      }
+      return c;
+    }, {})
+  );
+  console.log(distinctCompanies);
 
   useEffect(() => {
     getAllCompanies();
@@ -344,59 +361,164 @@ function EditCompanyAdmin(props) {
         </form>
       </dialog>
 
-      <main className="edit-comp-contact-page__main-section max-width--main-container">
-        <h1 className="edit-comp-contact-title form-page-title--lg-1">
-          Edit Company Admins
-        </h1>
-        <div className="edit_page__return-link-holder">
-          <Link to="/clients-hub" className="return-link">
-            <svg
-              width="80"
-              height="134"
-              viewBox="0 0 80 134"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M76.7864 3.36106C72.8812 -0.544183 66.5495 -0.544181 62.6443 3.36106L1.12622 64.8787C-0.0453612 66.0503 -0.0453675 67.9497 1.12621 69.1213L62.6445 130.64C66.5497 134.545 72.8814 134.545 76.7866 130.64C80.6919 126.734 80.6919 120.403 76.7866 116.497L29.4107 69.1216C28.2391 67.95 28.2391 66.0505 29.4107 64.8789L76.7864 17.5032C80.6917 13.598 80.6917 7.2663 76.7864 3.36106Z"
-                fill="#255463"
-              />
-            </svg>
-            <p className="return-link-text">Return to Clients</p>
-          </Link>
+      <main className="EditCompanyAdmins--main-container edit-comp-contact-page__main-section max-width--main-container">
+        <div className="kash_operations--upper-section-holder">
+          <h1 className="edit-comp-contact-title form-page-title--lg-1">
+            Manage Company Admins
+          </h1>
+          <div className="edit_page__return-link-holder">
+            <Link to="/clients-hub" className="return-link">
+              <svg
+                width="80"
+                height="134"
+                viewBox="0 0 80 134"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M76.7864 3.36106C72.8812 -0.544183 66.5495 -0.544181 62.6443 3.36106L1.12622 64.8787C-0.0453612 66.0503 -0.0453675 67.9497 1.12621 69.1213L62.6445 130.64C66.5497 134.545 72.8814 134.545 76.7866 130.64C80.6919 126.734 80.6919 120.403 76.7866 116.497L29.4107 69.1216C28.2391 67.95 28.2391 66.0505 29.4107 64.8789L76.7864 17.5032C80.6917 13.598 80.6917 7.2663 76.7864 3.36106Z"
+                  fill="#255463"
+                />
+              </svg>
+              <p className="return-link-text">Return to Clients</p>
+            </Link>
+          </div>
         </div>
 
-        <div className="edit-comp-contact-page--content-holder">
-          <form
-            id="attach_contact_to_project--form"
-            className="edit_contact_page--mini-form attach_contact_to_project--form"
-            ref={companyAddAdminForm}
+        <ul className="EmployeesDetail--tabs-container">
+          <li
+            className={
+              tabActive === "cardTab"
+                ? employeeInfoCardTabActive + " EmployeesDetail--card-tab"
+                : employeeInfoCardTabNotActive + " EmployeesDetail--card-tab"
+            }
+            onClick={() => setTabActive("editTab")}
           >
-            <h2 className="attach_contact_to_project--title">
-              Attach Admin to Company
-            </h2>
-            <div className="attach_contact_to_project--content-holder">
-              <div className="company-information-holder">
+            <span>Edit</span>
+          </li>
+          <li
+            className={
+              tabActive === "companyTab"
+                ? employeeInfoCardTabActive +
+                  " EmployeesDetail--company-admin-tab"
+                : employeeInfoCardTabNotActive +
+                  " EmployeesDetail--company-admin-tab"
+            }
+            onClick={() => setTabActive("companyTab")}
+          >
+            <span>Company Admins</span>
+          </li>
+        </ul>
+
+        {tabActive === "editTab" ? (
+          <div className="edit-comp-contact-page--content-holder">
+            <form
+              id="attach_contact_to_project--form"
+              className="edit_contact_page--mini-form attach_contact_to_project--form"
+              ref={companyAddAdminForm}
+            >
+              <h2 className="attach_contact_to_project--title">
+                Attach Admin to Company
+              </h2>
+              <div className="attach_contact_to_project--content-holder">
+                <div className="company-information-holder">
+                  <label
+                    htmlFor="attach_contact_to_project--company_name--selection"
+                    className="attach_contact_to_project--company_name--label"
+                  >
+                    Company
+                    <select
+                      name="attach_contact_to_project--company_name--selection"
+                      id="attach_contact_to_project--company_name--selection"
+                      className="attach_contact_to_project--company_name--selection"
+                      onChange={selectCompanyToAddAdmin}
+                    >
+                      {console.log("All companies: ", allCompanies)}
+                      {console.log("All company admins: ", allCompanyAdmins)}
+                      {console.log(
+                        allCompanies.filter((company) => {
+                          allCompanyAdmins.map((admin) => {
+                            return company.CompanyId === admin.CompanyId;
+                          });
+                        })
+                      )}
+                      <option value="">- Select a Company -</option>
+                      {allCompanies.map((company, i) => {
+                        return (
+                          <option
+                            key={i}
+                            value={company.CompanyName}
+                            data-companyid={company.CompanyId}
+                          >
+                            {company.CompanyName}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </label>
+
+                  <label
+                    htmlFor="attach_contact_to_project--contact_name--selection"
+                    className="attach_contact_to_project--contact_name--label"
+                  >
+                    Admin Name
+                    <select
+                      name="attach_contact_to_project--contact_name--selection"
+                      id="attach_contact_to_project--contact_name--selection"
+                      className="attach-contact-to-project--form-input attach_contact_to_project--contact_name--selection"
+                      onChange={selectAdminUserToAdd}
+                    >
+                      <option
+                        id="attach_contact_to_project--contact-name-empty-display-option"
+                        value=""
+                      >
+                        - Please Select an Admin -
+                      </option>
+                      {allAdmins.map((admin, i) => {
+                        return (
+                          <option
+                            id="attach_contact_to_project--contact-name-empty-display-option"
+                            key={i}
+                            value={admin.FirstName + " " + admin.LastName}
+                            data-userid={admin.EmpId}
+                            data-username={admin.KashOperationsUsn}
+                          >
+                            {admin.FirstName + " " + admin.LastName}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </label>
+                </div>
+              </div>
+              <button
+                id="attach-contact-to-project--button"
+                onClick={addAdminToCompany}
+              >
+                Add to Company
+              </button>
+            </form>
+
+            <form
+              id="remove_contact_from_project--form"
+              className="edit_contact_page--mini-form remove_contact_from_project--form"
+              ref={companyRemoveAdminForm}
+            >
+              <h2 className="remove_contact_from_project--title">
+                Remove Admin from Company
+              </h2>
+              <div className="remove_contact_from_project--content-holder">
                 <label
-                  htmlFor="attach_contact_to_project--company_name--selection"
-                  className="attach_contact_to_project--company_name--label"
+                  htmlFor="remove_contact_from_project--project_description--selection"
+                  className="remove_contact_from_project--project_description--label"
                 >
                   Company
                   <select
-                    name="attach_contact_to_project--company_name--selection"
-                    id="attach_contact_to_project--company_name--selection"
-                    className="attach_contact_to_project--company_name--selection"
-                    onChange={selectCompanyToAddAdmin}
+                    name="remove_contact_from_project--project_description--selection"
+                    id="remove_contact_from_project--project_description--selection"
+                    className="remove_contact_from_project--project_description--selection"
+                    onChange={selectCompanyPopulateAdminsToRemove}
                   >
-                    {console.log("All companies: ", allCompanies)}
-                    {console.log("All company admins: ", allCompanyAdmins)}
-                    {console.log(
-                      allCompanies.filter((company) => {
-                        allCompanyAdmins.map((admin) => {
-                          return company.CompanyId === admin.CompanyId;
-                        });
-                      })
-                    )}
                     <option value="">- Select a Company -</option>
                     {allCompanies.map((company, i) => {
                       return (
@@ -413,30 +535,30 @@ function EditCompanyAdmin(props) {
                 </label>
 
                 <label
-                  htmlFor="attach_contact_to_project--contact_name--selection"
-                  className="attach_contact_to_project--contact_name--label"
+                  htmlFor="remove_contact_from_project--contact_name--selection"
+                  className="remove_contact_from_project--contact_name--label"
                 >
                   Admin Name
                   <select
-                    name="attach_contact_to_project--contact_name--selection"
-                    id="attach_contact_to_project--contact_name--selection"
-                    className="attach-contact-to-project--form-input attach_contact_to_project--contact_name--selection"
-                    onChange={selectAdminUserToAdd}
+                    name="remove_contact_from_project--contact_name--selection"
+                    id="remove_contact_from_project--contact_name--selection"
+                    className="remove-contact-from-project--form-input remove_contact_from_project--contact_name--selection"
+                    onChange={selectAdminToRemove}
                   >
                     <option
-                      id="attach_contact_to_project--contact-name-empty-display-option"
+                      id="remove_contact_from_project--contact-name-empty-display-option"
                       value=""
                     >
-                      - Please Select an Admin -
+                      - Please Select a Company First -
                     </option>
-                    {allAdmins.map((admin, i) => {
+
+                    {allAdminsPerCompany.map((admin, i) => {
                       return (
                         <option
-                          id="attach_contact_to_project--contact-name-empty-display-option"
+                          id="remove_contact_from_project--contact-name-empty-display-option"
                           key={i}
                           value={admin.FirstName + " " + admin.LastName}
                           data-userid={admin.EmpId}
-                          data-username={admin.KashOperationsUsn}
                         >
                           {admin.FirstName + " " + admin.LastName}
                         </option>
@@ -445,91 +567,27 @@ function EditCompanyAdmin(props) {
                   </select>
                 </label>
               </div>
-            </div>
-            <button
-              id="attach-contact-to-project--button"
-              onClick={addAdminToCompany}
-            >
-              Add to Company
-            </button>
-          </form>
-
-          <form
-            id="remove_contact_from_project--form"
-            className="edit_contact_page--mini-form remove_contact_from_project--form"
-            ref={companyRemoveAdminForm}
-          >
-            <h2 className="remove_contact_from_project--title">
-              Remove Admin from Company
-            </h2>
-            <div className="remove_contact_from_project--content-holder">
-              <label
-                htmlFor="remove_contact_from_project--project_description--selection"
-                className="remove_contact_from_project--project_description--label"
+              <button
+                id="remove-contact-from-project--button"
+                onClick={removeAdminFromCompany}
               >
-                Company
-                <select
-                  name="remove_contact_from_project--project_description--selection"
-                  id="remove_contact_from_project--project_description--selection"
-                  className="remove_contact_from_project--project_description--selection"
-                  onChange={selectCompanyPopulateAdminsToRemove}
-                >
-                  <option value="">- Select a Company -</option>
-                  {allCompanies.map((company, i) => {
-                    return (
-                      <option
-                        key={i}
-                        value={company.CompanyName}
-                        data-companyid={company.CompanyId}
-                      >
-                        {company.CompanyName}
-                      </option>
-                    );
-                  })}
-                </select>
-              </label>
-
-              <label
-                htmlFor="remove_contact_from_project--contact_name--selection"
-                className="remove_contact_from_project--contact_name--label"
-              >
-                Admin Name
-                <select
-                  name="remove_contact_from_project--contact_name--selection"
-                  id="remove_contact_from_project--contact_name--selection"
-                  className="remove-contact-from-project--form-input remove_contact_from_project--contact_name--selection"
-                  onChange={selectAdminToRemove}
-                >
-                  <option
-                    id="remove_contact_from_project--contact-name-empty-display-option"
-                    value=""
-                  >
-                    - Please Select a Company First -
-                  </option>
-
-                  {allAdminsPerCompany.map((admin, i) => {
-                    return (
-                      <option
-                        id="remove_contact_from_project--contact-name-empty-display-option"
-                        key={i}
-                        value={admin.FirstName + " " + admin.LastName}
-                        data-userid={admin.EmpId}
-                      >
-                        {admin.FirstName + " " + admin.LastName}
-                      </option>
-                    );
-                  })}
-                </select>
-              </label>
-            </div>
-            <button
-              id="remove-contact-from-project--button"
-              onClick={removeAdminFromCompany}
-            >
-              Remove From Company
-            </button>
-          </form>
-        </div>
+                Remove From Company
+              </button>
+            </form>
+          </div>
+        ) : (
+          <div className="CompaniesDetail--company-admin-detail-container">
+            {distinctCompanies.map((company) => {
+              return (
+                <CompanyAdminInfoCard
+                  companyName={company.CompanyName}
+                  companyId={company.CompanyId}
+                  companyAdminsArr={companyAdmins}
+                />
+              );
+            })}
+          </div>
+        )}
       </main>
     </div>
   );

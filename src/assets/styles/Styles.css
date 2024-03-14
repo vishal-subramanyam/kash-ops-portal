@@ -1858,10 +1858,16 @@ Specify # of total sub-levels?
 
 /* ^^^^^^^^^^^^^^ ********** Edit Company Contacts Page ********** ^^^^^^^^^^^^^^^^^^ */
 .edit-comp-contact-page--content-holder {
-  margin: 2rem 0;
+  padding: 2rem 0;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
+  background-color: #a2d299;
+}
+
+.edit-comp-contact-page--content-holder form {
+  width: 80%;
+  margin: 0 auto;
 }
 
 .database-submit-dialog p span.attach-contact-to-project--dialog_success_note {
@@ -1885,8 +1891,8 @@ Specify # of total sub-levels?
 }
 
 .edit-comp-contact-page__main-section label {
-  font-weight: 300;
-  font-size: 1rem;
+  /* font-weight: 300;
+  font-size: 1rem; */
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -2415,4 +2421,12 @@ tfoot {
 
 .edit-user-form-container label {
   margin: 0.5rem 0rem;
+}
+
+.EditCompanyAdmins--main-container {
+  padding: 0;
+}
+
+.EditCompanyAdmins--main-container .kash_operations--upper-section-holder {
+  padding: 1rem;
 }

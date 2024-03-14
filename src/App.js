@@ -179,6 +179,7 @@ function App() {
                 <EditCompanyAdmin
                   loggedInUser={loggedInUserLocal}
                   admin={isAdminLocal}
+                  companyAdmins={resource.companyAdmins}
                 />
               </RequireAuth>
             }

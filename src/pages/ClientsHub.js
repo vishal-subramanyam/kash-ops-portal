@@ -109,7 +109,7 @@ function ClientsHub(props) {
                 to="/edit-company-admin"
                 class="edit-company_admin-link hub_page--secondary-action-link client_hub--secondary-action-link"
               >
-                Edit Company Admins
+                Manage Company Admins
               </Link>
             ) : (
               <></>

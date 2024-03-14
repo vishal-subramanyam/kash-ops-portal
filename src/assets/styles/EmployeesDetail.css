@@ -114,10 +114,18 @@
 .EmployeeInfoCard--employee-id {
   color: #f57407;
   font-weight: 300;
+  display: flex;
+}
+
+.EmployeeInfoCard--employee-role,
+.EmployeeInfoCard--employee-contractor-name,
+.EmployeeInfoCard--employee-level {
+  display: flex;
 }
 
 .EmployeeInfoCard--employee-username {
   font-weight: 300;
+  display: flex;
 }
 
 .EmployeeInfoCard--employee-id label,
@@ -216,7 +224,7 @@
     grid-gap: 1rem;
   }
 
-  .EmployeeInfoCard--employee-contact-info-section li {
+  /* .EmployeeInfoCard--employee-contact-info-section li {
     font-size: 14px;
-  }
+  } */
 }

@@ -33,7 +33,7 @@ function CompanyAdminInfoCard(props) {
                     admin.EmployeeType === "" ||
                     admin.EmployeeType === "-" ? (
                       <div>
-                        <div>
+                        <div className="EmployeeInfoCard--employee-role">
                           <label>Contract Type:</label>
                           <span>{admin.EmployeeType}</span>
                         </div>
@@ -44,13 +44,13 @@ function CompanyAdminInfoCard(props) {
                       </div>
                     ) : (
                       <div>
-                        <div>
+                        <div className="EmployeeInfoCard--employee-role">
                           <label>Contract Type:</label>
                           <span className="EmployeeInfoCard--contractor">
                             {admin.EmployeeType}
                           </span>
                         </div>
-                        <div>
+                        <div className="EmployeeInfoCard--employee-contractor-name">
                           <label>Contract Name:</label>
                           <span className="EmployeeInfoCard--contractor-name">
                             {admin.EmployeeContractorName}
