@@ -363,7 +363,7 @@ function EditCompanyAdmin(props) {
 
       <main className="EditCompanyAdmins--main-container edit-comp-contact-page__main-section max-width--main-container">
         <div className="kash_operations--upper-section-holder">
-          <h1 className="edit-comp-contact-title form-page-title--lg-1">
+          <h1 className="EditCompanyAdmins--haeding edit-comp-contact-title form-page-title--lg-1">
             Manage Company Admins
           </h1>
           <div className="edit_page__return-link-holder">

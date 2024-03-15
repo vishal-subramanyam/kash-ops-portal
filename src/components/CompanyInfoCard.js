@@ -87,7 +87,6 @@ function CompanyInfoCard(props) {
               ) {
                 return (
                   <li>
-                    {/* If percentage of total projected hours/ total billed hours is 80% or greater, add  CompanyInfoDetail--project-overdue class to project  */}
                     <article className="CompanyInfoDetail--project-detail">
                       <h6>{project.ProjectCategory}</h6>
                       <label className="CompanyInfoDetail--hours-label">
@@ -98,8 +97,7 @@ function CompanyInfoCard(props) {
                           <span>
                             <label>Billed: </label>
                             <p>
-                              {console.log(project.TotalBilledHours)}
-                              {isNaN(project.TotalBilledHours) === true
+                              {isNaN(project.TotalBilledHours)
                                 ? "0"
                                 : project.TotalBilledHours}
                             </p>
@@ -114,16 +112,17 @@ function CompanyInfoCard(props) {
                           <div
                             className="CompanyInfoDetail--project-progress-bar"
                             style={{
-                              width:
-                                (project.TotalBilledHours /
-                                  project.TotalProjectedHours) *
-                                  100 <=
-                                20
-                                  ? "20%"
-                                  : (project.TotalBilledHours /
-                                      project.TotalProjectedHours) *
-                                      100 +
-                                    "%",
+                              width: isNaN(project.TotalBilledHours)
+                                ? "0%"
+                                : (project.TotalBilledHours /
+                                    project.TotalProjectedHours) *
+                                    100 <=
+                                  20
+                                ? "20%"
+                                : (project.TotalBilledHours /
+                                    project.TotalProjectedHours) *
+                                    100 +
+                                  "%",
                             }}
                           ></div>
                         </div>
@@ -131,10 +130,15 @@ function CompanyInfoCard(props) {
                     </article>
                   </li>
                 );
-              } else {
+              } else if (
+                (project.TotalBilledHours / project.TotalProjectedHours) * 100 >
+                70
+              ) {
+                {
+                  /* If percentage of total projected hours/ total billed hours is greater than 70%, add  CompanyInfoDetail--project-detail_over-billed class to project  */
+                }
                 return (
                   <li>
-                    {/* If percentage of total projected hours/ total billed hours is 70% or greater, add  CompanyInfoDetail--project-overdue class to project  */}
                     <article className="CompanyInfoDetail--project-detail CompanyInfoCard--project-detail_over-billed">
                       <h6>{project.ProjectCategory}</h6>
                       <label className="CompanyInfoDetail--hours-label">
@@ -145,7 +149,7 @@ function CompanyInfoCard(props) {
                           <span>
                             <label>Billed: </label>
                             <p>
-                              {isNaN(project.TotalBilledHours) === true
+                              {isNaN(project.TotalBilledHours)
                                 ? "0"
                                 : project.TotalBilledHours}
                             </p>
@@ -160,16 +164,52 @@ function CompanyInfoCard(props) {
                           <div
                             className="CompanyInfoDetail--project-progress-bar CompanyInfoCard--project-detail_over-billed-progress-bar"
                             style={{
-                              width:
-                                (project.TotalBilledHours /
-                                  project.TotalProjectedHours) *
-                                  100 >=
-                                100
-                                  ? "100%"
-                                  : (project.TotalBilledHours /
-                                      project.TotalProjectedHours) *
-                                      100 +
-                                    "%",
+                              width: isNaN(project.TotalBilledHours)
+                                ? "0%"
+                                : (project.TotalBilledHours /
+                                    project.TotalProjectedHours) *
+                                    100 >=
+                                  100
+                                ? "100%"
+                                : (project.TotalBilledHours /
+                                    project.TotalProjectedHours) *
+                                    100 +
+                                  "%",
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                    </article>
+                  </li>
+                );
+              } else if (isNaN(project.TotalBilledHours)) {
+                {
+                  /* If there are no hours billed to project, add grey as background-color  */
+                }
+                return (
+                  <li>
+                    <article className="CompanyInfoDetail--project-detail CompanyInfoCard--project-detail-not-billed">
+                      <h6>{project.ProjectCategory}</h6>
+                      <label className="CompanyInfoDetail--hours-label">
+                        Hours
+                      </label>
+                      <div className="CompanyInfoDetail--project-progress-bar-container">
+                        <div className="CompanyInfoDetail--hours-heading">
+                          <span>
+                            <label>Billed: </label>
+                            <p>0</p>
+                          </span>
+                          <span>
+                            <label>Projected: </label>
+                            <p>{project.TotalProjectedHours}</p>
+                          </span>
+                        </div>
+
+                        <div className="CompanyInfoDetail--project-progress-bar-wrapper">
+                          <div
+                            className="CompanyInfoDetail--project-progress-bar-not-billed"
+                            style={{
+                              width: "0%",
                             }}
                           ></div>
                         </div>

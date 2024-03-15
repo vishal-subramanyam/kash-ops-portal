@@ -200,6 +200,10 @@
   );
 }
 
+.CompanyInfoCard--project-detail-not-billed {
+  background-color: #eaeaea;
+}
+
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
   .CompanyInfoCard--info-card header {
     display: flex;
