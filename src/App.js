@@ -5,7 +5,7 @@ import "./App.css";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import EmployeeHub from "./pages/EmployeeHub";
-import AddEmployee from "./pages/AddEmployee";
+import ManageEmployee from "./pages/ManageEmployee";
 import EmployeeRoleAndResponsibilities from "./pages/EmployeeRoleAndResponsibilities";
 import ClientsHub from "./pages/ClientsHub";
 import AddCompany from "./pages/AddCompany";
@@ -78,10 +78,10 @@ function App() {
             }
           />
           <Route
-            path="/add-employee"
+            path="/manage-employee"
             element={
               <RequireAuth>
-                <AddEmployee
+                <ManageEmployee
                   loggedInUser={loggedInUserLocal}
                   admin={isAdminLocal}
                 />
@@ -173,7 +173,7 @@ function App() {
             }
           />
           <Route
-            path="/edit-company-admin"
+            path="/manage-company-admin"
             element={
               <RequireAuth>
                 <EditCompanyAdmin

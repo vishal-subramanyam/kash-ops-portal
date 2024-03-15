@@ -388,7 +388,7 @@ function EditCompanyAdmin(props) {
         <ul className="EmployeesDetail--tabs-container">
           <li
             className={
-              tabActive === "cardTab"
+              tabActive === "editTab"
                 ? employeeInfoCardTabActive + " EmployeesDetail--card-tab"
                 : employeeInfoCardTabNotActive + " EmployeesDetail--card-tab"
             }

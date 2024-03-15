@@ -228,7 +228,7 @@ function AddEmployee(props) {
         </form>
       </dialog>
       <main className="add-employee-page__main-section max-width--main-container">
-        <h1 className="add-employee__page-title form-page-title--lg-1">
+        {/* <h1 className="add-employee__page-title form-page-title--lg-1">
           Add an Employee
         </h1>
         <div className="edit_page__return-link-holder">
@@ -247,7 +247,7 @@ function AddEmployee(props) {
             </svg>
             <p className="return-link-text">Return to Employees</p>
           </Link>
-        </div>
+        </div> */}
         <form
           onSubmit={validateRequiredInputs}
           id="add-employee-form"

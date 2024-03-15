@@ -24,7 +24,7 @@ function EmployeeHub() {
             X
           </span> */}
       {/* <iframe id="editEmployeeFrame"></iframe> */}
-      <EditEmployeeInfo id="editEmployeeFrame" />
+
       {/* </div>
       </div> */}
 
@@ -81,39 +81,39 @@ function EmployeeHub() {
         <div className="employee_hub--admin-links-holder">
           <div className="hub_page--secondary-actions-holder">
             <h2 className="activity_hub--admin_links_title employee_hub--admin_links_title employee_hub--add-title">
-              Add
+              Manage
             </h2>
             {/* <a href="http://52.167.226.44:8080/ibi_apps/WFServlet.ibfs?IBFS1_action=RUNFEX&|IBFS_path=/WFC/Repository/KashDemo_Files/KASH_Operations/html-pages/external_html_and_assets/html/add-employee-page.html" class="add_employee-admin-link hub_page--secondary-action-link employee_hub--secondary-action-link">Add Employee</a> */}
             <Link
-              to="/add-employee"
+              to="/manage-employee"
               className="add_employee-admin-link hub_page--secondary-action-link employee_hub--secondary-action-link"
             >
-              Add Employee
+              Manage Employees
             </Link>
           </div>
-          <div className="hub_page--secondary-actions-holder">
+          {/* <div className="hub_page--secondary-actions-holder">
             <h2 className="activity_hub--admin_links_title employee_hub--admin_links_title employee_hub--edit-title">
               Edit
             </h2>
             <a
-              //   href="#"
+             
               onClick={showEditEmployeeModel}
               className="edit_employee-admin-link hub_page--secondary-action-link employee_hub--secondary-action-link"
             >
               Edit Employee Information
-            </a>
-            {/* <a
+            </a> */}
+          {/* <a
               href="http://52.167.226.44:8080/ibi_apps/WFServlet.ibfs?IBFS1_action=RUNFEX&|IBFS_path=/WFC/Repository/KashDemo_Files/KASH_Operations/html-pages/external_html_and_assets/html/employee_roles_and_responsibilities-page.htm"
               class="roles_and_responsibilities-admin-link hub_page--secondary-action-link employee_hub--secondary-action-link"
             > */}
-            {/* <Link
+          {/* <Link
               to="/employee-roles-and-responsibilities"
               class="roles_and_responsibilities-admin-link hub_page--secondary-action-link employee_hub--secondary-action-link"
             >
               Roles and Responsibilities
             </Link> */}
-            {/* </a> */}
-          </div>
+          {/* </a> */}
+          {/* </div> */}
         </div>
       </div>
       {/* END show links if signed in employee is Admin level */}

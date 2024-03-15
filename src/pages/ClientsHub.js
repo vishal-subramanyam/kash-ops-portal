@@ -106,7 +106,7 @@ function ClientsHub(props) {
             </a> */}
             {props.loggedInUser.AdminLevel === "Super Admin" ? (
               <Link
-                to="/edit-company-admin"
+                to="/manage-company-admin"
                 class="edit-company_admin-link hub_page--secondary-action-link client_hub--secondary-action-link"
               >
                 Manage Company Admins

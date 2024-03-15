@@ -53,6 +53,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
 }
 
 .EmployeesDetail--tabs-container li:hover {
@@ -72,23 +74,33 @@
 
 .EmployeesDetail--card-tab {
   background-color: #a2d299;
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
 }
 
 .EmployeesDetail--card-tab span {
   color: #2a8519;
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
 }
 
 .EmployeesDetail--table-tab {
   background-color: #ffe1bd;
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
 }
 
 .EmployeesDetail--table-tab span {
   color: #ff981c;
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
 }
 
 .EmployeesDetail--company-admin-tab {
   background-color: #dbf0f6;
   color: #255463;
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
 }
 
 .EmployeesDetail--info-card-container {
@@ -220,7 +232,7 @@
 
   .EmployeeInfoCard--employee-contact-info-section ol {
     display: grid;
-    grid-template-columns: 33% 33% 33%;
+    grid-template-columns: 33% 33% 30%;
     grid-gap: 1rem;
   }
 
