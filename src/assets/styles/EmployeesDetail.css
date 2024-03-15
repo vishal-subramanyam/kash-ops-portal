@@ -62,6 +62,10 @@
   cursor: pointer;
 }
 
+.EmployeesDetail--tab span {
+  padding: 0 1rem;
+}
+
 .EmployeesDetail--tab-not-active {
   height: 45px;
   z-index: 0;

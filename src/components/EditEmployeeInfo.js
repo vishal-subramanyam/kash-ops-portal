@@ -244,32 +244,31 @@ function EditEmployeeInfo(props) {
       />
       <div className="EditEmployeeInfo--content-container">
         <form ref={editUserForm} className="edit-user-form-container">
-          <label
+          {/* <label
             className="manage_roles--employee_label edit-user-dropdown-wrapper"
             htmlFor="EMP_ID"
+          > 
+          Employee*/}
+          <select
+            className="edit-user-dropdown"
+            name="EMP_ID"
+            id="EMP_ID"
+            onChange={onNameChange}
           >
-            Employee
-            <select
-              className="edit-user-dropdown"
-              name="EMP_ID"
-              id="EMP_ID"
-              onChange={onNameChange}
-            >
-              <option value="Select an Employee">-Select an Employee-</option>
-              {allUsersArr.map((employee, i) => {
-                return (
-                  <option
-                    data-employeeid={employee.EmpId}
-                    value={`${employee.FirstName} ${employee.LastName}`}
-                    key={i}
-                  >
-                    {`${employee.FirstName} ${employee.LastName}`}
-                  </option>
-                );
-              })}
-            </select>
-          </label>
-
+            <option value="Select an Employee">Select an Employee</option>
+            {allUsersArr.map((employee, i) => {
+              return (
+                <option
+                  data-employeeid={employee.EmpId}
+                  value={`${employee.FirstName} ${employee.LastName}`}
+                  key={i}
+                >
+                  {`${employee.FirstName} ${employee.LastName}`}
+                </option>
+              );
+            })}
+          </select>
+          {/* </label> */}
           <div className="employee-info-form">
             <div className="left_group_inputs">
               <label
