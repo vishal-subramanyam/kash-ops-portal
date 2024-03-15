@@ -1,3 +1,40 @@
+.ManageEmployees--heading {
+  padding: 1rem;
+}
+
 .ManageEmployees--main-container {
   padding: 0;
+}
+
+.AddEmployee--content-wrapper {
+  background-color: #ffe1bd;
+}
+
+.EditEmployeeInfo--wrapper {
+  background-color: #a2d299;
+}
+
+.employee-info-form label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-weight: 200;
+}
+
+.employee-info-form input {
+  font-weight: 400;
+}
+
+.ManageEmployees--add-tab {
+  background-color: #ffe1bd;
+  color: #ff981c;
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+}
+
+.ManageEmployees--edit-tab {
+  background-color: #a2d299;
+  color: #2a8519;
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
 }

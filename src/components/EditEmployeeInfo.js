@@ -245,11 +245,16 @@ function EditEmployeeInfo(props) {
       <div className="EditEmployeeInfo--content-container">
         <form ref={editUserForm} className="edit-user-form-container">
           <label
-            className="manage_roles--employee_label edit-user-dropdown"
+            className="manage_roles--employee_label edit-user-dropdown-wrapper"
             htmlFor="EMP_ID"
           >
             Employee
-            <select name="EMP_ID" id="EMP_ID" onChange={onNameChange}>
+            <select
+              className="edit-user-dropdown"
+              name="EMP_ID"
+              id="EMP_ID"
+              onChange={onNameChange}
+            >
               <option value="Select an Employee">-Select an Employee-</option>
               {allUsersArr.map((employee, i) => {
                 return (
@@ -360,7 +365,7 @@ function EditEmployeeInfo(props) {
                 <input
                   id="firstnamebox"
                   name="manage_employees--first-name"
-                  className="form-control"
+                  className="EditEmployeeInfo--firstname-input"
                   // defaultValue={selectedCurrentUser.FirstName}
                   ref={firstNameInput}
                 ></input>
@@ -374,7 +379,7 @@ function EditEmployeeInfo(props) {
                 <input
                   id="lastnamebox"
                   name="manage_employees--last_name"
-                  className="form-control"
+                  className="EditEmployeeInfo--lastname-input"
                   // defaultValue={selectedCurrentUser.LastName}
                   ref={lastNameInput}
                 ></input>
@@ -388,7 +393,7 @@ function EditEmployeeInfo(props) {
                 <input
                   id="emailbox"
                   name="manage_employees--email"
-                  className="form-control"
+                  className="EditEmployeeInfo--email-input"
                   // defaultValue={selectedCurrentUser.EmailAddress}
                   ref={emailAddressInput}
                 ></input>
@@ -402,7 +407,7 @@ function EditEmployeeInfo(props) {
                 <input
                   id="phonebox"
                   name="manage_employees--phone"
-                  className="form-control"
+                  className="EditEmployeeInfo--phone-input"
                   // defaultValue={selectedCurrentUser.PhoneNumber}
                   ref={employeePhoneNumber}
                 ></input>
@@ -418,7 +423,7 @@ function EditEmployeeInfo(props) {
                 <input
                   id="citybox"
                   name="manage_employees--city"
-                  className="form-control"
+                  className="EditEmployeeInfo--city-input"
                   // defaultValue={selectedCurrentUser.EmpLocationCity}
                   ref={employeeLocationCity}
                 ></input>
@@ -432,7 +437,7 @@ function EditEmployeeInfo(props) {
                 <input
                   id="statebox"
                   name="manage_employees--state"
-                  className="form-control"
+                  className="EditEmployeeInfo--state-input"
                   // defaultValue={selectedCurrentUser.EmpLocationState}
                   ref={employeeLocationState}
                 ></input>
@@ -446,7 +451,7 @@ function EditEmployeeInfo(props) {
                 <input
                   id="countrybox"
                   name="manage_employees--email"
-                  className="form-control"
+                  className="EditEmployeeInfo--country-input"
                   // defaultValue={selectedCurrentUser.EmpLocationCountry}
                   ref={employeeLocationCountry}
                 ></input>

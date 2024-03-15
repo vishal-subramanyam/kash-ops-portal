@@ -174,7 +174,7 @@ function AddEmployee(props) {
   };
 
   return (
-    <div>
+    <div className="AddEmployee--content-wrapper">
       <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
       <dialog
         className="database-submit-dialog"

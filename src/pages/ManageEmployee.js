@@ -16,7 +16,7 @@ function ManageEmployee(props) {
 
   return (
     <main className="ManageEmployees--main-container max-width--main-container">
-      <div className="kash_operations--upper-section-holder">
+      <div className="kash_operations--upper-section-holder ManageEmployees--heading">
         <h1 className="add-employee__page-title form-page-title--lg-1">
           Manage Employees
         </h1>
@@ -43,8 +43,8 @@ function ManageEmployee(props) {
         <li
           className={
             tabActive === "addTab"
-              ? employeeInfoCardTabActive + " EmployeesDetail--card-tab"
-              : employeeInfoCardTabNotActive + " EmployeesDetail--card-tab"
+              ? employeeInfoCardTabActive + " ManageEmployees--add-tab"
+              : employeeInfoCardTabNotActive + " ManageEmployees--add-tab"
           }
           onClick={() => setTabActive("addTab")}
         >
@@ -53,10 +53,8 @@ function ManageEmployee(props) {
         <li
           className={
             tabActive === "editTab"
-              ? employeeInfoCardTabActive +
-                " EmployeesDetail--company-admin-tab"
-              : employeeInfoCardTabNotActive +
-                " EmployeesDetail--company-admin-tab"
+              ? employeeInfoCardTabActive + " ManageEmployees--edit-tab"
+              : employeeInfoCardTabNotActive + " ManageEmployees--edit-tab"
           }
           onClick={() => setTabActive("editTab")}
         >
