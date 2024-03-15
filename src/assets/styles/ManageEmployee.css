@@ -10,21 +10,6 @@
   background-color: #ffe1bd;
 }
 
-.EditEmployeeInfo--wrapper {
-  background-color: #a2d299;
-}
-
-.employee-info-form label {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  font-weight: 200;
-}
-
-.employee-info-form input {
-  font-weight: 400;
-}
-
 .ManageEmployees--add-tab {
   background-color: #ffe1bd;
   color: #ff981c;

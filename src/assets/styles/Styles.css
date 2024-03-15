@@ -459,12 +459,9 @@ input:checked + .slider:before {
   display: none;
 }
 
-.left_group_inputs label {
-  margin-bottom: 0.3rem;
-}
-
 .buttonContainer {
   margin-top: 10px;
+  text-align: center;
 }
 
 .btn-danger {
@@ -732,11 +729,13 @@ input:checked + .slider:before {
 .EditEmployeeInfo--phone-input,
 .EditEmployeeInfo--firstname-input,
 .EditEmployeeInfo--lastname-input {
-  margin-top: 10px;
-  border: solid 2px var(--kashtech_operations--characteristic-orange-1);
+  margin: 0px 0px 1rem 0px;
+  border: 2px solid var(--kashtech_operations--characteristic-orange-1);
   border-radius: 0.3rem;
-  width: 10rem;
+  width: 100%;
+  height: 2rem;
   background-color: #fefaf7;
+  font-weight: 400;
 }
 /* .checkBoxLabel {
   margin-top: 0.4rem;
@@ -1217,11 +1216,10 @@ input:checked + .slider:before {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  font-weight: 200;
-  width: 70%;
+  font-weight: 400;
   margin: 0 auto 1.5rem auto;
-  height: 2.25rem;
-  background-color: #fff;
+  height: 2rem;
+  background-color: #fefaf7;
   border: solid 2px var(--kashtech_operations--characteristic-orange-1);
   border-radius: 0.3rem;
   text-align: center;

@@ -271,18 +271,20 @@ function EditEmployeeInfo(props) {
           {/* </label> */}
           <div className="employee-info-form">
             <div className="left_group_inputs">
-              <label
-                className="manage_roles--employee_label esit-user-username"
-                htmlFor="manage_employees--first-name"
-              >
-                Username
-              </label>
-              <p
-                id="username-display"
-                name="manage_employees--username"
-                className="username-display"
-                ref={usernameDisplay}
-              ></p>
+              <div className="username-display-container">
+                <label
+                  className="manage_roles--employee_label esit-user-username"
+                  htmlFor="manage_employees--first-name"
+                >
+                  Username
+                </label>
+                <p
+                  id="username-display"
+                  name="manage_employees--username"
+                  className="username-display"
+                  ref={usernameDisplay}
+                ></p>
+              </div>
               <label htmlFor="admin-level-designation">Admin Level</label>
               {isAdminLocal === '"Super Admin"' ? (
                 <select
@@ -383,7 +385,8 @@ function EditEmployeeInfo(props) {
                   ref={lastNameInput}
                 ></input>
               </label>
-
+            </div>
+            <div className="right_group_inputs">
               <label
                 className="manage_roles--employee_label"
                 htmlFor="manage_employees--email"
@@ -411,9 +414,7 @@ function EditEmployeeInfo(props) {
                   ref={employeePhoneNumber}
                 ></input>
               </label>
-            </div>
 
-            <div className=" left_group_inputs">
               <label
                 className="manage_roles--employee_label"
                 htmlFor="manage_employees--city"
@@ -455,22 +456,21 @@ function EditEmployeeInfo(props) {
                   ref={employeeLocationCountry}
                 ></input>
               </label>
-
-              <div className="buttonContainer">
-                <button
-                  className="btn btn-primary update-user-btn"
-                  onClick={updateUser}
-                >
-                  Update
-                </button>
-                <button
-                  className="btn btn-danger delete-user-btn"
-                  onClick={deleteUser}
-                >
-                  Delete User
-                </button>
-              </div>
             </div>
+          </div>
+          <div className="buttonContainer">
+            <button
+              className="btn btn-primary update-user-btn"
+              onClick={updateUser}
+            >
+              Update
+            </button>
+            <button
+              className="btn btn-danger delete-user-btn"
+              onClick={deleteUser}
+            >
+              Delete User
+            </button>
           </div>
         </form>
       </div>

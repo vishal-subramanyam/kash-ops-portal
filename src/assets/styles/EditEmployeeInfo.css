@@ -1,37 +1,53 @@
-label {
-  font-weight: 200;
-  display: inline-block;
-  margin-bottom: 0.5rem;
+.EditEmployeeInfo--wrapper {
+  background-color: #a2d299;
 }
 
-input[type="checkbox"] {
-  margin-right: 0.5rem;
-  vertical-align: middle;
+.employee-info-form label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-weight: 200;
+}
+
+.employee-info-form input {
+  font-weight: 400;
 }
 
 .employee-info-form {
   display: flex;
   flex-direction: column;
+  max-width: 15rem;
   /* align-items: flex-start !important; */
 }
 
+.right_group_inputs,
 .left_group_inputs {
   display: flex;
   flex-direction: column;
 }
 
+.right_group_inputs label,
 .left_group_inputs label {
   text-align: left;
 }
 
+.right_group_inputs > label > input:focus,
+.left_group_inputs > label > input:focus,
+.right_group_inputs > label > input:focus-visible,
+.left_group_inputs > label > input:focus-visible {
+  outline: 2px solid var(--kashtech_operations--characteristic-orange-1) !important ;
+}
 .username-display {
   display: block;
   width: 100%;
-  padding: 0.375rem 0.75rem;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
   color: #212529;
+  border: 2px solid var(--kashtech_operations--characteristic-orange-1);
+  height: 2rem;
+  background-color: #fefaf7;
+  border-radius: 0.3rem;
 }
 
 .edit-user-form-container {
@@ -40,4 +56,37 @@ input[type="checkbox"] {
   justify-content: center;
   align-items: center;
   padding: 2rem 0;
+}
+
+.username-display-container {
+  height: 3.5rem;
+}
+
+.employee-info-form label[for="admin-level-designation"] {
+  margin-top: 0.75rem;
+}
+
+@media only screen and (min-device-width: 768px) {
+  .employee-info-form {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    max-width: 78rem;
+  }
+
+  .username-display {
+    width: 80%;
+  }
+  .employee-role-designation,
+  .admin-designation,
+  .add-employee-form label > input,
+  .add-employee-form label > select,
+  .EditEmployeeInfo--country-input,
+  .EditEmployeeInfo--city-input,
+  .EditEmployeeInfo--state-input,
+  .EditEmployeeInfo--email-input,
+  .EditEmployeeInfo--phone-input,
+  .EditEmployeeInfo--firstname-input,
+  .EditEmployeeInfo--lastname-input {
+    width: 80%;
+  }
 }
