@@ -109,6 +109,8 @@ input[type="text"] {
   margin: 0 auto;
   /* padding-bottom: 2rem; */
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 .timesheet-update__main-section select {
   background-color: #ebffef;
@@ -461,7 +463,9 @@ input:checked + .slider:before {
 
 .buttonContainer {
   margin-top: 10px;
-  text-align: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .btn-danger {
@@ -802,6 +806,13 @@ input:checked + .slider:before {
 }
 
 @media (min-width: 650px) {
+  .max-width--main-container {
+    flex-direction: unset;
+  }
+
+  .kash_operations_home--main-card--wrapper {
+    flex-basis: 45%;
+  }
   /* .add-employee-form--top-section {
     flex-direction: row;
     gap: 1rem;
@@ -1216,24 +1227,38 @@ input:checked + .slider:before {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  font-weight: 400;
+  font-weight: 300;
   margin: 0 auto 1.5rem auto;
   height: 2rem;
   background-color: #fefaf7;
   border: solid 2px var(--kashtech_operations--characteristic-orange-1);
   border-radius: 0.3rem;
   text-align: center;
+  padding: 0 0.5rem;
 }
 
 .update-user-btn {
-  margin-right: 1rem;
+  margin-right: 0.5rem;
   background-color: #706aaa !important;
   border-color: #706aaa !important;
+  width: 5rem;
+  max-height: 2.5rem;
+  font-size: 75%;
+  line-height: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .delete-user-btn {
   background-color: #fa9b4b !important;
   border-color: #fa9b4b !important;
+  width: 5rem;
+  max-height: 2.5rem;
+  font-size: 75%;
+  line-height: 1rem;
+  display: flex;
+  align-items: center;
 }
 
 .edit-user-username {

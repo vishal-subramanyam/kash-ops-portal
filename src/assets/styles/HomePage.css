@@ -16,7 +16,7 @@ a {
   flex-direction: column;
   padding: 0 2rem;
   align-items: center;
-  margin-bottom: 3rem;
+  /* margin-bottom: 3rem; */
 }
 .kash_operations_home--title {
   font-weight: 900;
@@ -27,7 +27,7 @@ a {
 }
 .kash_operations_home--user-welcome-msg {
   font-size: 0.8rem;
-  margin-right: 0.5rem;
+  flex-basis: 20%;
 }
 .kash_operations_home--catgories-holder {
   position: relative;
@@ -43,6 +43,7 @@ a {
   flex-basis: 33%;
   position: relative;
   z-index: 2;
+  width: 80%;
 }
 .kash_operations_home--main-card {
   flex-basis: 33%;

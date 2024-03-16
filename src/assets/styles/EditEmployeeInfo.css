@@ -20,6 +20,14 @@
   /* align-items: flex-start !important; */
 }
 
+.left_group_inputs {
+  margin-right: 0.5rem;
+}
+
+.right_group_inputs {
+  margin-left: 0.5rem;
+}
+
 .right_group_inputs,
 .left_group_inputs {
   display: flex;
@@ -70,13 +78,10 @@
   .employee-info-form {
     display: grid;
     grid-template-columns: 50% 50%;
-    max-width: 78rem;
+    max-width: 100%;
   }
 
-  .username-display {
-    width: 80%;
-  }
-  .employee-role-designation,
+  /* .employee-role-designation,
   .admin-designation,
   .add-employee-form label > input,
   .add-employee-form label > select,
@@ -88,5 +93,5 @@
   .EditEmployeeInfo--firstname-input,
   .EditEmployeeInfo--lastname-input {
     width: 80%;
-  }
+  } */
 }

@@ -129,22 +129,26 @@ function NavBar(props) {
 
       <div className="NavBar--nav-links">
         <ol className="NavBar--nav-links-list">
-          <Link to="/" className="NavBar--user-hub-link-container">
-            <li className="NavBar--user-hub-link">User Hub</li>
-          </Link>
-          <Link
-            to="/control-center"
-            className="NavBar--control-center-link-container"
-          >
-            <li className="NavBar--control-center-link">Control Center</li>
-          </Link>
-          <p className="kash_operations_home--user-welcome-msg">
-            Welcome,{" "}
-            <span id="kash_ops_user--first-name">
-              {props.userInfo.FirstName}
-            </span>
-            !
-          </p>
+          <li className="NavBar--user-hub-link-container">
+            <Link to="/" className="NavBar--user-hub-link">
+              User Hub
+            </Link>
+          </li>
+
+          <li className="NavBar--control-center-link-container">
+            <Link to="/control-center" className="NavBar--control-center-link">
+              Control Center
+            </Link>
+          </li>
+          <li>
+            <p className="kash_operations_home--user-welcome-msg">
+              Welcome,{" "}
+              <span id="kash_ops_user--first-name">
+                {props.userInfo.FirstName}
+              </span>
+              !
+            </p>
+          </li>
           <li
             className="NavBar--user-icon"
             onClick={() => setShowProfileLinks(!showProfileLinks)}
