@@ -659,6 +659,9 @@ function ControlCenter(props) {
     <div className="ControlCenter--container">
       <header>
         <div class="kash_operations--upper-section-holder">
+          <h1 class="kash_operations--hub-title clients-hub-page-title ControlCenter--page-title">
+            Control Center
+          </h1>
           <Link to="/" class="return-to-operations-hub">
             <svg
               width="80"
@@ -674,9 +677,6 @@ function ControlCenter(props) {
             </svg>
             <p>Return to Operations Hub</p>
           </Link>
-          <h1 class="kash_operations--hub-title clients-hub-page-title ControlCenter--page-title">
-            Control Center
-          </h1>
         </div>
       </header>
 
