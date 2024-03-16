@@ -481,6 +481,10 @@ a {
     font-size: clamp(40px, 15px + 10vw, 70px);
   }
 
+  .kash_operations_home--user-welcome-msg {
+    flex-basis: 100%;
+  }
+
   .main-card--details_tag {
     transition: opacity 0.3s 0.3s linear, transform 0.3s 0.3s ease-out;
   }

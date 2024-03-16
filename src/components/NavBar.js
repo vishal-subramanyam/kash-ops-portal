@@ -142,11 +142,9 @@ function NavBar(props) {
           </li>
           <li>
             <p className="kash_operations_home--user-welcome-msg">
-              Welcome,{" "}
-              <span id="kash_ops_user--first-name">
-                {props.userInfo.FirstName}
-              </span>
-              !
+              Welcome, {/* <span id="kash_ops_user--first-name"> */}
+              {props.userInfo.FirstName}
+              {/* </span> */}!
             </p>
           </li>
           <li

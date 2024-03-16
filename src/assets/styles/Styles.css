@@ -810,6 +810,10 @@ input:checked + .slider:before {
     flex-direction: unset;
   } */
 
+  .kash_operations_home--catgories-holder {
+    flex-direction: row;
+  }
+
   .kash_operations_home--main-card--wrapper {
     flex-basis: 45%;
   }

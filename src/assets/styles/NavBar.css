@@ -21,10 +21,24 @@ body {
 .NavBar--nav-links-list li {
   display: flex;
   align-content: center;
+  justify-content: center;
+  max-width: 4rem;
+}
+
+.NavBar--user-hub-link-container {
+  width: 90%;
+}
+
+.NavBar--nav-links-list li a,
+.NavBar--nav-links-list li p {
+  font-size: 14px;
 }
 
 .NavBar--control-center-link {
   text-decoration: none;
+  border-bottom: 2px solid #297ab4;
+  font-size: 0.8rem;
+  width: 70%;
 }
 
 .NavBar--nav-links-list {
@@ -66,11 +80,7 @@ body {
   border-bottom: 2px solid #ff922d;
   font-size: 0.8rem;
   text-decoration: none;
-}
-
-.NavBar--control-center-link-container {
-  border-bottom: 2px solid #297ab4;
-  font-size: 0.8rem;
+  width: 70%;
 }
 
 .NavBar--profile-nav-link-hide {
@@ -173,6 +183,27 @@ body {
   100% {
     opacity: 0;
     transform: translateY(-250px);
+  }
+}
+
+@media (min-width: 650px) {
+  .NavBar--nav-links-list {
+    grid-gap: 15px;
+  }
+
+  .NavBar--user-hub-link {
+    width: 100%;
+  }
+
+  .NavBar--nav-links-list li {
+    max-width: 6rem;
+  }
+
+  .NavBar--user-hub-link-container {
+    width: 100%;
+  }
+  .NavBar--control-center-link {
+    width: 100%;
   }
 }
 
