@@ -153,6 +153,12 @@
   margin-right: 5px;
 }
 
+.EmployeeInfoCard--employee-type label,
+.EmployeeInfoCard--employee-contact-info-section label,
+.EmployeeInfoCard--employee-hours-billed-section label {
+  font-weight: bold;
+}
+
 .EmployeeInfoCard--employee-type span {
   margin-left: 5px;
   color: #f57407;

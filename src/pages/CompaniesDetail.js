@@ -18,7 +18,7 @@ function CompaniesDetail(props) {
     <main className="CompaniesDetail--content-container">
       <div className="kash_operations--upper-section-holder EmployeesDetail--upper-section-holder CompaniesDetail--upper-section-holder">
         <h1 className="add-employee__page-title form-page-title--lg-1 EmployeesDetail--page-title">
-          Companies Detail
+          Companies Detailed
         </h1>
         <div className="edit_page__return-link-holder CompaniesDetail--return-link-holder">
           <Link to="/clients-hub">
