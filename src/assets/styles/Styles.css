@@ -806,9 +806,9 @@ input:checked + .slider:before {
 }
 
 @media (min-width: 650px) {
-  .max-width--main-container {
+  /* .max-width--main-container {
     flex-direction: unset;
-  }
+  } */
 
   .kash_operations_home--main-card--wrapper {
     flex-basis: 45%;

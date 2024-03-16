@@ -43,7 +43,8 @@ a {
   flex-basis: 33%;
   position: relative;
   z-index: 2;
-  width: 80%;
+  width: 65%;
+  max-width: 232px;
 }
 .kash_operations_home--main-card {
   flex-basis: 33%;
@@ -223,6 +224,7 @@ a {
 .timesheets-hub-page-main.max-width--main-container {
   max-width: 1000px;
   padding-bottom: 2rem;
+  flex-direction: column;
 }
 .kash_operations--hub-page--main {
   display: flex;
