@@ -21,7 +21,7 @@ body {
 .NavBar--nav-links-list li {
   display: flex;
   align-content: center;
-  justify-content: center;
+  /* justify-content: center; */
   max-width: 4rem;
 }
 
@@ -53,7 +53,7 @@ body {
 }
 
 .NavBar--user-hub-link-container {
-  display: flex;
+  justify-content: end;
 }
 
 .NavBar--user-hub-link-container:hover {
