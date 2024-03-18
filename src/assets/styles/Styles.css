@@ -164,7 +164,7 @@ input[type="text"] {
   overflow-x: unset;
 }
 
-.timesheet-table-container > th {
+.timesheet-table-container > table > thead > tr > th {
   position: sticky;
   top: 0;
   background-color: #fff;
