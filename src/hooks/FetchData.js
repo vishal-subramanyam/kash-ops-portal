@@ -419,6 +419,7 @@ const getProjectsBilledAndProjectedHoursByCompany = () => {
       let projectsByCompanyDateWithBurnTime = res.data.map((project) => ({
         CompanyId: project.CompanyId,
         CompanyName: project.CompanyName,
+        CurrentStatus: project.CurrentStatus,
         ProjectCategory: project.ProjectCategory,
         SowId: project.SowId,
         TotalBilledHours: parseFloat(project.TotalBilledHours),

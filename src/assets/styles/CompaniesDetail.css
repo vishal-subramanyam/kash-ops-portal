@@ -203,6 +203,15 @@
   background-color: #eaeaea;
 }
 
+.CompaniesDetail--table-detail-container {
+  background-color: #ffe1bd;
+  padding: 1.5rem 0;
+}
+
+.CompaniesDetail--table-detail-container .MuiDataGrid-toolbarContainer button {
+  color: #ff981c;
+}
+
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
   .CompanyInfoCard--info-card header {
     display: flex;
