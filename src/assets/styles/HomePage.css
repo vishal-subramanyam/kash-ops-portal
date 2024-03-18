@@ -323,14 +323,7 @@ a {
   flex-direction: column;
   gap: 0.5rem;
 }
-.hub_page--secondary-action-link {
-  /*color: #065886; */
-  color: #000;
-  font-weight: 500;
-  font-size: 1.5rem;
-  display: block;
-  position: relative;
-}
+
 .add-company-link {
   --admin-link-underline-bg: #047ca3;
 }
@@ -379,9 +372,13 @@ a {
   );
 }
 .hub_page--secondary-action-link {
-  width: max-content;
   font-size: 1.2rem;
+  color: #000;
+  font-weight: 500;
+  display: block;
+  position: relative;
 }
+
 .hub_page--secondary-action-link::after {
   content: "";
   position: absolute;
@@ -454,9 +451,10 @@ a {
   height: 5px;
   background: #165c72;
 }
-.client_hub--add-title::after {
+/* .client_hub--add-title::after {
   background: #165c72;
-}
+} */
+.client_hub--add-title::after,
 .client_hub--edit-title::after {
   background: linear-gradient(90deg, #2083a1 0%, #cda0dd 100%);
 }

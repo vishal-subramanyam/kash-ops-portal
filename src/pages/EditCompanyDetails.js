@@ -62,7 +62,7 @@ function EditCompanyDetails(props) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        _keyword_: "PROJECTS_AND_COMPANY_BY_COMPANY_ADMIN_TABLE",
+        _keyword_: "COMPANY_BY_COMPANY_ADMIN_TABLE",
         EmpId: props.loggedInUser.EmpId,
       }),
     })
@@ -72,7 +72,7 @@ function EditCompanyDetails(props) {
       })
       .catch((err) => {
         setMessage(
-          alertMessageDisplay(`Unable to get projects from database. ${err}`)
+          alertMessageDisplay(`Unable to get companies from database. ${err}`)
         );
         alertMessage.current.showModal();
       });
