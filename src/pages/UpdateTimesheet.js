@@ -1049,7 +1049,8 @@ function UpdateTimesheet(props) {
                 <h2 className="daily-hours--title">
                   Daily Hours (Round to nearest 0.25)
                 </h2>
-                <div className="table-responsive">
+                <div className="timesheet-table-container table-responsive">
+                  {/* <div className="timesheet-table-container"> */}
                   <table
                     id="timeSheetTable"
                     className="display table"

@@ -160,6 +160,16 @@ input[type="text"] {
   cursor: pointer;
 }
 
+.timesheet-table-container {
+  overflow-x: unset;
+}
+
+.timesheet-table-container > th {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+}
+
 .delete-task {
   background-color: transparent;
   height: 2rem;
@@ -181,7 +191,6 @@ input[type="text"] {
 .delete-sub-category:hover {
   background-color: hsla(0 87% 81% / 100%);
   cursor: pointer;
-
   border-radius: 50%;
 }
 
