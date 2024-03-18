@@ -342,7 +342,7 @@ const getCompanies = () => {
   })
     .then((res) => res.json())
     .then((res) => {
-      // console.log("List of companies: ", res.data);
+      console.log("List of companies: ", res.data);
       return res.data;
     })
     .catch((err) => {

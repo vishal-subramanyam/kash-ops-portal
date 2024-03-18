@@ -1,9 +1,14 @@
-.report-title {
-  font-weight: 800;
-  font-size: 1.5rem;
+.timesheet-report-container {
+  width: 90%;
+  background-color: #fff;
+  margin: 0 auto;
 }
 
-.report-container {
-  height: 300;
-  width: "100%";
+.timesheet-report-content-warpper {
+  background-color: #a2d299;
+  padding: 1.5rem 0px;
+}
+
+.timesheet-report-container .MuiDataGrid-toolbarContainer button {
+  color: #54c488;
 }

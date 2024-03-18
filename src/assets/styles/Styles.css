@@ -825,8 +825,8 @@ input:checked + .slider:before {
   .add-employee-form--id-content,
   .employee-form--personal-content-holder,
   .employee-form--location-content-holder {
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, auto);
     gap: 1rem;
   }
 }
@@ -835,8 +835,14 @@ input:checked + .slider:before {
   .add-employee-form--top-section {
     flex-direction: row;
     gap: 2rem;
-    align-items: flex-start;
   }
+
+  .employee-form--location-content-holder {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 1rem;
+  }
+
   .add-employee-form--id-content {
     order: 1;
     /* flex-basis: 40%; */
@@ -897,6 +903,8 @@ input:checked + .slider:before {
   flex-direction: column;
   font-weight: 200;
 }
+
+.company-form--name-input,
 .add-company-form label > input {
   margin-top: 10px;
   border: solid 2px var(--kashtech_operations--main-blue);

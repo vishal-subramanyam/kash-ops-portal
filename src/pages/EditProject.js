@@ -47,6 +47,7 @@ function EditProject(props) {
     newWorkAreaIdInput,
   ];
 
+  // This is the project and sub assignment workflow
   //   on page load, fetch companies from DB
   useEffect(() => {
     if (props.loggedInUser.AdminLevel === "Super Admin") {

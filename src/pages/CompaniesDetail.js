@@ -12,7 +12,13 @@ function CompaniesDetail(props) {
   let projectsHoursBilledProjected = props.projectsHoursBilledProjected.read();
   let loggedInUserInfo = props.loggedInUser;
 
-  console.log("projects", projects);
+  console.log("companies", companies);
+  console.log(
+    "company admins",
+    admins.filter((admin) => {
+      return admin.EmpId === loggedInUserInfo.EmpId;
+    })
+  );
   console.log("Projects with hours:", projectsHoursBilledProjected);
   return (
     <main className="CompaniesDetail--content-container">
@@ -40,26 +46,51 @@ function CompaniesDetail(props) {
       </div>
 
       <div className="CompaniesDetail--info-card-container">
-        {companies.map((company) => {
-          return (
-            <CompanyInfoCard
-              name={company.CompanyName}
-              id={company.CompanyId}
-              projects={projects.companyProjects.filter(
-                (project) => company.CompanyId === project.CompanyId
-              )}
-              admins={admins.filter(
-                (admin) => company.CompanyId === admin.CompanyId
-              )}
-              contacts={contacts.filter(
-                (contact) => company.CompanyId === contact.CompanyId
-              )}
-              hoursPerProject={projectsHoursBilledProjected.filter(
-                (project) => company.CompanyId === project.CompanyId
-              )}
-            />
-          );
-        })}
+        {loggedInUserInfo.AdminLevel === "Super Admin"
+          ? companies.map((company) => {
+              return (
+                <CompanyInfoCard
+                  name={company.CompanyName}
+                  id={company.CompanyId}
+                  projects={projects.companyProjects.filter(
+                    (project) => company.CompanyId === project.CompanyId
+                  )}
+                  admins={admins.filter(
+                    (admin) => company.CompanyId === admin.CompanyId
+                  )}
+                  contacts={contacts.filter(
+                    (contact) => company.CompanyId === contact.CompanyId
+                  )}
+                  hoursPerProject={projectsHoursBilledProjected.filter(
+                    (project) => company.CompanyId === project.CompanyId
+                  )}
+                />
+              );
+            })
+          : admins
+              .filter((admin) => {
+                return admin.EmpId === loggedInUserInfo.EmpId;
+              })
+              .map((company) => {
+                return (
+                  <CompanyInfoCard
+                    name={company.CompanyName}
+                    id={company.CompanyId}
+                    projects={projects.companyProjects.filter(
+                      (project) => company.CompanyId === project.CompanyId
+                    )}
+                    admins={admins.filter(
+                      (admin) => company.CompanyId === admin.CompanyId
+                    )}
+                    contacts={contacts.filter(
+                      (contact) => company.CompanyId === contact.CompanyId
+                    )}
+                    hoursPerProject={projectsHoursBilledProjected.filter(
+                      (project) => company.CompanyId === project.CompanyId
+                    )}
+                  />
+                );
+              })}
       </div>
     </main>
   );

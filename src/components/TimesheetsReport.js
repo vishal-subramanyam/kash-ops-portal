@@ -142,9 +142,9 @@ function TimesheetsReport(props) {
   const customColumnOrder = [
     "idTS",
     "PeriodStartDate",
-    "NonBillableReason",
-    "CompanyName",
     "FullName",
+    "CompanyName",
+    "NonBillableReason",
     "ProjectCategory",
     "SubAssignment",
     "SubAssignmentSegment1",
@@ -213,9 +213,9 @@ function TimesheetsReport(props) {
   };
 
   return (
-    <div>
-      <h1 className="report-title"> KASH OPS TIMESHEETS </h1>
-      <div className="report-container">
+    <div className="timesheet-report-content-warpper">
+      {/* <h1 className="report-title"> KASH OPS TIMESHEETS </h1> */}
+      <div className="timesheet-report-container">
         <DataGrid
           rows={transformedRowsTS}
           columns={visibleColumns}

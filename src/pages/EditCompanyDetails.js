@@ -53,7 +53,6 @@ function EditCompanyDetails(props) {
       });
   };
 
-  // PROJECTS_AND_COMPANY_BY_COMPANY_ADMIN_TABLE;
   const getAllCompaniesByCompanyAdmin = async () => {
     await fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",

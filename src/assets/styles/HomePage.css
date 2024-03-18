@@ -210,6 +210,10 @@ a {
 
 /* ################################################################### */
 
+.timesheet-report-header {
+  padding: 1rem;
+}
+
 .kash_operations--upper-section-holder {
   display: flex;
   flex-direction: column;
