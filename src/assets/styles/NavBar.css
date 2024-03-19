@@ -41,6 +41,10 @@ body {
   width: 70%;
 }
 
+.NavBar--control-center-link:hover {
+  color: #297ab4;
+}
+
 .NavBar--nav-links-list {
   list-style: none;
   margin-bottom: unset;
@@ -81,6 +85,10 @@ body {
   font-size: 0.8rem;
   text-decoration: none;
   width: 70%;
+}
+
+.NavBar--user-hub-link:hover {
+  color: #ff922d;
 }
 
 .NavBar--profile-nav-link-hide {

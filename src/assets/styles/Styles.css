@@ -125,6 +125,17 @@ input[type="text"] {
   border: 2px solid red !important;
 }
 
+.edit-company-title {
+  background: linear-gradient(
+    90deg,
+    rgb(48, 133, 160) 0%,
+    rgb(255, 175, 130) 60%
+  );
+  background-clip: border-box;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .form-page-title--lg-1 {
   font-size: 2rem;
   font-weight: 900;

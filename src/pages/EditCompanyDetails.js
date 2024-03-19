@@ -225,8 +225,8 @@ function EditCompanyDetails(props) {
         close={closeAlert}
         message={message}
       />
-      <main className="add-company-page__main-section max-width--main-container">
-        <h1 className="add-company-title form-page-title--lg-1">
+      <main className="edit-company-page__main-section max-width--main-container">
+        <h1 className="edit-company-title form-page-title--lg-1">
           Edit or Delete a Company
         </h1>
         <div className="edit_page__return-link-holder">
