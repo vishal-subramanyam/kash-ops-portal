@@ -249,7 +249,7 @@ function EditCompanyDetails(props) {
         <div className="add-company-page--content-holder">
           <div className="add-company-img-holder">
             <img
-              src="https://raw.githubusercontent.com/Alex-Gardner/KASH_Tech_Operations_Portal/main/kashtech-project-reporting-portal/assets/raster-assets/wise-fox-cTv69qOUjc4-unsplash.webp"
+              src={require("../assets/images/EditProjectImg.png")}
               alt="Company office interior setting"
               className="add-company-img"
             />

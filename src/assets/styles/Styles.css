@@ -896,19 +896,37 @@ input:checked + .slider:before {
 .add-company-img-holder {
   flex-basis: 100%;
   aspect-ratio: 1;
-  background-color: var(--kashtech_operations--main-blue);
+  background-color: linear-gradient(
+    180deg,
+    rgb(48, 133, 160) 0%,
+    rgb(255, 175, 130) 100%
+  );
+  position: relative;
 }
 .add-company-img-holder > img {
   object-fit: cover;
   height: 100%;
   width: 100%;
-  filter: drop-shadow(
+  /* filter: drop-shadow(
     var(--bounded-shadow) var(--bounded-shadow) 0px
       var(--kashtech_operations--main-blue)
+  ); */
+}
+.add-company-img-holder::before {
+  background: linear-gradient(
+    180deg,
+    rgb(48, 133, 160) 0%,
+    rgb(255, 175, 130) 100%
   );
+  content: "";
+  position: absolute;
+  inset: 0px;
+  transform: translate(2%, 2%);
+  z-index: -1;
+  height: 100%;
+  width: 100%;
 }
-.add-company-form {
-}
+
 .add-company-form--company-details,
 .add-company-form--company-location {
   display: flex;
@@ -973,7 +991,7 @@ input:checked + .slider:before {
     flex-direction: row;
     gap: 2rem;
     align-items: flex-start;
-    justify-content: space-between;
+    justify-content: center;
   }
   .add-company-img-holder {
     order: 2;
