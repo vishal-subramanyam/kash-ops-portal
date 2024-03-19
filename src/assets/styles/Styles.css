@@ -2479,6 +2479,7 @@ tfoot {
 
 .EditCompanyAdmins--main-container {
   padding: 0;
+  max-width: unset;
 }
 
 .EditCompanyAdmins--main-container .kash_operations--upper-section-holder {
