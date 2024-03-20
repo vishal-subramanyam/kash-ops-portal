@@ -346,7 +346,7 @@ function EditProjectDetails(props) {
         <div className="add-project-page--content-holder">
           <div className="add-project-page--img-holder">
             <img
-              src="https://raw.githubusercontent.com/Alex-Gardner/KASH_Tech_Operations_Portal/main/kashtech-project-reporting-portal/assets/raster-assets/construction-tools--resize.webp"
+              src={require("../assets/images/EditProjectImg.png")}
               alt="Group of tools on dark background"
               className="add-project-page--img"
             />

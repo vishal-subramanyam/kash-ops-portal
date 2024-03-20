@@ -690,11 +690,7 @@ input:checked + .slider:before {
 /* ################################################################### */
 
 /* ------------------------- Media Queries ---------------------- */
-@media (min-width: 650px) {
-  .form-page-title--lg-1 {
-    font-size: 2.5rem;
-  }
-}
+
 /* @media (min-width: 900px) {
   .timesheet-information-group-holder {
     flex-wrap: nowrap;
@@ -829,6 +825,35 @@ input:checked + .slider:before {
   /* .max-width--main-container {
     flex-direction: unset;
   } */
+
+  .add-company-page--content-holder {
+    flex-direction: row;
+    gap: 2rem;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .add-company-img-holder {
+    order: 2;
+  }
+
+  .add-project-page--content-holder {
+    flex-direction: row-reverse !important;
+    align-items: flex-start;
+  }
+
+  .add-comp__contact-page--content-holder {
+    flex-direction: row;
+    gap: 2rem;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .add-comp__contact-img-holder {
+    order: 2;
+  }
+
+  .form-page-title--lg-1 {
+    font-size: 2.5rem;
+  }
 
   .kash_operations_home--catgories-holder {
     flex-direction: row;
@@ -986,17 +1011,6 @@ input:checked + .slider:before {
   background-color: var(--kashtech_operations--blue-darken1);
 }
 
-@media (min-width: 650px) {
-  .add-company-page--content-holder {
-    flex-direction: row;
-    gap: 2rem;
-    align-items: flex-start;
-    justify-content: center;
-  }
-  .add-company-img-holder {
-    order: 2;
-  }
-}
 @media (min-width: 900px) {
   .add-company-img-holder {
     flex-basis: 50%;
@@ -1134,17 +1148,6 @@ input:checked + .slider:before {
   background-color: #1a3d37;
 }
 
-@media (min-width: 650px) {
-  .add-comp__contact-page--content-holder {
-    flex-direction: row;
-    gap: 2rem;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
-  .add-comp__contact-img-holder {
-    order: 2;
-  }
-}
 @media (min-width: 900px) {
   .add-comp-contact-page--content-holder {
     flex-direction: row;
@@ -1176,8 +1179,17 @@ input:checked + .slider:before {
   padding: 1rem 0;
 }
 .add-project-title {
-  color: var(--kashtech_operations--characteristic-purple-1);
-  /*margin-bottom: 1rem;*/
+  /*color: var(--kashtech_operations--characteristic-purple-1);
+  margin-bottom: 1rem;*/
+  background: linear-gradient(
+    90deg,
+    rgba(211, 173, 235, 1) 0%,
+    rgba(254, 214, 166, 1) 100%
+  );
+  background-clip: border-box;
+  background-clip: border-box;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .add-project-page--content-holder {
   display: flex;
@@ -1187,18 +1199,34 @@ input:checked + .slider:before {
   margin-top: 1rem;
 }
 .add-project-page--img-holder {
-  width: 50%;
+  width: 100%;
   aspect-ratio: 0.8761;
-  /* background-color: var(--kashtech_operations--characteristic-purple-1); */
+  position: relative;
 }
+
+.add-project-page--img-holder::before {
+  background: linear-gradient(
+    180deg,
+    rgba(211, 173, 235, 1) 0%,
+    rgba(254, 214, 166, 1) 100%
+  );
+  content: "";
+  position: absolute;
+  inset: 0px;
+  transform: translate(2%, 2%);
+  z-index: -1;
+  height: 100%;
+  width: 100%;
+}
+
 .add-project-page--img-holder > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: drop-shadow(
+  /* filter: drop-shadow(
     var(--bounded-shadow) var(--bounded-shadow) 0px
       var(--kashtech_operations--characteristic-purple-1)
-  );
+  ); */
 }
 .add-project--form {
   display: flex;
@@ -1220,10 +1248,11 @@ input:checked + .slider:before {
   content: "";
   background-color: #f9f4fd;
   height: 100%;
+  /* width: 130vw; */
   width: 130vw;
   top: 0;
   left: -20vw;
-  z-index: -1;
+  z-index: -2;
 }
 
 .add-project--form label > input,
@@ -1340,18 +1369,14 @@ input:checked + .slider:before {
 .add-project-form--add-project-button:hover {
   background-color: #9335de;
 }
-
+/* 
 @media (min-width: 900px) {
-  .add-project-page--content-holder {
-    flex-direction: row;
-    align-items: flex-start;
-  }
   .add-project-page--img-holder {
-    width: 45%;
+    width: 100%;
     order: 2;
     margin-top: 1rem;
   }
-}
+} */
 
 /* ################################################################### */
 

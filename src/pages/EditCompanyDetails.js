@@ -249,7 +249,7 @@ function EditCompanyDetails(props) {
         <div className="add-company-page--content-holder">
           <div className="add-company-img-holder">
             <img
-              src={require("../assets/images/EditProjectImg.png")}
+              src={require("../assets/images/EditCompanyImg.png")}
               alt="Company office interior setting"
               className="add-company-img"
             />
