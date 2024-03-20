@@ -239,6 +239,8 @@ function App() {
                 <ControlCenter
                   loggedInUser={loggedInUserLocal}
                   admin={isAdminLocal}
+                  companies={resource.companies}
+                  timesheetEntryDetails={resource.timesheetEntryDetails}
                 />
               </RequireAuth>
             }

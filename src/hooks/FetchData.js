@@ -456,8 +456,20 @@ const getTimesheetEntryDetails = () => {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log("Timesheet entry details", res.data);
-      return res.data;
+      let users = Object.values(
+        res.data.reduce((c, e) => {
+          if (!c[e.EmpId]) c[e.EmpId] = e;
+          return c;
+        }, {})
+      );
+
+      let timesheetUserEntryDetails = {
+        users: users,
+        entryDetails: res.data,
+      };
+      console.log("Timesheet entry details", timesheetUserEntryDetails);
+
+      return timesheetUserEntryDetails;
     })
     .catch((err) => {
       return err;

@@ -70,28 +70,23 @@ const getCompanyProjects = () => {
         }
       });
 
+      console.log({
+        monthly: monthlyNumOfProjects,
+        lifetime: res.data,
+        monthlyActive: activeMonthlyNumOfProjects,
+        lifetimeActive: activeLifetimeNumOfProjects,
+        companyProjects: res.data,
+      });
+
       return {
         projects: {
-          monthly: monthlyNumOfProjects.length,
-          lifetime: res.data.length,
-          monthlyActive: activeMonthlyNumOfProjects.length,
-          lifetimeActive: activeLifetimeNumOfProjects.length,
+          monthly: monthlyNumOfProjects,
+          lifetime: res.data,
+          monthlyActive: activeMonthlyNumOfProjects,
+          lifetimeActive: activeLifetimeNumOfProjects,
           companyProjects: res.data,
         },
       };
-      // dispatchKPI({
-      //   type: "initialize",
-      //   payload: {
-      //     ...KPIData,
-      //     projects: {
-      //       monthly: monthlyNumOfProjects.length,
-      //       lifetime: res.data.length,
-      //       monthlyActive: activeMonthlyNumOfProjects.length,
-      //       lifetimeActive: activeLifetimeNumOfProjects.length,
-      //       companyProjects: res.data,
-      //     },
-      //   },
-      // });
     })
     .catch((err) => {
       return err;
@@ -127,15 +122,6 @@ const getAllAdmins = () => {
         }
       });
       return filteredOutAdmins;
-      // dispatchKPI({
-      //   type: "initialize",
-      //   payload: {
-      //     ...KPIData,
-      //     admins: {
-      //       allAdmins: filteredOutAdmins,
-      //     },
-      //   },
-      // });
     })
     .catch((err) => {
       return err;
@@ -160,15 +146,6 @@ const getCompanyAdmins = () => {
     .then((res) => {
       console.log(res.data);
       return res.data;
-      // dispatchKPI({
-      //   type: "initialize",
-      //   payload: {
-      //     ...KPIData,
-      //     admins: {
-      //       adminsPerCompany: res.data,
-      //     },
-      //   },
-      // });
     })
     .catch((err) => {
       return err;
@@ -199,15 +176,6 @@ const getAvgBilledHours = () => {
       let totalHours = convertedNums.reduce((a, c) => a + c, 0);
       let avgOverallHours = totalHours / res.data.length;
       return avgOverallHours.toFixed(2);
-      // dispatchKPI({
-      //   type: "initialize",
-      //   payload: {
-      //     ...initialKPI,
-      //     totalHoursBilledDetailed: {
-      //       avgHoursBilledOverall: avgOverallHours.toFixed(2),
-      //     },
-      //   },
-      // });
     })
     .catch((err) => {
       return err;
@@ -231,17 +199,7 @@ const hoursBilledPerProject = () => {
   })
     .then((res) => res.json())
     .then((res) => {
-      // setBilledHoursPerCompanyProject(res.data);
       return res.data;
-      // dispatchKPI({
-      //   type: "initialize",
-      //   payload: {
-      //     ...initialKPI,
-      //     totalHoursBilledDetailed: {
-      //       hoursBilledPerProject: res.data,
-      //     },
-      //   },
-      // });
     })
     .catch((err) => {
       return err;
@@ -302,7 +260,6 @@ const getTotalProjectedHours = () => {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log(res.data);
       let totalProjectedHours = res.data;
       console.log(totalProjectedHours);
       return parseFloat(totalProjectedHours[0].TotalProjectedHours);
@@ -427,62 +384,6 @@ const getBilledAndProjectedHoursByCompany = () => {
   return response;
 };
 
-// let projects = getCompanyProjects();
-// let admins = getAllAdmins();
-// let companyAdmins = getCompanyAdmins();
-// let billedHours = getBilledHours();
-// let billedHoursByProject = hoursBilledPerProject();
-// let billedAndProjectedHours = getBilledAndProjectedHours();
-// let totalProjectedHours = getTotalProjectedHours();
-// let avgHoursPerCompany = getAvgHoursPerCompany();
-// let billedAndProjectedHoursByCompany = getBilledAndProjectedHoursByCompany();
-
-// Promise.allSettled([
-//   projects,
-//   admins,
-//   companyAdmins,
-//   billedHours,
-//   billedHoursByProject,
-//   billedAndProjectedHours,
-//   totalProjectedHours,
-//   avgHoursPerCompany,
-//   billedAndProjectedHoursByCompany,
-// ]).then((values) => {
-//   console.log(values);
-//     // dispatchKPI({
-//     //   type: "initialize",
-//     //   payload: {
-//     //     projects: {
-//     //       monthly: values[0].value.monthly,
-//     //       lifetime: values[0].value.lifetime,
-//     //       monthlyActive: values[0].value.monthlyActive,
-//     //       lifetimeActive: values[0].value.lifetimeActive,
-//     //       companyProjects: values[0].value.companyProjects,
-//     //     },
-//     //     admins: {
-//     //       allAdmins: values[1].value.allAdmins,
-//     //       adminsPerCompany: values[1].value.adminsPerCompany,
-//     //     },
-//     //     totalHoursBilledDetailed: {
-//     //       hoursBilledPerProject: values[2].value.hoursBilledPerProject,
-//     //       avgHoursBilledOverall: values[2].value.avgHoursBilledOverall,
-//     //     },
-//     //     companiesAndHoursPerCompany: {
-//     //       companies: values[3].value.companies,
-//     //       avgHours: values[3].value.avgHours,
-//     //     },
-//     //     hoursBilledAndProjected: {
-//     //       totalBilledHours: values[4].value.totalBilledHours,
-//     //       totalProjectedHours: values[4].value.totalProjectedHours,
-//     //       hoursDetailArr: values[4].value.hoursDetailArr,
-//     //     },
-//     //     hoursBilledAndProjectedByCompanyProject: {
-//     //       calcBurntimeArr: values[5].value,
-//     //     },
-//     //   },
-//     // });
-// });
-
 // ====================================================================================
 // REDUCER FUNCTION
 // ====================================================================================
@@ -572,6 +473,7 @@ function ControlCenter(props) {
   //  let companiesAndHoursPerCompany = useAvgHoursPerCompany(); // Total Hours Billed / Avg Hours Per Company KPI
   //  let hoursBilledAndProjectedByCompanyProject =
   //    useBilledAndProjectedHoursByCompany();
+  let companies = props.companies.read();
   let projects = getCompanyProjects();
   let admins = getAllAdmins();
   let companyAdmins = getCompanyAdmins();
@@ -614,7 +516,7 @@ function ControlCenter(props) {
             avgHoursBilledOverall: values[3].value,
           },
           companiesAndHoursPerCompany: {
-            companies: values[7].value.companies,
+            companies: values[7].value.companies, // will have duplicate companies because of the projects within a company
             avgHours: values[7].value.avgHours,
           },
           hoursBilledAndProjected: {
@@ -688,7 +590,7 @@ function ControlCenter(props) {
           onChange={updateKPIByCompanyId}
         >
           <option value="Overall">Overall</option>
-          {/* {companiesAndHoursPerCompany.companies.map((company) => {
+          {companies.map((company) => {
             return (
               <option
                 value={company.CompanyName}
@@ -697,7 +599,7 @@ function ControlCenter(props) {
                 {company.CompanyName}
               </option>
             );
-          })} */}
+          })}
         </select>
 
         <main className="ControlCenter--main-content">
@@ -728,37 +630,30 @@ function ControlCenter(props) {
             </li>
           </ul>
 
-          <Suspense fallback={<LoadingData />}>
-            {tabActive === "tab1" ? (
-              // Monthly Tab KPI Display
-              <section className="ControlCenter--KPI-section-container ControlCenter--KPI-section-container-active">
-                {/* KPI section */}
-                <section className="ControlCenter--KPI-section-wrapper">
-                  <KPI
-                    value={initialKPI.projects.monthly}
-                    caption="Companies with Projects"
-                  />
-                  <KPI
-                    // value="10"
-                    caption="Employees Assigned"
-                  />
-                  <KPI value="0" caption="Avg Hours Billed Per Resource" />
-                  <KPI value="0" caption="Company Admins" />
-                  <ProjectHoursKPI
-                    className="project-hours-KPI-article"
-                    hoursBilled="0"
-                    hoursAllotted="0"
-                    percentage={(0 / 1) * 100 + "%"}
-                  />
-                  <KPI
-                    value={initialKPI.projects.monthlyActive}
-                    caption="Active Projects"
-                  />
-                  <CompanyHoursKPI hoursBilled="0" avgHoursPerCompany="0" />
-                  <KPI value="0" caption="Projects with time < 100" />
-                </section>
+          {tabActive === "tab1" ? (
+            // Monthly Tab KPI Display
+            <section className="ControlCenter--KPI-section-container ControlCenter--KPI-section-container-active">
+              {/* KPI section */}
+              <section className="ControlCenter--KPI-section-wrapper">
+                <KPI
+                  value={KPIData.projects.monthly.length}
+                  caption="Companies with Projects"
+                />
+                <KPI value="0" caption="Employees Assigned" />
+                <KPI value="0" caption="Avg Hours Billed Per Resource" />
+                <KPI value="0" caption="Company Admins" />
+                <ProjectHoursKPI
+                  className="project-hours-KPI-article"
+                  hoursBilled="0"
+                  hoursAllotted="0"
+                  percentage={(0 / 1) * 100 + "%"}
+                />
+                <KPI value="0" caption="Active Projects" />
+                <CompanyHoursKPI hoursBilled="0" avgHoursPerCompany="0" />
+                <KPI value="0" caption="Projects with time < 100" />
+              </section>
 
-                {/* KPI Charts and Graphs Section 
+              {/* KPI Charts and Graphs Section 
                 <section className="ControlCenter--chart-section-wrapper">
                   <PieChartKPI className="pie-chart-kpi" />
                   <LineChartKPI className="line-chart-kpi" />
@@ -766,65 +661,59 @@ function ControlCenter(props) {
                   <HorizontalBarChartKPI className="horizontal-bar-chart-kpi" />
                 </section>
                 */}
+            </section>
+          ) : (
+            // Lifetime KPI Display
+            <section className="ControlCenter--KPI-section-container ControlCenter--KPI-section-container-active">
+              {/* KPI section */}
+              <section className="ControlCenter--KPI-section-wrapper">
+                <KPI
+                  value={KPIData.projects.lifetime.length}
+                  caption="Companies with Projects"
+                />
+                <KPI value="0" caption="Employees Assigned" />
+                <KPI
+                  value={KPIData.totalHoursBilledDetailed.avgHoursBilledOverall}
+                  caption="Avg Hours Billed Per Resource"
+                />
+                <KPI
+                  value={KPIData.admins.allAdmins.length}
+                  caption="Company Admins"
+                />
+                <ProjectHoursKPI
+                  hoursBilled={KPIData.hoursBilledAndProjected.totalBilledHours}
+                  hoursAllotted={
+                    KPIData.hoursBilledAndProjected.totalProjectedHours
+                  }
+                  percentage={
+                    (
+                      (KPIData.hoursBilledAndProjected.totalBilledHours /
+                        KPIData.hoursBilledAndProjected.totalProjectedHours) *
+                      100
+                    ).toFixed(2) + "%"
+                  }
+                />
+                <KPI
+                  value={KPIData.projects.lifetimeActive.length}
+                  caption="Active Projects"
+                />
+                <CompanyHoursKPI
+                  hoursBilled={KPIData.hoursBilledAndProjected.totalBilledHours}
+                  avgHoursPerCompany={
+                    KPIData.companiesAndHoursPerCompany.avgHours
+                  }
+                />
+                <KPI
+                  value={
+                    KPIData.hoursBilledAndProjectedByCompanyProject.calcBurntimeArr.filter(
+                      (project) => project.ProjectBurnTime <= 300
+                    ).length
+                  }
+                  caption="Projects with < 300 hours"
+                />
               </section>
-            ) : (
-              // Lifetime KPI Display
-              <section className="ControlCenter--KPI-section-container ControlCenter--KPI-section-container-active">
-                {/* KPI section */}
-                <section className="ControlCenter--KPI-section-wrapper">
-                  <KPI
-                    value={KPIData.projects.lifetime}
-                    caption="Companies with Projects"
-                  />
-                  <KPI value="0" caption="Employees Assigned" />
-                  <KPI
-                    value={
-                      KPIData.totalHoursBilledDetailed.avgHoursBilledOverall
-                    }
-                    caption="Avg Hours Billed Per Resource"
-                  />
-                  <KPI
-                    value={KPIData.admins.allAdmins.length}
-                    caption="Company Admins"
-                  />
-                  <ProjectHoursKPI
-                    hoursBilled={
-                      KPIData.hoursBilledAndProjected.totalBilledHours
-                    }
-                    hoursAllotted={
-                      KPIData.hoursBilledAndProjected.totalProjectedHours
-                    }
-                    percentage={
-                      (
-                        (KPIData.hoursBilledAndProjected.totalBilledHours /
-                          KPIData.hoursBilledAndProjected.totalProjectedHours) *
-                        100
-                      ).toFixed(2) + "%"
-                    }
-                  />
-                  <KPI
-                    value={KPIData.projects.lifetimeActive}
-                    caption="Active Projects"
-                  />
-                  <CompanyHoursKPI
-                    hoursBilled={
-                      KPIData.hoursBilledAndProjected.totalBilledHours
-                    }
-                    avgHoursPerCompany={
-                      KPIData.companiesAndHoursPerCompany.avgHours
-                    }
-                  />
-                  <KPI
-                    value={
-                      KPIData.hoursBilledAndProjectedByCompanyProject.calcBurntimeArr.filter(
-                        (project) => project.ProjectBurnTime <= 300
-                      ).length
-                    }
-                    caption="Projects with < 300 hours"
-                  />
-                </section>
 
-                {/* KPI Charts and Graphs Section
+              {/* KPI Charts and Graphs Section
                 <section className="ControlCenter--chart-section-wrapper">
                   <PieChartKPI className="pie-chart-kpi" />
                   <LineChartKPI className="line-chart-kpi" />
@@ -832,9 +721,8 @@ function ControlCenter(props) {
                   <HorizontalBarChartKPI className="horizontal-bar-chart-kpi" />
                 </section>
                  */}
-              </section>
-            )}
-          </Suspense>
+            </section>
+          )}
         </main>
       </div>
     </div>
