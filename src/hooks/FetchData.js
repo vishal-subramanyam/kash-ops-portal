@@ -49,6 +49,7 @@ export const createResource = () => {
     projectsBilledAndProjectedHoursByCompany: wrapPromise(
       getProjectsBilledAndProjectedHoursByCompany()
     ),
+    timesheetEntryDetails: wrapPromise(getTimesheetEntryDetails()),
   };
 };
 
@@ -352,7 +353,7 @@ const getCompanies = () => {
 };
 
 const getAvgHoursPerCompany = () => {
-  // Get total hours billed per company projects
+  // Get total hours billed per company projects. Returns duplicate company entries because of the hours billed to each project associated to a company
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
@@ -383,7 +384,7 @@ const getAvgHoursPerCompany = () => {
       let avgHoursByCompanyConsolidated = avgHoursByCompany.toFixed(2);
       // console.log(avgHoursByCompanyConsolidated);
       let companiesAndHoursBilled = {
-        companies: companies,
+        companiesProjectsBilled: res.data,
         avgHours: parseFloat(avgHoursByCompanyConsolidated),
       };
       // console.log(
@@ -430,6 +431,33 @@ const getProjectsBilledAndProjectedHoursByCompany = () => {
       }));
       console.log(projectsByCompanyDateWithBurnTime);
       return projectsByCompanyDateWithBurnTime;
+    })
+    .catch((err) => {
+      return err;
+    });
+  return response;
+};
+
+// =============================
+// GET TIMESHEET ENTRY DETAILS
+// =============================
+
+const getTimesheetEntryDetails = () => {
+  // Get list of companies
+  let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      _keyword_: "TIMESHEETS_ENTRY_DATE_DETAILED",
+    }),
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      console.log("Timesheet entry details", res.data);
+      return res.data;
     })
     .catch((err) => {
       return err;

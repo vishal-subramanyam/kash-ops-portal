@@ -17,14 +17,6 @@ import BarChartKPI from "../components/BarChartKPI";
 import HorizontalBarChartKPI from "../components/HorizontalBarChartKPI";
 import LoadingData from "../components/LoadingData";
 import { domain } from "../assets/api/apiEndpoints";
-import {
-  useCompanyProjects,
-  useCompanyAdmins,
-  useBilledHours,
-  useBilledAndProjectedHours,
-  useAvgHoursPerCompany,
-  useBilledAndProjectedHoursByCompany,
-} from "../hooks/Fetch";
 let currentDate = new Date();
 let currentDateUnix = Date.parse(currentDate);
 // ============================================================================
@@ -349,7 +341,7 @@ const getCompanies = () => {
 };
 
 const getAvgHoursPerCompany = () => {
-  // Get total hours billed per company projects
+  // Get total hours billed per company projects. Returns duplicate company entries because of the hours billed to each project associated to a company
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
@@ -370,6 +362,7 @@ const getAvgHoursPerCompany = () => {
         }, {})
       );
       console.log(companies);
+      console.log("Get Billed Hours by Company:", res.data);
       // console.log("companies: ", companies);
       let convertedNums = res.data.map((company) =>
         parseFloat(company.TotalBilledHours)
@@ -380,7 +373,7 @@ const getAvgHoursPerCompany = () => {
       let avgHoursByCompanyConsolidated = avgHoursByCompany.toFixed(2);
       console.log(avgHoursByCompanyConsolidated);
       let companiesAndHoursBilled = {
-        companies: companies,
+        companiesProjectsBilled: res.data,
         avgHours: parseFloat(avgHoursByCompanyConsolidated),
       };
       console.log(
