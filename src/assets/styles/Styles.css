@@ -826,8 +826,13 @@ input:checked + .slider:before {
     flex-direction: unset;
   } */
 
+  .add-project-page--img-holder > img {
+    position: relative;
+    top: 10px;
+  }
+
   .add-company-page--content-holder {
-    flex-direction: row;
+    flex-direction: row !important;
     gap: 2rem;
     align-items: flex-start;
     justify-content: center;
@@ -880,6 +885,15 @@ input:checked + .slider:before {
   .add-employee-form--top-section {
     flex-direction: row;
     gap: 2rem;
+  }
+
+  .add-project-page--img-holder::before {
+    transform: translate(2%, 5%);
+  }
+  .add-project-page__main-section.max-width--main-container
+    .add-project-form--project-details {
+    display: grid;
+    grid-template-columns: 50% 50%;
   }
 
   .employee-form--location-content-holder {
@@ -1194,7 +1208,7 @@ input:checked + .slider:before {
 .add-project-page--content-holder {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 2rem;
   margin-top: 1rem;
 }
