@@ -730,7 +730,7 @@ function ControlCenter(props) {
     return (sumHours / companiesByMonth.length).toFixed(2);
   };
 
-  // Calculate the projected hours each month per project
+  // Calculate the projected hours each month per project to see which projects have a projected time less than 100 hrs
   const getMonthlyProjectedHours = () => {
     let entries = KPIData.timesheetUserEntryDetails.entryDetails;
 
@@ -744,13 +744,15 @@ function ControlCenter(props) {
         return entry;
       }
     });
-    // filter out duplicate project entries to get projects billed in current month
+    // Array of individual projects billed in current month (filtering out duplicate project entries)
     let billedProjects = Object.values(
       filteredEntriesByCurrentMonth.reduce((c, e) => {
         if (!c[e.SowId]) c[e.SowId] = e;
         return c;
       }, {})
     );
+    let billedProjectsBrnTimeArr =
+      KPIData.hoursBilledAndProjectedByCompanyProject.calcBurntimeArr;
 
     // Get project data for the projects billed in current month
     let billedProjectsByCurrentMonth = [];
@@ -884,7 +886,10 @@ function ControlCenter(props) {
                   hoursBilled={getMonthlyHoursBilled()}
                   avgHoursPerCompany={getAvgHoursPerCompanyByMonth()}
                 />
-                <KPI value="0" caption="Projects with time < 100" />
+                <KPI
+                  value={getMonthlyProjectedHours()}
+                  caption="Projects with time < 100"
+                />
               </section>
 
               {/* KPI Charts and Graphs Section 
