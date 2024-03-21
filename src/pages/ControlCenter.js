@@ -744,17 +744,15 @@ function ControlCenter(props) {
         return entry;
       }
     });
-    // Array of individual projects billed in current month (filtering out duplicate project entries)
+    // Get total number of projects by creating an Array of individual projects billed in current month (filtering out duplicate project entries)
     let billedProjects = Object.values(
       filteredEntriesByCurrentMonth.reduce((c, e) => {
         if (!c[e.SowId]) c[e.SowId] = e;
         return c;
       }, {})
     );
-    let billedProjectsBrnTimeArr =
-      KPIData.hoursBilledAndProjectedByCompanyProject.calcBurntimeArr;
 
-    // Get project data for the projects billed in current month
+    // Number of individual projects billed in current month
     let billedProjectsByCurrentMonth = [];
 
     for (var i = 0; i < KPIData.projects.companyProjects.length; i++) {
@@ -769,6 +767,25 @@ function ControlCenter(props) {
       }
     }
     console.log(billedProjectsByCurrentMonth);
+    // Hours billed within current month for individual project with  project duration in months
+    let calculateProjectDurationPerMonth = billedProjectsByCurrentMonth.map(
+      (entry) => {
+        let dateFrom = new Date(entry.OriginalStartDate);
+        let dateTo = new Date(entry.OriginalEndDate);
+        return {
+          ...entry,
+          durationInMonths:
+            dateTo.getMonth() -
+            dateFrom.getMonth() +
+            12 * (dateTo.getFullYear() - dateFrom.getFullYear()),
+        };
+      }
+    );
+
+    console.log(
+      "Projects with their duration in months: ",
+      calculateProjectDurationPerMonth
+    );
   };
 
   return (
