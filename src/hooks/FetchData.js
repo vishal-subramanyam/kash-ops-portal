@@ -443,7 +443,7 @@ const getProjectsBilledAndProjectedHoursByCompany = () => {
 // =============================
 
 const getTimesheetEntryDetails = () => {
-  // Get list of companies
+  // Get detailed list of timesheet entries logged each day by each user
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
@@ -464,7 +464,7 @@ const getTimesheetEntryDetails = () => {
       );
 
       let timesheetUserEntryDetails = {
-        users: users,
+        numUsers: users.length,
         entryDetails: res.data,
       };
       console.log("Timesheet entry details", timesheetUserEntryDetails);

@@ -18,6 +18,8 @@ import HorizontalBarChartKPI from "../components/HorizontalBarChartKPI";
 import LoadingData from "../components/LoadingData";
 import { domain } from "../assets/api/apiEndpoints";
 let currentDate = new Date();
+let currentMonth = currentDate.getMonth() + 1;
+let currentYear = currentDate.getFullYear();
 let currentDateUnix = Date.parse(currentDate);
 // ============================================================================
 // FETCH PROJECTS AND COMPANY DATA
@@ -374,6 +376,8 @@ const getBilledAndProjectedHoursByCompany = () => {
         ProjectBurnTime:
           parseFloat(project.TotalProjectedHours) -
           parseFloat(project.TotalBilledHours),
+        OriginalStartDate: project.OriginalStartDate,
+        OriginalEndDate: project.OriginalEndDate,
       }));
 
       return projectsByCompanyDateWithBurnTime;
@@ -462,6 +466,10 @@ function ControlCenter(props) {
     hoursBilledAndProjectedByCompanyProject: {
       calcBurntimeArr: [],
     },
+    timesheetUserEntryDetails: {
+      numUsers: 0, // total number of users who made a timesheet entry
+      entryDetails: [],
+    },
   };
   let useCallbackDependency = true;
   let [KPIData, dispatchKPI] = useReducer(kpiReducer, initialKPI);
@@ -474,6 +482,7 @@ function ControlCenter(props) {
   //  let hoursBilledAndProjectedByCompanyProject =
   //    useBilledAndProjectedHoursByCompany();
   let companies = props.companies.read();
+  let timesheetEntryDetails = props.timesheetEntryDetails.read();
   let projects = getCompanyProjects();
   let admins = getAllAdmins();
   let companyAdmins = getCompanyAdmins();
@@ -495,8 +504,9 @@ function ControlCenter(props) {
       totalProjectedHours,
       avgHoursPerCompany,
       billedAndProjectedHoursByCompany,
+      timesheetEntryDetails,
     ]).then((values) => {
-      console.log(values);
+      console.log("KPI Fetch Data: ", values);
       dispatchKPI({
         type: "initialize",
         payload: {
@@ -527,6 +537,10 @@ function ControlCenter(props) {
           hoursBilledAndProjectedByCompanyProject: {
             calcBurntimeArr: values[8].value,
           },
+          timesheetUserEntryDetails: {
+            numUsers: values[9].value.numUsers, // total number of users who made a timesheet entry
+            entryDetails: values[9].value.entryDetails,
+          },
         },
       });
     });
@@ -548,6 +562,211 @@ function ControlCenter(props) {
         e.target[e.target.selectedIndex].getAttribute("data-companyid");
       console.log(selectedCompanyId);
     }
+  };
+
+  const getAvgTimesheetEntriesBilledPerMonth = () => {
+    console.log("current year:", currentYear);
+
+    console.log(KPIData.timesheetUserEntryDetails.entryDetails);
+    let entries = KPIData.timesheetUserEntryDetails.entryDetails;
+
+    // Get only the timesheet entries for current month and year
+    let filteredEntriesByCurrentMonth = entries.filter((entry) => {
+      let entryDate = new Date(entry.EntryDate);
+      if (
+        entryDate.getMonth() + 1 === currentMonth &&
+        entryDate.getFullYear() === currentYear
+      ) {
+        return entry;
+      }
+    });
+    console.log(filteredEntriesByCurrentMonth);
+    // get sum of task_hours billed/entered during current month
+    let sumHours = filteredEntriesByCurrentMonth.reduce(
+      (acc, entry) => acc + parseFloat(entry.TaskHours),
+      0
+    );
+    console.log(sumHours);
+
+    // filter out repeated emp_ids to get the number of users who recorded a timesheet entry during current month
+    let employees = Object.values(
+      filteredEntriesByCurrentMonth.reduce((c, e) => {
+        if (!c[e.EmpId]) c[e.EmpId] = e;
+        return c;
+      }, {})
+    );
+    console.log(employees);
+
+    // Calculate Avg of total hours billed/entered per the number of users who made an entry
+    let avgTotalHoursCurrentMonth = sumHours / employees.length;
+
+    return avgTotalHoursCurrentMonth.toFixed(2);
+  };
+
+  const getMonthlyHoursBilled = () => {
+    let entries = KPIData.timesheetUserEntryDetails.entryDetails;
+
+    // Get only the timesheet entries for current month and year
+    let filteredEntriesByCurrentMonth = entries.filter((entry) => {
+      let entryDate = new Date(entry.EntryDate);
+      if (
+        entryDate.getMonth() + 1 === currentMonth &&
+        entryDate.getFullYear() === currentYear
+      ) {
+        return entry;
+      }
+    });
+    console.log(filteredEntriesByCurrentMonth);
+    // get sum of task_hours billed/entered during current month
+    let sumHours = filteredEntriesByCurrentMonth.reduce(
+      (acc, entry) => acc + parseFloat(entry.TaskHours),
+      0
+    );
+    return sumHours;
+  };
+
+  // Get the projected hours for each project billed during current month
+  const getAllottedProjectHoursByMonth = () => {
+    let entries = KPIData.timesheetUserEntryDetails.entryDetails;
+
+    // Get only the timesheet entries for current month and year
+    let filteredEntriesByCurrentMonth = entries.filter((entry) => {
+      let entryDate = new Date(entry.EntryDate);
+      if (
+        entryDate.getMonth() + 1 === currentMonth &&
+        entryDate.getFullYear() === currentYear
+      ) {
+        return entry;
+      }
+    });
+    // filter out repeated sow_ids to get the number of projects who users recorded a timesheet entry against during current month
+    let billedProjects = Object.values(
+      filteredEntriesByCurrentMonth.reduce((c, e) => {
+        if (!c[e.SowId]) c[e.SowId] = e;
+        return c;
+      }, {})
+    );
+    console.log(billedProjects);
+
+    // Get the projected hours for the projects billed in current month
+    let projectedHours = [];
+    for (let i = 0; i < KPIData.projects.companyProjects.length; i++) {
+      for (let j = 0; j < billedProjects.length; j++) {
+        if (
+          KPIData.projects.companyProjects[i].SowId === billedProjects[j].SowId
+        ) {
+          projectedHours.push(KPIData.projects.companyProjects[i]);
+        }
+      }
+    }
+
+    console.log(
+      "Projected Hour of projects billed in current month: ",
+      projectedHours
+    );
+
+    // Add the project hours for each project that was billed in current month
+    let totalProjectedHoursByMonth = projectedHours.reduce(
+      (a, c) => a + parseFloat(c.TotalProjectedHours),
+      0
+    );
+
+    return totalProjectedHoursByMonth;
+  };
+
+  const getAvgHoursPerCompanyByMonth = () => {
+    let entries = KPIData.timesheetUserEntryDetails.entryDetails;
+
+    // Get only the timesheet entries for current month and year
+    let filteredEntriesByCurrentMonth = entries.filter((entry) => {
+      let entryDate = new Date(entry.EntryDate);
+      if (
+        entryDate.getMonth() + 1 === currentMonth &&
+        entryDate.getFullYear() === currentYear
+      ) {
+        return entry;
+      }
+    });
+    // Get total hours billed during current month
+    let sumHours = filteredEntriesByCurrentMonth.reduce(
+      (acc, entry) => acc + parseFloat(entry.TaskHours),
+      0
+    );
+    // filter out repeated sow_ids to get the number of projects who users recorded a timesheet entry against during current month
+    let billedProjects = Object.values(
+      filteredEntriesByCurrentMonth.reduce((c, e) => {
+        if (!c[e.SowId]) c[e.SowId] = e;
+        return c;
+      }, {})
+    );
+    console.log(billedProjects);
+
+    let billedCompaniesByCurrentMonth = [];
+
+    for (var i = 0; i < KPIData.projects.companyProjects.length; i++) {
+      for (var j = 0; j < billedProjects.length; j++) {
+        if (
+          KPIData.projects.companyProjects[i].SowId === billedProjects[j].SowId
+        ) {
+          billedCompaniesByCurrentMonth.push(
+            KPIData.projects.companyProjects[i]
+          );
+        }
+      }
+    }
+    console.log(billedCompaniesByCurrentMonth);
+
+    // Get the number of companies billed during current month
+    let companiesByMonth = Object.values(
+      billedCompaniesByCurrentMonth.reduce((c, e) => {
+        if (!c[e.CompanyId]) c[e.CompanyId] = e;
+        return c;
+      }, {})
+    );
+
+    console.log(companiesByMonth.length);
+
+    // Return the avg hours billed per company during current month
+    return (sumHours / companiesByMonth.length).toFixed(2);
+  };
+
+  // Calculate the projected hours each month per project
+  const getMonthlyProjectedHours = () => {
+    let entries = KPIData.timesheetUserEntryDetails.entryDetails;
+
+    // Get only the timesheet entries for current month and year
+    let filteredEntriesByCurrentMonth = entries.filter((entry) => {
+      let entryDate = new Date(entry.EntryDate);
+      if (
+        entryDate.getMonth() + 1 === currentMonth &&
+        entryDate.getFullYear() === currentYear
+      ) {
+        return entry;
+      }
+    });
+    // filter out duplicate project entries to get projects billed in current month
+    let billedProjects = Object.values(
+      filteredEntriesByCurrentMonth.reduce((c, e) => {
+        if (!c[e.SowId]) c[e.SowId] = e;
+        return c;
+      }, {})
+    );
+
+    // Get project data for the projects billed in current month
+    let billedProjectsByCurrentMonth = [];
+
+    for (var i = 0; i < KPIData.projects.companyProjects.length; i++) {
+      for (var j = 0; j < billedProjects.length; j++) {
+        if (
+          KPIData.projects.companyProjects[i].SowId === billedProjects[j].SowId
+        ) {
+          billedProjectsByCurrentMonth.push(
+            KPIData.projects.companyProjects[i]
+          );
+        }
+      }
+    }
+    console.log(billedProjectsByCurrentMonth);
   };
 
   return (
@@ -640,16 +859,31 @@ function ControlCenter(props) {
                   caption="Companies with Projects"
                 />
                 <KPI value="0" caption="Employees Assigned" />
-                <KPI value="0" caption="Avg Hours Billed Per Resource" />
-                <KPI value="0" caption="Company Admins" />
+                <KPI
+                  value={getAvgTimesheetEntriesBilledPerMonth()}
+                  caption="Avg Hours Billed Per Resource"
+                />
+                <KPI
+                  value={KPIData.admins.allAdmins.length}
+                  caption="Company Admins"
+                />
                 <ProjectHoursKPI
                   className="project-hours-KPI-article"
-                  hoursBilled="0"
-                  hoursAllotted="0"
-                  percentage={(0 / 1) * 100 + "%"}
+                  hoursBilled={getMonthlyHoursBilled()}
+                  hoursAllotted={getAllottedProjectHoursByMonth()}
+                  percentage={
+                    (
+                      (getMonthlyHoursBilled() /
+                        getAllottedProjectHoursByMonth()) *
+                      100
+                    ).toFixed(2) + "%"
+                  }
                 />
                 <KPI value="0" caption="Active Projects" />
-                <CompanyHoursKPI hoursBilled="0" avgHoursPerCompany="0" />
+                <CompanyHoursKPI
+                  hoursBilled={getMonthlyHoursBilled()}
+                  avgHoursPerCompany={getAvgHoursPerCompanyByMonth()}
+                />
                 <KPI value="0" caption="Projects with time < 100" />
               </section>
 
