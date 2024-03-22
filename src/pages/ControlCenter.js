@@ -463,7 +463,7 @@ function ControlCenter(props) {
 
   let [KPIData, dispatchKPI] = useReducer(kpiReducer, initialKPIState);
   let companies = props.companies.read();
-  let timesheetEntryDetails = props.timesheetEntryDetails.read();
+  // let timesheetEntryDetails = props.timesheetEntryDetails.read();
   let projects = props.projects.read();
   let admins = getAllAdmins();
   // let admins = props.users.read().filter((admin) => {
@@ -491,7 +491,7 @@ function ControlCenter(props) {
       totalProjectedHours,
       avgHoursPerCompany,
       billedAndProjectedHoursByCompany,
-      timesheetEntryDetails,
+      // timesheetEntryDetails,
     ]).then((values) => {
       console.log("KPI Fetch Data: ", values);
       dispatchKPI({
@@ -524,10 +524,10 @@ function ControlCenter(props) {
           hoursBilledAndProjectedByCompanyProject: {
             calcBurntimeArr: values[8].value,
           },
-          timesheetUserEntryDetails: {
-            numUsers: values[9].value.numUsers, // total number of users who made a timesheet entry
-            entryDetails: values[9].value.entryDetails,
-          },
+          // timesheetUserEntryDetails: {
+          //   numUsers: values[9].value.numUsers, // total number of users who made a timesheet entry
+          //   entryDetails: values[9].value.entryDetails,
+          // },
         },
       });
     });
