@@ -428,6 +428,8 @@ const getProjectsBilledAndProjectedHoursByCompany = () => {
         ProjectBurnTime:
           parseFloat(project.TotalProjectedHours) -
           parseFloat(project.TotalBilledHours),
+        OriginalStartDate: project.OriginalStartDate,
+        OriginalEndDate: project.OriginalEndDate,
       }));
       console.log(projectsByCompanyDateWithBurnTime);
       return projectsByCompanyDateWithBurnTime;

@@ -242,7 +242,7 @@ function App() {
                   projects={resource.companyProjects}
                   companies={resource.companies}
                   companyAdmins={resource.companyAdmins}
-                  timesheetEntryDetails={resource.timesheetEntryDetails}
+                  // timesheetEntryDetails={resource.timesheetEntryDetails}
                   avgHrsBilled={resource.avgBilledHours}
                   hoursBilledPerProject={resource.hoursBilledPerProject}
                   totalBilledHours={resource.totalBilledHours}
