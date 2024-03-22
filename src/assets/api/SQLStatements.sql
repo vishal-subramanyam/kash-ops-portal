@@ -96,3 +96,10 @@ ON Timesheets.sow_id = Projects.sow_id
 WHERE Timesheets.non_billable_reason = 'n/a' OR Timesheets.non_billable_reason = 'N/A' OR Timesheets.non_billable_reason = ''
 GROUP BY Users.First_Name, Users.Last_Name, Users.Emp_Id, Timesheets.sow_id, Projects.company_id
 ORDER BY Users.first_name;
+
+
+-- Get Total Hours Billed By User by Daily Timesheet Entries
+SELECT Users.First_Name, Users.Last_Name, Users.Emp_Id, SUM(Timesheets.task_hours) FROM v_kash_operations_timesheet_table_date AS Timesheets JOIN KASH_OPERATIONS_USER_TABLE AS Users ON Timesheets.EMP_ID = Users.EMP_ID WHERE Timesheets.non_billable_reason = 'n/a' OR Timesheets.non_billable_reason = 'N/A' OR Timesheets.non_billable_reason = '' GROUP BY Users.First_Name, Users.Last_Name, Users.Emp_Id
+
+-- Get Total Hours Billed By User Timesheet by Period State Date
+SELECT Users.First_Name, Users.Last_Name, Users.Emp_Id, SUM(Timesheets.monday_hours +Timesheets.tuesday_hours +Timesheets.wednesday_hours + Timesheets.thursday_hours + Timesheets.friday_hours +Timesheets.saturday_hours + Timesheets.sunday_hours ) FROM KASH_OPERATIONS_TIMESHEET_TABLE AS Timesheets JOIN KASH_OPERATIONS_USER_TABLE AS Users ON Timesheets.EMP_ID = Users.EMP_ID WHERE Timesheets.non_billable_reason = 'n/a' OR Timesheets.non_billable_reason = 'N/A' OR Timesheets.non_billable_reason = '' GROUP BY Users.First_Name, Users.Last_Name, Users.Emp_Id

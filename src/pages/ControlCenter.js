@@ -461,63 +461,24 @@ function ControlCenter(props) {
     lowBurnTimeByRange: 0,
   };
 
-  let initialKPI = {
-    projects: {
-      monthly: 0,
-      lifetime: 0,
-      monthlyActive: 0,
-      lifetimeActive: 0,
-      companyProjects: [],
-    },
-    admins: {
-      allAdmins: [],
-      adminsPerCompany: [],
-    },
-    totalHoursBilledDetailed: {
-      hoursBilledByUserPerProject: [],
-      avgHoursBilledOverall: 0,
-      avgHoursBilledByRange: 0,
-    },
-    companiesAndHoursPerCompany: {
-      companies: [],
-      avgHoursOverall: 0,
-      avgHoursByRange: 0,
-    },
-    hoursBilledAndProjected: {
-      totalBilledHoursOverall: 0,
-      totalProjectedHoursOverall: 0,
-
-      hoursDetailArr: [],
-    },
-    hoursBilledAndProjectedByCompanyProject: {
-      calcBurntimeArr: [],
-    },
-    timesheetUserEntryDetails: {
-      numUsers: 0, // total number of users who made a timesheet entry
-      entryDetails: [],
-    },
-  };
-  let useCallbackDependency = true;
-  let [KPIData, dispatchKPI] = useReducer(kpiReducer, initialKPI);
-  let promiseResolutionValues = [];
-  //  let companyProjects = useCompanyProjects(); // Number of company projects
-  //  let companyAdmins = useCompanyAdmins(); // Number of company admins
-  //  let billedHoursDetailed = useBilledHours(); // Avg Hours Billed KPI
-  //  let billedAndProjectedHours = useBilledAndProjectedHours(); // Hours Billed and Hours Projected/Alloted KPI
-  //  let companiesAndHoursPerCompany = useAvgHoursPerCompany(); // Total Hours Billed / Avg Hours Per Company KPI
-  //  let hoursBilledAndProjectedByCompanyProject =
-  //    useBilledAndProjectedHoursByCompany();
+  let [KPIData, dispatchKPI] = useReducer(kpiReducer, initialKPIState);
   let companies = props.companies.read();
   let timesheetEntryDetails = props.timesheetEntryDetails.read();
-  let projects = getCompanyProjects();
+  let projects = props.projects.read();
   let admins = getAllAdmins();
-  let companyAdmins = getCompanyAdmins();
-  let avgBilledHours = getAvgBilledHours();
-  let billedHoursByUserByProject = hoursBilledPerProject();
-  let totalBilledHours = getTotalBilledHours();
-  let totalProjectedHours = getTotalProjectedHours();
-  let avgHoursPerCompany = getAvgHoursPerCompany();
-  let billedAndProjectedHoursByCompany = getBilledAndProjectedHoursByCompany();
+  // let admins = props.users.read().filter((admin) => {
+  //   if (admin.AdminLevel === "Super Admin" || admin.AdminLevel === "Admin") {
+  //     return admin;
+  //   }
+  // });
+  let companyAdmins = props.companyAdmins.read();
+  let avgBilledHours = props.avgHrsBilled.read();
+  let billedHoursByUserByProject = props.hoursBilledPerProject.read();
+  let totalBilledHours = props.totalBilledHours.read();
+  let totalProjectedHours = props.totalProjectedHours.read();
+  let avgHoursPerCompany = props.avgHoursPerCompany.read();
+  let billedAndProjectedHoursByCompany =
+    props.projectsBilledAndProjectedHoursByCompany.read();
 
   const resolvePromisesAndDispatch = useCallback(() => {
     Promise.allSettled([
@@ -573,7 +534,7 @@ function ControlCenter(props) {
   }, []);
 
   useEffect(() => {
-    resolvePromisesAndDispatch();
+    // resolvePromisesAndDispatch();
   }, []);
 
   const updateKPIByCompanyId = (e) => {
@@ -916,13 +877,7 @@ function ControlCenter(props) {
                   className="project-hours-KPI-article"
                   hoursBilled={initialKPIState.totalHrsBilledByRange}
                   hoursAllotted={initialKPIState.totalHrsProjectedByRange}
-                  percentage={
-                    (
-                      (initialKPIState.totalHrsBilledByRange /
-                        initialKPIState.totalHrsProjectedByRange) *
-                      100
-                    ).toFixed(2) + "%"
-                  }
+                  percentage={((0 / 1) * 100).toFixed(2) + "%"}
                 />
                 <KPI
                   value={initialKPIState.activeProjByRange}
@@ -968,13 +923,7 @@ function ControlCenter(props) {
                 <ProjectHoursKPI
                   hoursBilled={initialKPIState.totalHrsBilledLifetime}
                   hoursAllotted={initialKPIState.totalHrsProjectedLifetime}
-                  percentage={
-                    (
-                      (initialKPIState.totalHrsBilledLifetime /
-                        initialKPIState.totalHrsProjectedLifetime) *
-                      100
-                    ).toFixed(2) + "%"
-                  }
+                  percentage={((0 / 1) * 100).toFixed(2) + "%"}
                 />
                 <KPI
                   value={initialKPIState.activeProjLifetime}
@@ -987,7 +936,7 @@ function ControlCenter(props) {
                   }
                 />
                 <KPI
-                  value={lowBurnTimeLifetime}
+                  value={initialKPIState.lowBurnTimeLifetime}
                   caption="Projects with < 300 hours"
                 />
               </section>
