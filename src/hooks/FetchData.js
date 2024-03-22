@@ -216,7 +216,10 @@ const getAvgBilledHours = () => {
       //   "Timesheet Details Grouped by Users Billed Hours: ",
       //   res.data
       // );
-      let convertedNums = res.data.map((num) => parseFloat(num.Sum));
+      console.log(res.data);
+      let convertedNums = res.data.map((num) =>
+        parseFloat(num.TotalBilledHours)
+      );
       let totalHours = convertedNums.reduce((a, c) => a + c, 0);
       let avgOverallHours = totalHours / res.data.length;
       // console.log(

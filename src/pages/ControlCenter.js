@@ -116,7 +116,7 @@ function ControlCenter(props) {
     activeProjByRange: 0,
     allAdminsDet: [],
     companyAdminsDet: [],
-    allCompaniesDet: [],
+    // allCompaniesDet: [],
     hrsBilledByUserByProjDet: [],
     avgHrsBilledByUserLifetime: 0,
     avgHsBilledByUserByRange: 0,
@@ -166,33 +166,25 @@ function ControlCenter(props) {
       dispatchKPI({
         type: "initialize",
         payload: {
-          projects: {
-            monthly: values[0].value.projects.monthly,
-            lifetime: values[0].value.projects.lifetime,
-            monthlyActive: values[0].value.projects.monthlyActive,
-            lifetimeActive: values[0].value.projects.lifetimeActive,
-            companyProjects: values[0].value.projects.companyProjects,
-          },
-          admins: {
-            allAdmins: values[1].value,
-            adminsPerCompany: values[2].value,
-          },
-          totalHoursBilledDetailed: {
-            hoursBilledByUserPerProject: values[4].value,
-            avgHoursBilledOverall: values[3].value,
-          },
-          companiesAndHoursPerCompany: {
-            companies: values[7].value.companies, // will have duplicate companies because of the projects within a company
-            avgHours: values[7].value.avgHours,
-          },
-          hoursBilledAndProjected: {
-            totalBilledHours: values[5].value,
-            totalProjectedHours: values[6].value,
-            hoursDetailArr: values[5].value.hoursDetailArr, // unable to get the array with details because the getTotalBilledHours function throws an error when returning an object containing the total hours billed value and hours detail array
-          },
-          hoursBilledAndProjectedByCompanyProject: {
-            calcBurntimeArr: values[8].value,
-          },
+          compProjDet: values[0].value.companyProjects,
+          numProjLifetim: values[0].value.lifetime,
+          numProjByRange: values[0].value.monthly,
+          activeProjLifetime: values[0].value.lifetimeActive,
+          activeProjByRange: values[0].value.monthlyActive,
+          allAdminsDet: values[1].value,
+          companyAdminsDet: values[2].value,
+          // allCompaniesDet: [],
+          hrsBilledByUserByProjDet: values[4].value,
+          avgHrsBilledByUserLifetime: 0,
+          avgHsBilledByUserByRange: 0,
+          avgHrsBilledByCompLifetime: 0,
+          avgHrsBilledByCompByRange: 0,
+          totalHrsBilledLifetime: 0,
+          totalHrsBilledByRange: 0,
+          totalHrsProjectedLifetime: 0,
+          totalHrsProjectedByRange: 0,
+          lowBurnTimeLifetime: 0,
+          lowBurnTimeByRange: 0,
           // timesheetUserEntryDetails: {
           //   numUsers: values[9].value.numUsers, // total number of users who made a timesheet entry
           //   entryDetails: values[9].value.entryDetails,
@@ -203,7 +195,7 @@ function ControlCenter(props) {
   }, []);
 
   useEffect(() => {
-    // resolvePromisesAndDispatch();
+    resolvePromisesAndDispatch();
   }, []);
 
   const updateKPIByCompanyId = (e) => {
