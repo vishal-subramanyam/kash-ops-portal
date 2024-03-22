@@ -227,6 +227,11 @@ const getAvgBilledHours = () => {
       //   convertedNums
       // );
       // console.log("Avg Hours Billed: ", avgOverallHours);
+
+      let avgHours = {
+        lifetime: avgOverallHours.toFixed(2),
+        //  range: calc avg hours billed for initial page load - projects billed during curren month with consideration to other time period and company specific filtering
+      };
       return avgOverallHours.toFixed(2);
     })
     .catch((err) => {

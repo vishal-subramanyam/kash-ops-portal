@@ -175,7 +175,7 @@ function ControlCenter(props) {
           companyAdminsDet: values[2].value,
           // allCompaniesDet: [],
           hrsBilledByUserByProjDet: values[4].value,
-          avgHrsBilledByUserLifetime: 0,
+          avgHrsBilledByUserLifetime: values[3].value,
           avgHsBilledByUserByRange: 0,
           avgHrsBilledByCompLifetime: 0,
           avgHrsBilledByCompByRange: 0,
