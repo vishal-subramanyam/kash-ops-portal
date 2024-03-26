@@ -551,26 +551,41 @@ const getHoursByRange = () => {
             86400000
         );
 
-        let projectedHrsByRange;
+        // Return only the projects that have an actual project duration - some projects are created without accurate start and end dates which messes up the range calculation
+        let projectedHrsByDay;
         if (projectDurationInDays === 0) {
           projectDurationInDays = 1;
+          return {
+            projectName: "n/a",
+            projectSowId: "n/a",
+            projectDuration: "n/a",
+            projectedHrsByDay: 0,
+            projectedHrsByMonth: 0,
+          };
+        } else {
+          projectedHrsByDay =
+            project.TotalProjectedHours / projectDurationInDays;
         }
-        projectedHrsByRange =
-          project.TotalProjectedHours / projectDurationInDays;
 
         return {
           projectName: project.ProjectCategory,
           projectSowId: project.SowId,
           projectDuration: projectDurationInDays,
-          projectedHrsByRange: projectedHrsByRange,
+          projectedHrsByDay: projectedHrsByDay.toFixed(2),
+          projectedHrsByMonth: projectedHrsByDay.toFixed(2) * 30,
         };
       });
 
       console.log(getProjectedHoursByRange);
-
+      let calcProjectedHoursByMonth = getProjectedHoursByRange.reduce(
+        (a, c) => a + c.projectedHrsByMonth,
+        0
+      );
+      console.log(calcProjectedHoursByMonth);
       let hoursBilledByRange = {
         avgHoursBilledByCompanyRange: avgHrsByCompany.toFixed(2),
         totalHoursBilledByRange: totalHoursBilled,
+        totalHoursProjectedByRange: calcProjectedHoursByMonth.toFixed(2),
       };
 
       return hoursBilledByRange;

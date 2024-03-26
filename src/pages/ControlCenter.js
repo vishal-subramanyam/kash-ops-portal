@@ -187,7 +187,7 @@ function ControlCenter(props) {
           totalHrsBilledLifetime: values[7].value.hoursBilled,
           totalHrsBilledByRange: values[9].value.totalHoursBilledByRange,
           totalHrsProjectedLifetime: values[8].value,
-          totalHrsProjectedByRange: 0,
+          totalHrsProjectedByRange: values[9].value.totalHoursProjectedByRange,
           lowBurnTimeLifetime: 0,
           lowBurnTimeByRange: 0,
           // timesheetUserEntryDetails: {
@@ -536,14 +536,20 @@ function ControlCenter(props) {
                   caption="Avg Hours Billed Per Resource"
                 />
                 <KPI
-                  value={KPIData.numCompanyAdmins.length}
+                  value={KPIData.numCompanyAdmins}
                   caption="Company Admins"
                 />
                 <ProjectHoursKPI
                   className="project-hours-KPI-article"
                   hoursBilled={KPIData.totalHrsBilledByRange}
                   hoursAllotted={KPIData.totalHrsProjectedByRange}
-                  percentage={((0 / 1) * 100).toFixed(2) + "%"}
+                  percentage={
+                    (
+                      (KPIData.totalHrsBilledByRange /
+                        KPIData.totalHrsProjectedByRange) *
+                      100
+                    ).toFixed(2) + "%"
+                  }
                 />
                 <KPI
                   value={KPIData.activeProjByRange}
@@ -583,7 +589,7 @@ function ControlCenter(props) {
                   caption="Avg Hours Billed Per Resource"
                 />
                 <KPI
-                  value={KPIData.numCompanyAdmins.length}
+                  value={KPIData.numCompanyAdmins}
                   caption="Company Admins"
                 />
                 <ProjectHoursKPI
