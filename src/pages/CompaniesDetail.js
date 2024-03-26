@@ -21,7 +21,7 @@ function CompaniesDetail(props) {
   console.log("company projects", projectsHoursBilledProjected);
   console.log(
     "company admins",
-    admins.filter((admin) => {
+    admins.companyAdmins.filter((admin) => {
       return admin.EmpId === loggedInUserInfo.EmpId;
     })
   );
@@ -85,7 +85,7 @@ function CompaniesDetail(props) {
                     projects={projects.companyProjects.filter(
                       (project) => company.CompanyId === project.CompanyId
                     )}
-                    admins={admins.filter(
+                    admins={admins.compAdminsOverall.filter(
                       (admin) => company.CompanyId === admin.CompanyId
                     )}
                     contacts={contacts.filter(

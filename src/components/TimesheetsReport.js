@@ -28,6 +28,7 @@ function TimesheetsReport(props) {
     TimesheetStatusEntry: true,
     TuesdayHours: true,
     WednesdayHours: true,
+    TotalHours: true,
   });
   let alertMessage = useRef();
   let [message, setMessage] = useState("");
@@ -127,6 +128,14 @@ function TimesheetsReport(props) {
     EmpId: item.EmpId,
     TimesheetStatusEntry: item.TimesheetStatusEntry,
     MondayHours: item.MondayHours,
+    TotalHours:
+      parseFloat(item.SundayHours) +
+      parseFloat(item.ThursdayHours) +
+      parseFloat(item.WednesdayHours) +
+      parseFloat(item.FridayHours) +
+      parseFloat(item.SaturdayHours) +
+      parseFloat(item.TuesdayHours) +
+      parseFloat(item.MondayHours),
   }));
   console.log(transformedRowsTS);
   console.log(allTimesheetRecords);
@@ -157,6 +166,7 @@ function TimesheetsReport(props) {
     "FridayHours",
     "SaturdayHours",
     "SundayHours",
+    "TotalHours",
   ];
 
   const columnList = customColumnOrder.map((item) => {

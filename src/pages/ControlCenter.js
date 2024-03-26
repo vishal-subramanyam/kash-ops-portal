@@ -176,7 +176,7 @@ function ControlCenter(props) {
           activeProjByRange: values[0].value.monthlyActive,
           allAdminsDet: values[1].value,
           companyAdminsDet: values[2].value.compAdminsOverall,
-          numCompanyAdmins: values[2].value.individualCompAdmins,
+          numCompanyAdmins: values[2].value.companyAdmins.length,
           // allCompaniesDet: [],
           avgHrsBilledByUserLifetime: values[3].value,
           avgHrsBilledByUserByRange: values[4].value.avgHoursByRange,

@@ -17,7 +17,7 @@ function EmployeesDetail(props) {
   console.log(allCompanyAdmins);
   //   filter allCompanyAdmins array to remove duplicate company names
   let distinctCompanies = Object.values(
-    allCompanyAdmins.reduce((c, e) => {
+    allCompanyAdmins.compAdminsOverall.reduce((c, e) => {
       if (!c[e.CompanyName]) {
         c[e.CompanyName] = e;
       }

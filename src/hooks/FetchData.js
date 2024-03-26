@@ -98,6 +98,7 @@ const fetchCompanyAdmins = () => {
     .then((res) => {
       // console.log("Company Admins with Company Details: ", res.data);
 
+      // Get array of individual company admins
       let individualCompAdmins = Object.values(
         res.data.reduce((c, e) => {
           if (!c[e.EmpId]) c[e.EmpId] = e;
@@ -105,9 +106,17 @@ const fetchCompanyAdmins = () => {
         }, {})
       );
 
+      let individualCompanies = Object.values(
+        res.data.reduce((c, e) => {
+          if (!c[e.CompanyId]) c[e.CompanyId] = e;
+          return c;
+        }, {})
+      );
+
       let companyAdminDetails = {
         compAdminsOverall: res.data, // call all data to accompodate filtering by company in control center
-        individualCompAdmins: individualCompAdmins,
+        companyAdmins: individualCompAdmins,
+        companies: individualCompanies,
       };
       return companyAdminDetails;
     })
