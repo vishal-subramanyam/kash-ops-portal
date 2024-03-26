@@ -128,14 +128,15 @@ function TimesheetsReport(props) {
     EmpId: item.EmpId,
     TimesheetStatusEntry: item.TimesheetStatusEntry,
     MondayHours: item.MondayHours,
-    TotalHours:
+    TotalHours: (
       parseFloat(item.SundayHours) +
       parseFloat(item.ThursdayHours) +
       parseFloat(item.WednesdayHours) +
       parseFloat(item.FridayHours) +
       parseFloat(item.SaturdayHours) +
       parseFloat(item.TuesdayHours) +
-      parseFloat(item.MondayHours),
+      parseFloat(item.MondayHours)
+    ).toFixed(2),
   }));
   console.log(transformedRowsTS);
   console.log(allTimesheetRecords);
