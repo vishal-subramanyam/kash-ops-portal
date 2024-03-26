@@ -102,7 +102,7 @@ function kpiReducer(state, action) {
 function ControlCenter(props) {
   // let currentDate = new Date();
   // let currentDateUnix = Date.parse(currentDate);
-  let [tabActive, setTabActive] = useState("tab2");
+  let [tabActive, setTabActive] = useState("card");
   let controlCenterKPITabActive =
     "ControlCenter--tab ControlCenter--tab-active";
   let controlCenterKPITabNotActive =
@@ -110,16 +110,17 @@ function ControlCenter(props) {
 
   let initialKPIState = {
     compProjDet: [],
-    numProjLifetim: 0,
+    numProjLifetime: 0,
     numProjByRange: 0,
     activeProjLifetime: 0,
     activeProjByRange: 0,
     allAdminsDet: [],
     companyAdminsDet: [],
+    numCompanyAdmins: [],
     // allCompaniesDet: [],
     hrsBilledByUserByProjDet: [],
     avgHrsBilledByUserLifetime: 0,
-    avgHsBilledByUserByRange: 0,
+    avgHrsBilledByUserByRange: 0,
     avgHrsBilledByCompLifetime: 0,
     avgHrsBilledByCompByRange: 0,
     totalHrsBilledLifetime: 0,
@@ -142,46 +143,50 @@ function ControlCenter(props) {
   // });
   let companyAdmins = props.companyAdmins.read();
   let avgBilledHours = props.avgHrsBilled.read();
+  let getAvgBilledHoursByRange = props.avgBilledHoursByRange.read();
   let billedHoursByUserByProject = props.hoursBilledPerProject.read();
   let totalBilledHours = props.totalBilledHours.read();
   let totalProjectedHours = props.totalProjectedHours.read();
   let avgHoursPerCompany = props.avgHoursPerCompany.read();
   let billedAndProjectedHoursByCompany =
     props.projectsBilledAndProjectedHoursByCompany.read();
-
+  let getHoursByRange = props.getHoursByRange.read();
   const resolvePromisesAndDispatch = useCallback(() => {
     Promise.allSettled([
       projects,
       admins,
       companyAdmins,
       avgBilledHours,
+      getAvgBilledHoursByRange,
       billedHoursByUserByProject,
+      avgHoursPerCompany,
       totalBilledHours,
       totalProjectedHours,
-      avgHoursPerCompany,
+      getHoursByRange,
       billedAndProjectedHoursByCompany,
-      // timesheetEntryDetails,
     ]).then((values) => {
       console.log("KPI Fetch Data: ", values);
       dispatchKPI({
         type: "initialize",
         payload: {
           compProjDet: values[0].value.companyProjects,
-          numProjLifetim: values[0].value.lifetime,
+          numProjLifetime: values[0].value.lifetime,
           numProjByRange: values[0].value.monthly,
           activeProjLifetime: values[0].value.lifetimeActive,
           activeProjByRange: values[0].value.monthlyActive,
           allAdminsDet: values[1].value,
-          companyAdminsDet: values[2].value,
+          companyAdminsDet: values[2].value.compAdminsOverall,
+          numCompanyAdmins: values[2].value.individualCompAdmins,
           // allCompaniesDet: [],
-          hrsBilledByUserByProjDet: values[4].value,
           avgHrsBilledByUserLifetime: values[3].value,
-          avgHsBilledByUserByRange: 0,
-          avgHrsBilledByCompLifetime: 0,
-          avgHrsBilledByCompByRange: 0,
-          totalHrsBilledLifetime: 0,
-          totalHrsBilledByRange: 0,
-          totalHrsProjectedLifetime: 0,
+          avgHrsBilledByUserByRange: values[4].value.avgHoursByRange,
+          hrsBilledByUserByProjDet: values[5].value, // Array detailing company and project associated with a user entry who billed a project and those total billed hours
+          avgHrsBilledByCompLifetime: values[6].value.avgHoursLifetime,
+          avgHrsBilledByCompByRange:
+            values[9].value.avgHoursBilledByCompanyRange,
+          totalHrsBilledLifetime: values[7].value.hoursBilled,
+          totalHrsBilledByRange: values[9].value.totalHoursBilledByRange,
+          totalHrsProjectedLifetime: values[8].value,
           totalHrsProjectedByRange: 0,
           lowBurnTimeLifetime: 0,
           lowBurnTimeByRange: 0,
@@ -496,60 +501,60 @@ function ControlCenter(props) {
           <ul className="ControlCenter--tabs-container">
             <li
               className={
-                tabActive === "tab1"
+                tabActive === "card"
                   ? controlCenterKPITabActive
                   : controlCenterKPITabNotActive
               }
-              onClick={() => setTabActive("tab1")}
+              onClick={() => setTabActive("card")}
             >
               <span>Monthly</span>
             </li>
             <li
               className={
-                tabActive === "tab2"
+                tabActive === "table"
                   ? controlCenterKPITabActive
                   : controlCenterKPITabNotActive
               }
-              onClick={() => setTabActive("tab2")}
+              onClick={() => setTabActive("table")}
             >
               <span>Lifetime</span>
             </li>
           </ul>
 
-          {tabActive === "tab1" ? (
+          {tabActive === "card" ? (
             // Monthly Tab KPI Display
             <section className="ControlCenter--KPI-section-container ControlCenter--KPI-section-container-active">
               {/* KPI section */}
               <section className="ControlCenter--KPI-section-wrapper">
                 <KPI
-                  value={initialKPIState.numProjByRange}
+                  value={KPIData.numProjByRange}
                   caption="Companies with Projects"
                 />
                 <KPI value="0" caption="Employees Assigned" />
                 <KPI
-                  value={initialKPIState.avgHsBilledByUserByRange}
+                  value={KPIData.avgHrsBilledByUserByRange}
                   caption="Avg Hours Billed Per Resource"
                 />
                 <KPI
-                  value={initialKPIState.companyAdminsDet.length}
+                  value={KPIData.numCompanyAdmins.length}
                   caption="Company Admins"
                 />
                 <ProjectHoursKPI
                   className="project-hours-KPI-article"
-                  hoursBilled={initialKPIState.totalHrsBilledByRange}
-                  hoursAllotted={initialKPIState.totalHrsProjectedByRange}
+                  hoursBilled={KPIData.totalHrsBilledByRange}
+                  hoursAllotted={KPIData.totalHrsProjectedByRange}
                   percentage={((0 / 1) * 100).toFixed(2) + "%"}
                 />
                 <KPI
-                  value={initialKPIState.activeProjByRange}
+                  value={KPIData.activeProjByRange}
                   caption="Active Projects"
                 />
                 <CompanyHoursKPI
-                  hoursBilled={initialKPIState.totalHrsBilledByRange}
-                  avgHoursPerCompany={initialKPIState.avgHrsBilledByCompByRange}
+                  hoursBilled={KPIData.totalHrsBilledByRange}
+                  avgHoursPerCompany={KPIData.avgHrsBilledByCompByRange}
                 />
                 <KPI
-                  value={initialKPIState.lowBurnTimeByRange}
+                  value={KPIData.lowBurnTimeByRange}
                   caption="Projects with time < 100"
                 />
               </section>
@@ -569,35 +574,39 @@ function ControlCenter(props) {
               {/* KPI section */}
               <section className="ControlCenter--KPI-section-wrapper">
                 <KPI
-                  value={initialKPIState.numProjLifetim}
+                  value={KPIData.numProjLifetime}
                   caption="Companies with Projects"
                 />
                 <KPI value="0" caption="Employees Assigned" />
                 <KPI
-                  value={initialKPIState.avgHrsBilledByUserLifetime}
+                  value={KPIData.avgHrsBilledByUserLifetime}
                   caption="Avg Hours Billed Per Resource"
                 />
                 <KPI
-                  value={initialKPIState.companyAdminsDet.length}
+                  value={KPIData.numCompanyAdmins.length}
                   caption="Company Admins"
                 />
                 <ProjectHoursKPI
-                  hoursBilled={initialKPIState.totalHrsBilledLifetime}
-                  hoursAllotted={initialKPIState.totalHrsProjectedLifetime}
-                  percentage={((0 / 1) * 100).toFixed(2) + "%"}
-                />
-                <KPI
-                  value={initialKPIState.activeProjLifetime}
-                  caption="Active Projects"
-                />
-                <CompanyHoursKPI
-                  hoursBilled={initialKPIState.totalHrsBilledLifetime}
-                  avgHoursPerCompany={
-                    initialKPIState.avgHrsBilledByCompLifetime
+                  hoursBilled={KPIData.totalHrsBilledLifetime}
+                  hoursAllotted={KPIData.totalHrsProjectedLifetime}
+                  percentage={
+                    (
+                      (KPIData.totalHrsBilledLifetime /
+                        KPIData.totalHrsProjectedLifetime) *
+                      100
+                    ).toFixed(2) + "%"
                   }
                 />
                 <KPI
-                  value={initialKPIState.lowBurnTimeLifetime}
+                  value={KPIData.activeProjLifetime}
+                  caption="Active Projects"
+                />
+                <CompanyHoursKPI
+                  hoursBilled={KPIData.totalHrsBilledLifetime}
+                  avgHoursPerCompany={KPIData.avgHrsBilledByCompLifetime}
+                />
+                <KPI
+                  value={KPIData.lowBurnTimeLifetime}
                   caption="Projects with < 300 hours"
                 />
               </section>

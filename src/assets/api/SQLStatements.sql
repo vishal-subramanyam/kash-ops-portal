@@ -156,6 +156,17 @@ SELECT Users.First_Name, Users.Last_Name, Users.Emp_Id, SUM(Timesheets.monday_ho
 
         SELECT Projects.project_category, Projects.sow_id, Companies.company_name, Projects.total_projected_hours, SUM(Timesheets.task_hours) AS Total_Billed_Hours FROM kash_operations_created_projects_table AS Projects JOIN kash_operations_company_table AS Companies ON Projects.company_id = Companies.company_id JOIN v_kash_operations_timesheet_table_date AS Timesheets ON Projects.sow_id = Timesheets.sow_id WHERE Timesheets.non_billable_reason = 'n/a' OR Timesheets.non_billable_reason = 'N/A' OR Timesheets.non_billable_reason = '' GROUP BY Projects.project_category, Projects.sow_id, Companies.company_name ORDER BY Companies.company_name
 
+
+SELECT Projects.project_category, Projects.sow_id, Companies.company_name, Projects.total_projected_hours, Timesheets.Entry_Date, SUM(Timesheets.task_hours) AS Total_Billed_Hours FROM v_kash_operations_timesheet_table_date AS Timesheets JOIN kash_operations_created_projects_table AS Projects ON Projects.sow_id = Timesheets.sow_id JOIN kash_operations_company_table AS Companies ON Projects.company_id = Companies.company_id WHERE Timesheets.non_billable_reason = 'n/a' OR Timesheets.non_billable_reason = 'N/A' OR Timesheets.non_billable_reason = '' GROUP BY Projects.project_category, Projects.sow_id, Companies.company_name, Timesheets.Entry_Date ORDER BY Companies.company_name
+
+
+
+
         -- projectsBilledAndProjectedHoursByCompany
             -- TABLE: HOURS_BILLED_AND_PROJECTED_BY_COMPANY_PROJECT_TABLE
         select Projects.project_category, Projects.sow_id, Projects.original_start_date, Projects.original_end_date, Projects.total_projected_hours, Projects.current_status, All_Timesheets.Total_Billed_Hours, Companies.company_id, Companies.company_name from kash_operations_created_projects_table as projects LEFT OUTER JOIN (select Timesheets.sow_id, SUM(Timesheets.task_hours) as Total_Billed_Hours from v_kash_operations_timesheet_table_date as Timesheets group by Timesheets.sow_id) as All_Timesheets ON Projects.sow_id = All_Timesheets.sow_id join kash_operations_company_table as Companies on Projects.company_id = Companies.company_id
+
+        -- Get all billed hours with project and company data
+            -- TABLE: ALL_TIMESHEETS_ENTRY_DATE_COMPANY_PROJECT
+        SELECT Projects.project_category, Projects.sow_id, Projects.original_start_date, Projects.original_end_date, Projects.total_projected_hours, Projects.current_status, Timesheets.Entry_Date, Timesheets.Emp_Id, Timesheets.Task_Hours, Companies.company_id, Companies.company_name FROM v_kash_operations_timesheet_table_date as Timesheets join kash_operations_created_projects_table as projects on Timesheets.Sow_id = Projects.Sow_id join kash_operations_company_table as companies on Projects.Company_id = Companies.Company_id WHERE Timesheets.non_billable_reason = 'n/a' OR Timesheets.non_billable_reason = 'N/A' OR Timesheets.non_billable_reason = '' order by entry_date
+

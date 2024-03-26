@@ -244,10 +244,12 @@ function App() {
                   companyAdmins={resource.companyAdmins}
                   // timesheetEntryDetails={resource.timesheetEntryDetails}
                   avgHrsBilled={resource.avgBilledHours}
+                  avgBilledHoursByRange={resource.avgBilledHoursByRange}
                   hoursBilledPerProject={resource.hoursBilledPerProject}
                   totalBilledHours={resource.totalBilledHours}
                   totalProjectedHours={resource.totalProjectedHours}
                   avgHoursPerCompany={resource.avgHoursPerCompany}
+                  getHoursByRange={resource.getHoursByRange}
                   projectsBilledAndProjectedHoursByCompany={
                     resource.projectsBilledAndProjectedHoursByCompany
                   }

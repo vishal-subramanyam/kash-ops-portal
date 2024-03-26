@@ -1,5 +1,7 @@
 import { domain } from "../assets/api/apiEndpoints";
 let currentDate = new Date();
+let currentMonth = currentDate.getMonth() + 1;
+let currentYear = currentDate.getFullYear();
 let currentDateUnix = Date.parse(currentDate);
 
 // ===========================================
@@ -42,14 +44,16 @@ export const createResource = () => {
     companyProjects: wrapPromise(getCompanyProjects()),
     companyContacts: wrapPromise(getCompanyContacts()),
     avgBilledHours: wrapPromise(getAvgBilledHours()),
-    hoursBilledPerProject: wrapPromise(hoursBilledPerProject()),
+    avgBilledHoursByRange: wrapPromise(getAvgBilledHoursByRange()),
+    hoursBilledPerProject: wrapPromise(hoursBilledPerProject()), // Billed hours by user per project
     totalBilledHours: wrapPromise(getTotalBilledHours()),
     totalProjectedHours: wrapPromise(getTotalProjectedHours()),
     avgHoursPerCompany: wrapPromise(getAvgHoursPerCompany()),
+    getHoursByRange: wrapPromise(getHoursByRange()),
     projectsBilledAndProjectedHoursByCompany: wrapPromise(
       getProjectsBilledAndProjectedHoursByCompany()
     ),
-    timesheetEntryDetails: wrapPromise(getTimesheetEntryDetails()),
+    // timesheetEntryDetails: wrapPromise(getTimesheetEntryDetails()),
   };
 };
 
@@ -93,7 +97,19 @@ const fetchCompanyAdmins = () => {
     .then((res) => res.json())
     .then((res) => {
       // console.log("Company Admins with Company Details: ", res.data);
-      return res.data;
+
+      let individualCompAdmins = Object.values(
+        res.data.reduce((c, e) => {
+          if (!c[e.EmpId]) c[e.EmpId] = e;
+          return c;
+        }, {})
+      );
+
+      let companyAdminDetails = {
+        compAdminsOverall: res.data, // call all data to accompodate filtering by company in control center
+        individualCompAdmins: individualCompAdmins,
+      };
+      return companyAdminDetails;
     })
     .catch((err) => {
       alert(`Unable to load users from database. Error: ${err}`);
@@ -199,7 +215,7 @@ const getCompanyProjects = () => {
 // ====================================================================================
 
 const getAvgBilledHours = () => {
-  // Get the total hours billed by users
+  // Get the total hours billed by users - total hours billed per usesr
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
@@ -227,11 +243,6 @@ const getAvgBilledHours = () => {
       //   convertedNums
       // );
       // console.log("Avg Hours Billed: ", avgOverallHours);
-
-      let avgHours = {
-        lifetime: avgOverallHours.toFixed(2),
-        //  range: calc avg hours billed for initial page load - projects billed during curren month with consideration to other time period and company specific filtering
-      };
       return avgOverallHours.toFixed(2);
     })
     .catch((err) => {
@@ -241,6 +252,67 @@ const getAvgBilledHours = () => {
   return response;
 };
 
+const getAvgBilledHoursByRange = () => {
+  // Get the total hours billed by users - total hours billed per usesr
+  let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      _keyword_: "TIMESHEETS_ENTRY_DATE_DETAILED",
+    }),
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      // console.log(res.data);
+
+      //  filter out hours billed within current month
+      let hoursBilledCurrentMonth = res.data.filter((entry) => {
+        let entryDate = new Date(entry.EntryDate);
+        if (
+          entryDate.getMonth() + 1 === currentMonth &&
+          entryDate.getFullYear() === currentYear
+        ) {
+          return entry;
+        }
+      });
+      // Get the total number of employees who input billable entries within current month
+      let numUsersBilledCurrentMonth = Object.values(
+        hoursBilledCurrentMonth.reduce((c, e) => {
+          if (!c[e.SowId]) c[e.SowId] = e;
+          return c;
+        }, {})
+      );
+      //  Calculate the total hours billed within current month
+      let convertedNums = hoursBilledCurrentMonth.map((num) =>
+        parseFloat(num.TaskHours)
+      );
+      let totalHours = convertedNums.reduce((a, c) => a + c, 0);
+
+      console.log(
+        "Total Hours Billed:",
+        totalHours,
+        "Num users billed: ",
+        numUsersBilledCurrentMonth
+      );
+      let avgHoursByRange = totalHours / numUsersBilledCurrentMonth.length;
+      let hoursBilled = {
+        lifetimeHoursArr: res.data,
+        avgHoursByRange: avgHoursByRange.toFixed(2),
+      };
+
+      return hoursBilled;
+    })
+    .catch((err) => {
+      return err;
+    });
+
+  return response;
+};
+
+// Get total amount of hours
 const hoursBilledPerProject = () => {
   // Get the total of hours billed by users per company project
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
@@ -293,7 +365,7 @@ const getTotalBilledHours = () => {
       // );
       // get the sum of billed hours
       let totalHoursBilled = convertedNums.reduce((a, c) => a + c, 0);
-      // console.log("Total Hours Billed: ", totalHoursBilled);
+      console.log("Total Hours Billed: ", totalHoursBilled);
       let hoursDetail = {
         hoursBilled: totalHoursBilled,
         hoursDeatilArr: res.data,
@@ -309,7 +381,7 @@ const getTotalBilledHours = () => {
 };
 
 const getTotalProjectedHours = () => {
-  // fetch the sum of project total hours of each project
+  // fetch the sum of project total hours of each project - return one number as total hours billed
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
@@ -393,7 +465,7 @@ const getAvgHoursPerCompany = () => {
       // console.log(avgHoursByCompanyConsolidated);
       let companiesAndHoursBilled = {
         companiesProjectsBilled: res.data,
-        avgHours: parseFloat(avgHoursByCompanyConsolidated),
+        avgHoursLifetime: parseFloat(avgHoursByCompanyConsolidated).toFixed(2),
       };
       // console.log(
       //   "companies and hours billed object:",
@@ -405,6 +477,99 @@ const getAvgHoursPerCompany = () => {
       return err;
     });
 
+  return response;
+};
+
+// Get total Hours billed to each company by range then the billed avg.
+// Get total hours billed by range overall
+// Get total hours projected within range
+// Get burn time within range
+const getHoursByRange = () => {
+  let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      _keyword_: "ALL_TIMESHEETS_ENTRY_DATE_COMPANY_PROJECT",
+    }),
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      let hoursBilledCurrentMonth = res.data.filter((entry) => {
+        let entryDate = new Date(entry.EntryDate);
+        if (
+          entryDate.getMonth() + 1 === currentMonth &&
+          entryDate.getFullYear() === currentYear
+        ) {
+          return entry;
+        }
+      });
+
+      // Get the total number of companies billed within current range
+      let numCompaniesBilledCurrentMonth = Object.values(
+        hoursBilledCurrentMonth.reduce((c, e) => {
+          if (!c[e.CompanyId]) c[e.CompanyId] = e;
+          return c;
+        }, {})
+      );
+      console.log(numCompaniesBilledCurrentMonth);
+      //  Calculate the total hours billed within current month
+      let convertedNums = hoursBilledCurrentMonth.map((num) =>
+        parseFloat(num.TaskHours)
+      );
+      let totalHoursBilled = convertedNums.reduce((a, c) => a + c, 0);
+
+      // Calculate total hours billed per company within current month
+      let avgHrsByCompany =
+        totalHoursBilled / numCompaniesBilledCurrentMonth.length;
+
+      // Get all the individual projects billed within current month
+      let getProjectsBilledByRange = Object.values(
+        hoursBilledCurrentMonth.reduce((c, e) => {
+          if (!c[e.SowId]) c[e.SowId] = e;
+          return c;
+        }, {})
+      );
+      console.log(getProjectsBilledByRange);
+
+      // Create an array of each project including their projected hours divided by the number of days alloted for project
+      let getProjectedHoursByRange = getProjectsBilledByRange.map((project) => {
+        let projectDurationInDays = Math.floor(
+          (Date.parse(project.OriginalEndDate) -
+            Date.parse(project.OriginalStartDate)) /
+            86400000
+        );
+
+        let projectedHrsByRange;
+        if (projectDurationInDays === 0) {
+          projectDurationInDays = 1;
+        }
+        projectedHrsByRange =
+          project.TotalProjectedHours / projectDurationInDays;
+
+        return {
+          projectName: project.ProjectCategory,
+          projectSowId: project.SowId,
+          projectDuration: projectDurationInDays,
+          projectedHrsByRange: projectedHrsByRange,
+        };
+      });
+
+      console.log(getProjectedHoursByRange);
+
+      let hoursBilledByRange = {
+        avgHoursBilledByCompanyRange: avgHrsByCompany.toFixed(2),
+        totalHoursBilledByRange: totalHoursBilled,
+      };
+
+      return hoursBilledByRange;
+    })
+
+    .catch((err) => {
+      return err;
+    });
   return response;
 };
 

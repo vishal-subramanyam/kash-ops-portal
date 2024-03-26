@@ -35,15 +35,17 @@ function EditCompanyAdmin(props) {
   let employeeInfoCardTabNotActive =
     "EmployeesDetail--tab EmployeesDetail--tab-not-active";
   //   filter allCompanyAdmins array to remove duplicate company names
-  let distinctCompanies = Object.values(
-    companyAdmins.reduce((c, e) => {
-      if (!c[e.CompanyName]) {
-        c[e.CompanyName] = e;
-      }
-      return c;
-    }, {})
-  );
-  console.log(distinctCompanies);
+  let distinctCompanies = companyAdmins.individualCompAdmins;
+
+  // let distinctCompanies = Object.values(
+  //   companyAdmins.reduce((c, e) => {
+  //     if (!c[e.CompanyName]) {
+  //       c[e.CompanyName] = e;
+  //     }
+  //     return c;
+  //   }, {})
+  // );
+  console.log(companyAdmins);
 
   useEffect(() => {
     getAllCompanies();
@@ -582,7 +584,7 @@ function EditCompanyAdmin(props) {
                 <CompanyAdminInfoCard
                   companyName={company.CompanyName}
                   companyId={company.CompanyId}
-                  companyAdminsArr={companyAdmins}
+                  companyAdminsArr={companyAdmins.compAdminsOverall}
                 />
               );
             })}
