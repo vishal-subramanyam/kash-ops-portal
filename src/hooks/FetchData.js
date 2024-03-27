@@ -556,9 +556,9 @@ const getHoursByRange = () => {
         if (projectDurationInDays === 0) {
           projectDurationInDays = 1;
           return {
-            projectName: "n/a",
-            projectSowId: "n/a",
-            projectDuration: "n/a",
+            projectName: project.ProjectCategory,
+            projectSowId: project.SowId,
+            projectDuration: projectDurationInDays,
             projectedHrsByDay: 0,
             projectedHrsByMonth: 0,
           };
@@ -628,8 +628,31 @@ const getProjectsBilledAndProjectedHoursByCompany = () => {
         OriginalStartDate: project.OriginalStartDate,
         OriginalEndDate: project.OriginalEndDate,
       }));
-      console.log(projectsByCompanyDateWithBurnTime);
-      return projectsByCompanyDateWithBurnTime;
+
+      let lowBurnTimeLifetime = projectsByCompanyDateWithBurnTime.filter(
+        (project) =>
+          project.ProjectBurnTime < 300 && project.ProjectBurnTime !== NaN
+      );
+      let lowBurnTimeByRange = projectsByCompanyDateWithBurnTime.filter(
+        (project) => {
+          let projectStartDate = Date.parse(project.OriginalStartDate);
+          let projectEndDate = Date.parse(project.OriginalEndDate);
+
+          if (
+            currentDateUnix >= projectStartDate &&
+            currentDateUnix <= projectEndDate &&
+            project.ProjectBurnTime < 100 &&
+            project.ProjectBurnTime !== NaN
+          ) {
+            return project;
+          }
+        }
+      );
+      let projectBurnTimes = {
+        lowBurnTimeLifetime: lowBurnTimeLifetime.length,
+        lowBurnTimeByRange: lowBurnTimeByRange.length,
+      };
+      return projectBurnTimes;
     })
     .catch((err) => {
       return err;

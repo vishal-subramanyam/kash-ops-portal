@@ -188,8 +188,8 @@ function ControlCenter(props) {
           totalHrsBilledByRange: values[9].value.totalHoursBilledByRange,
           totalHrsProjectedLifetime: values[8].value,
           totalHrsProjectedByRange: values[9].value.totalHoursProjectedByRange,
-          lowBurnTimeLifetime: 0,
-          lowBurnTimeByRange: 0,
+          lowBurnTimeLifetime: values[10].value.lowBurnTimeLifetime,
+          lowBurnTimeByRange: values[10].value.lowBurnTimeByRange,
           // timesheetUserEntryDetails: {
           //   numUsers: values[9].value.numUsers, // total number of users who made a timesheet entry
           //   entryDetails: values[9].value.entryDetails,
