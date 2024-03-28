@@ -25,10 +25,10 @@ import ControlCenter from "./pages/ControlCenter";
 import EmployeesDetail from "./pages/EmployeesDetail";
 import CompaniesDetail from "./pages/CompaniesDetail";
 import LoadingData from "./components/LoadingData";
-import { createResource } from "./hooks/FetchData";
 
 function App() {
-  let resource = createResource(); // Access the fetch functions to get the pertinent users data
+  //  let resource = useResources(); // Access the fetch functions to get the pertinent users data
+
   let { logout, user, loggedInUser, isAdmin } = useAuth();
   let username = window.localStorage.getItem("user");
 
@@ -103,8 +103,8 @@ function App() {
                 <EmployeesDetail
                   loggedInUser={loggedInUserLocal}
                   admin={isAdminLocal}
-                  users={resource.users}
-                  companyAdmins={resource.companyAdmins}
+                  // users={resource.users}
+                  // companyAdmins={resource.companyAdmins}
                 />
               </RequireAuth>
             }
@@ -179,7 +179,7 @@ function App() {
                 <EditCompanyAdmin
                   loggedInUser={loggedInUserLocal}
                   admin={isAdminLocal}
-                  companyAdmins={resource.companyAdmins}
+                  // companyAdmins={resource.companyAdmins}
                 />
               </RequireAuth>
             }
@@ -191,13 +191,13 @@ function App() {
                 <CompaniesDetail
                   loggedInUser={loggedInUserLocal}
                   admin={isAdminLocal}
-                  companies={resource.companies}
-                  companyProjects={resource.companyProjects}
-                  companyAdmins={resource.companyAdmins}
-                  companyContacts={resource.companyContacts}
-                  projectsHoursBilledProjected={
-                    resource.projectsBilledAndProjectedHoursByCompany
-                  }
+                  // companies={resource.companies}
+                  // companyProjects={resource.companyProjects}
+                  // companyAdmins={resource.companyAdmins}
+                  // companyContacts={resource.companyContacts}
+                  // projectsHoursBilledProjected={
+                  //   resource.projectsBilledAndProjectedHoursByCompany
+                  // }
                 />
               </RequireAuth>
             }
@@ -238,21 +238,21 @@ function App() {
               <RequireAuth>
                 <ControlCenter
                   loggedInUser={loggedInUserLocal}
-                  users={resource.users}
-                  projects={resource.companyProjects}
-                  companies={resource.companies}
-                  companyAdmins={resource.companyAdmins}
-                  // timesheetEntryDetails={resource.timesheetEntryDetails}
-                  avgHrsBilled={resource.avgBilledHours}
-                  avgBilledHoursByRange={resource.avgBilledHoursByRange}
-                  hoursBilledPerProject={resource.hoursBilledPerProject}
-                  totalBilledHours={resource.totalBilledHours}
-                  totalProjectedHours={resource.totalProjectedHours}
-                  avgHoursPerCompany={resource.avgHoursPerCompany}
-                  getHoursByRange={resource.getHoursByRange}
-                  projectsBilledAndProjectedHoursByCompany={
-                    resource.projectsBilledAndProjectedHoursByCompany
-                  }
+                  // users={resource.users}
+                  // projects={resource.companyProjects}
+                  // companies={resource.companies()}
+                  // companyAdmins={resource.companyAdmins}
+                  // // timesheetEntryDetails={resource.timesheetEntryDetails}
+                  // avgHrsBilled={resource.avgBilledHours}
+                  // avgBilledHoursByRange={resource.avgBilledHoursByRange}
+                  // hoursBilledPerProject={resource.hoursBilledPerProject}
+                  // totalBilledHours={resource.totalBilledHours}
+                  // totalProjectedHours={resource.totalProjectedHours}
+                  // avgHoursPerCompany={resource.avgHoursPerCompany}
+                  // getHoursBilledDetail={resource.getHoursBilledDetail}
+                  // projectsBilledAndProjectedHoursByCompany={
+                  //   resource.projectsBilledAndProjectedHoursByCompany
+                  // }
                 />
               </RequireAuth>
             }

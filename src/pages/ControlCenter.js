@@ -16,6 +16,7 @@ import LineChartKPI from "../components/LineChartKPI";
 import BarChartKPI from "../components/BarChartKPI";
 import HorizontalBarChartKPI from "../components/HorizontalBarChartKPI";
 import LoadingData from "../components/LoadingData";
+import { useResources } from "../hooks/FetchData";
 import { domain } from "../assets/api/apiEndpoints";
 let currentDate = new Date();
 let currentMonth = currentDate.getMonth() + 1;
@@ -26,36 +27,36 @@ let currentDateUnix = Date.parse(currentDate);
 // FETCH ADMINS AND COMPANY ADMINS
 // ============================================================================
 
-const getAllAdmins = () => {
-  // Get all users who are Admins or Super Admins
-  let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      _keyword_: "KASH_OPERATIONS_USER_TABLE",
-    }),
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      let filteredOutAdmins = res.data.filter((admin) => {
-        if (
-          admin.AdminLevel === "Super Admin" ||
-          admin.AdminLevel === "Admin"
-        ) {
-          return admin;
-        }
-      });
-      return filteredOutAdmins;
-    })
-    .catch((err) => {
-      return err;
-    });
+// const getAllAdmins = () => {
+//   // Get all users who are Admins or Super Admins
+//   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
+//     method: "POST",
+//     headers: {
+//       Accept: "application/json, text/plain, */*",
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       _keyword_: "KASH_OPERATIONS_USER_TABLE",
+//     }),
+//   })
+//     .then((res) => res.json())
+//     .then((res) => {
+//       let filteredOutAdmins = res.data.filter((admin) => {
+//         if (
+//           admin.AdminLevel === "Super Admin" ||
+//           admin.AdminLevel === "Admin"
+//         ) {
+//           return admin;
+//         }
+//       });
+//       return filteredOutAdmins;
+//     })
+//     .catch((err) => {
+//       return err;
+//     });
 
-  return response;
-};
+//   return response;
+// };
 
 // ====================================================================================
 // REDUCER FUNCTION
@@ -66,33 +67,80 @@ function kpiReducer(state, action) {
     case "initialize": {
       return action.payload;
     }
-    case "add project": {
+    case "changeCompany": {
+      // run calculations for each kpi against given company id and return updated state
+      console.log(state);
+      // Array of all hours billed to selected company by user
+      let allHoursBilledBySelectedCompanyLifetime =
+        state.hrsBilledByUserByProjDet.filter(
+          (project) => action.action.companyId === project.CompanyId
+        );
+      // Array of individual users who billed to projects associated to selected company
+      let numUsersBilledHrsByCompanyLifetime = () => {
+        if (allHoursBilledBySelectedCompanyLifetime.length === 0) {
+          return 1;
+        } else {
+          return Object.values(
+            allHoursBilledBySelectedCompanyLifetime.reduce((c, e) => {
+              if (!c[e.EmpId]) c[e.EmpId] = e;
+              return c;
+            }, {})
+          ).length;
+        }
+      };
+      // Calculate total hours billed to selected company into one figure
+      let totalHrsBilledBySelectedCompany = () => {
+        if (allHoursBilledBySelectedCompanyLifetime.length === 0) {
+          return 0;
+        } else {
+          return allHoursBilledBySelectedCompanyLifetime.reduce(
+            (a, c) => a + parseFloat(c.TotalHoursBilled),
+            0
+          );
+        }
+      };
+
+      // Get projects associated with selected company
+      let selectedCompanyProjects = state.allProjectsArr.filter(
+        (p) => action.action.companyId === p.CompanyId
+      );
+      let totalProjectedHrs = selectedCompanyProjects.reduce(
+        (a, c) => a + c.TotalProjectedHours,
+        0
+      );
+
+      // Num of projects associated with selected company whose burn time is less than 300
+      let lowBurnTimeLT = selectedCompanyProjects.filter(
+        (p) => p.ProjectBurnTime < 300
+      );
       return {
-        monthly: 0,
-        lifetime: state.lifetime + 1,
-        monthlyActive: 0,
-        lifetimeActive: 0,
-        companyProjects: [],
+        // numProjLifetime: 0,
+        // numProjByRange: 0,
+        ...state,
+        numCompanyAdmins: state.companyAdminsDet.filter(
+          (admin) => action.action.companyId === admin.CompanyId
+        ).length,
+        activeProjLifetime: state.compProjDet.filter(
+          (project) =>
+            action.action.companyId === project.CompanyId &&
+            project.CurrentStatus === "Active"
+        ).length,
+        activeProjByRange: 0,
+        avgHrsBilledByUserLifetime:
+          totalHrsBilledBySelectedCompany() /
+          numUsersBilledHrsByCompanyLifetime(),
+        avgHrsBilledByUserByRange: 0,
+        avgHrsBilledByCompLifetime: totalHrsBilledBySelectedCompany() / 1,
+        avgHrsBilledByCompByRange: 0,
+        totalHrsBilledLifetime: totalHrsBilledBySelectedCompany(),
+        totalHrsBilledByRange: 0,
+        totalHrsProjectedLifetime: totalProjectedHrs,
+        totalHrsProjectedByRange: 0,
+        lowBurnTimeLifetime: lowBurnTimeLT.length,
+        lowBurnTimeByRange: 0,
       };
     }
-    case "changed": {
-      // return project.map((p) => {
-      //   if (p.id === action.project.id) {
-      //     return action.project;
-      //   } else {
-      //     return p;
-      //   }
-      // });
-    }
-    case "remove project": {
-      return {
-        monthly: 0,
-        lifetime: state.lifetime - 1,
-        monthlyActive: 0,
-        lifetimeActive: 0,
-        companyProjects: [],
-      };
-    }
+
     default: {
       throw Error("Unknown action: " + action.type);
     }
@@ -100,6 +148,8 @@ function kpiReducer(state, action) {
 }
 
 function ControlCenter(props) {
+  let resource = useResources();
+  console.log(resource);
   // let currentDate = new Date();
   // let currentDateUnix = Date.parse(currentDate);
   let [tabActive, setTabActive] = useState("card");
@@ -107,6 +157,7 @@ function ControlCenter(props) {
     "ControlCenter--tab ControlCenter--tab-active";
   let controlCenterKPITabNotActive =
     "ControlCenter--tab ControlCenter--tab-not-active";
+  let kpiFilterRange = useState("monthly");
 
   let initialKPIState = {
     compProjDet: [],
@@ -127,30 +178,33 @@ function ControlCenter(props) {
     totalHrsBilledByRange: 0,
     totalHrsProjectedLifetime: 0,
     totalHrsProjectedByRange: 0,
+    allProjectsArr: [],
     lowBurnTimeLifetime: 0,
     lowBurnTimeByRange: 0,
+    allCompanies: [],
   };
 
   let [KPIData, dispatchKPI] = useReducer(kpiReducer, initialKPIState);
-  let companies = props.companies.read();
+  let companies = resource.companies();
+  console.log(companies);
   // let timesheetEntryDetails = props.timesheetEntryDetails.read();
-  let projects = props.projects.read();
-  let admins = getAllAdmins();
+  let projects = resource.companyProjects();
+  let admins = resource.companyAdmins();
   // let admins = props.users.read().filter((admin) => {
   //   if (admin.AdminLevel === "Super Admin" || admin.AdminLevel === "Admin") {
   //     return admin;
   //   }
   // });
-  let companyAdmins = props.companyAdmins.read();
-  let avgBilledHours = props.avgHrsBilled.read();
-  let getAvgBilledHoursByRange = props.avgBilledHoursByRange.read();
-  let billedHoursByUserByProject = props.hoursBilledPerProject.read();
-  let totalBilledHours = props.totalBilledHours.read();
-  let totalProjectedHours = props.totalProjectedHours.read();
-  let avgHoursPerCompany = props.avgHoursPerCompany.read();
+  let companyAdmins = resource.companyAdmins();
+  let avgBilledHours = resource.avgBilledHours();
+  let getAvgBilledHoursByRange = resource.avgBilledHoursByRange();
+  let billedHoursByUserByProject = resource.hoursBilledPerProject();
+  let totalBilledHours = resource.totalBilledHours();
+  let totalProjectedHours = resource.totalProjectedHours();
+  let avgHoursPerCompany = resource.avgHoursPerCompany();
   let billedAndProjectedHoursByCompany =
-    props.projectsBilledAndProjectedHoursByCompany.read();
-  let getHoursByRange = props.getHoursByRange.read();
+    resource.projectsBilledAndProjectedHoursByCompany();
+  let hoursBilledArr = resource.getHoursBilledDetail();
   const resolvePromisesAndDispatch = useCallback(() => {
     Promise.allSettled([
       projects,
@@ -162,8 +216,10 @@ function ControlCenter(props) {
       avgHoursPerCompany,
       totalBilledHours,
       totalProjectedHours,
-      getHoursByRange,
+      hoursBilledArr,
       billedAndProjectedHoursByCompany,
+      companies,
+      // timesheetEntryDetails,
     ]).then((values) => {
       console.log("KPI Fetch Data: ", values);
       dispatchKPI({
@@ -187,12 +243,15 @@ function ControlCenter(props) {
           totalHrsBilledLifetime: values[7].value.hoursBilled,
           totalHrsBilledByRange: values[9].value.totalHoursBilledByRange,
           totalHrsProjectedLifetime: values[8].value,
+          allBilledHrsArr: values[9].value.allHrsBilledArr,
           totalHrsProjectedByRange: values[9].value.totalHoursProjectedByRange,
+          allProjectsArr: values[10].value.allProjects,
           lowBurnTimeLifetime: values[10].value.lowBurnTimeLifetime,
           lowBurnTimeByRange: values[10].value.lowBurnTimeByRange,
+          allCompanies: values[11].value,
           // timesheetUserEntryDetails: {
-          //   numUsers: values[9].value.numUsers, // total number of users who made a timesheet entry
-          //   entryDetails: values[9].value.entryDetails,
+          //   numUsers: values[11].value.numUsers, // total number of users who made a timesheet entry
+          //   entryDetails: values[11].value.entryDetails,
           // },
         },
       });
@@ -209,11 +268,17 @@ function ControlCenter(props) {
     // if the selection value is 'overall' run dispatch from useEffect to reset kpi data
     if (e.target[e.target.selectedIndex].value === "Overall") {
       console.log("reset kpi with dispatch from useEffect");
+      resolvePromisesAndDispatch();
     } else {
       // Get the KPI data per company id
       let selectedCompanyId =
         e.target[e.target.selectedIndex].getAttribute("data-companyid");
       console.log(selectedCompanyId);
+
+      dispatchKPI({
+        type: "changeCompany",
+        action: { companyId: selectedCompanyId, filterRange: kpiFilterRange },
+      });
     }
   };
 
@@ -481,7 +546,7 @@ function ControlCenter(props) {
           onChange={updateKPIByCompanyId}
         >
           <option value="Overall">Overall</option>
-          {companies.map((company) => {
+          {KPIData.allCompanies.map((company) => {
             return (
               <option
                 value={company.CompanyName}

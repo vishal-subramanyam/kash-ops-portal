@@ -91,7 +91,7 @@ function CompaniesDetail(props) {
                     contacts={contacts.filter(
                       (contact) => company.CompanyId === contact.CompanyId
                     )}
-                    hoursPerProject={projectsHoursBilledProjected.filter(
+                    hoursPerProject={projectsHoursBilledProjected.allProjects.filter(
                       (project) => company.CompanyId === project.CompanyId
                     )}
                   />
@@ -115,7 +115,7 @@ function CompaniesDetail(props) {
                       contacts={contacts.filter(
                         (contact) => company.CompanyId === contact.CompanyId
                       )}
-                      hoursPerProject={projectsHoursBilledProjected.filter(
+                      hoursPerProject={projectsHoursBilledProjected.allProjects.filter(
                         (project) => company.CompanyId === project.CompanyId
                       )}
                     />
@@ -127,14 +127,14 @@ function CompaniesDetail(props) {
           {loggedInUserInfo.AdminLevel === "Super Admin" ? (
             <CompaniesReport
               entries={companies}
-              projects={projectsHoursBilledProjected}
+              projects={projectsHoursBilledProjected.allProjects}
             />
           ) : (
             <CompaniesReport
               entries={admins.filter((admin) => {
                 return admin.EmpId === loggedInUserInfo.EmpId;
               })}
-              projects={projectsHoursBilledProjected}
+              projects={projectsHoursBilledProjected.allProjects}
             />
           )}
         </div>

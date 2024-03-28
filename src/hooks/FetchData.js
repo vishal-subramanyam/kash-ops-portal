@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { domain } from "../assets/api/apiEndpoints";
 let currentDate = new Date();
 let currentMonth = currentDate.getMonth() + 1;
@@ -36,23 +37,22 @@ const wrapPromise = (promise) => {
 // =====================================================================================================
 // FUNCTION TO RESOLVE PROMISES AND ASSIGN PROMISE RESULT WIHTIN OBJECT TO PASS TO COMPONENTS IN App.js
 // =====================================================================================================
-export const createResource = () => {
+export const useResources = () => {
   return {
-    users: wrapPromise(fetchUsers()),
-    companies: wrapPromise(getCompanies()),
-    companyAdmins: wrapPromise(fetchCompanyAdmins()),
-    companyProjects: wrapPromise(getCompanyProjects()),
-    companyContacts: wrapPromise(getCompanyContacts()),
-    avgBilledHours: wrapPromise(getAvgBilledHours()),
-    avgBilledHoursByRange: wrapPromise(getAvgBilledHoursByRange()),
-    hoursBilledPerProject: wrapPromise(hoursBilledPerProject()), // Billed hours by user per project
-    totalBilledHours: wrapPromise(getTotalBilledHours()),
-    totalProjectedHours: wrapPromise(getTotalProjectedHours()),
-    avgHoursPerCompany: wrapPromise(getAvgHoursPerCompany()),
-    getHoursByRange: wrapPromise(getHoursByRange()),
-    projectsBilledAndProjectedHoursByCompany: wrapPromise(
-      getProjectsBilledAndProjectedHoursByCompany()
-    ),
+    users: fetchUsers,
+    companies: getCompanies,
+    companyAdmins: fetchCompanyAdmins,
+    companyProjects: getCompanyProjects,
+    companyContacts: getCompanyContacts,
+    avgBilledHours: getAvgBilledHours,
+    avgBilledHoursByRange: getAvgBilledHoursByRange,
+    hoursBilledPerProject: hoursBilledPerProject, // Billed hours by user per project
+    totalBilledHours: getTotalBilledHours,
+    totalProjectedHours: getTotalProjectedHours,
+    avgHoursPerCompany: getAvgHoursPerCompany,
+    getHoursBilledDetail: getHoursBilledDetail,
+    projectsBilledAndProjectedHoursByCompany:
+      getProjectsBilledAndProjectedHoursByCompany,
     // timesheetEntryDetails: wrapPromise(getTimesheetEntryDetails()),
   };
 };
@@ -493,7 +493,7 @@ const getAvgHoursPerCompany = () => {
 // Get total hours billed by range overall
 // Get total hours projected within range
 // Get burn time within range
-const getHoursByRange = () => {
+const getHoursBilledDetail = () => {
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
@@ -583,6 +583,7 @@ const getHoursByRange = () => {
       );
       console.log(calcProjectedHoursByMonth);
       let hoursBilledByRange = {
+        allHrsBilledArr: res.data,
         avgHoursBilledByCompanyRange: avgHrsByCompany.toFixed(2),
         totalHoursBilledByRange: totalHoursBilled,
         totalHoursProjectedByRange: calcProjectedHoursByMonth.toFixed(2),
@@ -629,6 +630,7 @@ const getProjectsBilledAndProjectedHoursByCompany = () => {
         OriginalEndDate: project.OriginalEndDate,
       }));
 
+      // Calculate burn time by lifetime and by range (month)
       let lowBurnTimeLifetime = projectsByCompanyDateWithBurnTime.filter(
         (project) =>
           project.ProjectBurnTime < 300 && project.ProjectBurnTime !== NaN
@@ -648,11 +650,13 @@ const getProjectsBilledAndProjectedHoursByCompany = () => {
           }
         }
       );
-      let projectBurnTimes = {
+
+      let billedProjectData = {
+        allProjects: projectsByCompanyDateWithBurnTime,
         lowBurnTimeLifetime: lowBurnTimeLifetime.length,
         lowBurnTimeByRange: lowBurnTimeByRange.length,
       };
-      return projectBurnTimes;
+      return billedProjectData;
     })
     .catch((err) => {
       return err;
