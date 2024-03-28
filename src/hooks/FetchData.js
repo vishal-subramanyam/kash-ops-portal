@@ -6,7 +6,7 @@ let currentYear = currentDate.getFullYear();
 let currentDateUnix = Date.parse(currentDate);
 
 // =====================================================================================================
-// FUNCTION TO RETURN ALL FETCH CALLS
+// FUNCTION TO RETURN ALL FETCH FUNCTIONS
 // =====================================================================================================
 export const useResources = () => {
   return {

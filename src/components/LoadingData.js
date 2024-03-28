@@ -1,14 +1,7 @@
 import React from "react";
 
 function LoadingData() {
-  return (
-    <div className="glimmer-panel">
-      Loading...
-      <div className="glimmer-line" />
-      <div className="glimmer-line" />
-      <div className="glimmer-line" />
-    </div>
-  );
+  return <div className="loading-panel">Loading...</div>;
 }
 
 export default LoadingData;

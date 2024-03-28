@@ -2557,3 +2557,12 @@ tfoot {
 .EditCompanyAdmins--haeding {
   color: #439ebc;
 }
+
+/* Loading Screen Component */
+.loading-panel {
+  width: 100%;
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
