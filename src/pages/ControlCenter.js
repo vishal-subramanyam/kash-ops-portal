@@ -185,40 +185,41 @@ function ControlCenter(props) {
   };
 
   let [KPIData, dispatchKPI] = useReducer(kpiReducer, initialKPIState);
-  let companies = resource.companies();
+  let companies = resource.companies;
   console.log(companies);
   // let timesheetEntryDetails = props.timesheetEntryDetails.read();
-  let projects = resource.companyProjects();
-  let admins = resource.companyAdmins();
+  let projects = resource.companyProjects;
+  let admins = resource.companyAdmins;
   // let admins = props.users.read().filter((admin) => {
   //   if (admin.AdminLevel === "Super Admin" || admin.AdminLevel === "Admin") {
   //     return admin;
   //   }
   // });
-  let companyAdmins = resource.companyAdmins();
-  let avgBilledHours = resource.avgBilledHours();
-  let getAvgBilledHoursByRange = resource.avgBilledHoursByRange();
-  let billedHoursByUserByProject = resource.hoursBilledPerProject();
-  let totalBilledHours = resource.totalBilledHours();
-  let totalProjectedHours = resource.totalProjectedHours();
-  let avgHoursPerCompany = resource.avgHoursPerCompany();
+  let companyAdmins = resource.companyAdmins;
+  let avgBilledHours = resource.avgBilledHours;
+  let getAvgBilledHoursByRange = resource.avgBilledHoursByRange;
+  let billedHoursByUserByProject = resource.hoursBilledPerProject;
+  let totalBilledHours = resource.totalBilledHours;
+  let totalProjectedHours = resource.totalProjectedHours;
+  let avgHoursPerCompany = resource.avgHoursPerCompany;
   let billedAndProjectedHoursByCompany =
-    resource.projectsBilledAndProjectedHoursByCompany();
-  let hoursBilledArr = resource.getHoursBilledDetail();
+    resource.projectsBilledAndProjectedHoursByCompany;
+  let hoursBilledArr = resource.getHoursBilledDetail;
+
   const resolvePromisesAndDispatch = useCallback(() => {
     Promise.allSettled([
-      projects,
-      admins,
-      companyAdmins,
-      avgBilledHours,
-      getAvgBilledHoursByRange,
-      billedHoursByUserByProject,
-      avgHoursPerCompany,
-      totalBilledHours,
-      totalProjectedHours,
-      hoursBilledArr,
-      billedAndProjectedHoursByCompany,
-      companies,
+      projects(),
+      admins(),
+      companyAdmins(),
+      avgBilledHours(),
+      getAvgBilledHoursByRange(),
+      billedHoursByUserByProject(),
+      avgHoursPerCompany(),
+      totalBilledHours(),
+      totalProjectedHours(),
+      hoursBilledArr(),
+      billedAndProjectedHoursByCompany(),
+      companies(),
       // timesheetEntryDetails,
     ]).then((values) => {
       console.log("KPI Fetch Data: ", values);
