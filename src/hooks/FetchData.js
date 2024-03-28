@@ -5,37 +5,8 @@ let currentMonth = currentDate.getMonth() + 1;
 let currentYear = currentDate.getFullYear();
 let currentDateUnix = Date.parse(currentDate);
 
-// ===========================================
-// WRAPPER FUNCTION TO RESOLVE FETCH PROMISES
-// ===========================================
-const wrapPromise = (promise) => {
-  let status = "pending";
-  let result = "";
-  let suspender = promise.then(
-    (res) => {
-      status = "success";
-      result = res;
-    },
-    (err) => {
-      status = "error";
-      result = err;
-    }
-  );
-  return {
-    read() {
-      if (status === "pending") {
-        console.log("Fetch data status is pending: ", promise);
-        throw suspender;
-      } else if (status === "error") {
-        throw result;
-      }
-      return result;
-    },
-  };
-};
-
 // =====================================================================================================
-// FUNCTION TO RESOLVE PROMISES AND ASSIGN PROMISE RESULT WIHTIN OBJECT TO PASS TO COMPONENTS IN App.js
+// FUNCTION TO RETURN ALL FETCH CALLS
 // =====================================================================================================
 export const useResources = () => {
   return {
@@ -62,7 +33,7 @@ export const useResources = () => {
 // ===============================================================
 
 // FETCH ADMINS AND COMPANY ADMINS
-const fetchUsers = () => {
+export const fetchUsers = () => {
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
@@ -83,7 +54,7 @@ const fetchUsers = () => {
 };
 
 // Get Company Admins with Company Details
-const fetchCompanyAdmins = () => {
+export const fetchCompanyAdmins = () => {
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
@@ -127,7 +98,7 @@ const fetchCompanyAdmins = () => {
 };
 
 // Get Company Contacts
-const getCompanyContacts = () => {
+export const getCompanyContacts = () => {
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
@@ -151,7 +122,7 @@ const getCompanyContacts = () => {
 // ============================================================================
 // FETCH PROJECTS AND COMPANY DATA
 // ============================================================================
-const getCompanyProjects = () => {
+export const getCompanyProjects = () => {
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
@@ -223,7 +194,7 @@ const getCompanyProjects = () => {
 // Get number of hours billed by users and divide by number of users that billed hours
 // ====================================================================================
 
-const getAvgBilledHours = () => {
+export const getAvgBilledHours = () => {
   // Get the total hours billed by users - total hours billed per usesr
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
@@ -261,7 +232,7 @@ const getAvgBilledHours = () => {
   return response;
 };
 
-const getAvgBilledHoursByRange = () => {
+export const getAvgBilledHoursByRange = () => {
   // Get the total hours billed by users - total hours billed per usesr
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
@@ -322,7 +293,7 @@ const getAvgBilledHoursByRange = () => {
 };
 
 // Get total amount of hours
-const hoursBilledPerProject = () => {
+export const hoursBilledPerProject = () => {
   // Get the total of hours billed by users per company project
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
@@ -349,7 +320,7 @@ const hoursBilledPerProject = () => {
 // GET TOTAL HOURS BILLED BY PROJECT
 // ====================================================================================
 // Get the total projected hours on all projects and the total hours billed on projects
-const getTotalBilledHours = () => {
+export const getTotalBilledHours = () => {
   // fetch the total hours billed by project
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
@@ -389,7 +360,7 @@ const getTotalBilledHours = () => {
   return response;
 };
 
-const getTotalProjectedHours = () => {
+export const getTotalProjectedHours = () => {
   // fetch the sum of project total hours of each project - return one number as total hours billed
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
@@ -418,7 +389,7 @@ const getTotalProjectedHours = () => {
 // GET HOURS BILLED PER COMPANY AND TOTAL NUMBER OF COMPANIES
 // ============================================================
 
-const getCompanies = () => {
+export const getCompanies = () => {
   // Get list of companies
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
@@ -441,7 +412,7 @@ const getCompanies = () => {
   return response;
 };
 
-const getAvgHoursPerCompany = () => {
+export const getAvgHoursPerCompany = () => {
   // Get total hours billed per company projects. Returns duplicate company entries because of the hours billed to each project associated to a company
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
@@ -493,7 +464,7 @@ const getAvgHoursPerCompany = () => {
 // Get total hours billed by range overall
 // Get total hours projected within range
 // Get burn time within range
-const getHoursBilledDetail = () => {
+export const getHoursBilledDetail = () => {
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
@@ -599,7 +570,7 @@ const getHoursBilledDetail = () => {
 };
 
 // Get the hours billed and projected per company project
-const getProjectsBilledAndProjectedHoursByCompany = () => {
+export const getProjectsBilledAndProjectedHoursByCompany = () => {
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
     headers: {
@@ -668,7 +639,7 @@ const getProjectsBilledAndProjectedHoursByCompany = () => {
 // GET TIMESHEET ENTRY DETAILS
 // =============================
 
-const getTimesheetEntryDetails = () => {
+export const getTimesheetEntryDetails = () => {
   // Get detailed list of timesheet entries logged each day by each user
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",

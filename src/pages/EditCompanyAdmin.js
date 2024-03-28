@@ -5,6 +5,7 @@ import "../assets/styles/Styles.css";
 import { Link } from "react-router-dom";
 import { domain } from "../assets/api/apiEndpoints";
 import CompanyAdminInfoCard from "../components/CompanyAdminInfoCard";
+import { fetchCompanyAdmins } from "../hooks/FetchData";
 
 function EditCompanyAdmin(props) {
   let [tabActive, setTabActive] = useState("editTab");
@@ -12,7 +13,7 @@ function EditCompanyAdmin(props) {
   let companyAddAdminForm = useRef();
   let alertMessage = useRef();
   let successMessage = useRef();
-  let companyAdmins = props.companyAdmins.read();
+  let companyAdmins = fetchCompanyAdmins;
   let [message, setMessage] = useState("");
   let [allAdmins, setAllAdmins] = useState([]);
   let [allCompanies, setAllCompanies] = useState([]);
@@ -36,14 +37,13 @@ function EditCompanyAdmin(props) {
     "EmployeesDetail--tab EmployeesDetail--tab-not-active";
   //   filter allCompanyAdmins array to remove duplicate company names
   let distinctCompanies = Object.values(
-    companyAdmins.compAdminsOverall.reduce((c, e) => {
+    allCompanyAdmins.reduce((c, e) => {
       if (!c[e.CompanyId]) {
         c[e.CompanyId] = e;
       }
       return c;
     }, {})
   );
-  console.log(companyAdmins);
 
   useEffect(() => {
     getAllCompanies();
@@ -100,39 +100,44 @@ function EditCompanyAdmin(props) {
   };
 
   const getAllCompanyAdmins = async () => {
-    try {
-      let res = await fetch(
-        `${domain}GenericResultBuilderService/buildResults`,
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            _keyword_: "KASH_OPERATIONS_COMPANY_ADMIN_ROLE_TABLE",
-          }),
-        }
-      );
-      let data = await res.json();
+    // try {
+    //   let res = await fetch(
+    //     `${domain}GenericResultBuilderService/buildResults`,
+    //     {
+    //       method: "POST",
+    //       headers: {
+    //         Accept: "application/json, text/plain, */*",
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify({
+    //         _keyword_: "KASH_OPERATIONS_COMPANY_ADMIN_ROLE_TABLE",
+    //       }),
+    //     }
+    //   );
 
+    Promise.resolve(companyAdmins()).then((val) => {
+      console.log(val);
+      let data = val;
+      console.log(data);
       if (props.loggedInUser.AdminLevel === "Super Admin") {
         console.log("logged in user is Super Admin");
-        setAllCompanyAdmins(data.data);
+        setAllCompanyAdmins(data.compAdminsOverall);
       } else {
-        let adminCompanies = data.data.filter((company) => {
+        let adminCompanies = data.compAdminsOverall.filter((company) => {
           return company.EmpId === props.loggedInUser.EmpId;
         });
         setAllCompanyAdmins(adminCompanies);
       }
-    } catch (error) {
-      setMessage(
-        alertMessageDisplay(
-          `Unable to load company admins from database. Error: ${error}`
-        )
-      );
-      alertMessage.current.showModal();
-    }
+    });
+
+    // } catch (error) {
+    //   setMessage(
+    //     alertMessageDisplay(
+    //       `Unable to load company admins from database. Error: ${error}`
+    //     )
+    //   );
+    //   alertMessage.current.showModal();
+    // }
   };
 
   const selectCompanyToAddAdmin = (e) => {
@@ -584,7 +589,7 @@ function EditCompanyAdmin(props) {
                   <CompanyAdminInfoCard
                     companyName={company.CompanyName}
                     companyId={company.CompanyId}
-                    companyAdminsArr={companyAdmins}
+                    companyAdminsArr={allCompanyAdmins}
                   />
                 );
               })}

@@ -1,31 +1,81 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useReducer, useCallback } from "react";
 import { Link } from "react-router-dom";
 import "../assets/styles/HomePage.css";
 import "../assets/styles/CompaniesDetail.css";
 import CompanyInfoCard from "../components/CompanyInfoCard";
 import CompaniesReport from "../components/CompaniesReport";
+import {
+  getCompanies,
+  fetchCompanyAdmins,
+  getCompanyProjects,
+  getCompanyContacts,
+  getProjectsBilledAndProjectedHoursByCompany,
+} from "../hooks/FetchData";
+
+// ====================================================================================
+// REDUCER FUNCTION
+// ====================================================================================
+
+function dataReducer(state, action) {
+  switch (action.type) {
+    case "initialize": {
+      return action.payload;
+    }
+
+    default: {
+      throw Error("Unknown action: " + action.type);
+    }
+  }
+}
 
 function CompaniesDetail(props) {
   let [tabActive, setTabActive] = useState("cardTab");
-  let companies = props.companies.read();
-  let projects = props.companyProjects.read();
-  let admins = props.companyAdmins.read();
-  let contacts = props.companyContacts.read();
-  let projectsHoursBilledProjected = props.projectsHoursBilledProjected.read();
+  let companies = getCompanies;
+  let projects = getCompanyProjects;
+  let admins = fetchCompanyAdmins;
+  let contacts = getCompanyContacts;
+  let projectsHoursBilledProjected =
+    getProjectsBilledAndProjectedHoursByCompany;
+  let initialState = {
+    companies: [],
+    projects: [],
+    admins: [],
+    contacts: [],
+    projectsHoursBilledProjected: [],
+  };
+  let [data, dispatchData] = useReducer(dataReducer, initialState);
   let loggedInUserInfo = props.loggedInUser;
   let employeeInfoCardTabActive =
     "EmployeesDetail--tab EmployeesDetail--tab-active";
   let employeeInfoCardTabNotActive =
     "EmployeesDetail--tab EmployeesDetail--tab-not-active";
 
-  console.log("company projects", projectsHoursBilledProjected);
-  console.log(
-    "company admins",
-    admins.companyAdmins.filter((admin) => {
-      return admin.EmpId === loggedInUserInfo.EmpId;
-    })
-  );
-  console.log("Projects with hours:", projectsHoursBilledProjected);
+  const resolvePromisesAndDispatch = useCallback(() => {
+    Promise.allSettled([
+      companies(),
+      projects(),
+      admins(),
+      contacts(),
+      projectsHoursBilledProjected(),
+    ]).then((values) => {
+      console.log("Fetch Data: ", values);
+      dispatchData({
+        type: "initialize",
+        payload: {
+          companies: values[0].value,
+          projects: values[1].value,
+          admins: values[2].value,
+          contacts: values[3].value,
+          projectsHoursBilledProjected: values[4].value,
+        },
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    resolvePromisesAndDispatch();
+  }, []);
+
   return (
     <main className="CompaniesDetail--content-container">
       <div className="kash_operations--upper-section-holder EmployeesDetail--upper-section-holder CompaniesDetail--upper-section-holder">
@@ -77,27 +127,27 @@ function CompaniesDetail(props) {
       {tabActive === "cardTab" ? (
         <div className="CompaniesDetail--info-card-container">
           {loggedInUserInfo.AdminLevel === "Super Admin"
-            ? companies.map((company) => {
+            ? data.companies.map((company) => {
                 return (
                   <CompanyInfoCard
                     name={company.CompanyName}
                     id={company.CompanyId}
-                    projects={projects.companyProjects.filter(
+                    projects={data.projects.companyProjects.filter(
                       (project) => company.CompanyId === project.CompanyId
                     )}
-                    admins={admins.compAdminsOverall.filter(
+                    admins={data.admins.compAdminsOverall.filter(
                       (admin) => company.CompanyId === admin.CompanyId
                     )}
-                    contacts={contacts.filter(
+                    contacts={data.contacts.filter(
                       (contact) => company.CompanyId === contact.CompanyId
                     )}
-                    hoursPerProject={projectsHoursBilledProjected.allProjects.filter(
+                    hoursPerProject={data.projectsHoursBilledProjected.allProjects.filter(
                       (project) => company.CompanyId === project.CompanyId
                     )}
                   />
                 );
               })
-            : admins
+            : data.admins.compAdminsOverall
                 .filter((admin) => {
                   return admin.EmpId === loggedInUserInfo.EmpId;
                 })
@@ -106,16 +156,16 @@ function CompaniesDetail(props) {
                     <CompanyInfoCard
                       name={company.CompanyName}
                       id={company.CompanyId}
-                      projects={projects.companyProjects.filter(
+                      projects={data.projects.companyProjects.filter(
                         (project) => company.CompanyId === project.CompanyId
                       )}
-                      admins={admins.filter(
+                      admins={data.admins.compAdminsOverall.filter(
                         (admin) => company.CompanyId === admin.CompanyId
                       )}
-                      contacts={contacts.filter(
+                      contacts={data.contacts.filter(
                         (contact) => company.CompanyId === contact.CompanyId
                       )}
-                      hoursPerProject={projectsHoursBilledProjected.allProjects.filter(
+                      hoursPerProject={data.projectsHoursBilledProjected.allProjects.filter(
                         (project) => company.CompanyId === project.CompanyId
                       )}
                     />
@@ -126,15 +176,15 @@ function CompaniesDetail(props) {
         <div className="CompaniesDetail--table-detail-container">
           {loggedInUserInfo.AdminLevel === "Super Admin" ? (
             <CompaniesReport
-              entries={companies}
-              projects={projectsHoursBilledProjected.allProjects}
+              entries={data.companies}
+              projects={data.projectsHoursBilledProjected.allProjects}
             />
           ) : (
             <CompaniesReport
-              entries={admins.filter((admin) => {
+              entries={data.admins.compAdminsOverall.filter((admin) => {
                 return admin.EmpId === loggedInUserInfo.EmpId;
               })}
-              projects={projectsHoursBilledProjected.allProjects}
+              projects={data.projectsHoursBilledProjected.allProjects}
             />
           )}
         </div>

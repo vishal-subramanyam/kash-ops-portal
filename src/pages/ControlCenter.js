@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-  Suspense,
-  useReducer,
-  useCallback,
-} from "react";
+import React, { useEffect, useState, useReducer, useCallback } from "react";
 import { Link } from "react-router-dom";
 import "../assets/styles/ControlCenter.css";
 import KPI from "../components/KPI";
@@ -22,41 +16,6 @@ let currentDate = new Date();
 let currentMonth = currentDate.getMonth() + 1;
 let currentYear = currentDate.getFullYear();
 let currentDateUnix = Date.parse(currentDate);
-
-// ============================================================================
-// FETCH ADMINS AND COMPANY ADMINS
-// ============================================================================
-
-// const getAllAdmins = () => {
-//   // Get all users who are Admins or Super Admins
-//   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
-//     method: "POST",
-//     headers: {
-//       Accept: "application/json, text/plain, */*",
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//       _keyword_: "KASH_OPERATIONS_USER_TABLE",
-//     }),
-//   })
-//     .then((res) => res.json())
-//     .then((res) => {
-//       let filteredOutAdmins = res.data.filter((admin) => {
-//         if (
-//           admin.AdminLevel === "Super Admin" ||
-//           admin.AdminLevel === "Admin"
-//         ) {
-//           return admin;
-//         }
-//       });
-//       return filteredOutAdmins;
-//     })
-//     .catch((err) => {
-//       return err;
-//     });
-
-//   return response;
-// };
 
 // ====================================================================================
 // REDUCER FUNCTION

@@ -191,13 +191,6 @@ function App() {
                 <CompaniesDetail
                   loggedInUser={loggedInUserLocal}
                   admin={isAdminLocal}
-                  // companies={resource.companies}
-                  // companyProjects={resource.companyProjects}
-                  // companyAdmins={resource.companyAdmins}
-                  // companyContacts={resource.companyContacts}
-                  // projectsHoursBilledProjected={
-                  //   resource.projectsBilledAndProjectedHoursByCompany
-                  // }
                 />
               </RequireAuth>
             }
@@ -236,24 +229,7 @@ function App() {
             path="/control-center"
             element={
               <RequireAuth>
-                <ControlCenter
-                  loggedInUser={loggedInUserLocal}
-                  // users={resource.users}
-                  // projects={resource.companyProjects}
-                  // companies={resource.companies()}
-                  // companyAdmins={resource.companyAdmins}
-                  // // timesheetEntryDetails={resource.timesheetEntryDetails}
-                  // avgHrsBilled={resource.avgBilledHours}
-                  // avgBilledHoursByRange={resource.avgBilledHoursByRange}
-                  // hoursBilledPerProject={resource.hoursBilledPerProject}
-                  // totalBilledHours={resource.totalBilledHours}
-                  // totalProjectedHours={resource.totalProjectedHours}
-                  // avgHoursPerCompany={resource.avgHoursPerCompany}
-                  // getHoursBilledDetail={resource.getHoursBilledDetail}
-                  // projectsBilledAndProjectedHoursByCompany={
-                  //   resource.projectsBilledAndProjectedHoursByCompany
-                  // }
-                />
+                <ControlCenter loggedInUser={loggedInUserLocal} />
               </RequireAuth>
             }
           />

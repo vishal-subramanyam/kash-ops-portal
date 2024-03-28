@@ -1,30 +1,71 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback, useReducer } from "react";
 import { Link } from "react-router-dom";
 import "../assets/styles/HomePage.css";
 import "../assets/styles/EmployeesDetail.css";
 import EmployeeInfoCard from "../components/EmployeeInfoCard";
 import UsersReport from "../components/UsersReport";
 import CompanyAdminInfoCard from "../components/CompanyAdminInfoCard";
+import { fetchUsers, fetchCompanyAdmins } from "../hooks/FetchData";
+
+// ====================================================================================
+// REDUCER FUNCTION
+// ====================================================================================
+
+function dataReducer(state, action) {
+  switch (action.type) {
+    case "initialize": {
+      return action.payload;
+    }
+
+    default: {
+      throw Error("Unknown action: " + action.type);
+    }
+  }
+}
 
 function EmployeesDetail(props) {
   let [tabActive, setTabActive] = useState("cardTab");
+
+  let initialState = {
+    allUsers: [],
+    allCompanyAdmins: [],
+    distinctCompanies: [],
+  };
+  let [data, dispatchData] = useReducer(dataReducer, initialState);
+  let getUsers = fetchUsers;
+  let getCompanyAdmins = fetchCompanyAdmins;
   let employeeInfoCardTabActive =
     "EmployeesDetail--tab EmployeesDetail--tab-active";
   let employeeInfoCardTabNotActive =
     "EmployeesDetail--tab EmployeesDetail--tab-not-active";
-  let allUsers = props.users.read();
-  let allCompanyAdmins = props.companyAdmins.read();
-  console.log(allCompanyAdmins);
-  //   filter allCompanyAdmins array to remove duplicate company names
-  let distinctCompanies = Object.values(
-    allCompanyAdmins.compAdminsOverall.reduce((c, e) => {
-      if (!c[e.CompanyName]) {
-        c[e.CompanyName] = e;
-      }
-      return c;
-    }, {})
-  );
-  console.log(distinctCompanies);
+
+  console.log(data.distinctCompanies);
+  const resolvePromisesAndDispatch = useCallback(() => {
+    Promise.allSettled([getUsers(), getCompanyAdmins()]).then((values) => {
+      console.log("Fetch Data: ", values);
+      dispatchData({
+        type: "initialize",
+        payload: {
+          allUsers: values[0].value,
+          allCompanyAdmins: values[1].value.compAdminsOverall,
+          //   filter allCompanyAdmins array to remove duplicate company names
+          distinctCompanies: Object.values(
+            values[1].value.compAdminsOverall.reduce((c, e) => {
+              if (!c[e.CompanyName]) {
+                c[e.CompanyName] = e;
+              }
+              return c;
+            }, {})
+          ),
+        },
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    resolvePromisesAndDispatch();
+  }, []);
+
   return (
     <main className="EmployeesDetail--container">
       <div className="kash_operations--upper-section-holder EmployeesDetail--upper-section-holder">
@@ -75,7 +116,7 @@ function EmployeesDetail(props) {
 
       {tabActive === "cardTab" ? (
         <div className="EmployeesDetail--info-card-container">
-          {allUsers.map((user) => {
+          {data.allUsers.map((user) => {
             return (
               <EmployeeInfoCard
                 firstName={user.FirstName}
@@ -96,7 +137,7 @@ function EmployeesDetail(props) {
         </div>
       ) : (
         <div className="EmployeesDetail--table-detail-container">
-          <UsersReport users={allUsers} />
+          <UsersReport users={data.allUsers} />
         </div>
       )}
     </main>
