@@ -4,8 +4,8 @@ import "../assets/styles/ControlCenter.css";
 
 function PieChartKPI(props) {
   return (
-    <>
-      <h1>{props.projectArr[0].projectName}</h1>
+    <div className="PieChart-container">
+      <h4>{props.projectArr[0].projectName}</h4>
       <PieChart
         //   colors={["red", "blue", "green"]} // Use palette
         series={[
@@ -14,8 +14,7 @@ function PieChartKPI(props) {
             innerRadius: 27,
           },
         ]}
-        width={props.projectArr.length <= 5 ? 400 : 750}
-        maxWidth={750}
+        // width={props.projectArr.length <= 5 ? 400 : 750}
         height={200}
         slotProps={{
           legend: {
@@ -25,7 +24,8 @@ function PieChartKPI(props) {
           },
         }}
       />
-    </>
+      <hr />
+    </div>
   );
 }
 

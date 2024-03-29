@@ -383,10 +383,12 @@ function ControlCenter(props) {
                   <LineChartKPI className="line-chart-kpi" />
                   <BarChartKPI className="bar-chart-kpi" />
                 */}
-                <HorizontalBarChartKPI
-                  className="horizontal-bar-chart-kpi"
-                  hrsBilledByUserByProjDet={KPIData.hrsBilledByUserByProjDet}
-                />
+                <div className="ControlCenter--horizontal-bar-chart-wrapper">
+                  <HorizontalBarChartKPI
+                    className="horizontal-bar-chart-kpi"
+                    hrsBilledByUserByProjDet={KPIData.hrsBilledByUserByProjDet}
+                  />
+                </div>
                 <ProjectPieChartsHolder
                   hrsBilledByUserByProjDet={KPIData.hrsBilledByUserByProjDet}
                 />

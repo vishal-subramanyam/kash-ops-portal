@@ -57,7 +57,7 @@ function ProjectPieChartsHolder(props) {
   });
   console.log(Object.values(projectGroups));
   return (
-    <>
+    <div className="ProjectListPieCharts-container">
       {/* loop over array of projects to show pie chart for each project */}
       <h1>Employee Hours Billed Per Project</h1>
       {Object.values(projectGroups).map((projectArr, i) => {
@@ -65,7 +65,7 @@ function ProjectPieChartsHolder(props) {
           <PieChartKPI className="pie-chart-kpi" projectArr={projectArr} />
         );
       })}
-    </>
+    </div>
   );
 }
 
