@@ -5,7 +5,6 @@ import KPI from "../components/KPI";
 import KPITEST from "../components/KPITEST";
 import ProjectHoursKPI from "../components/ProjectHoursKPI";
 import CompanyHoursKPI from "../components/CompanyHoursKPI";
-import PieChartKPI from "../components/PieChartKPI";
 import LineChartKPI from "../components/LineChartKPI";
 import BarChartKPI from "../components/BarChartKPI";
 import HorizontalBarChartKPI from "../components/HorizontalBarChartKPI";
@@ -24,6 +23,7 @@ import {
   getProjectsBilledAndProjectedHoursByCompany,
 } from "../hooks/FetchData";
 import { domain } from "../assets/api/apiEndpoints";
+import ProjectPieChartsHolder from "../components/ProjectPieChartsHolder";
 let currentDate = new Date();
 let currentMonth = currentDate.getMonth() + 1;
 let currentYear = currentDate.getFullYear();
@@ -380,12 +380,14 @@ function ControlCenter(props) {
 
               <section className="ControlCenter--chart-section-wrapper">
                 {/* KPI Charts and Graphs Section 
-                  <PieChartKPI className="pie-chart-kpi" />
                   <LineChartKPI className="line-chart-kpi" />
                   <BarChartKPI className="bar-chart-kpi" />
                 */}
                 <HorizontalBarChartKPI
                   className="horizontal-bar-chart-kpi"
+                  hrsBilledByUserByProjDet={KPIData.hrsBilledByUserByProjDet}
+                />
+                <ProjectPieChartsHolder
                   hrsBilledByUserByProjDet={KPIData.hrsBilledByUserByProjDet}
                 />
               </section>
@@ -435,12 +437,14 @@ function ControlCenter(props) {
 
               <section className="ControlCenter--chart-section-wrapper">
                 {/* KPI Charts and Graphs Section
-                  <PieChartKPI className="pie-chart-kpi" />
                   <LineChartKPI className="line-chart-kpi" />
                   <BarChartKPI className="bar-chart-kpi" />
                 */}
                 <HorizontalBarChartKPI
                   className="horizontal-bar-chart-kpi"
+                  hrsBilledByUserByProjDet={KPIData.hrsBilledByUserByProjDet}
+                />
+                <ProjectPieChartsHolder
                   hrsBilledByUserByProjDet={KPIData.hrsBilledByUserByProjDet}
                 />
               </section>
