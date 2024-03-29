@@ -5,7 +5,6 @@ import "../assets/styles/ControlCenter.css";
 function PieChartKPI(props) {
   return (
     <>
-      {console.log(props.projectArr)}
       <h1>{props.projectArr[0].projectName}</h1>
       <PieChart
         //   colors={["red", "blue", "green"]} // Use palette
@@ -15,11 +14,12 @@ function PieChartKPI(props) {
             innerRadius: 27,
           },
         ]}
-        width={400}
+        width={props.projectArr.length <= 5 ? 400 : 750}
+        maxWidth={750}
         height={200}
         slotProps={{
           legend: {
-            hidden: true,
+            // hidden: true,
             direction: "column",
             position: { vertical: "bottom", horizontal: "right" },
           },
