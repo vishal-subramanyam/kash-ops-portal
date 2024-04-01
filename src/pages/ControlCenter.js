@@ -204,7 +204,7 @@ function ControlCenter(props) {
           numCompanyAdmins: values[2].value.companyAdmins.length,
           // allCompaniesDet: [],
           avgHrsBilledByUserLifetime: values[3].value,
-          avgHrsBilledByUserByRange: values[4].value.avgHoursByRange,
+          avgHrsBilledByUserByRange: values[4].value.avgHoursByRange || 0,
           hrsBilledByUserByProjDet: values[5].value, // Array detailing company and project associated with a user entry who billed a project and those total billed hours
           avgHrsBilledByCompLifetime: values[6].value.avgHoursLifetime,
           avgHrsBilledByCompByRange:
@@ -345,11 +345,11 @@ function ControlCenter(props) {
                 />
                 <KPI value="0" caption="Employees Assigned" />
                 <KPI
-                  value={KPIData.avgHrsBilledByUserByRange || 0}
+                  value={KPIData.avgHrsBilledByUserByRange}
                   caption="Avg Hours Billed Per Resource"
                 />
                 <KPI
-                  value={KPIData.numCompanyAdmins || 0}
+                  value={KPIData.numCompanyAdmins}
                   caption="Company Admins"
                 />
                 <ProjectHoursKPI
@@ -361,7 +361,7 @@ function ControlCenter(props) {
                       (KPIData.totalHrsBilledByRange /
                         KPIData.totalHrsProjectedByRange) *
                       100
-                    ).toFixed(2) + "%"
+                    ).toFixed(2) + "%" || 0
                   }
                 />
                 <KPI

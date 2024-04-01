@@ -277,7 +277,11 @@ export const getAvgBilledHoursByRange = () => {
         "Num users billed: ",
         numUsersBilledCurrentMonth
       );
-      let avgHoursByRange = totalHours / numUsersBilledCurrentMonth.length;
+
+      let avgHoursByRange = 0;
+      if (numUsersBilledCurrentMonth.length > 0) {
+        avgHoursByRange = totalHours / numUsersBilledCurrentMonth.length;
+      }
       let hoursBilled = {
         lifetimeHoursArr: res.data,
         avgHoursByRange: avgHoursByRange.toFixed(2),

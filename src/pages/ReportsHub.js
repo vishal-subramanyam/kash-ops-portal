@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../assets/styles/Styles.css";
 import ProjectsReport from "../components/ProjectsReport";
@@ -6,6 +6,10 @@ import TimesheetsReport from "../components/TimesheetsReport";
 import SubAssignmentsReport from "../components/SubAssignmentsReport";
 
 function ReportsHub(props) {
+  let [tabActive, setTabActive] = useState("card");
+  let timesheetTabActive = "tab tab-active";
+  let timesheetTabNotActive = "tab tab-not-active";
+
   return (
     <>
       <header className="timesheet-report-header">
@@ -41,6 +45,24 @@ function ReportsHub(props) {
       </header>
 
       <main>
+        <ul className="tabs-container">
+          <li
+            className={
+              tabActive === "card" ? timesheetTabActive : timesheetTabNotActive
+            }
+            onClick={() => setTabActive("card")}
+          >
+            <span>Weekly Hours</span>
+          </li>
+          <li
+            className={
+              tabActive === "table" ? timesheetTabActive : timesheetTabNotActive
+            }
+            onClick={() => setTabActive("table")}
+          >
+            <span>Total Hours</span>
+          </li>
+        </ul>
         <TimesheetsReport loggedInUser={props.loggedInUser} />
       </main>
     </>
