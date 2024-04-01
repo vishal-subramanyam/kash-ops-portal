@@ -12,9 +12,10 @@ function PieChartKPI(props) {
           {
             data: [...props.projectArr],
             innerRadius: 27,
+            cx: 150,
           },
         ]}
-        // width={props.projectArr.length <= 5 ? 400 : 750}
+        width={props.projectArr.length <= 5 ? 450 : 600}
         height={200}
         slotProps={{
           legend: {
