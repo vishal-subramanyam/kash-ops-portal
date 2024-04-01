@@ -17,7 +17,6 @@ import UpdateTimesheet from "./pages/UpdateTimesheet";
 import EDITUpdateTimesheet from "./pages/EDITUpdateTimesheet";
 import RequireAuth from "./components/RequireAuth";
 import UpdatePassword from "./pages/UpdatePassword";
-import ReportsHub from "./pages/ReportsHub";
 import NavBar from "./components/NavBar";
 import EditProjectDetails from "./pages/EditProjectDetails";
 import EditCompanyDetails from "./pages/EditCompanyDetails";
@@ -25,6 +24,7 @@ import ControlCenter from "./pages/ControlCenter";
 import EmployeesDetail from "./pages/EmployeesDetail";
 import CompaniesDetail from "./pages/CompaniesDetail";
 import LoadingData from "./components/LoadingData";
+import TimesheetReportsPage from "./pages/TimesheetReportsPage";
 
 function App() {
   //  let resource = useResources(); // Access the fetch functions to get the pertinent users data
@@ -234,10 +234,10 @@ function App() {
             }
           />
           <Route
-            path="/reports"
+            path="/timesheet-reports"
             element={
               <RequireAuth>
-                <ReportsHub
+                <TimesheetReportsPage
                   loggedInUser={loggedInUserLocal}
                   admin={isAdminLocal}
                 />
