@@ -5,9 +5,12 @@ import TimesheetsReport from "../components/TimesheetsReport";
 import TimesheetsTotalsReport from "../components/TimesheetTotalsReport";
 
 function TimesheetReportsPage(props) {
+  const [allTimesheetRecords, setAllTimesheetRecords] = useState([]);
   let [tabActive, setTabActive] = useState("weekly");
   let timesheetTabActive = "tab tab-active";
   let timesheetTabNotActive = "tab tab-not-active";
+
+  const getTimesheetRecordsByRange = (from, to) => {};
 
   return (
     <>
@@ -72,7 +75,55 @@ function TimesheetReportsPage(props) {
         {tabActive === "weekly" ? (
           <TimesheetsReport loggedInUser={props.loggedInUser} />
         ) : (
-          <TimesheetsTotalsReport loggedInUser={props.loggedInUser} />
+          <div className="TimesheetTotalReport--container">
+            <div className="TimesheetTotalReport--reporting-date--holder">
+              <h4>Search Timesheets By Range</h4>
+              <div className="date-picker-holder">
+                <label
+                  htmlFor="timesheet-update--timesheet-start-date-input"
+                  className="reporting-start-date__label"
+                >
+                  From
+                </label>
+                <input
+                  type="date"
+                  required
+                  className="add-timesheet-entry--form-input timesheet-update--timesheet-start-date-input"
+                  id="timesheet-update--timesheet-start-date-input"
+                  name="timesheet-update--timesheet-start-date-input"
+                />
+
+                <label
+                  htmlFor="timesheet-update--timesheet-end-date-input"
+                  className="reporting-end-date__label"
+                >
+                  To
+                </label>
+                <input
+                  type="date"
+                  required
+                  className="add-timesheet-entry--form-input timesheet-update--timesheet-end-date-input"
+                  id="timesheet-update--timesheet-end-date-input"
+                  name="timesheet-update--timesheet-end-date-input"
+                />
+                <button
+                  className="btn btn-primary"
+                  onClick={getTimesheetRecordsByRange}
+                >
+                  Get Records
+                </button>
+              </div>
+            </div>
+
+            {allTimesheetRecords.length > 0 ? (
+              <TimesheetsTotalsReport
+                loggedInUser={props.loggedInUser}
+                timesheetRecordsArr={allTimesheetRecords}
+              />
+            ) : (
+              <></>
+            )}
+          </div>
         )}
       </main>
     </>

@@ -5,7 +5,9 @@ import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Reports.css";
 
 function TimesheetTotalsReport(props) {
-  const [allTimesheetRecords, setAllTimesheetRecords] = useState([]);
+  const [allTimesheetRecords, setAllTimesheetRecords] = useState(
+    props.timesheetRecordsArr
+  );
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     CompanyName: true,
     EmpId: false,
@@ -29,15 +31,15 @@ function TimesheetTotalsReport(props) {
   //   return new Date(twoWeeksAgo).toISOString().split("T")[0];
   // });
 
-  useEffect(() => {
-    if (props.loggedInUser.AdminLevel === "Super Admin") {
-      console.log("User is Super Admin", props.loggedInUser);
-      getAllTimesheets();
-    } else {
-      console.log("User is basic or admin", props.loggedInUser);
-      getTimesheetsByEmpId();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (props.loggedInUser.AdminLevel === "Super Admin") {
+  //     console.log("User is Super Admin", props.loggedInUser);
+  //     getAllTimesheets();
+  //   } else {
+  //     console.log("User is basic or admin", props.loggedInUser);
+  //     getTimesheetsByEmpId();
+  //   }
+  // }, []);
 
   const getAllTimesheets = async () => {
     await fetch(`${domain}GenericResultBuilderService/buildResults`, {
@@ -92,6 +94,13 @@ function TimesheetTotalsReport(props) {
         );
         alertMessage.current.showModal();
       });
+  };
+
+  const getTimesheetRecordsByRange = (from, to) => {
+    // Get timesheet records by range
+    // If logged in user is Super Admin, get all records in range
+    // If logged in user is just Admin, get records in range for companies they are admins for
+    // If logged in user is basic user, just get their records and no one else's
   };
 
   const transformedRowsTS = allTimesheetRecords.map((item, i) => ({

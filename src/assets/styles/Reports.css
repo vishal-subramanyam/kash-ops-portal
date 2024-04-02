@@ -8,11 +8,30 @@
 .timesheet-report-content-warpper {
   background-color: #a2d299;
   padding: 1.5rem 0px;
+  height: 100vh;
 }
 
-.timesheet-totals-report-content-warpper {
+.TimesheetTotalReport--container {
   background-color: #a2c9d5;
   padding: 1.5rem 0px;
+  height: 100vh;
+}
+
+.TimesheetTotalReport--reporting-date--holder {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  max-width: 11.5rem;
+  margin: 0 auto;
+  justify-content: space-between;
+  height: 15rem;
+}
+
+.date-picker-holder {
+  display: flex;
+  flex-direction: column;
+  height: 10rem;
+  justify-content: space-around;
 }
 
 .timesheet-report-container .MuiDataGrid-toolbarContainer button {
@@ -90,4 +109,9 @@
 
 .timesheet-totals-report-container .MuiDataGrid-toolbarContainer button {
   color: var(--kashtech_operations--blue-darken1);
+}
+
+.TimesheetReports--total-tab-not-active span,
+.TimesheetReports--weekly-tab-not-active span {
+  text-align: center;
 }
