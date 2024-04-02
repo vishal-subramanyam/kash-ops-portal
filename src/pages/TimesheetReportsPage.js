@@ -10,18 +10,21 @@ function TimesheetReportsPage(props) {
   const [allTimesheetRecords, setAllTimesheetRecords] = useState([]);
   let alertMessage = useRef();
   let [message, setMessage] = useState("");
+  let [dateFrom, setDateFrom] = useState("");
+  let [dateTo, setDateTo] = useState("");
   let [tabActive, setTabActive] = useState("weekly");
   let timesheetTabActive = "tab tab-active";
   let timesheetTabNotActive = "tab tab-not-active";
 
-  const getTimesheetRecordsByRange = (from, to) => {
-    if (props.loggedInUser.AdminLevel === "Super Admin") {
-      console.log("User is Super Admin", props.loggedInUser);
-      getAllTimesheets(from, to);
-    } else {
-      console.log("User is basic or admin", props.loggedInUser);
-      getTimesheetsByEmpId(from, to);
-    }
+  const getTimesheetRecordsByRange = (e) => {
+    console.log("Search Timesheets by range");
+    e.preventDefault();
+    // if (props.loggedInUser.AdminLevel === "Super Admin") {
+    //   console.log("User is Super Admin", props.loggedInUser);
+    //   getAllTimesheets(from, to);
+    // } else {
+    getTimesheetsByEmpId(dateFrom, dateTo);
+    // }
   };
 
   const getAllTimesheets = async (from, to) => {
@@ -52,6 +55,8 @@ function TimesheetReportsPage(props) {
   };
 
   const getTimesheetsByEmpId = async (from, to) => {
+    console.log(from);
+    console.log(to);
     await fetch(`${domain}GenericResultBuilderService/buildResults`, {
       method: "POST",
       headers: {
@@ -154,7 +159,11 @@ function TimesheetReportsPage(props) {
           <div className="TimesheetTotalReport--container">
             <div className="TimesheetTotalReport--reporting-date--holder">
               <h4>Search Timesheets By Range</h4>
-              <div className="date-picker-holder">
+              <form
+                className="date-picker-holder"
+                method="post"
+                onSubmit={(e) => getTimesheetRecordsByRange(e)}
+              >
                 <label
                   htmlFor="timesheet-update--timesheet-start-date-input"
                   className="reporting-start-date__label"
@@ -167,6 +176,7 @@ function TimesheetReportsPage(props) {
                   className="add-timesheet-entry--form-input timesheet-update--timesheet-start-date-input"
                   id="timesheet-update--timesheet-start-date-input"
                   name="timesheet-update--timesheet-start-date-input"
+                  onChange={(e) => setDateFrom(e.target.value)}
                 />
 
                 <label
@@ -181,14 +191,15 @@ function TimesheetReportsPage(props) {
                   className="add-timesheet-entry--form-input timesheet-update--timesheet-end-date-input"
                   id="timesheet-update--timesheet-end-date-input"
                   name="timesheet-update--timesheet-end-date-input"
+                  onChange={(e) => setDateTo(e.target.value)}
                 />
                 <button
                   className="btn btn-primary"
-                  onClick={getTimesheetRecordsByRange}
+                  // onClick={getTimesheetRecordsByRange}
                 >
                   Get Records
                 </button>
-              </div>
+              </form>
             </div>
 
             {allTimesheetRecords.length > 0 ? (

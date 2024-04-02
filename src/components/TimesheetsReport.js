@@ -138,8 +138,8 @@ function TimesheetsReport(props) {
       parseFloat(item.MondayHours)
     ).toFixed(2),
   }));
-  console.log(transformedRowsTS);
-  console.log(allTimesheetRecords);
+  // console.log(transformedRowsTS);
+  // console.log(allTimesheetRecords);
 
   const initialHiddenColumns = [
     "Billable",

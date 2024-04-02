@@ -195,3 +195,17 @@ join kash_operations_company_table as Company on Project.Company_Id = Company.Co
 WHERE timesheet.EMP_ID=cast(? as integer) OR company.COMPANY_ID IN (SELECT COMPANY_ID FROM KASH_OPERATIONS_COMPANY_ADMIN_ROLE_TABLE WHERE EMP_ID=cast(? as integer)) AND Timesheets.Entry_Date >= ? AND Timesheets.Entry_Date <= ? 
 Group By Full_Name, Project_Description, Timesheets.Non_Billable_Reason,  Timesheets.Sub_Assignment, Timesheets.Sub_Assignment_Segment_1, Timesheets.Ticket_Num
 Order by Full_Name
+
+
+-- Get timesheet records by range
+select CONCAT(Users.First_Name, ' ', Users.Last_Name) As Full_Name, CONCAT(Company.Company_Name, ' - ', Project.Project_Category,' (', Project.Sow_Id, ') ') As Project_Description, Timesheets.Non_Billable_Reason, MAX(Timesheets.Timesheet_Status_Entry) as Status, Timesheets.Sub_Assignment, Timesheets.Sub_Assignment_Segment_1, Timesheets.Ticket_Num, SUM(Timesheets.Task_Hours) As Total_Hours  
+from v_kash_operations_timesheet_table_date as Timesheets 
+join kash_operations_created_projects_table as Project 
+on Timesheets.sow_id = Project.sow_id
+join kash_operations_user_table as Users
+on Timesheets.Emp_Id = Users.Emp_Id
+join kash_operations_company_table as Company
+on Project.Company_Id = Company.Company_Id 
+where Timesheets.Entry_Date >= '2024-01-01' AND Timesheets.Entry_Date <= '2024-04-01'
+Group By Full_Name, Project_Description, Timesheets.Non_Billable_Reason,  Timesheets.Sub_Assignment, Timesheets.Sub_Assignment_Segment_1, Timesheets.Ticket_Num
+Order by Full_Name, Project_Description
