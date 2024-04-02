@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../assets/styles/Styles.css";
 import TimesheetsReport from "../components/TimesheetsReport";
+import TimesheetsTotalsReport from "../components/TimesheetTotalsReport";
 
 function TimesheetReportsPage(props) {
-  let [tabActive, setTabActive] = useState("card");
+  let [tabActive, setTabActive] = useState("weekly");
   let timesheetTabActive = "tab tab-active";
   let timesheetTabNotActive = "tab tab-not-active";
 
@@ -24,7 +25,7 @@ function TimesheetReportsPage(props) {
           >
             Timesheets Report
           </h1>
-          <Link to="/" className="return-to-operations-hub">
+          <Link to="/timesheets-hub" className="return-to-operations-hub">
             <svg
               width="80"
               height="134"
@@ -37,7 +38,7 @@ function TimesheetReportsPage(props) {
                 fill="#255463"
               />
             </svg>
-            <p>Return to Operations Hub</p>
+            <p>Return to Timesheets Hub</p>
           </Link>
         </div>
       </header>
@@ -46,22 +47,33 @@ function TimesheetReportsPage(props) {
         <ul className="tabs-container">
           <li
             className={
-              tabActive === "card" ? timesheetTabActive : timesheetTabNotActive
+              tabActive === "weekly"
+                ? timesheetTabActive + " TimesheetReports--weekly-tab-active"
+                : timesheetTabNotActive +
+                  " TimesheetReports--weekly-tab-not-active"
             }
-            onClick={() => setTabActive("card")}
+            onClick={() => setTabActive("weekly")}
           >
             <span>Weekly Hours</span>
           </li>
           <li
             className={
-              tabActive === "table" ? timesheetTabActive : timesheetTabNotActive
+              tabActive === "total"
+                ? timesheetTabActive + " TimesheetReports--total-tab-active"
+                : timesheetTabNotActive +
+                  " TimesheetReports--total-tab-not-active"
             }
-            onClick={() => setTabActive("table")}
+            onClick={() => setTabActive("total")}
           >
             <span>Total Hours</span>
           </li>
         </ul>
-        <TimesheetsReport loggedInUser={props.loggedInUser} />
+
+        {tabActive === "weekly" ? (
+          <TimesheetsReport loggedInUser={props.loggedInUser} />
+        ) : (
+          <TimesheetsTotalsReport loggedInUser={props.loggedInUser} />
+        )}
       </main>
     </>
   );

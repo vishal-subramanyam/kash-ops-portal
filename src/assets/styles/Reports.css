@@ -1,4 +1,5 @@
-.timesheet-report-container {
+.timesheet-report-container,
+.timesheet-totals-report-container {
   width: 90%;
   background-color: #fff;
   margin: 0 auto;
@@ -9,6 +10,84 @@
   padding: 1.5rem 0px;
 }
 
+.timesheet-totals-report-content-warpper {
+  background-color: #a2c9d5;
+  padding: 1.5rem 0px;
+}
+
 .timesheet-report-container .MuiDataGrid-toolbarContainer button {
   color: #54c488;
+}
+
+.tabs-container {
+  width: 50%;
+  padding: 0;
+  margin: -1px;
+  list-style: none;
+  display: flex;
+  align-items: end;
+  overflow: hidden;
+}
+
+.tab {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bolder;
+  height: 45px;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.tab-active span {
+  -webkit-box-shadow: 0px 12px 25px 2px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0px 12px 25px 2px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 12px 25px 2px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  z-index: 0;
+  height: 55px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.tabs-container li:hover {
+  height: 50px;
+  cursor: pointer;
+}
+
+.TimesheetReports--weekly-tab-not-active {
+  height: 45px;
+  background-color: #a2d299 !important;
+  color: #2a8519 !important;
+  z-index: 0;
+}
+
+.TimesheetReports--weekly-tab-active {
+  height: 55px !important;
+  background-color: #a2d299 !important;
+  color: #2a8519 !important;
+  z-index: 4;
+}
+
+.TimesheetReports--total-tab-not-active {
+  height: 45px;
+  color: var(--kashtech_operations--blue-darken1);
+  background-color: #a2c9d5;
+  z-index: 0;
+}
+
+.TimesheetReports--total-tab-active {
+  height: 55px !important;
+  color: var(--kashtech_operations--blue-darken1);
+  background-color: #a2c9d5;
+  z-index: 4;
+}
+
+.timesheet-totals-report-container .MuiDataGrid-toolbarContainer button {
+  color: var(--kashtech_operations--blue-darken1);
 }
