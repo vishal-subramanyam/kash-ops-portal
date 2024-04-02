@@ -19,12 +19,17 @@ function TimesheetReportsPage(props) {
   const getTimesheetRecordsByRange = (e) => {
     console.log("Search Timesheets by range");
     e.preventDefault();
-    // if (props.loggedInUser.AdminLevel === "Super Admin") {
-    //   console.log("User is Super Admin", props.loggedInUser);
-    //   getAllTimesheets(from, to);
-    // } else {
-    getTimesheetsByEmpId(dateFrom, dateTo);
-    // }
+    // Get timesheet records by range
+    // If logged in user is Super Admin, get all records in range
+    // If logged in user is just Admin, get records in range for companies they are admins for
+    // If logged in user is basic user, just get their records and no one else's
+
+    if (props.loggedInUser.AdminLevel === "Super Admin") {
+      console.log("User is Super Admin", props.loggedInUser);
+      getAllTimesheets(dateFrom, dateTo);
+    } else {
+      getTimesheetsByEmpId(dateFrom, dateTo);
+    }
   };
 
   const getAllTimesheets = async (from, to) => {
@@ -36,6 +41,8 @@ function TimesheetReportsPage(props) {
       },
       body: JSON.stringify({
         _keyword_: "TIMESHEET_HOURS_BILLED_RANGE_TABLE",
+        FromDate: from,
+        ToDate: to,
       }),
     })
       .then((res) => res.json())
@@ -193,10 +200,7 @@ function TimesheetReportsPage(props) {
                   name="timesheet-update--timesheet-end-date-input"
                   onChange={(e) => setDateTo(e.target.value)}
                 />
-                <button
-                  className="btn btn-primary"
-                  // onClick={getTimesheetRecordsByRange}
-                >
+                <button className="btn btn-primary TimesheetTotalReport--button">
                   Get Records
                 </button>
               </form>

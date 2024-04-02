@@ -115,3 +115,14 @@
 .TimesheetReports--weekly-tab-not-active span {
   text-align: center;
 }
+
+.TimesheetTotalReport--reporting-date--holder h4,
+.TimesheetTotalReport--reporting-date--holder label {
+  color: var(--kashtech_operations--blue-darken1);
+  font-weight: bold;
+}
+
+.TimesheetTotalReport--button {
+  background-color: var(--kashtech_operations--blue-darken1);
+  border-color: var(--kashtech_operations--blue-darken1);
+}

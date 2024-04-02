@@ -18,7 +18,7 @@ function TimesheetTotalsReport(props) {
     SubAssignment: true,
     SubAssignmentSegment1: true,
     TicketNum: true,
-    Status: true,
+    EntryStatus: true,
     EntryDate: false,
   });
   let alertMessage = useRef();
@@ -31,77 +31,7 @@ function TimesheetTotalsReport(props) {
   //   return new Date(twoWeeksAgo).toISOString().split("T")[0];
   // });
 
-  // useEffect(() => {
-  //   if (props.loggedInUser.AdminLevel === "Super Admin") {
-  //     console.log("User is Super Admin", props.loggedInUser);
-  //     getAllTimesheets();
-  //   } else {
-  //     console.log("User is basic or admin", props.loggedInUser);
-  //     getTimesheetsByEmpId();
-  //   }
-  // }, []);
-
-  const getAllTimesheets = async () => {
-    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        _keyword_: "TIMESHEETS_AND_COMPANY_INFO_TABLE",
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res.data);
-        // save all timesheet records to state
-        setAllTimesheetRecords(res.data);
-      })
-      .catch((err) => {
-        setMessage(
-          alertMessageDisplay(
-            `Unable to load timesheets from database. Error: ${err}`
-          )
-        );
-        alertMessage.current.showModal();
-      });
-  };
-
-  const getTimesheetsByEmpId = async () => {
-    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        _keyword_: "TIMESHEETS_BY_COMPANY_ADMIN_TABLE",
-        EmpId: props.loggedInUser.EmpId,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res.data);
-        // save all timesheet records to state
-        setAllTimesheetRecords(res.data);
-      })
-      .catch((err) => {
-        setMessage(
-          alertMessageDisplay(
-            `Unable to load timesheets from database. Error: ${err}`
-          )
-        );
-        alertMessage.current.showModal();
-      });
-  };
-
-  const getTimesheetRecordsByRange = (from, to) => {
-    // Get timesheet records by range
-    // If logged in user is Super Admin, get all records in range
-    // If logged in user is just Admin, get records in range for companies they are admins for
-    // If logged in user is basic user, just get their records and no one else's
-  };
+  console.log(allTimesheetRecords);
 
   const transformedRowsTS = allTimesheetRecords.map((item, i) => ({
     idTS: i,
@@ -113,7 +43,8 @@ function TimesheetTotalsReport(props) {
     NonBillableReason: item.NonBillableReason,
     SubAssignment: item.SubAssignment,
     EmpId: item.EmpId,
-    Status: item.Status,
+    EntryStatus: item.EntryStatus,
+    TotalHours: item.TotalHours,
   }));
   // console.log(transformedRowsTS);
   // console.log(allTimesheetRecords);

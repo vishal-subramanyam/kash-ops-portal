@@ -209,3 +209,4 @@ on Project.Company_Id = Company.Company_Id
 where Timesheets.Entry_Date >= '2024-01-01' AND Timesheets.Entry_Date <= '2024-04-01'
 Group By Full_Name, Project_Description, Timesheets.Non_Billable_Reason,  Timesheets.Sub_Assignment, Timesheets.Sub_Assignment_Segment_1, Timesheets.Ticket_Num
 Order by Full_Name, Project_Description
+
