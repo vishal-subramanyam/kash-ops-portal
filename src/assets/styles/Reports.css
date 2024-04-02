@@ -8,13 +8,13 @@
 .timesheet-report-content-warpper {
   background-color: #a2d299;
   padding: 1.5rem 0px;
-  height: 100vh;
+  height: 100%;
 }
 
 .TimesheetTotalReport--container {
   background-color: #a2c9d5;
   padding: 1.5rem 0px;
-  height: 100vh;
+  height: 100%;
 }
 
 .TimesheetTotalReport--reporting-date--holder {

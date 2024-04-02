@@ -173,3 +173,25 @@ SELECT Projects.project_category, Projects.sow_id, Companies.company_name, Proje
 
 -- Timesheet report for searching records by date - from and to dates
 select CONCAT(Users.First_Name, ' ', Users.Last_Name) As Full_Name, CONCAT(Company.Company_Name, ' - ', Project.Project_Category,' (', Project.Sow_Id, ') ') As Project_Description, Timesheets.Non_Billable_Reason, MAX(Timesheets.Timesheet_Status_Entry), Timesheets.Sub_Assignment, Timesheets.Sub_Assignment_Segment_1, Timesheets.Ticket_Num, SUM(Timesheets.Task_Hours) As Total_Hours from v_kash_operations_timesheet_table_date as Timesheets join kash_operations_created_projects_table as Project on timesheets.sow_id = Project.sow_id join kash_operations_user_table as Users on Timesheets.Emp_Id = Users.Emp_Id join kash_operations_company_table as Company on Project.Company_Id = Company.Company_Id Where Timesheets.Entry_Date >= ? AND Timesheets.Entry_Date <= ? Group By Full_Name, Project_Description, Timesheets.Non_Billable_Reason,  Timesheets.Sub_Assignment, Timesheets.Sub_Assignment_Segment_1, Timesheets.Ticket_Num Order by Full_Name
+
+
+
+
+
+-- Get Timesheet records by range and by company admin
+SELECT timesheet.ENTRY_DATE, company.COMPANY_NAME, employee.FIRST_NAME || ' ' || employee.LAST_NAME AS "full_name", project.PROJECT_CATEGORY, timesheet.SUB_ASSIGNMENT, timesheet.SUB_ASSIGNMENT_SEGMENT_1, timesheet.TICKET_NUM, SUM(timesheet.TOTAL_HOURS) FROM v_kash_operations_timesheet_table_date AS timesheet LEFT OUTER JOIN KASH_OPERATIONS_CREATED_PROJECTS_TABLE AS project ON timesheet.SOW_ID = project.SOW_ID LEFT OUTER JOIN KASH_OPERATIONS_COMPANY_TABLE AS company ON project.COMPANY_ID = company.COMPANY_ID LEFT OUTER JOIN KASH_OPERATIONS_USER_TABLE AS employee ON timesheet.EMP_ID = employee.EMP_ID WHERE timesheet.EMP_ID=cast(? as integer) OR company.COMPANY_ID IN (SELECT COMPANY_ID FROM KASH_OPERATIONS_COMPANY_ADMIN_ROLE_TABLE WHERE EMP_ID=cast(? as integer)) ORDER BY timesheet.PERIOD_START_DATE DESC
+
+
+
+
+-- Get Timesheet records by range
+select CONCAT(Users.First_Name, ' ', Users.Last_Name) As Full_Name, CONCAT(Company.Company_Name, ' - ', Project.Project_Category,' (', Project.Sow_Id, ') ') As Project_Description, Timesheets.Non_Billable_Reason, MAX(Timesheets.Timesheet_Status_Entry) As Entry_Status, Timesheets.Sub_Assignment, Timesheets.Sub_Assignment_Segment_1, Timesheets.Ticket_Num, SUM(Timesheets.Task_Hours) As Total_Hours 
+from v_kash_operations_timesheet_table_date as Timesheets 
+join kash_operations_created_projects_table as Project 
+on timesheets.sow_id = Project.sow_id 
+join kash_operations_user_table as Users
+on Timesheets.Emp_Id = Users.Emp_Id
+join kash_operations_company_table as Company on Project.Company_Id = Company.Company_Id
+WHERE timesheet.EMP_ID=cast(? as integer) OR company.COMPANY_ID IN (SELECT COMPANY_ID FROM KASH_OPERATIONS_COMPANY_ADMIN_ROLE_TABLE WHERE EMP_ID=cast(? as integer)) AND Timesheets.Entry_Date >= ? AND Timesheets.Entry_Date <= ? 
+Group By Full_Name, Project_Description, Timesheets.Non_Billable_Reason,  Timesheets.Sub_Assignment, Timesheets.Sub_Assignment_Segment_1, Timesheets.Ticket_Num
+Order by Full_Name

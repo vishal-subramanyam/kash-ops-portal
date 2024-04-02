@@ -1,16 +1,93 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Styles.css";
 import TimesheetsReport from "../components/TimesheetsReport";
 import TimesheetsTotalsReport from "../components/TimesheetTotalsReport";
+import AlertMessage from "../components/AlertMessage";
 
 function TimesheetReportsPage(props) {
   const [allTimesheetRecords, setAllTimesheetRecords] = useState([]);
+  let alertMessage = useRef();
+  let [message, setMessage] = useState("");
   let [tabActive, setTabActive] = useState("weekly");
   let timesheetTabActive = "tab tab-active";
   let timesheetTabNotActive = "tab tab-not-active";
 
-  const getTimesheetRecordsByRange = (from, to) => {};
+  const getTimesheetRecordsByRange = (from, to) => {
+    if (props.loggedInUser.AdminLevel === "Super Admin") {
+      console.log("User is Super Admin", props.loggedInUser);
+      getAllTimesheets(from, to);
+    } else {
+      console.log("User is basic or admin", props.loggedInUser);
+      getTimesheetsByEmpId(from, to);
+    }
+  };
+
+  const getAllTimesheets = async (from, to) => {
+    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "TIMESHEET_HOURS_BILLED_RANGE_TABLE",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res.data);
+        // save all timesheet records to state
+        setAllTimesheetRecords(res.data);
+      })
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to load timesheets from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
+  };
+
+  const getTimesheetsByEmpId = async (from, to) => {
+    await fetch(`${domain}GenericResultBuilderService/buildResults`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _keyword_: "TIMESHEET_HOURS_BILLED_RANGE_COMPANY_ADMIN_TABLE",
+        EmpId: props.loggedInUser.EmpId,
+        FromDate: from,
+        ToDate: to,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res.data);
+        // save all timesheet records to state
+        setAllTimesheetRecords(res.data);
+      })
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `Unable to load timesheets from database. Error: ${err}`
+          )
+        );
+        alertMessage.current.showModal();
+      });
+  };
+
+  const alertMessageDisplay = (entry) => {
+    return entry;
+  };
+
+  const closeAlert = () => {
+    alertMessage.current.close();
+  };
 
   return (
     <>
@@ -71,7 +148,6 @@ function TimesheetReportsPage(props) {
             <span>Total Hours</span>
           </li>
         </ul>
-
         {tabActive === "weekly" ? (
           <TimesheetsReport loggedInUser={props.loggedInUser} />
         ) : (
@@ -125,6 +201,7 @@ function TimesheetReportsPage(props) {
             )}
           </div>
         )}
+        <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
       </main>
     </>
   );
