@@ -22,8 +22,8 @@
   flex-direction: column;
   width: 80%;
   max-width: 11.5rem;
-  margin: 0 auto;
-  justify-content: space-between;
+  margin: 0 auto 1rem auto;
+  justify-content: space-around;
   height: 15rem;
 }
 
@@ -125,4 +125,7 @@
 .TimesheetTotalReport--button {
   background-color: var(--kashtech_operations--blue-darken1);
   border-color: var(--kashtech_operations--blue-darken1);
+}
+
+@media only screen and (min-device-width: 768px) {
 }
