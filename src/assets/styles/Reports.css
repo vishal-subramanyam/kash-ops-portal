@@ -8,13 +8,13 @@
 .timesheet-report-content-warpper {
   background-color: #a2d299;
   padding: 1.5rem 0px;
-  height: 100%;
+  /* height: 100%; */
 }
 
 .TimesheetTotalReport--container {
   background-color: #a2c9d5;
   padding: 1.5rem 0px;
-  height: 100%;
+  /* height: 100%; */
 }
 
 .TimesheetTotalReport--reporting-date--holder {
@@ -127,5 +127,24 @@
   border-color: var(--kashtech_operations--blue-darken1);
 }
 
-@media only screen and (min-device-width: 768px) {
+@media only screen and (min-width: 768px) {
+  .TimesheetTotalReport--reporting-date--holder {
+    max-width: 100%;
+    justify-content: center;
+    height: 8rem;
+    align-items: center;
+  }
+
+  .date-picker-holder {
+    display: flex;
+    flex-direction: row;
+    height: unset;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .date-picker-holder input {
+    height: 2.4rem;
+    margin: 0 0.5rem;
+  }
 }

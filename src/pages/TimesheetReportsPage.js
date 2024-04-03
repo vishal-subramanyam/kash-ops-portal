@@ -163,7 +163,12 @@ function TimesheetReportsPage(props) {
         {tabActive === "weekly" ? (
           <TimesheetsReport loggedInUser={props.loggedInUser} />
         ) : (
-          <div className="TimesheetTotalReport--container">
+          <div
+            className="TimesheetTotalReport--container"
+            style={{
+              height: allTimesheetRecords.length === 0 ? "100dvh" : "100%",
+            }}
+          >
             <div className="TimesheetTotalReport--reporting-date--holder">
               <h4>Search Timesheets By Range</h4>
               <form

@@ -224,7 +224,12 @@ function TimesheetsReport(props) {
   };
 
   return (
-    <div className="timesheet-report-content-warpper">
+    <div
+      className="timesheet-report-content-warpper"
+      style={{
+        height: allTimesheetRecords.length === 0 ? "100dvh" : "100%",
+      }}
+    >
       {/* <h1 className="report-title"> KASH OPS TIMESHEETS </h1> */}
       <div className="timesheet-report-container">
         <DataGrid
