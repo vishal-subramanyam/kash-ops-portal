@@ -52,6 +52,13 @@ function HorizontalBarChartKPI(props) {
           valueFormatter,
         },
       ]}
+      slotProps={{
+        legend: {
+          labelStyle: {
+            fontSize: 14,
+          },
+        },
+      }}
       layout="horizontal"
       {...chartSetting}
     />

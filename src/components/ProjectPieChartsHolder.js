@@ -59,7 +59,7 @@ function ProjectPieChartsHolder(props) {
   return (
     <div className="ProjectListPieCharts-container">
       {/* loop over array of projects to show pie chart for each project */}
-      <h1>Employee Hours Billed Per Project</h1>
+      <h3>Employee Hours Billed Per Project</h3>
       {Object.values(projectGroups).map((projectArr, i) => {
         return (
           <PieChartKPI className="pie-chart-kpi" projectArr={projectArr} />
