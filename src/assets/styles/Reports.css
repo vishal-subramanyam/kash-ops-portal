@@ -74,8 +74,9 @@
   border-top-right-radius: 0.5rem;
 }
 
-.tabs-container li:hover {
-  height: 50px;
+.tabs-container li:hover,
+.tabs-container li span:hover {
+  /* height: 50px; */
   cursor: pointer;
 }
 
