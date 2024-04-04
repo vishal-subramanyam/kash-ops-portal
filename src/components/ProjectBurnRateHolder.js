@@ -7,7 +7,9 @@ function ProjectBurnRateHolder(props) {
     <div className="ProjectListBurnRateCharts-container">
       {/* loop over array of projects to show pie chart for each project */}
       <h3>Hours Billed/ Alloted Hours Per Project</h3>
-      <BurnRateChartKPI allProjects={props.hrsAllottedBilledByProj} />
+      {props.hrsAllottedBilledByProj.map((project, i) => {
+        return <BurnRateChartKPI projectDetails={project} />;
+      })}
     </div>
   );
 }

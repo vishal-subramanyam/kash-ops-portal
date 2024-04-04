@@ -115,7 +115,8 @@
 }
 
 .ControlCenter--horizontal-bar-chart-wrapper div,
-.ProjectListPieCharts-container {
+.ProjectListPieCharts-container,
+.ProjectListBurnRateCharts-container {
   width: 90%;
   background-color: #b9e1ed;
   margin-bottom: 1rem;
