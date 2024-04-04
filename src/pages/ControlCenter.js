@@ -24,6 +24,7 @@ import {
 } from "../hooks/FetchData";
 import { domain } from "../assets/api/apiEndpoints";
 import ProjectPieChartsHolder from "../components/ProjectPieChartsHolder";
+import ProjectBurnRateHolder from "../components/ProjectBurnRateHolder";
 let currentDate = new Date();
 let currentMonth = currentDate.getMonth() + 1;
 let currentYear = currentDate.getFullYear();
@@ -383,6 +384,9 @@ function ControlCenter(props) {
                   <LineChartKPI className="line-chart-kpi" />
                   <BarChartKPI className="bar-chart-kpi" />
                 */}
+                <ProjectBurnRateHolder
+                  hrsAllottedBilledByProj={KPIData.allProjectsArr}
+                />
                 <div className="ControlCenter--horizontal-bar-chart-wrapper">
                   <HorizontalBarChartKPI
                     className="horizontal-bar-chart-kpi"

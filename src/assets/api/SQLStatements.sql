@@ -210,3 +210,6 @@ where Timesheets.Entry_Date >= '2024-01-01' AND Timesheets.Entry_Date <= '2024-0
 Group By Full_Name, Project_Description, Timesheets.Non_Billable_Reason,  Timesheets.Sub_Assignment, Timesheets.Sub_Assignment_Segment_1, Timesheets.Ticket_Num
 Order by Full_Name, Project_Description
 
+-- TABLE: TOTAL_HOURS_BILLED_BY_PROJECT
+-- Updated SQL with Company.company_name and joined the company table to get the company name for the data output
+SELECT Projects.sow_id, Company.company_name, Projects.company_id, Projects.total_projected_hours, SUM(Timesheets.monday_hours +Timesheets.tuesday_hours +Timesheets.wednesday_hours + Timesheets.thursday_hours + Timesheets.friday_hours +Timesheets.saturday_hours + Timesheets.sunday_hours ) AS Total_Billed_Hours FROM KASH_OPERATIONS_TIMESHEET_TABLE AS Timesheets JOIN KASH_OPERATIONS_CREATED_PROJECTS_TABLE AS Projects ON Timesheets.sow_id = Projects.sow_id JOIN KASH_OPERATIONS_COMPANY_TABLE AS Company ON Projects.company_id = Company.company_id WHERE Timesheets.non_billable_reason = 'n/a' OR Timesheets.non_billable_reason = 'N/A' OR Timesheets.non_billable_reason = '' GROUP BY Projects.SOW_ID, Company.company_name ORDER BY Projects.SOW_ID

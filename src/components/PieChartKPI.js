@@ -17,7 +17,7 @@ function PieChartKPI(props) {
             // cy: 95,
           },
         ]}
-        // width={props.projectArr.length <= 5 ? 450 : 600}
+        // width={450}
         height={props.projectArr.length <= 5 ? 200 : 300}
         slotProps={{
           legend: {
