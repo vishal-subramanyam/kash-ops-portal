@@ -590,20 +590,37 @@ export const getProjectsBilledAndProjectedHoursByCompany = () => {
       console.log("Hours Billed and Projected by Company Project: ", res.data);
 
       // convert string values of total projected hours and total billed hours per company project
-      let projectsByCompanyDateWithBurnTime = res.data.map((project) => ({
-        CompanyId: project.CompanyId,
-        CompanyName: project.CompanyName,
-        CurrentStatus: project.CurrentStatus,
-        ProjectCategory: project.ProjectCategory,
-        SowId: project.SowId,
-        TotalBilledHours: parseFloat(project.TotalBilledHours),
-        TotalProjectedHours: parseFloat(project.TotalProjectedHours),
-        ProjectBurnTime:
-          parseFloat(project.TotalProjectedHours) -
-          parseFloat(project.TotalBilledHours),
-        OriginalStartDate: project.OriginalStartDate,
-        OriginalEndDate: project.OriginalEndDate,
-      }));
+      let projectsByCompanyDateWithBurnTime = res.data.map((project) => {
+        if (!project.TotalBilledHours) {
+          return {
+            CompanyId: project.CompanyId,
+            CompanyName: project.CompanyName,
+            CurrentStatus: project.CurrentStatus,
+            ProjectCategory: project.ProjectCategory,
+            SowId: project.SowId,
+            TotalBilledHours: 0,
+            TotalProjectedHours: parseFloat(project.TotalProjectedHours),
+            ProjectBurnTime: parseFloat(project.TotalProjectedHours) - 0,
+            OriginalStartDate: project.OriginalStartDate,
+            OriginalEndDate: project.OriginalEndDate,
+          };
+        } else {
+          return {
+            CompanyId: project.CompanyId,
+            CompanyName: project.CompanyName,
+            CurrentStatus: project.CurrentStatus,
+            ProjectCategory: project.ProjectCategory,
+            SowId: project.SowId,
+            TotalBilledHours: parseFloat(project.TotalBilledHours),
+            TotalProjectedHours: parseFloat(project.TotalProjectedHours),
+            ProjectBurnTime:
+              parseFloat(project.TotalProjectedHours) -
+              parseFloat(project.TotalBilledHours),
+            OriginalStartDate: project.OriginalStartDate,
+            OriginalEndDate: project.OriginalEndDate,
+          };
+        }
+      });
 
       // Calculate burn time by lifetime and by range (month)
       let lowBurnTimeLifetime = projectsByCompanyDateWithBurnTime.filter(

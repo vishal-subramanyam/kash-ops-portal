@@ -148,26 +148,37 @@
   margin: 0 auto;
 }
 
-.PieChart-container h4 {
+.PieChart-container h4,
+.BurnRateChart--container h6 {
   text-align: center;
   font-weight: 200;
 }
 
-.ProjectListPieCharts-container h1 {
+.ProjectListPieCharts-container h3,
+.ProjectListBurnRateCharts-container h3 {
   text-align: center;
   font-weight: bolder;
   margin: 1rem auto;
 }
 
-.PieChart-container {
-  width: 70%;
+.PieChart-container,
+.BurnRateChart--container {
+  width: 90%;
   margin: 0 auto;
   max-width: 400px;
 }
 
-.PieChart-container hr {
-  width: 90%;
+.PieChart-container hr,
+.BurnRateChart--container hr {
+  width: 100%;
   margin: 1rem auto;
+}
+
+.BurnRateChart--container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 /* @media only screen and (min-device-width: 280px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 1) {
