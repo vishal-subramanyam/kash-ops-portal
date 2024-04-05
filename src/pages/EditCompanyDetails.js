@@ -243,7 +243,7 @@ function EditCompanyDetails(props) {
                 fill="#255463"
               />
             </svg>
-            <p className="return-link-text">Return to Clients</p>
+            <p className="return-link-text">Return to Client Hub</p>
           </Link>
         </div>
         <div className="add-company-page--content-holder">

@@ -59,7 +59,7 @@ function HomePage(props) {
         )}
         <div className="kash_operations_home--main-card--wrapper kash_operations_home--timesheets-card--wrapper">
           <Link
-            to="/timesheets-hub"
+            to="/timesheet-hub"
             className="kash_operations_home--main-card kash_operations_home--timesheets-card"
           >
             <h2 className="kash_operations--timesheets-card-title">

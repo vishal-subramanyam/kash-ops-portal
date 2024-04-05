@@ -780,7 +780,7 @@ function UpdateTimesheet(props) {
           Update Weekly Timesheet
         </h1>
         <div className="edit_page__return-link-holder">
-          <Link to="/timesheets-hub" className="return-link">
+          <Link to="/timesheet-hub" className="return-link">
             <svg
               width="80"
               height="134"

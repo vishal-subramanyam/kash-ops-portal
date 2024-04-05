@@ -196,7 +196,7 @@ function App() {
             }
           />
           <Route
-            path="/timesheets-hub"
+            path="/timesheet-hub"
             element={
               <RequireAuth>
                 <TimesheetsHub />

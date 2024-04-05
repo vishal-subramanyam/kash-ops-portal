@@ -117,7 +117,7 @@ function TimesheetReportsPage(props) {
           >
             Timesheets Report
           </h1>
-          <Link to="/timesheets-hub" className="return-to-operations-hub">
+          <Link to="/timesheet-hub" className="return-to-operations-hub">
             <svg
               width="80"
               height="134"
@@ -130,7 +130,7 @@ function TimesheetReportsPage(props) {
                 fill="#255463"
               />
             </svg>
-            <p>Return to Timesheets Hub</p>
+            <p>Return to Timesheet Hub</p>
           </Link>
         </div>
       </header>

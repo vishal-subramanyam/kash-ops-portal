@@ -86,7 +86,7 @@ function EmployeesDetail(props) {
                 fill="#255463"
               />
             </svg>
-            <p className="return-link-text">Return to Employees</p>
+            <p className="return-link-text">Return to Employee Hub</p>
           </Link>
         </div>
       </div>
