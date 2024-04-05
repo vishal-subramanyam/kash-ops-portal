@@ -391,15 +391,15 @@ function ControlCenter(props) {
                   <LineChartKPI className="line-chart-kpi" />
                   <BarChartKPI className="bar-chart-kpi" />
                 */}
-                <ProjectBurnRateHolder
-                  hrsAllottedBilledByProj={KPIData.allProjectsArr}
-                />
                 <div className="ControlCenter--horizontal-bar-chart-wrapper">
                   <HorizontalBarChartKPI
                     className="horizontal-bar-chart-kpi"
                     hrsBilledByUserByProjDet={KPIData.hrsBilledByUserByProjDet}
                   />
                 </div>
+                <ProjectBurnRateHolder
+                  hrsAllottedBilledByProj={KPIData.allProjectsArr}
+                />
                 <ProjectPieChartsHolder
                   hrsBilledByUserByProjDet={KPIData.hrsBilledByUserByProjDet}
                 />
@@ -453,13 +453,13 @@ function ControlCenter(props) {
                   <LineChartKPI className="line-chart-kpi" />
                   <BarChartKPI className="bar-chart-kpi" />
                 */}
-                <ProjectBurnRateHolder
-                  hrsAllottedBilledByProj={KPIData.allProjectsArr}
-                />
                 <div className="ControlCenter--horizontal-bar-chart-wrapper">
                   <HorizontalBarChartKPI
                     className="horizontal-bar-chart-kpi"
                     hrsBilledByUserByProjDet={KPIData.hrsBilledByUserByProjDet}
+                  />
+                  <ProjectBurnRateHolder
+                    hrsAllottedBilledByProj={KPIData.allProjectsArr}
                   />
                 </div>
                 <ProjectPieChartsHolder
