@@ -182,6 +182,21 @@
   max-width: 8rem;
 }
 
+.ProjectListBurnRateCharts-container {
+  max-height: 28rem;
+  overflow: scroll;
+}
+
+.ProjectListPieCharts-container {
+  max-height: 28rem;
+  overflow: scroll;
+}
+
+.ControlCenter--horizontal-bar-chart-wrapper
+  > .css-1lbgfbl-MuiResponsiveChart-container {
+  padding: 0.5rem;
+}
+
 /* @media only screen and (min-device-width: 280px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 1) {
 } */
 
@@ -203,14 +218,10 @@
 
   .ProjectListBurnRateCharts-container {
     grid-column: 1 / 4;
-    max-height: 28rem;
-    overflow: scroll;
   }
 
   .ProjectListPieCharts-container {
     grid-column: 4 /7;
-    max-height: 28rem;
-    overflow: scroll;
   }
 }
 
