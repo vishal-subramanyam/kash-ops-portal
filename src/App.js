@@ -110,7 +110,7 @@ function App() {
             }
           />
           <Route
-            path="/clients-hub"
+            path="/client-hub"
             element={
               <RequireAuth>
                 <ClientsHub

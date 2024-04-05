@@ -237,7 +237,22 @@
 
   .ControlCenter--chart-section-wrapper {
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: minmax(100px, auto);
+  }
+
+  .ControlCenter--horizontal-bar-chart-wrapper {
+    grid-column: 1 / 5;
+  }
+
+  .ProjectListBurnRateCharts-container {
+    grid-column: 5 / 7;
+  }
+
+  .ProjectListPieCharts-container {
+    grid-column: 1 / 5;
+    /* position: relative;
+    bottom: 8rem; */
   }
   /* .ControlCenter--desktop-sidebar {
     display: block;
@@ -261,6 +276,21 @@
 
   .ControlCenter--chart-section-wrapper {
     display: grid;
-    grid-template-columns: 33.3% 33.3% 33.3%;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-columns: minmax(100px, auto);
+  }
+
+  .ControlCenter--horizontal-bar-chart-wrapper {
+    grid-column: 1 / 5;
+  }
+
+  .ProjectListBurnRateCharts-container {
+    grid-column: 5 / 7;
+  }
+
+  .ProjectListPieCharts-container {
+    grid-column: 1/5;
+    /* position: relative;
+  bottom: 25%; */
   }
 }

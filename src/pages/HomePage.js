@@ -44,7 +44,7 @@ function HomePage(props) {
 
             <div className="kash_operations_home--main-card--wrapper kash_operations_home--clients-card--wrapper">
               <Link
-                to="/clients-hub"
+                to="/client-hub"
                 className="kash_operations_home--main-card kash_operations_home--clients-card"
               >
                 <h2 className="kash_operations--clients-card-title">Clients</h2>

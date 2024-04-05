@@ -51,6 +51,8 @@ function kpiReducer(state, action) {
       // Array of individual users who billed to projects associated to selected company
       let numUsersBilledHrsByCompanyLifetime = () => {
         if (allHoursBilledBySelectedCompanyLifetime.length === 0) {
+          return 0;
+        } else if (allHoursBilledBySelectedCompanyLifetime.length === 1) {
           return 1;
         } else {
           return Object.values(
@@ -62,25 +64,25 @@ function kpiReducer(state, action) {
         }
       };
       // Calculate total hours billed to selected company into one figure
-      // let totalHrsBilledBySelectedCompany = () => {
-      //   if (allHoursBilledBySelectedCompanyLifetime.length === 0) {
-      //     return 0;
-      //   } else {
-      //     return allHoursBilledBySelectedCompanyLifetime.reduce(
-      //       (a, c) => a + parseFloat(c.TotalHoursBilled),
-      //       0
-      //     );
-      //   }
-      // };
+      let totalHrsBilledBySelectedCompany = () => {
+        if (allHoursBilledBySelectedCompanyLifetime.length === 0) {
+          return 0;
+        } else {
+          return allHoursBilledBySelectedCompanyLifetime.reduce(
+            (a, c) => a + parseFloat(c.TotalHoursBilled),
+            0
+          );
+        }
+      };
       console.log(numUsersBilledHrsByCompanyLifetime());
       // Get projects associated with selected company
       let selectedCompanyProjects = state.allProjectsArr.filter(
         (p) => action.action.companyId === p.CompanyId
       );
-      // let totalProjectedHrs = selectedCompanyProjects.reduce(
-      //   (a, c) => a + parseFloat(c.TotalProjectedHours),
-      //   0
-      // );
+      let totalProjectedHrs = selectedCompanyProjects.reduce(
+        (a, c) => a + parseFloat(c.TotalProjectedHours),
+        0
+      );
       console.log(selectedCompanyProjects);
       // console.log(totalProjectedHrs);
 
@@ -92,31 +94,31 @@ function kpiReducer(state, action) {
         // numProjLifetime: 0,
         // numProjByRange: 0,
         ...state,
-        // numCompanyAdmins: state.companyAdminsDet.filter(
-        //   (admin) => action.action.companyId === admin.CompanyId
-        // ).length,
-        // activeProjLifetime: state.compProjDet.filter(
-        //   (project) =>
-        //     action.action.companyId === project.CompanyId &&
-        //     project.CurrentStatus === "Active"
-        // ).length,
-        // activeProjByRange: 0,
-        // hrsBilledByUserByProjDet: allHoursBilledBySelectedCompanyLifetime,
-        // avgHrsBilledByUserLifetime:
-        //   totalHrsBilledBySelectedCompany() /
-        //   numUsersBilledHrsByCompanyLifetime(),
-        // avgHrsBilledByUserByRange: 0,
-        // avgHrsBilledByCompLifetime: totalHrsBilledBySelectedCompany() / 1,
-        // avgHrsBilledByCompByRange: 0,
-        // totalHrsBilledLifetime: totalHrsBilledBySelectedCompany(),
-        // totalHrsBilledByRange: 0,
-        // totalHrsProjectedLifetime: totalProjectedHrs,
-        // totalHrsProjectedByRange: 0,
-        // allProjectsArr: state.allProjectsArr.filter((project) => {
-        //   return action.action.companyId === project.CompanyId;
-        // }),
-        // lowBurnTimeLifetime: lowBurnTimeLT.length,
-        // lowBurnTimeByRange: 0,
+        numCompanyAdmins: state.companyAdminsDet.filter(
+          (admin) => action.action.companyId === admin.CompanyId
+        ).length,
+        activeProjLifetime: state.compProjDet.filter(
+          (project) =>
+            action.action.companyId === project.CompanyId &&
+            project.CurrentStatus === "Active"
+        ).length,
+        activeProjByRange: 0,
+        hrsBilledByUserByProjDet: allHoursBilledBySelectedCompanyLifetime,
+        avgHrsBilledByUserLifetime:
+          totalHrsBilledBySelectedCompany() /
+          numUsersBilledHrsByCompanyLifetime(),
+        avgHrsBilledByUserByRange: 0,
+        avgHrsBilledByCompLifetime: totalHrsBilledBySelectedCompany() / 1,
+        avgHrsBilledByCompByRange: 0,
+        totalHrsBilledLifetime: totalHrsBilledBySelectedCompany(),
+        totalHrsBilledByRange: 0,
+        totalHrsProjectedLifetime: totalProjectedHrs,
+        totalHrsProjectedByRange: 0,
+        allProjectsArr: state.allProjectsArr.filter((project) => {
+          return action.action.companyId === project.CompanyId;
+        }),
+        lowBurnTimeLifetime: lowBurnTimeLT.length,
+        lowBurnTimeByRange: 0,
       };
     }
 
@@ -458,10 +460,10 @@ function ControlCenter(props) {
                     className="horizontal-bar-chart-kpi"
                     hrsBilledByUserByProjDet={KPIData.hrsBilledByUserByProjDet}
                   />
-                  <ProjectBurnRateHolder
-                    hrsAllottedBilledByProj={KPIData.allProjectsArr}
-                  />
                 </div>
+                <ProjectBurnRateHolder
+                  hrsAllottedBilledByProj={KPIData.allProjectsArr}
+                />
                 <ProjectPieChartsHolder
                   hrsBilledByUserByProjDet={KPIData.hrsBilledByUserByProjDet}
                 />

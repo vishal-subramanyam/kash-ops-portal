@@ -230,7 +230,7 @@ function EditCompanyDetails(props) {
           Edit or Delete a Company
         </h1>
         <div className="edit_page__return-link-holder">
-          <Link to="/clients-hub" className="return-link">
+          <Link to="/client-hub" className="return-link">
             <svg
               width="80"
               height="134"

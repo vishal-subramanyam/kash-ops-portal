@@ -83,7 +83,7 @@ function CompaniesDetail(props) {
           Companies Detailed
         </h1>
         <div className="edit_page__return-link-holder CompaniesDetail--return-link-holder">
-          <Link to="/clients-hub">
+          <Link to="/client-hub">
             <svg
               width="80"
               height="134"
