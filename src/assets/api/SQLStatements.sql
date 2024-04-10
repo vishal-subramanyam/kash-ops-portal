@@ -213,3 +213,35 @@ Order by Full_Name, Project_Description
 -- TABLE: TOTAL_HOURS_BILLED_BY_PROJECT
 -- Updated SQL with Company.company_name and joined the company table to get the company name for the data output
 SELECT Projects.sow_id, Company.company_name, Projects.company_id, Projects.total_projected_hours, SUM(Timesheets.monday_hours +Timesheets.tuesday_hours +Timesheets.wednesday_hours + Timesheets.thursday_hours + Timesheets.friday_hours +Timesheets.saturday_hours + Timesheets.sunday_hours ) AS Total_Billed_Hours FROM KASH_OPERATIONS_TIMESHEET_TABLE AS Timesheets JOIN KASH_OPERATIONS_CREATED_PROJECTS_TABLE AS Projects ON Timesheets.sow_id = Projects.sow_id JOIN KASH_OPERATIONS_COMPANY_TABLE AS Company ON Projects.company_id = Company.company_id WHERE Timesheets.non_billable_reason = 'n/a' OR Timesheets.non_billable_reason = 'N/A' OR Timesheets.non_billable_reason = '' GROUP BY Projects.SOW_ID, Company.company_name ORDER BY Projects.SOW_ID
+
+
+-- Get Timesheet Data for Invoice creation
+SELECT
+company.company_name,
+project.project_category,
+project.sow_id,
+sub_cat.project_sub_task_id as work_area_id,
+sub_cat.sub_task_title as work_area,
+sub_cat.segment_1 as task_area,
+CONCAT(employee.first_name, ' ', employee.last_name) as Full_Name,
+SUM(timesheet.task_hours)
+FROM v_kash_operations_timesheet_table_date as timesheet
+JOIN kash_operations_created_projects_table as project
+ON timesheet.sow_id = project.sow_id
+JOIN kash_operations_project_sub_category_table as sub_cat
+ON project.sow_id = sub_cat.sow_id
+JOIN kash_operations_company_table as company
+ON project.company_id = company.company_id
+JOIN kash_operations_user_table as employee
+ON timesheet.emp_id = employee.emp_id
+WHERE timesheet.entry_date >= (searchFromDate) AND timesheet.entry_date <= (searchToDate) -- passed as query params to config 
+GROUP BY
+company.company_name,
+project.project_category,
+project.sow_id,
+employee.first_name, 
+employee.last_name,
+sub_cat.project_sub_task_id,
+sub_cat.sub_task_title,
+sub_cat.segment_1
+ORDER BY company.company_name
