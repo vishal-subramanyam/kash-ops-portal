@@ -98,8 +98,13 @@ a {
 .timesheet-card--details_tag {
   --characteristic-color: #30bc70;
 }
+
+.invoice-card--details_tag {
+  --characteristic-color: #e43b8c;
+}
 .employee-card--details_tag,
-.timesheet-card--details_tag {
+.timesheet-card--details_tag,
+.invoice-card--details_tag {
   border-radius: 0.5rem 0 0 0.5rem;
   /* left: -85%; */
   left: -16ch;
@@ -192,6 +197,11 @@ a {
   transform: translate(20%, -50%);
 }
 
+.kash_operations_home--invoices-card--wrapper:hover ~ .invoices-card-watermark {
+  opacity: 1;
+  transform: translate(0%, -50%);
+}
+
 /* ################################################################### */
 
 /* ################################################################### */
@@ -238,7 +248,8 @@ a {
 }
 .employees-hub-page-main.max-width--main-container,
 .clients-hub-page-main.max-width--main-container,
-.timesheets-hub-page-main.max-width--main-container {
+.timesheets-hub-page-main.max-width--main-container,
+.invoices-hub-page-main.max-width--main-container {
   max-width: 1000px;
   padding-bottom: 2rem;
   flex-direction: column;
@@ -306,6 +317,12 @@ a {
 .hub_page--main-action-link.timesheet_hub--main-action-link:hover {
   background-color: #296c50;
 }
+
+.hub_page--main-action-link.invoice_hub--main-action-link:hover {
+  color: #fff;
+  background-color: #94295c;
+}
+
 .hub_page--main-action-link > p {
   margin-top: auto;
 }
@@ -339,6 +356,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  max-width: 225px;
 }
 
 .add-company-link {
@@ -396,6 +414,14 @@ a {
   position: relative;
 }
 
+.manage_invoice-admin-link {
+  --admin-link-underline-bg: linear-gradient(
+    90deg,
+    rgba(228, 59, 140, 1) 0%,
+    rgba(252, 181, 186, 1) 100%
+  );
+}
+
 .hub_page--secondary-action-link::after {
   content: "";
   position: absolute;
@@ -405,7 +431,8 @@ a {
   bottom: -2px;
   left: 0;
   width: 100%;
-  background: var(--admin-link-underline-bg, #439ebc);
+  /* background: var(--admin-link-underline-bg, #439ebc); */
+  background: var(--admin-link-underline-bg);
   transform: scale(0, 0);
 }
 .hub_page--secondary-action-link:hover::after {
@@ -447,6 +474,10 @@ a {
   --characteristic-color: #54c488;
   color: var(--characteristic-color);
 }
+.invoices-hub-page-main {
+  --characteristic-color: #e43b8c;
+  color: var(--characteristic-color);
+}
 .activity_hub--admin_links_title {
   text-align: center;
   align-self: stretch;
@@ -458,6 +489,10 @@ a {
 }
 .employee_hub--admin_links_title {
   color: #f68627;
+}
+
+.invoice_hub--admin_links_title {
+  color: #e43b8c;
 }
 .activity_hub--admin_links_title::after {
   content: "";
@@ -478,8 +513,17 @@ a {
 .employee_hub--add-title::after {
   background: #fca358;
 }
+
 .employee_hub--edit-title::after {
   background: linear-gradient(90deg, #f79542 0%, #fd7979 100%);
+}
+
+.invoice_hub--add-title::after {
+  background: linear-gradient(
+    90deg,
+    rgba(228, 59, 140, 1) 0%,
+    rgba(252, 181, 186, 1) 100%
+  );
 }
 /* ################################################################### */
 

@@ -3,15 +3,15 @@ import { Link } from "react-router-dom";
 import "../assets/styles/HomePage.css";
 import "../assets/styles/Styles.css";
 
-function EmployeeHub() {
+function InvoiceHub() {
   return (
     <main
-      id="employees-hub-page-main"
-      className="kash_operations--hub-page--main employees-hub-page-main max-width--main-container"
+      id="invoinces-hub-page-main"
+      className="kash_operations--hub-page--main invoices-hub-page-main max-width--main-container"
     >
       <div className="kash_operations--upper-section-holder">
-        <h1 className="kash_operations--hub-title employees-hub-page-title">
-          Employees
+        <h1 className="kash_operations--hub-title invoices-hub-page-title">
+          Invoices
         </h1>
         <Link to="/" className="return-to-operations-hub">
           <svg
@@ -29,10 +29,10 @@ function EmployeeHub() {
           <p>Return to Operations Hub</p>
         </Link>
       </div>
-      <div className="hub_page--main-actions-holder employee_hub--main-action-holder">
+      <div className="hub_page--main-actions-holder invoice_hub--main-action-holder">
         <Link
-          to="/employees-detail"
-          className="hub_page--main-action-link employee_hub--main-action-link"
+          to="/invoice-detail"
+          className="hub_page--main-action-link invoice_hub--main-action-link"
         >
           <p>View Reports</p>
           <svg
@@ -48,17 +48,17 @@ function EmployeeHub() {
         </Link>
       </div>
 
-      <div className="employee_hub--full_admin_links">
-        <div className="employee_hub--admin-links-holder">
+      <div className="invoice_hub--full_admin_links">
+        <div className="invoice_hub--admin-links-holder">
           <div className="hub_page--secondary-actions-holder">
-            <h2 className="activity_hub--admin_links_title employee_hub--admin_links_title employee_hub--add-title">
+            <h2 className="activity_hub--admin_links_title invoice_hub--admin_links_title invoice_hub--add-title">
               Manage
             </h2>
             <Link
-              to="/manage-employee"
-              className="add_employee-admin-link hub_page--secondary-action-link employee_hub--secondary-action-link"
+              to="/manage-invoice"
+              className="manage_invoice-admin-link hub_page--secondary-action-link invoice_hub--secondary-action-link"
             >
-              Manage Employees
+              Manage Invoices
             </Link>
           </div>
         </div>
@@ -67,4 +67,4 @@ function EmployeeHub() {
   );
 }
 
-export default EmployeeHub;
+export default InvoiceHub;
