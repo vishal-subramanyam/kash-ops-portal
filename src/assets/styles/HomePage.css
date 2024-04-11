@@ -141,6 +141,11 @@ a {
   --watermark-text-color: #54c488;
   opacity: 0;
 }
+
+.invoices-card-watermark {
+  --watermark-text-color: #e43b8c;
+  opacity: 0;
+}
 .kash_operations_home--main-card {
 }
 .kash_operations_home--employees-card {
@@ -162,6 +167,14 @@ a {
   --glow-shadow-darker: hsla(148 55% 57% / 100%);
   --glow-shadow-lighter: hsla(195 60% 70% / 64%);
 }
+
+.kash_operations_home--invoices-card {
+  --card-holder-color: #e43b8c;
+  --light-characteristic-color: #ffd0e7;
+  --glow-shadow-darker: hsla(331 75% 56% / 100%);
+  --glow-shadow-lighter: hsla(331 75% 56% / 30%);
+}
+
 .kash_operations_home--employees-card:hover {
 }
 .kash_operations_home--employees-card--wrapper:hover

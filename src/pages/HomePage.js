@@ -23,7 +23,7 @@ function HomePage(props) {
       <section className="kash_operations_home--catgories-holder max-width--main-container">
         {/* if logged in user is not an admin, hide employee and clients hubs */}
         {props.admin === '"Basic User"' ? (
-          ""
+          <></>
         ) : (
           <>
             <div className="kash_operations_home--main-card--wrapper kash_operations_home--employees-card--wrapper">
@@ -53,6 +53,22 @@ function HomePage(props) {
                 <p className="tag-note">Add Company</p>
                 <p className="tag-note">Company Info</p>
                 <p className="tag-note">Manage Projects</p>
+              </div>
+            </div>
+
+            <div className="kash_operations_home--main-card--wrapper kash_operations_home--invoices-card--wrapper">
+              <Link
+                to="/invoice-hub"
+                className="kash_operations_home--main-card kash_operations_home--invoices-card"
+              >
+                <h2 className="kash_operations--invoices-card-title">
+                  Invoices
+                </h2>
+              </Link>
+              <div className="invoice-card--details_tag main-card--details_tag">
+                <p className="tag-note">Add Invoice</p>
+                <p className="tag-note">Invoice Info</p>
+                <p className="tag-note">Manage Invoices</p>
               </div>
             </div>
           </>
@@ -89,6 +105,12 @@ function HomePage(props) {
           className="kash_operations_home--interactive-card-watermark timesheets-card-watermark"
         >
           Timesheets
+        </p>
+        <p
+          aria-hidden="true"
+          className="kash_operations_home--interactive-card-watermark invoices-card-watermark"
+        >
+          Invoices
         </p>
       </section>
     </main>
