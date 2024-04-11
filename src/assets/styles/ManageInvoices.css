@@ -81,4 +81,19 @@
 .ManageInvoices--new-invoice-tab-content {
   background-color: #ffe4f1;
   height: 100dvh;
+  padding: 1rem;
+}
+
+.ManageInvoices--create-new-invoice-btn {
+  background: transparent;
+  color: #26515f;
+  width: 11rem;
+  max-width: 11rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.ManageInvoices--create-new-invoice-btn svg {
+  color: #fb68af;
 }
