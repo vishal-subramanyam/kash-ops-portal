@@ -55,7 +55,7 @@ function InvoiceHub() {
               Manage
             </h2>
             <Link
-              to="/manage-invoice"
+              to="/invoice-hub/manage-invoices"
               className="manage_invoice-admin-link hub_page--secondary-action-link invoice_hub--secondary-action-link"
             >
               Manage Invoices

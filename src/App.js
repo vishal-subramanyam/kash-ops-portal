@@ -26,6 +26,7 @@ import CompaniesDetail from "./pages/CompaniesDetail";
 import LoadingData from "./components/LoadingData";
 import TimesheetReportsPage from "./pages/TimesheetReportsPage";
 import InvoiceHub from "./pages/InvoiceHub";
+import ManageInvoices from "./pages/ManageInvoices";
 
 function App() {
   //  let resource = useResources(); // Access the fetch functions to get the pertinent users data
@@ -250,6 +251,14 @@ function App() {
             element={
               <RequireAuth>
                 <InvoiceHub loggedInUser={loggedInUserLocal} />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/invoice-hub/manage-invoices"
+            element={
+              <RequireAuth>
+                <ManageInvoices loggedInUser={loggedInUserLocal} />
               </RequireAuth>
             }
           />

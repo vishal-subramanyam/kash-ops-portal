@@ -681,6 +681,50 @@ input:checked + .slider:before {
   }
 }
 
+/* ################################################################### 
+    Manage Invoices Workflow Components Styling
+ ################################################################### */
+
+.new-invoice__page-title {
+  color: #e43b8c;
+}
+
+.invoice__return-link-holder {
+  --link-color: #255463;
+  margin-top: 0.5rem;
+  display: flex;
+  color: var(--link-color);
+}
+
+.invoice__return-link-holder:hover {
+  --link-color: #e43b8c;
+}
+
+.invoice__return-link-holder a {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: inherit;
+  text-decoration-line: none;
+  justify-content: flex-start;
+}
+.invoice__return-link-holder a svg {
+  width: 0.6rem;
+  height: 1rem;
+}
+.invoice__return-link-holder a svg > * {
+  fill: var(--link-color);
+}
+.invoice__return-link-holder a p {
+  text-decoration-line: underline;
+  text-underline-offset: 0.05rem;
+  font-weight: 300;
+}
+
+/* ################################################################### 
+  END Manage Invoices Workflow Components Styling END
+################################################################### */
+
 /* ################################################################### */
 
 /* ################################################################### */

@@ -1,0 +1,84 @@
+.ManageInvoices--main-container {
+  padding: 0;
+}
+
+.ManageInvoices--heading {
+  padding: 1rem;
+}
+
+.ManageInvoices--tabs-container {
+  width: 70%;
+  padding: 0;
+  margin: -1px;
+  list-style: none;
+  display: flex;
+  align-items: end;
+  overflow: hidden;
+}
+
+.ManageInvoices--tab {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bolder;
+  height: 45px;
+  text-align: center;
+}
+
+.ManageInvoices--tab-active span {
+  -webkit-box-shadow: 0px 12px 5px 2px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0px 12px 5px 2px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 12px 5px 2px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  z-index: 0;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+}
+
+.ManageInvoices--tabs-container li:hover {
+  height: 50px;
+  cursor: pointer;
+}
+
+.ManageInvoices--tab span {
+  padding: 0 1rem;
+}
+
+.ManageInvoices--tab-not-active {
+  height: 45px;
+  z-index: 0;
+}
+
+.ManageInvoices--tab-active {
+  height: 55px !important;
+  z-index: 4;
+}
+
+.ManageInvoices--new-tab {
+  background-color: #ffe4f1;
+  color: #fb68af;
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+}
+
+.ManageInvoices--modify-tab {
+  background-color: #fb68af;
+  color: #ffe4f1;
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+}
+
+.ManageInvoices--modify-invoice-tab-content {
+  background-color: #fb68af;
+  height: 100dvh;
+}
+
+.ManageInvoices--new-invoice-tab-content {
+  background-color: #ffe4f1;
+  height: 100dvh;
+}
