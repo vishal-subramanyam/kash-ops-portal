@@ -5,11 +5,10 @@ import "../assets/styles/ManageInvoices.css";
 import NewInvoiceTypeModal from "./NewInvoiceTypeModal";
 
 function NewInvoice(props) {
-  let chooseInvoiceTypeModal = useRef();
+  let chooseInvoiceTypeModal = useRef("");
 
   const chooseNewInvoice = (e) => {
-    console.log(e.target);
-    chooseInvoiceTypeModal.current.showModal();
+    console.log(chooseInvoiceTypeModal);
   };
   const closeModal = () => {
     chooseInvoiceTypeModal.current.close();
@@ -17,12 +16,12 @@ function NewInvoice(props) {
 
   return (
     <section className="ManageInvoices--new-invoice-tab-content">
-      <button className="ManageInvoices--create-new-invoice-btn" type="button">
-        <FontAwesomeIcon
-          className="create-new-invoice-icon"
-          icon={faPlus}
-          onClick={() => chooseNewInvoice()}
-        />
+      <button
+        className="ManageInvoices--create-new-invoice-btn"
+        type="button"
+        onClick={(e) => chooseNewInvoice(e)}
+      >
+        <FontAwesomeIcon className="create-new-invoice-icon" icon={faPlus} />
         Create New Invoice
       </button>
       <NewInvoiceTypeModal ref={chooseInvoiceTypeModal} close={closeModal} />

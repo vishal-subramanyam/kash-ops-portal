@@ -1,15 +1,16 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import "../assets/styles/HomePage.css";
 
-function NewInvoiceTypeModal(props) {
+const newInvoiceTypeModal = forwardRef(function (props, ref) {
   return (
     <dialog
       className="database-submit-dialog success-modal-container"
       role="alert"
       id="database-submit-dialog"
+      ref={ref}
     >
       <form method="dialog">
-        <p>{props.message}</p>
+        <p>Test Me</p>
 
         <div>
           <button
@@ -25,6 +26,6 @@ function NewInvoiceTypeModal(props) {
       </form>
     </dialog>
   );
-}
+});
 
-export default NewInvoiceTypeModal;
+export default newInvoiceTypeModal;
