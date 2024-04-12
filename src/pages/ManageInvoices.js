@@ -1,16 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import "../assets/styles/Styles.css";
 import "../assets/styles/ManageInvoices.css";
 import NewInvoice from "../components/NewInvoice";
 import ModifyInvoice from "../components/ModifyInvoice";
+import NewInvoiceTypeModal from "../components/NewInvoiceTypeModal";
 
 function ManageInvoices(props) {
+  let chooseInvoiceTypeModal = useRef("");
   let [tabActive, setTabActive] = useState("newTab");
   let newInvoiceTabActive = "ManageInvoices--tab ManageInvoices--tab-active";
   let newInvoiceTabNotActive =
     "ManageInvoices--tab ManageInvoices--tab-not-active";
   let loggedInUserLocal = props.loggedInUser;
+
+  const chooseNewInvoiceType = (e) => {
+    console.log(chooseInvoiceTypeModal);
+    chooseInvoiceTypeModal.current.showModal();
+  };
+  const closeModal = () => {
+    chooseInvoiceTypeModal.current.close();
+  };
 
   return (
     <main className="ManageInvoices--main-container max-width--main-container">
@@ -60,7 +70,18 @@ function ManageInvoices(props) {
         </li>
       </ul>
 
-      {tabActive === "newTab" ? <NewInvoice /> : <ModifyInvoice />}
+      {tabActive === "newTab" ? (
+        <NewInvoice newInvoiceType={chooseNewInvoiceType} />
+      ) : (
+        <ModifyInvoice />
+      )}
+
+      {/* Choose new invoice type modal popup */}
+      <NewInvoiceTypeModal
+        ref={chooseInvoiceTypeModal}
+        // chooseNewInvoice={chooseNewInvoiceType}
+        close={closeModal}
+      />
     </main>
   );
 }
