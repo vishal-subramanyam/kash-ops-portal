@@ -1,7 +1,12 @@
 import React, { forwardRef } from "react";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import { common } from "@mui/material/colors";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTableList,
+  faFile,
+  faFileEdit,
+  faFileInvoice,
+} from "@fortawesome/free-solid-svg-icons";
+
 import "../assets/styles/HomePage.css";
 
 const newInvoiceTypeModal = forwardRef(function (props, ref) {
@@ -20,33 +25,21 @@ const newInvoiceTypeModal = forwardRef(function (props, ref) {
         Create New Invoice
       </h1>
       <form method="dialog" className="new-invoice-type-form">
-        <div className="new-invoice-type new-ts-invoice-choice">
-          <FormControlLabel
-            control={
-              <Checkbox
-                sx={{ color: common, "& .MuiSvgIcon-root": { fontSize: 45 } }}
-                onChange={(e) => selectInvoiceType(e)}
-                // color="#fff"
-              />
-            }
-            label="From Timesheet Data"
-            labelPlacement="top"
-          />
-        </div>
+        <button
+          type="submit"
+          className="new-invoice-type new-ts-invoice-choice"
+        >
+          <h6>From Timesheet Data</h6>
+          <FontAwesomeIcon icon={faTableList} />
+        </button>
 
-        <div className="new-invoice-type new-blank-invoice-choice">
-          <FormControlLabel
-            control={
-              <Checkbox
-                sx={{ "& .MuiSvgIcon-root": { fontSize: 45 } }}
-                onChange={(e) => selectInvoiceType(e)}
-                // color="#fff"
-              />
-            }
-            label="Blank Invoice"
-            labelPlacement="top"
-          />
-        </div>
+        <button
+          type="submit"
+          className="new-invoice-type new-blank-invoice-choice"
+        >
+          <h6>Blank Invoice</h6>
+          <FontAwesomeIcon icon={faFileInvoice} />
+        </button>
 
         {/* <div>
           <button

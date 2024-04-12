@@ -97,3 +97,52 @@
 .ManageInvoices--create-new-invoice-btn svg {
   color: #fb68af;
 }
+
+/* ================================================================================
+Choose New Invoice Type Modal
+=================================================================================== */
+
+.invoice-type-modal-container[open] {
+  opacity: 1;
+  transform: translate(0, -10rem) !important;
+  animation: slideIn 0.2s ease-in forwards;
+  height: 13rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.new-invoice-type {
+  border: none;
+  height: 5rem;
+  padding: 0.8rem 2rem !important;
+  max-width: 300px;
+  width: 300px;
+  border-radius: 25px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #e7fff2 !important;
+}
+
+.new-invoice-type-form {
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  width: 90%;
+}
+
+.new-ts-invoice-choice {
+  background-color: #54c488 !important;
+}
+.new-blank-invoice-choice {
+  background-color: #e43b8c !important;
+}
+
+.new-invoice__page-title {
+  color: #68889f;
+}
+
+.new-invoice-type svg {
+  font-size: 1.5rem;
+}
