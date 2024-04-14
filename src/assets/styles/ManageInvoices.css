@@ -146,3 +146,12 @@ Choose New Invoice Type Modal
 .new-invoice-type svg {
   font-size: 1.5rem;
 }
+
+.close-modal-icon {
+  color: #68889f;
+  text-align: right;
+}
+
+.close-modal-icon:hover {
+  cursor: pointer;
+}
