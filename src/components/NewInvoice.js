@@ -19,10 +19,12 @@ function NewInvoice(props) {
       {console.log("invoice type chosen", props.newInvoiceType)}
 
       {/* If "New Timesheet Invoice" button clicked, show that UI and blank invoice UI if "Blank Invoice" button clicked */}
-      {props.newInvoiceType === "new-timesheet-invoice" ? (
-        <CreateTimesheetInvoice />
-      ) : (
+      {props.newInvoiceType === "" ? (
         <></>
+      ) : props.newInvoiceType === "new-timesheet-invoice" ? (
+        <CreateTimesheetInvoice loggedInUserInfo={props.loggedInUserInfo} />
+      ) : (
+        <>"This is the Blank Invoice UI section</>
       )}
     </section>
   );

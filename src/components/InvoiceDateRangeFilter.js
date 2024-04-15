@@ -1,6 +1,7 @@
 import React from "react";
 
 function InvoiceDateRangeFilter() {
+  // Write function to track filter choices and run function sent via props to update state on parent in order to pass to new invoice component
   return (
     <form method="POST" className="invoice-filter-form">
       <fieldset>
@@ -18,7 +19,7 @@ function InvoiceDateRangeFilter() {
         </select>
       </fieldset>
 
-      <fieldset>
+      <fieldset className="invoice-date-rage-form-group">
         <h5>Date Range</h5>
         <div>
           <div>

@@ -99,6 +99,22 @@
 }
 
 /* ================================================================================
+New Timesheet Invoice Workflow and Component Styles
+=================================================================================== */
+
+.new-invoice-heading {
+  color: #00af83;
+}
+
+.invoice-date-rage-form-group {
+  background-color: #beeadf;
+}
+
+.invoice-date-rage-form-group h5 {
+  color: #00af83;
+}
+
+/* ================================================================================
 Choose New Invoice Type Modal
 =================================================================================== */
 
@@ -106,7 +122,7 @@ Choose New Invoice Type Modal
   opacity: 1;
   transform: translate(0, -10rem) !important;
   animation: slideIn 0.2s ease-in forwards;
-  height: 13rem;
+  height: 20rem;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -116,8 +132,9 @@ Choose New Invoice Type Modal
   border: none;
   height: 5rem;
   padding: 0.8rem 2rem !important;
+  margin: 0 0 0.5rem 0;
   max-width: 300px;
-  width: 300px;
+  width: 100%;
   border-radius: 25px !important;
   display: flex;
   flex-direction: column;
@@ -126,10 +143,10 @@ Choose New Invoice Type Modal
   color: #e7fff2 !important;
 }
 
-.new-invoice-type-form {
+.new-invoice-type-selection {
   flex-direction: row !important;
   justify-content: space-between !important;
-  width: 90%;
+  width: 100%;
 }
 
 .new-ts-invoice-choice {
@@ -154,4 +171,8 @@ Choose New Invoice Type Modal
 
 .close-modal-icon:hover {
   cursor: pointer;
+}
+
+.new-invoice-type h6 {
+  font-size: 0.85rem;
 }

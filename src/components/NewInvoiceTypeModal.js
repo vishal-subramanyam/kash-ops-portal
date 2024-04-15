@@ -26,12 +26,15 @@ const newInvoiceTypeModal = forwardRef(function (props, ref) {
       <h1 className="new-invoice__page-title form-page-title--lg-1">
         Create New Invoice
       </h1>
-      <section className="new-invoice-type-form">
+      <section className="new-invoice-type-selection">
         <button
           type="submit"
           className="new-invoice-type new-ts-invoice-choice"
           name="new-timesheet-invoice"
-          onClick={(e) => props.chooseInvoiceType(e.target.name)}
+          onClick={(e) => {
+            props.chooseInvoiceType(e.target.name);
+            closeModal();
+          }}
         >
           <h6 onClick={(e) => e.stopPropagation()}>From Timesheet Data</h6>
           <FontAwesomeIcon
@@ -44,7 +47,10 @@ const newInvoiceTypeModal = forwardRef(function (props, ref) {
           type="submit"
           className="new-invoice-type new-blank-invoice-choice"
           name="new-blank-invoice"
-          onClick={(e) => props.chooseInvoiceType(e.target.name)}
+          onClick={(e) => {
+            props.chooseInvoiceType(e.target.name);
+            closeModal();
+          }}
         >
           <h6 onClick={(e) => e.stopPropagation()}>Blank Invoice</h6>
           <FontAwesomeIcon
