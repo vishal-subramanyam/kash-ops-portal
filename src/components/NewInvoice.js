@@ -38,22 +38,43 @@ function dataReducer(state, action) {
     case "chooseCompanyAndFilterProjects": {
       // set selectedCompanyId
       console.log("choose company reducer case", state);
+
+      // Filter projects arr by action.companyId and return only the projects associated with that companyId
+
+      let filteredProjects = state.companyProjectsList.filter((project) => {
+        return project.CompanyId === action.companyId;
+      });
       return {
         ...state,
         selectedCompanyId: action.companyId,
+        companyProjectsList: filteredProjects,
       };
     }
     case "chooseProject": {
       // set selectedProjectSowId
       console.log("choose project reducer case", state);
+      return {
+        ...state,
+        selectedProjectSowId: action.sowId,
+      };
     }
     case "chooseDateFrom": {
       // set dateRangeFrom to selected date
       console.log("choose date from reducer case", state);
+
+      return {
+        ...state,
+        dateRangeFrom: action.dateFrom,
+      };
     }
     case "chooseDateTo": {
       // set dateRangeTo to selected date
       console.log("choose date to reducer case", state);
+
+      return {
+        ...state,
+        dateRangeTo: action.dateTo,
+      };
     }
     default: {
       throw Error("Unknown action: " + action.type);
@@ -141,7 +162,7 @@ function NewInvoice(props) {
         // filter fetch response from company admins table to return only the companies for which the logged in user is just an company Admin
         // Fetch list of all company admins and their respective company details
         // setCompanyAdminsDet(values[1].compAdminsOverall);
-        // setIsLoading(false);
+        setIsLoading(false);
       }
     );
   });
@@ -150,21 +171,74 @@ function NewInvoice(props) {
     resolvePromises();
   }, []);
 
-  //   // Show loading component while data is being fetched
-  //   if (isLoading) {
-  //     return <LoadingData />;
-  //   }
+  // Show loading component while data is being fetched
+  if (isLoading) {
+    return <LoadingData />;
+  }
 
   // Choose company from filter dropdown and update state
   const selectCompanyFilter = (e) => {
     let selectedCompanyId =
-      e.target[e.target.selectedIndex].getAttribute("data-id");
+      e.target[e.target.selectedIndex].getAttribute("data-companyid");
     console.log(selectedCompanyId);
 
+    // if (dataState.selectedCompanyId !== "") {
+    //   resolvePromises();
+    // }
     // dispatch state action to update the selected company Id and filter list of projects in state to only return projects that share the selected company Id
     dispatchData({
       type: "chooseCompanyAndFilterProjects",
       companyId: selectedCompanyId,
+    });
+  };
+
+  // Choose company project from dropdown and update state
+  const selectProjectFilter = (e) => {
+    // get project SOW Id
+    let selectedProjectSowId =
+      e.target[e.target.selectedIndex].getAttribute("data-sowid");
+    console.log(selectedProjectSowId);
+
+    // dispatch state action and set selected project sow id to state
+    dispatchData({
+      type: "chooseProject",
+      sowId: selectedProjectSowId,
+    });
+  };
+
+  // Choose filter for date range start
+  const selectDateFromFilter = (e) => {
+    console.log(e.target.value);
+    let filterDateFrom = e.target.value;
+
+    dispatchData({
+      type: "chooseDateFrom",
+      dateFrom: filterDateFrom,
+    });
+  };
+
+  // function to handle both from and to date filters
+  const selectDateRangeFilter = (e) => {
+    let filterDateFrom = "";
+    let filterDateTo = "";
+    if (e.target.name === "date-filter-from") {
+      filterDateFrom = e.target.value;
+    } else if (e.target.name === "date-filter-to") {
+      filterDateTo = e.target.value;
+    }
+
+    console.log(filterDateFrom);
+    console.log(filterDateTo);
+  };
+
+  // Choose filter for date range end
+  const selectDateToFilter = (e) => {
+    console.log(e.target.value);
+    let filterDateTo = e.target.value;
+
+    dispatchData({
+      type: "chooseDateTo",
+      dateTo: filterDateTo,
     });
   };
 
@@ -189,7 +263,7 @@ function NewInvoice(props) {
           <h5 className="new-invoice-heading">New Timesheet Invoice</h5>
           {/* Filter invoice params. Set filter params as a state object and update said object with the values from the filters. Pass those values back up to run filters on data. */}
           {/* {console.log(companiesArr)} */}
-          {console.log(dataState)}
+          {console.log("state data", dataState)}
           {/* Date Range Filter Form */}
           <form method="POST" className="invoice-filter-form">
             <fieldset>
@@ -207,7 +281,7 @@ function NewInvoice(props) {
                     <option
                       key={i}
                       value={company.CompanyName}
-                      data-id={company.CompanyId}
+                      data-companyid={company.CompanyId}
                     >
                       {company.CompanyName}
                     </option>
@@ -225,9 +299,20 @@ function NewInvoice(props) {
                 id="project-selection"
                 name="project-selection"
                 typeof="text"
+                onChange={selectProjectFilter}
               >
                 <option value=""></option>
-                {/* map over list of company projects */}
+                {dataState.companyProjectsList.map((project, i) => {
+                  return (
+                    <option
+                      key={i}
+                      value={project.ProjectCategory}
+                      data-sowid={project.SowId}
+                    >
+                      {project.ProjectCategory}
+                    </option>
+                  );
+                })}
               </select>
             </fieldset>
 
@@ -249,6 +334,7 @@ function NewInvoice(props) {
                     id="date-filter-from"
                     name="date-filter-from"
                     type="date"
+                    onChange={selectDateFromFilter}
                   />
                 </div>
 
@@ -259,6 +345,7 @@ function NewInvoice(props) {
                       id="date-filter-to"
                       name="date-filter-to"
                       type="date"
+                      onChange={selectDateToFilter}
                     />
                   </div>
                 </div>

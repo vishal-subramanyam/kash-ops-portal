@@ -114,6 +114,10 @@ New Timesheet Invoice Workflow and Component Styles
   color: #00af83;
 }
 
+.invoice-filter-form select {
+  width: 100%;
+}
+
 /* ================================================================================
 Choose New Invoice Type Modal
 =================================================================================== */
