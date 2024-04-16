@@ -22,10 +22,10 @@ function ManageInvoices(props) {
 
   // Function to choose new invoice type - set state to track (or reducer??) new invoice type
 
-  //   const selectInvoiceType = (e) => {
-  //     console.log(e.target.value);
-  //     setNewInvoiceType(e.target.value);
-  //   };
+  const selectInvoiceType = (el) => {
+    console.log(el);
+    setNewInvoiceType(el);
+  };
 
   console.log(newInvoiceType);
 
@@ -92,8 +92,8 @@ function ManageInvoices(props) {
       <NewInvoiceTypeModal
         ref={chooseInvoiceTypeModal}
         // openNewInvoiceModal={openNewInvoiceTypeModal}
-        chooseInvoiceType={setNewInvoiceType}
-        // chooseInvoiceType={(e) => selectInvoiceType(e)}
+        // chooseInvoiceType={setNewInvoiceType}
+        chooseInvoiceType={selectInvoiceType}
       />
     </main>
   );
