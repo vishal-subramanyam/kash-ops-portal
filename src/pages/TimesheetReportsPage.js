@@ -20,11 +20,19 @@ function TimesheetReportsPage(props) {
     console.log("Search Timesheets by range");
     e.preventDefault();
     // Get timesheet records by range
+    // If dateFrom is GREATER THAN dateTo, throw alert message to update date pickers
     // If logged in user is Super Admin, get all records in range
     // If logged in user is just Admin, get records in range for companies they are admins for
     // If logged in user is basic user, just get their records and no one else's
 
-    if (props.loggedInUser.AdminLevel === "Super Admin") {
+    if (dateFrom > dateTo) {
+      setMessage(
+        alertMessageDisplay(
+          `Please, ensure that the From date picker value is LESS THAN the To date picker value`
+        )
+      );
+      alertMessage.current.showModal();
+    } else if (props.loggedInUser.AdminLevel === "Super Admin") {
       console.log("User is Super Admin", props.loggedInUser);
       getAllTimesheets(dateFrom, dateTo);
     } else {
