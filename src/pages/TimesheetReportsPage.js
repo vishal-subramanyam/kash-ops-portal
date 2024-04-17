@@ -196,6 +196,7 @@ function TimesheetReportsPage(props) {
                   className="add-timesheet-entry--form-input timesheet-update--timesheet-start-date-input"
                   id="timesheet-update--timesheet-start-date-input"
                   name="timesheet-update--timesheet-start-date-input"
+                  value={dateFrom}
                   onChange={(e) => setDateFrom(e.target.value)}
                 />
 
@@ -211,6 +212,7 @@ function TimesheetReportsPage(props) {
                   className="add-timesheet-entry--form-input timesheet-update--timesheet-end-date-input"
                   id="timesheet-update--timesheet-end-date-input"
                   name="timesheet-update--timesheet-end-date-input"
+                  value={dateTo}
                   onChange={(e) => setDateTo(e.target.value)}
                 />
                 <button className="btn btn-primary TimesheetTotalReport--button">

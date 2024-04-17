@@ -207,7 +207,7 @@ function TimesheetsReport(props) {
         field: item,
         headerName: item.replace(/([A-Z])/g, " $1").trim(),
         headerClassName: "timesheets-report--column-header",
-        width: 85,
+        width: 95,
       };
     } else if (item.includes("Hours")) {
       return {
