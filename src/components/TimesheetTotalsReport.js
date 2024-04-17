@@ -71,11 +71,42 @@ function TimesheetTotalsReport(props) {
   ];
 
   const columnList = customColumnOrder.map((item) => {
-    return {
-      field: item,
-      headerName: item.replace(/([A-Z0-9])/g, " $1").trim(),
-      width: 250,
-    };
+    if (item === "FullName") {
+      return {
+        field: item,
+        headerName: item.replace(/([A-Z])/g, " $1").trim(),
+        headerClassName: "timesheets-report--column-header",
+        width: 150,
+      };
+    } else if (item === "NonBillableReason") {
+      return {
+        field: item,
+        headerName: item.replace(/([A-Z])/g, " $1").trim(),
+        headerClassName: "timesheets-report--column-header",
+        width: 75,
+      };
+    } else if (item === "TicketNum") {
+      return {
+        field: item,
+        headerName: item.replace(/([A-Z])/g, " $1").trim(),
+        headerClassName: "timesheets-report--column-header",
+        width: 85,
+      };
+    } else if (item === "TotalHours") {
+      return {
+        field: item,
+        headerName: item.replace(/([A-Z])/g, " $1").trim(),
+        headerClassName: "timesheets-report--column-header",
+        width: 85,
+      };
+    } else {
+      return {
+        field: item,
+        headerName: item.replace(/([A-Z0-9])/g, " $1").trim(),
+        headerClassName: "timesheets-report--column-header",
+        width: 250,
+      };
+    }
   });
 
   const handleToggleColumnVisibility = (column) => {
