@@ -175,7 +175,8 @@ function TimesheetsReport(props) {
       return {
         field: item,
         headerName: item.replace(/([A-Z])/g, " $1").trim(),
-        width: 250,
+        headerClassName: "timesheets-report--column-header",
+        width: 100,
         type: "date",
         valueGetter: (params) => {
           let date = params.value;
@@ -194,11 +195,33 @@ function TimesheetsReport(props) {
           );
         },
       };
+    } else if (item === "NonBillableReason") {
+      return {
+        field: item,
+        headerName: item.replace(/([A-Z])/g, " $1").trim(),
+        headerClassName: "timesheets-report--column-header",
+        width: 75,
+      };
+    } else if (item === "TicketNum") {
+      return {
+        field: item,
+        headerName: item.replace(/([A-Z])/g, " $1").trim(),
+        headerClassName: "timesheets-report--column-header",
+        width: 85,
+      };
+    } else if (item.includes("Hours")) {
+      return {
+        field: item,
+        headerName: item.replace(/([A-Z])/g, " $1").trim(),
+        headerClassName: "timesheets-report--column-header",
+        width: 100,
+      };
     } else {
       return {
         field: item,
         headerName: item.replace(/([A-Z0-9])/g, " $1").trim(),
-        width: 250,
+        width: 175,
+        headerClassName: "timesheets-report--column-header",
       };
     }
   });

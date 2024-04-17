@@ -1,3 +1,10 @@
+.timesheets-report--column-header .css-t89xny-MuiDataGrid-columnHeaderTitle {
+  font-size: 1rem !important;
+  font-weight: bold !important;
+  white-space: wrap;
+  line-height: 18px;
+}
+
 .timesheet-report-container,
 .timesheet-totals-report-container {
   width: 90%;
