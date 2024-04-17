@@ -2,8 +2,37 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/ManageInvoices.css";
+import { getHoursBilledDetail } from "../hooks/FetchData";
 
 function CreateTimesheetInvoice(props) {
+  let { companyId, sowId, from, to } = props;
+  let [filteredHoursArray, setFilteredHoursArray] = useState([]);
+
+  // Should I run function with useMemo hook? or useCallback hook?
+  const fetchTSData = (companyId, sowId, from, to) => {
+    console.log("trigger fetch to get data", companyId, sowId, from, to);
+
+    // resolve the promise in order to get the hours billed array. When promise is resolved, filter response array with filter values above and return new array - array of objects, each object is a user with properties: name, totalBilledHours, details: array containing all sub task entries for a project
+
+    Promise.allSettled([getHoursBilledDetail()]).then((values) => {
+      console.log(values);
+      // filter billed hours array per filters
+      let filterHrs = values[0].value.allHrsBilledArr.filter((record) => {
+        return (
+          record.CompanyId === companyId &&
+          record.SowId === sowId &&
+          record.EntryDate >= from &&
+          record.EntryDate <= to
+        );
+      });
+      console.log(filterHrs);
+
+      // Group results by name and task area
+    });
+  };
+
+  // Call the fetch TS data function with filter values passed via props
+  fetchTSData(companyId, sowId, from, to);
   return (
     <>
       <header>
@@ -40,6 +69,7 @@ function CreateTimesheetInvoice(props) {
                 </div>
                 <p>$6,200</p>
               </summary>
+              <div className="details-container"></div>
               <header>
                 <ol>
                   <li>Name</li>

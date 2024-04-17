@@ -245,3 +245,7 @@ sub_cat.project_sub_task_id,
 sub_cat.sub_task_title,
 sub_cat.segment_1
 ORDER BY company.company_name
+
+
+-- SQL for fetching Timesheet data by date range
+SELECT Projects.project_category, Projects.sow_id, Projects.original_start_date, Projects.original_end_date, Projects.total_projected_hours, Projects.current_status, Timesheets.sub_assignment, Timesheets.sub_assignment_segment_1, Timesheets.Entry_Date, Timesheets.Emp_Id, SUM(Timesheets.Task_Hours), Companies.company_id, Companies.company_name FROM v_kash_operations_timesheet_table_date as Timesheets join kash_operations_created_projects_table as projects on Timesheets.Sow_id = Projects.Sow_id join kash_operations_company_table as companies on Projects.Company_id = Companies.Company_id WHERE (Timesheets.entry_date >= '2024-04-01' AND Timesheets.entry_date <= '2024-04-16') AND (Timesheets.non_billable_reason = 'n/a' OR Timesheets.non_billable_reason = 'N/A' OR Timesheets.non_billable_reason = '') group by Projects.project_category, Projects.sow_id, Projects.original_start_date, Projects.original_end_date, Projects.total_projected_hours, Projects.current_status, Timesheets.sub_assignment, Timesheets.sub_assignment_segment_1, Timesheets.Entry_Date, Timesheets.Emp_Id, Companies.company_id, Companies.company_name order by entry_date

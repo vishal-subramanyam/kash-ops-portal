@@ -181,10 +181,6 @@ function NewInvoice(props) {
     let selectedCompanyId =
       e.target[e.target.selectedIndex].getAttribute("data-companyid");
     console.log(selectedCompanyId);
-
-    // if (dataState.selectedCompanyId !== "") {
-    //   resolvePromises();
-    // }
     // dispatch state action to update the selected company Id and filter list of projects in state to only return projects that share the selected company Id
     dispatchData({
       type: "chooseCompanyAndFilterProjects",
@@ -362,7 +358,12 @@ function NewInvoice(props) {
           dataState.dateRangeTo === "" ? (
             <></>
           ) : (
-            <CreateTimesheetInvoice />
+            <CreateTimesheetInvoice
+              companyId={dataState.selectedCompanyId}
+              sowId={dataState.selectedProjectSowId}
+              from={dataState.dateRangeFrom}
+              to={dataState.dateRangeTo}
+            />
           )}
         </>
       ) : (

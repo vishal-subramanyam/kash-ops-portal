@@ -176,7 +176,7 @@ function TimesheetsReport(props) {
         field: item,
         headerName: item.replace(/([A-Z])/g, " $1").trim(),
         headerClassName: "timesheets-report--column-header",
-        width: 100,
+        width: 120,
         type: "date",
         valueGetter: (params) => {
           let date = params.value;
@@ -200,7 +200,7 @@ function TimesheetsReport(props) {
         field: item,
         headerName: item.replace(/([A-Z])/g, " $1").trim(),
         headerClassName: "timesheets-report--column-header",
-        width: 75,
+        width: 95,
       };
     } else if (item === "TicketNum") {
       return {

@@ -124,7 +124,7 @@ Choose New Invoice Type Modal
 
 .invoice-type-modal-container[open] {
   opacity: 1;
-  transform: translate(0, -10rem) !important;
+  transform: translate(0, -13rem) !important;
   animation: slideIn 0.2s ease-in forwards;
   height: 20rem;
   display: flex;
