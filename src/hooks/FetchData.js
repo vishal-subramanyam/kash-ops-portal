@@ -694,3 +694,28 @@ export const getTimesheetEntryDetails = () => {
     });
   return response;
 };
+
+// Get Timesheet data by date range
+export const getAllTimesheets = (from, to) => {
+  let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      _keyword_: "TIMESHEET_HOURS_BILLED_RANGE_TABLE",
+      FromDate: from,
+      ToDate: to,
+    }),
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      console.log(res.data);
+      return res.data;
+    })
+    .catch((err) => {
+      return err;
+    });
+  return response;
+};

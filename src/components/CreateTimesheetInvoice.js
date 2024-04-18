@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/ManageInvoices.css";
-import { getHoursBilledDetail } from "../hooks/FetchData";
+import { getAllTimesheets } from "../hooks/FetchData";
+import AlertMessage from "../components/AlertMessage";
 
 function CreateTimesheetInvoice(props) {
+  let alertMessage = useRef();
+  let [message, setMessage] = useState("");
   let { companyId, sowId, from, to } = props;
   let [filteredHoursArray, setFilteredHoursArray] = useState([]);
 
@@ -14,18 +17,18 @@ function CreateTimesheetInvoice(props) {
 
     // resolve the promise in order to get the hours billed array. When promise is resolved, filter response array with filter values above and return new array - array of objects, each object is a user with properties: name, totalBilledHours, details: array containing all sub task entries for a project
 
-    Promise.allSettled([getHoursBilledDetail()]).then((values) => {
+    Promise.allSettled([getAllTimesheets(from, to)]).then((values) => {
       console.log(values);
       // filter billed hours array per filters
-      let filterHrs = values[0].value.allHrsBilledArr.filter((record) => {
-        return (
-          record.CompanyId === companyId &&
-          record.SowId === sowId &&
-          record.EntryDate >= from &&
-          record.EntryDate <= to
-        );
-      });
-      console.log(filterHrs);
+      //   let filterHrs = values[0].value.allHrsBilledArr.filter((record) => {
+      //     return (
+      //       record.CompanyId === companyId &&
+      //       record.SowId === sowId &&
+      //       record.EntryDate >= from &&
+      //       record.EntryDate <= to
+      //     );
+      //   });
+      //   console.log(filterHrs);
 
       // Group results by name and task area
     });
@@ -33,6 +36,14 @@ function CreateTimesheetInvoice(props) {
 
   // Call the fetch TS data function with filter values passed via props
   fetchTSData(companyId, sowId, from, to);
+
+  const alertMessageDisplay = (entry) => {
+    return entry;
+  };
+
+  const closeAlert = () => {
+    alertMessage.current.close();
+  };
   return (
     <>
       <header>
@@ -119,6 +130,7 @@ function CreateTimesheetInvoice(props) {
           </section>
         </section>
       </section>
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />;
     </>
   );
 }
