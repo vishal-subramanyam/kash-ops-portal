@@ -1,0 +1,128 @@
+{
+  "data": [
+    {
+      "FirstName": "Kugapathi",
+      "LastName": "S",
+      "TotalBilledHours": "320.00",
+      "EmpId": "584872844"
+    },
+    {
+      "FirstName": "Randy",
+      "LastName": "Lane",
+      "TotalBilledHours": "501.70",
+      "EmpId": "3594124"
+    },
+    {
+      "FirstName": "Garrett",
+      "LastName": "Anderson",
+      "TotalBilledHours": "1.75",
+      "EmpId": "411065"
+    },
+    {
+      "FirstName": "Alex",
+      "LastName": "Gardner",
+      "TotalBilledHours": "807.50",
+      "EmpId": "8844422"
+    },
+    {
+      "FirstName": "Sourabh Kumar",
+      "LastName": "Vats",
+      "TotalBilledHours": "352.00",
+      "EmpId": "756421"
+    },
+    {
+      "FirstName": "Vivek",
+      "LastName": "AR",
+      "TotalBilledHours": "360.00",
+      "EmpId": "8483527"
+    },
+    {
+      "FirstName": "Ragul",
+      "LastName": "S",
+      "TotalBilledHours": "272.00",
+      "EmpId": "3"
+    },
+    {
+      "FirstName": "Doug",
+      "LastName": "Monson",
+      "TotalBilledHours": "221.50",
+      "EmpId": "9975157"
+    },
+    {
+      "FirstName": "David",
+      "LastName": "Sibert",
+      "TotalBilledHours": "56.00",
+      "EmpId": "5533221"
+    },
+    {
+      "FirstName": "Ashvini",
+      "LastName": "Yedla",
+      "TotalBilledHours": "640.50",
+      "EmpId": "30607"
+    },
+    {
+      "FirstName": "Robert",
+      "LastName": "Watcke",
+      "TotalBilledHours": "537.00",
+      "EmpId": "1"
+    },
+    {
+      "FirstName": "Akshey",
+      "LastName": "Ram",
+      "TotalBilledHours": "190.50",
+      "EmpId": "5618412"
+    },
+    {
+      "FirstName": "Joseph",
+      "LastName": "Nirmal",
+      "TotalBilledHours": "312.00",
+      "EmpId": "81754565"
+    },
+    {
+      "FirstName": "Ben",
+      "LastName": "Koehn",
+      "TotalBilledHours": "145.00",
+      "EmpId": "5555888"
+    },
+    {
+      "FirstName": "Sivakumar",
+      "LastName": "KS",
+      "TotalBilledHours": "232.00",
+      "EmpId": "2"
+    },
+    {
+      "FirstName": "Jonathan",
+      "LastName": "Drake",
+      "TotalBilledHours": "311.50",
+      "EmpId": "32556393"
+    },
+    {
+      "FirstName": "Jim",
+      "LastName": "Roy",
+      "TotalBilledHours": "216.00",
+      "EmpId": "123"
+    },
+    {
+      "FirstName": "Arshath",
+      "LastName": "Ahamed",
+      "TotalBilledHours": "344.00",
+      "EmpId": "2774287"
+    },
+    {
+      "FirstName": "Rajesh",
+      "LastName": "Vetrivel",
+      "TotalBilledHours": "135.00",
+      "EmpId": "4466321"
+    },
+    {
+      "FirstName": "Kahren",
+      "LastName": "Tovmassian",
+      "TotalBilledHours": "311.50",
+      "EmpId": "4850285"
+    }
+  ],
+  "success": "true",
+  "_keyword_": "TIMESHEET_BY_USER_HOURS_BILLED_TABLE",
+  "rows": "20",
+  "_transfer_id_": "849de3bb-b5af-464d-8b6d-0d1f6fc26461"
+}

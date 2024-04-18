@@ -1,0 +1,245 @@
+{
+  "data": [
+    {
+      "CompanyName": "ABC Fitness",
+      "SowId": "ABC2024",
+      "ProjectCategory": "WebFocus Upgrade 8.105 to 9.2",
+      "CompanyId": "ABC202306",
+      "OriginalEndDate": "2024-02-14",
+      "CurrentStatus": "In Progress",
+      "TotalBilledHours": "263.00",
+      "OriginalStartDate": "2024-01-01",
+      "TotalProjectedHours": "160"
+    },
+    {
+      "CompanyName": "ABC Fitness",
+      "SowId": "ABC0620",
+      "ProjectCategory": "Maintenance, Bug Fixes, Upgrade Support",
+      "CompanyId": "ABC202306",
+      "OriginalEndDate": "2023-09-30",
+      "CurrentStatus": "Ongoing",
+      "TotalBilledHours": "204.50",
+      "OriginalStartDate": "2023-01-04",
+      "TotalProjectedHours": "9999"
+    },
+    {
+      "CompanyName": "Conifer Health Solutions, LLC",
+      "SowId": "CHS20230512",
+      "ProjectCategory": "WebFOCUS Development",
+      "CompanyId": "CHS202111",
+      "OriginalEndDate": "2023-10-17",
+      "CurrentStatus": "In Progress",
+      "OriginalStartDate": "2023-05-12",
+      "TotalProjectedHours": "400"
+    },
+    {
+      "CompanyName": "Medicx",
+      "SowId": "143",
+      "ProjectCategory": "Phase 2 Development",
+      "CompanyId": "MED03052212",
+      "OriginalEndDate": "2023-05-31",
+      "CurrentStatus": "Active",
+      "OriginalStartDate": "2023-05-01",
+      "TotalProjectedHours": "120"
+    },
+    {
+      "CompanyName": "Medicx",
+      "SowId": "MED20221001",
+      "ProjectCategory": "WebFOCUS Operations",
+      "CompanyId": "MED03052212",
+      "OriginalEndDate": "2023-12-29",
+      "CurrentStatus": "In Progress",
+      "TotalBilledHours": "318.00",
+      "OriginalStartDate": "2022-10-05",
+      "TotalProjectedHours": "1020"
+    },
+    {
+      "CompanyName": "Steel Technologies",
+      "SowId": "STX0120240101",
+      "ProjectCategory": "WebFOCUS Administration",
+      "CompanyId": "STX202112",
+      "OriginalEndDate": "1970-01-01",
+      "CurrentStatus": "",
+      "TotalBilledHours": "6.50",
+      "OriginalStartDate": "1970-01-01",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "United Educators",
+      "SowId": "UNE2022050301",
+      "ProjectCategory": " Operational Services",
+      "CompanyId": "UNE202205",
+      "OriginalEndDate": "2026-10-31",
+      "CurrentStatus": "Active",
+      "TotalBilledHours": "1737.70",
+      "OriginalStartDate": "2022-05-31",
+      "TotalProjectedHours": "5000"
+    },
+    {
+      "CompanyName": "Associated Bank",
+      "SowId": "ASB0120240101",
+      "ProjectCategory": "Power BI Migration",
+      "CompanyId": "ASB20240101",
+      "OriginalEndDate": "1970-01-01",
+      "CurrentStatus": "",
+      "TotalBilledHours": "2977.50",
+      "OriginalStartDate": "1970-01-01",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "Leadec",
+      "SowId": "LEA0120240101",
+      "ProjectCategory": "WebFOCUS Installation",
+      "CompanyId": "LEA20240101",
+      "OriginalEndDate": "1970-01-01",
+      "CurrentStatus": "",
+      "OriginalStartDate": "1970-01-01",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "Hertz",
+      "SowId": "HTZ0120240101",
+      "ProjectCategory": "WebFOCUS Upgrade",
+      "CompanyId": "HTZ20240101",
+      "OriginalEndDate": "1970-01-01",
+      "CurrentStatus": "",
+      "OriginalStartDate": "1970-01-01",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "University of Nebraska",
+      "SowId": "UNB20240101",
+      "ProjectCategory": "WebFOCUS Administration",
+      "CompanyId": "UNB20240101",
+      "OriginalEndDate": "1970-01-01",
+      "CurrentStatus": "",
+      "TotalBilledHours": "12.00",
+      "OriginalStartDate": "1970-01-01",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "Ferris State University",
+      "SowId": "FSU0220240101",
+      "ProjectCategory": "SOW",
+      "CompanyId": "FSU20240101",
+      "OriginalEndDate": "1970-01-01",
+      "CurrentStatus": "",
+      "TotalBilledHours": "76.50",
+      "OriginalStartDate": "1970-01-01",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "Ferris State University",
+      "SowId": "FSU0120240101",
+      "ProjectCategory": "WebFOCUS Migration to Cloud",
+      "CompanyId": "FSU20240101",
+      "OriginalEndDate": "1970-01-01",
+      "CurrentStatus": "",
+      "TotalBilledHours": "20.00",
+      "OriginalStartDate": "1970-01-01",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "Berg Pipe Panama City Corp",
+      "SowId": "BPC0120240101",
+      "ProjectCategory": "Presales",
+      "CompanyId": "BPC20240101",
+      "OriginalEndDate": "1970-01-01",
+      "CurrentStatus": "",
+      "OriginalStartDate": "1970-01-01",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "Florida Atlantic University",
+      "SowId": "FAU0120240101",
+      "ProjectCategory": "SOW",
+      "CompanyId": "FAU20240101",
+      "OriginalEndDate": "1970-01-01",
+      "CurrentStatus": "",
+      "TotalBilledHours": "28.00",
+      "OriginalStartDate": "1970-01-01",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "Rudolph Libbe Group",
+      "SowId": "RLG02212024aph",
+      "ProjectCategory": "Data Consult",
+      "CompanyId": "RLG20240101",
+      "OriginalEndDate": "2024-04-05",
+      "CurrentStatus": "Started",
+      "TotalBilledHours": "75.00",
+      "OriginalStartDate": "2024-03-01",
+      "TotalProjectedHours": "60"
+    },
+    {
+      "CompanyName": "Swisher",
+      "SowId": "SWR0120240101",
+      "ProjectCategory": "WebFOCUS Administration",
+      "CompanyId": "SWR20240101",
+      "OriginalEndDate": "1970-01-01",
+      "CurrentStatus": "",
+      "TotalBilledHours": "503.50",
+      "OriginalStartDate": "1970-01-01",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "Illinois Central College",
+      "SowId": "ICC0120240101",
+      "ProjectCategory": "UX Pyramid Style Guide",
+      "CompanyId": "ICC20240101",
+      "OriginalEndDate": "1970-01-01",
+      "CurrentStatus": "",
+      "TotalBilledHours": "11.00",
+      "OriginalStartDate": "1970-01-01",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "Fred Hutch Cancer Center",
+      "SowId": "1",
+      "ProjectCategory": "Power BI Coaching",
+      "CompanyId": "1",
+      "OriginalEndDate": "1970-01-01",
+      "CurrentStatus": "",
+      "TotalBilledHours": "14.00",
+      "OriginalStartDate": "1970-01-01",
+      "TotalProjectedHours": "300"
+    },
+    {
+      "CompanyName": "KASH Tech",
+      "SowId": "KAT0120240101",
+      "ProjectCategory": "Operations",
+      "CompanyId": "KAT20240101",
+      "OriginalEndDate": "1970-01-01",
+      "CurrentStatus": "",
+      "TotalBilledHours": "20.50",
+      "OriginalStartDate": "1970-01-01",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "MSIG",
+      "SowId": "2",
+      "ProjectCategory": "Power BI Set up",
+      "CompanyId": "1251",
+      "OriginalEndDate": "2024-05-01",
+      "CurrentStatus": "In progress",
+      "TotalBilledHours": "13.00",
+      "OriginalStartDate": "2024-03-04",
+      "TotalProjectedHours": "48"
+    },
+    {
+      "CompanyName": "Sentinel",
+      "SowId": "SEN0120240401",
+      "ProjectCategory": "IVR",
+      "CompanyId": "SEN20240401",
+      "OriginalEndDate": "2024-04-22",
+      "CurrentStatus": "Active",
+      "TotalBilledHours": "1.75",
+      "OriginalStartDate": "2024-04-01",
+      "TotalProjectedHours": "135"
+    }
+  ],
+  "success": "true",
+  "_keyword_": "HOURS_BILLED_AND_PROJECTED_BY_COMPANY_PROJECT_TABLE",
+  "rows": "22",
+  "_transfer_id_": "95cabdcb-8a9a-49a1-8e3c-ddb86840bb0a"
+}

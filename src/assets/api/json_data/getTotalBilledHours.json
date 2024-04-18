@@ -1,0 +1,127 @@
+{
+  "data": [
+    {
+      "CompanyName": "Fred Hutch Cancer Center",
+      "SowId": "1",
+      "CompanyId": "1",
+      "TotalBilledHours": "14.00",
+      "TotalProjectedHours": "300"
+    },
+    {
+      "CompanyName": "MSIG",
+      "SowId": "2",
+      "CompanyId": "1251",
+      "TotalBilledHours": "13.00",
+      "TotalProjectedHours": "48"
+    },
+    {
+      "CompanyName": "ABC Fitness",
+      "SowId": "ABC0620",
+      "CompanyId": "ABC202306",
+      "TotalBilledHours": "204.50",
+      "TotalProjectedHours": "9999"
+    },
+    {
+      "CompanyName": "ABC Fitness",
+      "SowId": "ABC2024",
+      "CompanyId": "ABC202306",
+      "TotalBilledHours": "263.00",
+      "TotalProjectedHours": "160"
+    },
+    {
+      "CompanyName": "Associated Bank",
+      "SowId": "ASB0120240101",
+      "CompanyId": "ASB20240101",
+      "TotalBilledHours": "2977.50",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "Florida Atlantic University",
+      "SowId": "FAU0120240101",
+      "CompanyId": "FAU20240101",
+      "TotalBilledHours": "28.00",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "Ferris State University",
+      "SowId": "FSU0120240101",
+      "CompanyId": "FSU20240101",
+      "TotalBilledHours": "20.00",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "Ferris State University",
+      "SowId": "FSU0220240101",
+      "CompanyId": "FSU20240101",
+      "TotalBilledHours": "76.50",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "Illinois Central College",
+      "SowId": "ICC0120240101",
+      "CompanyId": "ICC20240101",
+      "TotalBilledHours": "11.00",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "KASH Tech",
+      "SowId": "KAT0120240101",
+      "CompanyId": "KAT20240101",
+      "TotalBilledHours": "20.50",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "Medicx",
+      "SowId": "MED20221001",
+      "CompanyId": "MED03052212",
+      "TotalBilledHours": "318.00",
+      "TotalProjectedHours": "1020"
+    },
+    {
+      "CompanyName": "Rudolph Libbe Group",
+      "SowId": "RLG02212024aph",
+      "CompanyId": "RLG20240101",
+      "TotalBilledHours": "75.00",
+      "TotalProjectedHours": "60"
+    },
+    {
+      "CompanyName": "Sentinel",
+      "SowId": "SEN0120240401",
+      "CompanyId": "SEN20240401",
+      "TotalBilledHours": "1.75",
+      "TotalProjectedHours": "135"
+    },
+    {
+      "CompanyName": "Steel Technologies",
+      "SowId": "STX0120240101",
+      "CompanyId": "STX202112",
+      "TotalBilledHours": "6.50",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "Swisher",
+      "SowId": "SWR0120240101",
+      "CompanyId": "SWR20240101",
+      "TotalBilledHours": "503.50",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "University of Nebraska",
+      "SowId": "UNB20240101",
+      "CompanyId": "UNB20240101",
+      "TotalBilledHours": "12.00",
+      "TotalProjectedHours": "10"
+    },
+    {
+      "CompanyName": "United Educators",
+      "SowId": "UNE2022050301",
+      "CompanyId": "UNE202205",
+      "TotalBilledHours": "1737.70",
+      "TotalProjectedHours": "5000"
+    }
+  ],
+  "success": "true",
+  "_keyword_": "TOTAL_HOURS_BILLED_BY_PROJECT_TABLE",
+  "rows": "17",
+  "_transfer_id_": "a3e80a29-1d2a-4aca-9b45-bcebe409d637"
+}

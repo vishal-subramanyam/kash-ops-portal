@@ -1,0 +1,110 @@
+{
+  "data": [
+    {
+      "CompanyName": "ABC Fitness",
+      "SowId": "ABC0620",
+      "ProjectCategory": "Maintenance, Bug Fixes, Upgrade Support",
+      "TotalBilledHours": "204.50"
+    },
+    {
+      "CompanyName": "ABC Fitness",
+      "SowId": "ABC2024",
+      "ProjectCategory": "WebFocus Upgrade 8.105 to 9.2",
+      "TotalBilledHours": "263.00"
+    },
+    {
+      "CompanyName": "Associated Bank",
+      "SowId": "ASB0120240101",
+      "ProjectCategory": "Power BI Migration",
+      "TotalBilledHours": "2977.50"
+    },
+    {
+      "CompanyName": "Ferris State University",
+      "SowId": "FSU0220240101",
+      "ProjectCategory": "SOW",
+      "TotalBilledHours": "76.50"
+    },
+    {
+      "CompanyName": "Ferris State University",
+      "SowId": "FSU0120240101",
+      "ProjectCategory": "WebFOCUS Migration to Cloud",
+      "TotalBilledHours": "20.00"
+    },
+    {
+      "CompanyName": "Florida Atlantic University",
+      "SowId": "FAU0120240101",
+      "ProjectCategory": "SOW",
+      "TotalBilledHours": "28.00"
+    },
+    {
+      "CompanyName": "Fred Hutch Cancer Center",
+      "SowId": "1",
+      "ProjectCategory": "Power BI Coaching",
+      "TotalBilledHours": "14.00"
+    },
+    {
+      "CompanyName": "Illinois Central College",
+      "SowId": "ICC0120240101",
+      "ProjectCategory": "UX Pyramid Style Guide",
+      "TotalBilledHours": "11.00"
+    },
+    {
+      "CompanyName": "KASH Tech",
+      "SowId": "KAT0120240101",
+      "ProjectCategory": "Operations",
+      "TotalBilledHours": "20.50"
+    },
+    {
+      "CompanyName": "Medicx",
+      "SowId": "MED20221001",
+      "ProjectCategory": "WebFOCUS Operations",
+      "TotalBilledHours": "318.00"
+    },
+    {
+      "CompanyName": "MSIG",
+      "SowId": "2",
+      "ProjectCategory": "Power BI Set up",
+      "TotalBilledHours": "13.00"
+    },
+    {
+      "CompanyName": "Rudolph Libbe Group",
+      "SowId": "RLG02212024aph",
+      "ProjectCategory": "Data Consult",
+      "TotalBilledHours": "75.00"
+    },
+    {
+      "CompanyName": "Sentinel",
+      "SowId": "SEN0120240401",
+      "ProjectCategory": "IVR",
+      "TotalBilledHours": "1.75"
+    },
+    {
+      "CompanyName": "Steel Technologies",
+      "SowId": "STX0120240101",
+      "ProjectCategory": "WebFOCUS Administration",
+      "TotalBilledHours": "6.50"
+    },
+    {
+      "CompanyName": "Swisher",
+      "SowId": "SWR0120240101",
+      "ProjectCategory": "WebFOCUS Administration",
+      "TotalBilledHours": "503.50"
+    },
+    {
+      "CompanyName": "United Educators",
+      "SowId": "UNE2022050301",
+      "ProjectCategory": " Operational Services",
+      "TotalBilledHours": "1737.70"
+    },
+    {
+      "CompanyName": "University of Nebraska",
+      "SowId": "UNB20240101",
+      "ProjectCategory": "WebFOCUS Administration",
+      "TotalBilledHours": "12.00"
+    }
+  ],
+  "success": "true",
+  "_keyword_": "HOURS_BILLED_BY_COMPANY_PROJECT_TABLE",
+  "rows": "17",
+  "_transfer_id_": "c158446a-d9c5-4125-9f4d-9a93a734aaf7"
+}

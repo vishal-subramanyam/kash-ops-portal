@@ -1,0 +1,422 @@
+{
+  "data": [
+    {
+      "SowId": "SWR0120240101",
+      "CompanyId": "SWR20240101",
+      "ProjectCategory": "WebFOCUS Administration",
+      "TotalHoursBilled": "142.50",
+      "FirstName": "Akshey",
+      "LastName": "Ram",
+      "EmpId": "5618412"
+    },
+    {
+      "SowId": "FSU0220240101",
+      "CompanyId": "FSU20240101",
+      "ProjectCategory": "SOW",
+      "TotalHoursBilled": "48.00",
+      "FirstName": "Akshey",
+      "LastName": "Ram",
+      "EmpId": "5618412"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "CompanyId": "UNE202205",
+      "ProjectCategory": " Operational Services",
+      "TotalHoursBilled": "807.50",
+      "FirstName": "Alex",
+      "LastName": "Gardner",
+      "EmpId": "8844422"
+    },
+    {
+      "SowId": "ASB0120240101",
+      "CompanyId": "ASB20240101",
+      "ProjectCategory": "Power BI Migration",
+      "TotalHoursBilled": "344.00",
+      "FirstName": "Arshath",
+      "LastName": "Ahamed",
+      "EmpId": "2774287"
+    },
+    {
+      "SowId": "ABC0620",
+      "CompanyId": "ABC202306",
+      "ProjectCategory": "Maintenance, Bug Fixes, Upgrade Support",
+      "TotalHoursBilled": "59.50",
+      "FirstName": "Ashvini",
+      "LastName": "Yedla",
+      "EmpId": "30607"
+    },
+    {
+      "SowId": "MED20221001",
+      "CompanyId": "MED03052212",
+      "ProjectCategory": "WebFOCUS Operations",
+      "TotalHoursBilled": "318.00",
+      "FirstName": "Ashvini",
+      "LastName": "Yedla",
+      "EmpId": "30607"
+    },
+    {
+      "SowId": "ABC2024",
+      "CompanyId": "ABC202306",
+      "ProjectCategory": "WebFocus Upgrade 8.105 to 9.2",
+      "TotalHoursBilled": "263.00",
+      "FirstName": "Ashvini",
+      "LastName": "Yedla",
+      "EmpId": "30607"
+    },
+    {
+      "SowId": "ABC0620",
+      "CompanyId": "ABC202306",
+      "ProjectCategory": "Maintenance, Bug Fixes, Upgrade Support",
+      "TotalHoursBilled": "145.00",
+      "FirstName": "Ben",
+      "LastName": "Koehn",
+      "EmpId": "5555888"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "CompanyId": "UNE202205",
+      "ProjectCategory": " Operational Services",
+      "TotalHoursBilled": "56.00",
+      "FirstName": "David",
+      "LastName": "Sibert",
+      "EmpId": "5533221"
+    },
+    {
+      "SowId": "FAU0120240101",
+      "CompanyId": "FAU20240101",
+      "ProjectCategory": "SOW",
+      "TotalHoursBilled": "25.00",
+      "FirstName": "Doug",
+      "LastName": "Monson",
+      "EmpId": "9975157"
+    },
+    {
+      "SowId": "UNB20240101",
+      "CompanyId": "UNB20240101",
+      "ProjectCategory": "WebFOCUS Administration",
+      "TotalHoursBilled": "12.00",
+      "FirstName": "Doug",
+      "LastName": "Monson",
+      "EmpId": "9975157"
+    },
+    {
+      "SowId": "FSU0120240101",
+      "CompanyId": "FSU20240101",
+      "ProjectCategory": "WebFOCUS Migration to Cloud",
+      "TotalHoursBilled": "7.50",
+      "FirstName": "Doug",
+      "LastName": "Monson",
+      "EmpId": "9975157"
+    },
+    {
+      "SowId": "STX0120240101",
+      "CompanyId": "STX202112",
+      "ProjectCategory": "WebFOCUS Administration",
+      "TotalHoursBilled": "5.50",
+      "FirstName": "Doug",
+      "LastName": "Monson",
+      "EmpId": "9975157"
+    },
+    {
+      "SowId": "FSU0220240101",
+      "CompanyId": "FSU20240101",
+      "ProjectCategory": "SOW",
+      "TotalHoursBilled": "25.50",
+      "FirstName": "Doug",
+      "LastName": "Monson",
+      "EmpId": "9975157"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "CompanyId": "UNE202205",
+      "ProjectCategory": " Operational Services",
+      "TotalHoursBilled": "146.00",
+      "FirstName": "Doug",
+      "LastName": "Monson",
+      "EmpId": "9975157"
+    },
+    {
+      "SowId": "SEN0120240401",
+      "CompanyId": "SEN20240401",
+      "ProjectCategory": "IVR",
+      "TotalHoursBilled": "1.75",
+      "FirstName": "Garrett",
+      "LastName": "Anderson",
+      "EmpId": "411065"
+    },
+    {
+      "SowId": "1",
+      "CompanyId": "1",
+      "ProjectCategory": "Power BI Coaching",
+      "TotalHoursBilled": "2.50",
+      "FirstName": "Jim",
+      "LastName": "Roy",
+      "EmpId": "123"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "CompanyId": "UNE202205",
+      "ProjectCategory": " Operational Services",
+      "TotalHoursBilled": "60.00",
+      "FirstName": "Jim",
+      "LastName": "Roy",
+      "EmpId": "123"
+    },
+    {
+      "SowId": "FSU0220240101",
+      "CompanyId": "FSU20240101",
+      "ProjectCategory": "SOW",
+      "TotalHoursBilled": "1.00",
+      "FirstName": "Jim",
+      "LastName": "Roy",
+      "EmpId": "123"
+    },
+    {
+      "SowId": "2",
+      "CompanyId": "1251",
+      "ProjectCategory": "Power BI Set up",
+      "TotalHoursBilled": "4.50",
+      "FirstName": "Jim",
+      "LastName": "Roy",
+      "EmpId": "123"
+    },
+    {
+      "SowId": "FSU0120240101",
+      "CompanyId": "FSU20240101",
+      "ProjectCategory": "WebFOCUS Migration to Cloud",
+      "TotalHoursBilled": "12.50",
+      "FirstName": "Jim",
+      "LastName": "Roy",
+      "EmpId": "123"
+    },
+    {
+      "SowId": "ASB0120240101",
+      "CompanyId": "ASB20240101",
+      "ProjectCategory": "Power BI Migration",
+      "TotalHoursBilled": "128.00",
+      "FirstName": "Jim",
+      "LastName": "Roy",
+      "EmpId": "123"
+    },
+    {
+      "SowId": "KAT0120240101",
+      "CompanyId": "KAT20240101",
+      "ProjectCategory": "Operations",
+      "TotalHoursBilled": "4.50",
+      "FirstName": "Jim",
+      "LastName": "Roy",
+      "EmpId": "123"
+    },
+    {
+      "SowId": "FAU0120240101",
+      "CompanyId": "FAU20240101",
+      "ProjectCategory": "SOW",
+      "TotalHoursBilled": "3.00",
+      "FirstName": "Jim",
+      "LastName": "Roy",
+      "EmpId": "123"
+    },
+    {
+      "SowId": "FSU0220240101",
+      "CompanyId": "FSU20240101",
+      "ProjectCategory": "SOW",
+      "TotalHoursBilled": "2.00",
+      "FirstName": "Jonathan",
+      "LastName": "Drake",
+      "EmpId": "32556393"
+    },
+    {
+      "SowId": "ICC0120240101",
+      "CompanyId": "ICC20240101",
+      "ProjectCategory": "UX Pyramid Style Guide",
+      "TotalHoursBilled": "11.00",
+      "FirstName": "Jonathan",
+      "LastName": "Drake",
+      "EmpId": "32556393"
+    },
+    {
+      "SowId": "KAT0120240101",
+      "CompanyId": "KAT20240101",
+      "ProjectCategory": "Operations",
+      "TotalHoursBilled": "12.00",
+      "FirstName": "Jonathan",
+      "LastName": "Drake",
+      "EmpId": "32556393"
+    },
+    {
+      "SowId": "2",
+      "CompanyId": "1251",
+      "ProjectCategory": "Power BI Set up",
+      "TotalHoursBilled": "8.50",
+      "FirstName": "Jonathan",
+      "LastName": "Drake",
+      "EmpId": "32556393"
+    },
+    {
+      "SowId": "SWR0120240101",
+      "CompanyId": "SWR20240101",
+      "ProjectCategory": "WebFOCUS Administration",
+      "TotalHoursBilled": "49.50",
+      "FirstName": "Jonathan",
+      "LastName": "Drake",
+      "EmpId": "32556393"
+    },
+    {
+      "SowId": "1",
+      "CompanyId": "1",
+      "ProjectCategory": "Power BI Coaching",
+      "TotalHoursBilled": "11.50",
+      "FirstName": "Jonathan",
+      "LastName": "Drake",
+      "EmpId": "32556393"
+    },
+    {
+      "SowId": "STX0120240101",
+      "CompanyId": "STX202112",
+      "ProjectCategory": "WebFOCUS Administration",
+      "TotalHoursBilled": "1.00",
+      "FirstName": "Jonathan",
+      "LastName": "Drake",
+      "EmpId": "32556393"
+    },
+    {
+      "SowId": "ASB0120240101",
+      "CompanyId": "ASB20240101",
+      "ProjectCategory": "Power BI Migration",
+      "TotalHoursBilled": "216.00",
+      "FirstName": "Jonathan",
+      "LastName": "Drake",
+      "EmpId": "32556393"
+    },
+    {
+      "SowId": "ASB0120240101",
+      "CompanyId": "ASB20240101",
+      "ProjectCategory": "Power BI Migration",
+      "TotalHoursBilled": "312.00",
+      "FirstName": "Joseph",
+      "LastName": "Nirmal",
+      "EmpId": "81754565"
+    },
+    {
+      "SowId": "SWR0120240101",
+      "CompanyId": "SWR20240101",
+      "ProjectCategory": "WebFOCUS Administration",
+      "TotalHoursBilled": "311.50",
+      "FirstName": "Kahren",
+      "LastName": "Tovmassian",
+      "EmpId": "4850285"
+    },
+    {
+      "SowId": "ASB0120240101",
+      "CompanyId": "ASB20240101",
+      "ProjectCategory": "Power BI Migration",
+      "TotalHoursBilled": "320.00",
+      "FirstName": "Kugapathi",
+      "LastName": "S",
+      "EmpId": "584872844"
+    },
+    {
+      "SowId": "ASB0120240101",
+      "CompanyId": "ASB20240101",
+      "ProjectCategory": "Power BI Migration",
+      "TotalHoursBilled": "272.00",
+      "FirstName": "Ragul",
+      "LastName": "S",
+      "EmpId": "3"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "CompanyId": "UNE202205",
+      "ProjectCategory": " Operational Services",
+      "TotalHoursBilled": "135.00",
+      "FirstName": "Rajesh",
+      "LastName": "Vetrivel",
+      "EmpId": "4466321"
+    },
+    {
+      "SowId": "KAT0120240101",
+      "CompanyId": "KAT20240101",
+      "ProjectCategory": "Operations",
+      "TotalHoursBilled": "4.00",
+      "FirstName": "Randy",
+      "LastName": "Lane",
+      "EmpId": "3594124"
+    },
+    {
+      "SowId": "MED20221001",
+      "CompanyId": "MED03052212",
+      "ProjectCategory": "WebFOCUS Operations",
+      "TotalHoursBilled": "0.00",
+      "FirstName": "Randy",
+      "LastName": "Lane",
+      "EmpId": "3594124"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "CompanyId": "UNE202205",
+      "ProjectCategory": " Operational Services",
+      "TotalHoursBilled": "166.20",
+      "FirstName": "Randy",
+      "LastName": "Lane",
+      "EmpId": "3594124"
+    },
+    {
+      "SowId": "ASB0120240101",
+      "CompanyId": "ASB20240101",
+      "ProjectCategory": "Power BI Migration",
+      "TotalHoursBilled": "256.50",
+      "FirstName": "Randy",
+      "LastName": "Lane",
+      "EmpId": "3594124"
+    },
+    {
+      "SowId": "RLG02212024aph",
+      "CompanyId": "RLG20240101",
+      "ProjectCategory": "Data Consult",
+      "TotalHoursBilled": "75.00",
+      "FirstName": "Randy",
+      "LastName": "Lane",
+      "EmpId": "3594124"
+    },
+    {
+      "SowId": "ASB0120240101",
+      "CompanyId": "ASB20240101",
+      "ProjectCategory": "Power BI Migration",
+      "TotalHoursBilled": "537.00",
+      "FirstName": "Robert",
+      "LastName": "Watcke",
+      "EmpId": "1"
+    },
+    {
+      "SowId": "ASB0120240101",
+      "CompanyId": "ASB20240101",
+      "ProjectCategory": "Power BI Migration",
+      "TotalHoursBilled": "232.00",
+      "FirstName": "Sivakumar",
+      "LastName": "KS",
+      "EmpId": "2"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "CompanyId": "UNE202205",
+      "ProjectCategory": " Operational Services",
+      "TotalHoursBilled": "352.00",
+      "FirstName": "Sourabh Kumar",
+      "LastName": "Vats",
+      "EmpId": "756421"
+    },
+    {
+      "SowId": "ASB0120240101",
+      "CompanyId": "ASB20240101",
+      "ProjectCategory": "Power BI Migration",
+      "TotalHoursBilled": "360.00",
+      "FirstName": "Vivek",
+      "LastName": "AR",
+      "EmpId": "8483527"
+    }
+  ],
+  "success": "true",
+  "_keyword_": "TIMESHEET_USER_HOURS_BILLED_PER_COMPANY_PROJECT_TABLE",
+  "rows": "46",
+  "_transfer_id_": "f659f240-3168-48d9-a074-4c7e1ccaec28"
+}
