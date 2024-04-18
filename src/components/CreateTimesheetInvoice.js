@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/ManageInvoices.css";
-import { getAllTimesheets } from "../hooks/FetchData";
+import { getTimesheetEntryDetails } from "../hooks/FetchData";
 import AlertMessage from "../components/AlertMessage";
 
 function CreateTimesheetInvoice(props) {
@@ -17,7 +17,7 @@ function CreateTimesheetInvoice(props) {
 
     // resolve the promise in order to get the hours billed array. When promise is resolved, filter response array with filter values above and return new array - array of objects, each object is a user with properties: name, totalBilledHours, details: array containing all sub task entries for a project
 
-    Promise.allSettled([getAllTimesheets(from, to)]).then((values) => {
+    Promise.allSettled([getTimesheetEntryDetails(from, to)]).then((values) => {
       console.log(values);
       // filter billed hours array per filters
       //   let filterHrs = values[0].value.allHrsBilledArr.filter((record) => {

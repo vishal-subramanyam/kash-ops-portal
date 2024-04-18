@@ -660,7 +660,7 @@ export const getProjectsBilledAndProjectedHoursByCompany = () => {
 // GET TIMESHEET ENTRY DETAILS
 // =============================
 
-export const getTimesheetEntryDetails = () => {
+export const getTimesheetEntryDetails = (from, to) => {
   // Get detailed list of timesheet entries logged each day by each user
   let response = fetch(`${domain}GenericResultBuilderService/buildResults`, {
     method: "POST",
@@ -669,25 +669,14 @@ export const getTimesheetEntryDetails = () => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      _keyword_: "TIMESHEETS_ENTRY_DATE_DETAILED",
+      _keyword_: "TIMESHEET_HOURS_BILLED_RANGE_INVOICE_TABLE",
+      FromDate: from,
+      ToDate: to,
     }),
   })
     .then((res) => res.json())
     .then((res) => {
-      let users = Object.values(
-        res.data.reduce((c, e) => {
-          if (!c[e.EmpId]) c[e.EmpId] = e;
-          return c;
-        }, {})
-      );
-
-      let timesheetUserEntryDetails = {
-        numUsers: users.length,
-        entryDetails: res.data,
-      };
-      console.log("Timesheet entry details", timesheetUserEntryDetails);
-
-      return timesheetUserEntryDetails;
+      return res.data;
     })
     .catch((err) => {
       return err;
