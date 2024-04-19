@@ -85,6 +85,7 @@ function dataReducer(state, action) {
 function NewInvoice(props) {
   let initialDataState = {
     selectedCompanyId: "",
+    selectedCompanyName: "",
     selectedProjectSowId: "",
     companiesList: [],
     companyProjectsList: [],
@@ -181,6 +182,10 @@ function NewInvoice(props) {
     let selectedCompanyId =
       e.target[e.target.selectedIndex].getAttribute("data-companyid");
     console.log(selectedCompanyId);
+
+    let selectedCompanyName =
+      e.target[e.target.selectedIndex].getAttribute("value");
+    console.log(selectedCompanyName);
     // dispatch state action to update the selected company Id and filter list of projects in state to only return projects that share the selected company Id
     dispatchData({
       type: "chooseCompanyAndFilterProjects",

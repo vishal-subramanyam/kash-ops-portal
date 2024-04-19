@@ -12,30 +12,44 @@ function CreateTimesheetInvoice(props) {
   let [filteredHoursArray, setFilteredHoursArray] = useState([]);
 
   // Should I run function with useMemo hook? or useCallback hook?
-  const fetchTSData = (companyId, sowId, from, to) => {
-    console.log("trigger fetch to get data", companyId, sowId, from, to);
+  // const fetchTSData = (companyId, sowId, from, to) => {
+  const fetchTSData = (from, to, companyId, sowId) => {
+    console.log("trigger fetch to get data", from, to);
 
     // resolve the promise in order to get the hours billed array. When promise is resolved, filter response array with filter values above and return new array - array of objects, each object is a user with properties: name, totalBilledHours, details: array containing all sub task entries for a project
 
-    Promise.allSettled([getTimesheetEntryDetails(from, to)]).then((values) => {
+    Promise.allSettled([
+      getTimesheetEntryDetails(from, to, companyId),
+      // getTimesheetEntryDetails(from, to, companyId, sowId),
+    ]).then((values) => {
       console.log(values);
-      // filter billed hours array per filters
-      //   let filterHrs = values[0].value.allHrsBilledArr.filter((record) => {
-      //     return (
-      //       record.CompanyId === companyId &&
-      //       record.SowId === sowId &&
-      //       record.EntryDate >= from &&
-      //       record.EntryDate <= to
-      //     );
-      //   });
-      //   console.log(filterHrs);
+      // filter resulting array per company id filter and sow id filter
+      let filterHrs = values[0].value.filter((record) => {
+        return record.SowId === sowId;
+      });
+      console.log(filterHrs);
 
       // Group results by name and task area
+      let groupedData = groupFilteredData(filterHrs);
+      setFilteredHoursArray(groupedData);
     });
   };
 
+  const groupFilteredData = (arr) => {
+    let grouped = {};
+    arr.forEach((obj) => {
+      let fullName = obj.FullName;
+
+      if (!grouped[fullName]) {
+        grouped[fullName] = [];
+      }
+
+      grouped[fullName].push(obj);
+    });
+    return grouped;
+  };
   // Call the fetch TS data function with filter values passed via props
-  fetchTSData(companyId, sowId, from, to);
+  fetchTSData(from, to, companyId, sowId);
 
   const alertMessageDisplay = (entry) => {
     return entry;
@@ -130,7 +144,7 @@ function CreateTimesheetInvoice(props) {
           </section>
         </section>
       </section>
-      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />;
+      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
     </>
   );
 }
