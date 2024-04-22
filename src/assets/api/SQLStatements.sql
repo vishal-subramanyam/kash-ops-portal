@@ -949,7 +949,7 @@ Order by
     Full_Name
     -- Create Invoice Table
 CREATE TABLE
-    kash_operations_invoice_table (
+    kash_operations_invoice (
         invoice_id SERIAL PRIMARY KEY,
         created_by INT,
         attention_to INT,
@@ -963,23 +963,21 @@ CREATE TABLE
         internal_notes TEXT,
         external_notes TEXT,
         FOREIGN KEY (created_by) REFERENCES kash_operations_user_table (emp_id),
-        FOREIGN KEY (attention_to) REFERENCES kash_operations_company_contact_table (company_primary_contact),
-        FOREIGN KEY (company_id) REFERENCES company (company_id)
+        FOREIGN KEY (attention_to) REFERENCES kash_operations_user_table (emp_id),
+        FOREIGN KEY (company_id) REFERENCES kash_operations_company_table (company_id)
     );
 
 -- Create InvoiceDetail Table
 CREATE TABLE
-    kash_operations_invoice_detail_table (
+    kash_operations_invoice_detail (
         invoice_detail_id SERIAL PRIMARY KEY,
         invoice_id INT,
         sow_id INT,
         rate FLOAT,
         resource_role VARCHAR(255),
         emp_id INT,
-        project_sub_assignment_id VARCHAR(20),
         sub_assignment_title VARCHAR(255),
         sub_assignment_segment_1 VARCHAR(255),
         FOREIGN KEY (invoice_id) REFERENCES kash_operations_invoice_table (invoice_id),
-        FOREIGN KEY (sow_id) REFERENCES kash_operations_created_projects_table (sow_id),
-        FOREIGN KEY (project_sub_assignment_id) REFERENCES kash_operations_project_sub_category_table (project_sub_task_id)
+        FOREIGN KEY (sow_id) REFERENCES kash_operations_created_projects_table (sow_id) FOREIGN KEY (emp_id) REFERENCES kash_operations_user_table (emp_id)
     );
