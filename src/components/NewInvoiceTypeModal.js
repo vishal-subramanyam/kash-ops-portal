@@ -20,12 +20,12 @@ const newInvoiceTypeModal = forwardRef(function (props, ref) {
       id="database-submit-dialog"
       ref={ref}
     >
-      <div className="close-modal-icon" onClick={closeModal}>
-        <FontAwesomeIcon icon={faXmark} />
-      </div>
       <h1 className="new-invoice__page-title form-page-title--lg-1">
         Create New Invoice
       </h1>
+      <div className="close-modal-icon" onClick={closeModal}>
+        <FontAwesomeIcon icon={faXmark} />
+      </div>
       <section className="new-invoice-type-selection">
         <button
           type="submit"

@@ -21,6 +21,7 @@ import {
 function dataReducer(state, action) {
   switch (action.type) {
     case "initialize": {
+      console.log("initialize state");
       return action.payload;
     }
     case "listCompanies": {
@@ -169,6 +170,7 @@ function NewInvoice(props) {
   });
   //   resolvePromises();
   useEffect(() => {
+    console.log("use effect run");
     resolvePromises();
   }, []);
 
@@ -267,7 +269,7 @@ function NewInvoice(props) {
           {console.log("state data", dataState)}
           {/* Date Range Filter Form */}
           <form method="POST" className="invoice-filter-form">
-            <fieldset>
+            <fieldset className="invoice-filter--company">
               <label htmlFor="company-selection">Company</label>
               <select
                 id="company-selection"
@@ -277,6 +279,7 @@ function NewInvoice(props) {
               >
                 <option value=""></option>
                 {/* map over list of companies */}
+                {console.log(dataState)}
                 {dataState.companiesList.map((company, i) => {
                   return (
                     <option
@@ -291,6 +294,7 @@ function NewInvoice(props) {
               </select>
             </fieldset>
             <fieldset
+              className="invoice-filter--project"
               style={{
                 display: dataState.selectedCompanyId === "" ? "none" : "block",
               }}
