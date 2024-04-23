@@ -107,6 +107,7 @@ New Timesheet Invoice Workflow and Component Styles
 }
 
 .invoice-date-rage-form-group {
+  flex-direction: column; /* display: flex; is set inline with a ternary to handle conditional rendering of date range filter*/
   background-color: #beeadf;
 }
 
@@ -208,15 +209,34 @@ Choose New Invoice Type Modal
   .invoice-filter-form {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
+    grid-gap: 0.5rem;
+    position: relative;
+    height: 95px;
   }
 
   .invoice-filter--company {
     grid-column: 1 /3;
+    position: absolute;
+    bottom: 0;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
   .invoice-filter--project {
     grid-column: 3 /5;
+    position: absolute;
+    bottom: 0;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
   .invoice-date-rage-form-group {
     grid-column: 5 / 9;
+  }
+
+  .invoice-filter-date-wrapper {
+    display: flex;
   }
 }

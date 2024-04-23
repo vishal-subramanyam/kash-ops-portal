@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/ManageInvoices.css";
@@ -9,32 +9,72 @@ function CreateTimesheetInvoice(props) {
   let alertMessage = useRef();
   let [message, setMessage] = useState("");
   let { companyId, sowId, from, to } = props;
-  let [filteredHoursArray, setFilteredHoursArray] = useState([]);
+  let [dataPerDateRangeFilter, setDataPerDateRangeFilter] = useState([]);
+  let [filteredHours, setFilteredHours] = useState([]);
+
+  useEffect(() => {
+    console.log(
+      `use effect to fetch Timsheet data per filter - from: ${from}, to: ${to}, company id: ${companyId}`
+    );
+    fetchTSData(from, to, companyId);
+  }, [from, to, companyId]);
 
   // Should I run function with useMemo hook? or useCallback hook?
   // const fetchTSData = (companyId, sowId, from, to) => {
-  const fetchTSData = (from, to, companyId, sowId) => {
+  const fetchTSData = (from, to, companyId) => {
     console.log("trigger fetch to get data", from, to);
 
     // resolve the promise in order to get the hours billed array. When promise is resolved, filter response array with filter values above and return new array - array of objects, each object is a user with properties: name, totalBilledHours, details: array containing all sub task entries for a project
-
     Promise.allSettled([
       getTimesheetEntryDetails(from, to, companyId),
       // getTimesheetEntryDetails(from, to, companyId, sowId),
     ]).then((values) => {
       console.log(values);
-      // filter resulting array per company id filter and sow id filter
-      let filterHrs = values[0].value.filter((record) => {
-        return record.SowId === sowId;
-      });
-      console.log(filterHrs);
 
-      // Group results by name and task area
-      let groupedData = groupFilteredData(filterHrs);
-      setFilteredHoursArray(groupedData);
+      // Assign all Timesheet data per filters - from, to and companyId - to state array
+      setDataPerDateRangeFilter(values[0].value);
+
+      // trigger function to filter out project data sharing the selected project sow id
+      getRecordsPerProject(props.sowId, values[0].value);
     });
   };
 
+  // filter Timesheet data to get records for selected sow Id
+  const getRecordsPerProject = (id, arr) => {
+    let selectedProjectName = "";
+    // filter resulting array per company id filter and sow id filter
+    let filterHrs = arr.filter((record, i) => {
+      selectedProjectName = record.ProjectCategory;
+      if (
+        !filteredHours.some((project) =>
+          project.hasOwnProperty(record.ProjectCategory)
+        )
+      ) {
+        setFilteredHours([
+          ...filteredHours,
+          {
+            projectName: record.ProjectCategory,
+            data: [],
+          },
+        ]);
+      }
+      return record.SowId === id;
+    });
+    console.log(filterHrs);
+    console.log(selectedProjectName);
+    // Group results by name and task area
+    let groupedData = groupFilteredData(filterHrs);
+    // setFilteredHoursArray(groupedData);
+    console.log(groupedData);
+    setFilteredHours(...filteredHours, {
+      projectName: selectedProjectName,
+      data: groupedData,
+    });
+
+    console.log("state of hours to group for UI:", filteredHours);
+  };
+
+  // Group data by resource - per project, all the hours billed user. This gets pushed to filtered hours array that will be looped over to render UI
   const groupFilteredData = (arr) => {
     let grouped = {};
     arr.forEach((obj) => {
@@ -48,8 +88,6 @@ function CreateTimesheetInvoice(props) {
     });
     return grouped;
   };
-  // Call the fetch TS data function with filter values passed via props
-  fetchTSData(from, to, companyId, sowId);
 
   const alertMessageDisplay = (entry) => {
     return entry;
@@ -109,6 +147,7 @@ function CreateTimesheetInvoice(props) {
               </header>
               {/* List of resource's name and billed hours per task area for specific project */}
               {/* List of billed hours per Task */}
+              {console.log("state array for data display on UI", filteredHours)}
               <ol>
                 <li>
                   <ol>

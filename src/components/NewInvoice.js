@@ -296,7 +296,7 @@ function NewInvoice(props) {
             <fieldset
               className="invoice-filter--project"
               style={{
-                display: dataState.selectedCompanyId === "" ? "none" : "block",
+                display: dataState.selectedCompanyId === "" ? "none" : "flex",
               }}
             >
               <label htmlFor="project-selection">Project</label>
@@ -328,11 +328,11 @@ function NewInvoice(props) {
                   dataState.selectedCompanyId === "" ||
                   dataState.selectedProjectSowId == ""
                     ? "none"
-                    : "block",
+                    : "flex",
               }}
             >
               <h5>Date Range</h5>
-              <div>
+              <div className="invoice-filter-date-wrapper">
                 <div>
                   <label htmlFor="date-filter-from">Start Date</label>
                   <input
