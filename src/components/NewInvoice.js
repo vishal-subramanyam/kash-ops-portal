@@ -80,13 +80,21 @@ function dataReducer(state, action) {
       };
     }
     case "filterByProject": {
-      console.log(action);
+      console.log("filter project dispatch - action:", action, "state:", state);
 
+      // hrsArr.push({
+      //   projectName: action.action.projectName,
+      //   data: action.action.data,
+      // });
+      console.log("hrs by projet:", state.filteredHours);
       return {
         ...state,
         filteredHours: [
-          // ...state.filteredHours,
-          { projectName: action.action.projectName, data: action.action.data },
+          ...state.filteredHours,
+          {
+            projectName: action.action.projectName,
+            data: action.action.data,
+          },
         ],
       };
     }
@@ -242,6 +250,7 @@ function NewInvoice(props) {
     });
   };
 
+  // Set state object property array for TS records betweeen date range filter
   const handleDispatchDateRangeData = (arr) => {
     dispatchData({
       type: "setDateRangeData",
@@ -256,41 +265,45 @@ function NewInvoice(props) {
   // filter Timesheet data to get records for selected sow Id
   const getRecordsPerProject = (name, id, arr) => {
     console.log("function to filter hours by selected project");
-    if (
-      !dataState.filteredHours.some((project) => project.hasOwnProperty(name))
-    ) {
-      // setFilteredHours([
-      //   ...dataState.filteredHours,
-      //   {
-      //     projectName: record.ProjectCategory,
-      //     data: [],
-      //   },
-      // ]);
+    // if (
+    //   !dataState.filteredHours.some((project) => project.hasOwnProperty(name))
+    // ) {
+    //   // setFilteredHours([
+    //   //   ...dataState.filteredHours,
+    //   //   {
+    //   //     projectName: record.ProjectCategory,
+    //   //     data: [],
+    //   //   },
+    //   // ]);
+    //   dispatchData({
+    //     type: "filterByProject",
+    //     action: { projectName: name, data: [] },
+    //   });
+    // }
+
+    // If input array is not an empty array, in other words, there is TS data in array
+    if (arr.length > 0) {
+      // filter resulting array per company id filter and sow id filter
+      let filterHrs = arr.filter((record, i) => {
+        return record.SowId === id;
+      });
+      console.log("Filter hours by sowID:", filterHrs);
+
+      // Group results by name and task area
+      let groupedData = groupFilteredData(filterHrs);
+      // setFilteredHoursArray(groupedData);
+      console.log("group filter hours by user", groupedData);
+      // setFilteredHours(...dataState.filteredHours, {
+      //   projectName: selectedProjectName,
+      //   data: groupedData,
+      // });
       dispatchData({
         type: "filterByProject",
-        action: { projectName: name, data: [] },
+        action: { projectName: name, data: groupedData },
       });
+
+      console.log("state of hours to group for UI:", dataState.filteredHours);
     }
-    // filter resulting array per company id filter and sow id filter
-    let filterHrs = arr.filter((record, i) => {
-      return record.SowId === id;
-    });
-    console.log(filterHrs);
-
-    // Group results by name and task area
-    let groupedData = groupFilteredData(filterHrs);
-    // setFilteredHoursArray(groupedData);
-    console.log(groupedData);
-    // setFilteredHours(...dataState.filteredHours, {
-    //   projectName: selectedProjectName,
-    //   data: groupedData,
-    // });
-    dispatchData({
-      type: "filterByProject",
-      action: { projectName: name, data: groupedData },
-    });
-
-    console.log("state of hours to group for UI:", dataState.filteredHours);
   };
 
   // Group data by resource - per project, all the hours billed user. This gets pushed to filtered hours array that will be looped over to render UI
@@ -488,6 +501,7 @@ function NewInvoice(props) {
               from={dataState.dateRangeFrom}
               to={dataState.dateRangeTo}
               projectName={dataState.selectedProjectName}
+              filteredHours={dataState.filteredHours}
               filterByProject={getRecordsPerProject}
               setDateRangeData={handleDispatchDateRangeData}
             />

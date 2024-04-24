@@ -9,15 +9,13 @@ function CreateTimesheetInvoice(props) {
   let alertMessage = useRef();
   let [message, setMessage] = useState("");
   let { companyId, sowId, from, to } = props;
-  let [dataPerDateRangeFilter, setDataPerDateRangeFilter] = useState([]);
-  let [filteredHours, setFilteredHours] = useState([]);
 
   useEffect(() => {
     console.log(
       `use effect to fetch Timsheet data per filter - from: ${from}, to: ${to}, company id: ${companyId}`
     );
     fetchTSData(from, to, companyId);
-  }, []);
+  }, [from, to, companyId]);
 
   // Should I run function with useMemo hook? or useCallback hook?
   // const fetchTSData = (companyId, sowId, from, to) => {
@@ -35,7 +33,7 @@ function CreateTimesheetInvoice(props) {
       props.setDateRangeData(values[0].value);
 
       // trigger function to filter out project data sharing the selected project sow id
-      props.filterByProject(props.projectName, props.sowId, values[0].value);
+      // props.filterByProject(props.projectName, props.sowId, values[0].value);
     });
   };
 
@@ -97,7 +95,10 @@ function CreateTimesheetInvoice(props) {
               </header>
               {/* List of resource's name and billed hours per task area for specific project */}
               {/* List of billed hours per Task */}
-              {console.log("state array for data display on UI", filteredHours)}
+              {console.log(
+                "state array for data display on UI",
+                props.filteredHours
+              )}
               <ol>
                 <li>
                   <ol>
