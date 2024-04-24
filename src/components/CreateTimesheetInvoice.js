@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/ManageInvoices.css";
@@ -17,7 +17,7 @@ function CreateTimesheetInvoice(props) {
       `use effect to fetch Timsheet data per filter - from: ${from}, to: ${to}, company id: ${companyId}`
     );
     fetchTSData(from, to, companyId);
-  }, [from, to, companyId]);
+  }, []);
 
   // Should I run function with useMemo hook? or useCallback hook?
   // const fetchTSData = (companyId, sowId, from, to) => {
@@ -35,58 +35,8 @@ function CreateTimesheetInvoice(props) {
       setDataPerDateRangeFilter(values[0].value);
 
       // trigger function to filter out project data sharing the selected project sow id
-      getRecordsPerProject(props.sowId, values[0].value);
+      props.filterByProject(props.projectName, props.sowId, values[0].value);
     });
-  };
-
-  // filter Timesheet data to get records for selected sow Id
-  const getRecordsPerProject = (id, arr) => {
-    let selectedProjectName = "";
-    // filter resulting array per company id filter and sow id filter
-    let filterHrs = arr.filter((record, i) => {
-      selectedProjectName = record.ProjectCategory;
-      if (
-        !filteredHours.some((project) =>
-          project.hasOwnProperty(record.ProjectCategory)
-        )
-      ) {
-        setFilteredHours([
-          ...filteredHours,
-          {
-            projectName: record.ProjectCategory,
-            data: [],
-          },
-        ]);
-      }
-      return record.SowId === id;
-    });
-    console.log(filterHrs);
-    console.log(selectedProjectName);
-    // Group results by name and task area
-    let groupedData = groupFilteredData(filterHrs);
-    // setFilteredHoursArray(groupedData);
-    console.log(groupedData);
-    setFilteredHours(...filteredHours, {
-      projectName: selectedProjectName,
-      data: groupedData,
-    });
-
-    console.log("state of hours to group for UI:", filteredHours);
-  };
-
-  // Group data by resource - per project, all the hours billed user. This gets pushed to filtered hours array that will be looped over to render UI
-  const groupFilteredData = (arr) => {
-    let grouped = {};
-    arr.forEach((obj) => {
-      let fullName = obj.FullName;
-
-      if (!grouped[fullName]) {
-        grouped[fullName] = [];
-      }
-
-      grouped[fullName].push(obj);
-    });
-    return grouped;
   };
 
   const alertMessageDisplay = (entry) => {

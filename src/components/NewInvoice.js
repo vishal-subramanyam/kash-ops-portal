@@ -54,9 +54,11 @@ function dataReducer(state, action) {
     case "chooseProject": {
       // set selectedProjectSowId
       console.log("choose project reducer case", state);
+      console.log(action);
       return {
         ...state,
-        selectedProjectSowId: action.sowId,
+        selectedProjectSowId: action.data.sowId,
+        selectedProjectName: action.data.projectName,
       };
     }
     case "chooseDateFrom": {
@@ -77,6 +79,17 @@ function dataReducer(state, action) {
         dateRangeTo: action.dateTo,
       };
     }
+    case "filterByProject": {
+      console.log(action);
+
+      return {
+        ...state,
+        filteredHours: [
+          ...state.filteredHours,
+          { projectName: action.projectName, data: action.data },
+        ],
+      };
+    }
     default: {
       throw Error("Unknown action: " + action.type);
     }
@@ -88,9 +101,11 @@ function NewInvoice(props) {
     selectedCompanyId: "",
     selectedCompanyName: "",
     selectedProjectSowId: "",
+    selectedProjectName: "",
     companiesList: [],
     companyProjectsList: [],
     companyAdminsDetail: [],
+    filteredHours: [],
     dateRangeFrom: "",
     dateRangeTo: "",
   };
@@ -202,12 +217,77 @@ function NewInvoice(props) {
       e.target[e.target.selectedIndex].getAttribute("data-sowid");
     console.log(selectedProjectSowId);
 
+    // get the name of the selected project
+    let selectedProjectName =
+      e.target[e.target.selectedIndex].getAttribute("value");
     // dispatch state action and set selected project sow id to state
+    //  dispatchData({
+    //    type: "chooseProject",
+    //      sowId: selectedProjectSowId,
+
+    //  });
     dispatchData({
       type: "chooseProject",
-      sowId: selectedProjectSowId,
+      data: { sowId: selectedProjectSowId, projectName: selectedProjectName },
     });
   };
+
+  // =====================================
+  // HANDLE FILTER BY PROJECT
+  // =====================================
+
+  // filter Timesheet data to get records for selected sow Id
+  const getRecordsPerProject = (name, id, arr) => {
+    console.log("function to filter hours by selected project");
+    if (
+      !dataState.filteredHours.some((project) => project.hasOwnProperty(name))
+    ) {
+      // setFilteredHours([
+      //   ...dataState.filteredHours,
+      //   {
+      //     projectName: record.ProjectCategory,
+      //     data: [],
+      //   },
+      // ]);
+      dispatchData({
+        type: "filterByProject",
+        action: { projectName: name, data: [] },
+      });
+    }
+    // filter resulting array per company id filter and sow id filter
+    let filterHrs = arr.filter((record, i) => {
+      return record.SowId === id;
+    });
+    console.log(filterHrs);
+
+    // Group results by name and task area
+    let groupedData = groupFilteredData(filterHrs);
+    // setFilteredHoursArray(groupedData);
+    console.log(groupedData);
+    // setFilteredHours(...dataState.filteredHours, {
+    //   projectName: selectedProjectName,
+    //   data: groupedData,
+    // });
+
+    console.log("state of hours to group for UI:", dataState.filteredHours);
+  };
+
+  // Group data by resource - per project, all the hours billed user. This gets pushed to filtered hours array that will be looped over to render UI
+  const groupFilteredData = (arr) => {
+    let grouped = {};
+    arr.forEach((obj) => {
+      let fullName = obj.FullName;
+
+      if (!grouped[fullName]) {
+        grouped[fullName] = [];
+      }
+
+      grouped[fullName].push(obj);
+    });
+    return grouped;
+  };
+
+  // =====================================
 
   // Choose filter for date range start
   const selectDateFromFilter = (e) => {
@@ -372,6 +452,8 @@ function NewInvoice(props) {
               sowId={dataState.selectedProjectSowId}
               from={dataState.dateRangeFrom}
               to={dataState.dateRangeTo}
+              projectName={dataState.selectedProjectName}
+              filterByProject={getRecordsPerProject}
             />
           )}
         </>
