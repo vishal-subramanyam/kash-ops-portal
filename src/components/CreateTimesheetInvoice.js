@@ -19,7 +19,7 @@ function CreateTimesheetInvoice(props) {
 
   // Should I run function with useMemo hook? or useCallback hook?
   // const fetchTSData = (companyId, sowId, from, to) => {
-  const fetchTSData = (from, to, companyId) => {
+  const fetchTSData = useCallback((from, to, companyId) => {
     console.log("trigger fetch to get data", from, to);
 
     // resolve the promise in order to get the hours billed array. When promise is resolved, filter response array with filter values above and return new array - array of objects, each object is a user with properties: name, totalBilledHours, details: array containing all sub task entries for a project
@@ -27,15 +27,15 @@ function CreateTimesheetInvoice(props) {
       getTimesheetEntryDetails(from, to, companyId),
       // getTimesheetEntryDetails(from, to, companyId, sowId),
     ]).then((values) => {
-      console.log(values);
+      console.log("promise to get TS data resolved:", values);
 
       // Assign all Timesheet data per filters - from, to and companyId - to state array
-      props.setDateRangeData(values[0].value);
+      // props.setDateRangeData(values[0].value);
 
       // trigger function to filter out project data sharing the selected project sow id
-      // props.filterByProject(props.projectName, props.sowId, values[0].value);
+      props.filterByProject(props.projectName, props.sowId, values[0].value);
     });
-  };
+  }, []);
 
   const alertMessageDisplay = (entry) => {
     return entry;

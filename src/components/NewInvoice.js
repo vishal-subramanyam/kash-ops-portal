@@ -87,15 +87,22 @@ function dataReducer(state, action) {
       //   data: action.action.data,
       // });
       console.log("hrs by projet:", state.filteredHours);
+      let projectHrs = state.filteredHours;
+      console.log(projectHrs);
+      projectHrs.push({
+        projectName: action.action.projectName,
+        data: action.action.data,
+      });
+      let trimmedArr = Object.values(
+        projectHrs.reduce((c, e) => {
+          if (!c[e.projectName]) c[e.projectName] = e;
+          return c;
+        }, {})
+      );
+      console.log("trying to filter out identical entries", trimmedArr);
       return {
         ...state,
-        filteredHours: [
-          ...state.filteredHours,
-          {
-            projectName: action.action.projectName,
-            data: action.action.data,
-          },
-        ],
+        filteredHours: trimmedArr,
       };
     }
     case "setDateRangeData": {
@@ -237,11 +244,14 @@ function NewInvoice(props) {
     let selectedProjectName =
       e.target[e.target.selectedIndex].getAttribute("value");
 
-    getRecordsPerProject(
-      selectedProjectName,
-      selectedProjectSowId,
-      dataState.dataPerDateRangeFilter
-    );
+    // If state array that's holding all hours between filter date range is NOT empty, in other words, there is TS data in array
+    if (dataState.dataPerDateRangeFilter.length > 0) {
+      getRecordsPerProject(
+        selectedProjectName,
+        selectedProjectSowId,
+        dataState.dataPerDateRangeFilter
+      );
+    }
 
     // dispatch state action and set selected project sow id to state
     dispatchData({
@@ -282,28 +292,28 @@ function NewInvoice(props) {
     // }
 
     // If input array is not an empty array, in other words, there is TS data in array
-    if (arr.length > 0) {
-      // filter resulting array per company id filter and sow id filter
-      let filterHrs = arr.filter((record, i) => {
-        return record.SowId === id;
-      });
-      console.log("Filter hours by sowID:", filterHrs);
+    // if (arr.length > 0) {
+    // filter resulting array per company id filter and sow id filter
+    let filterHrs = arr.filter((record, i) => {
+      return record.SowId === id;
+    });
+    console.log("Filter hours by sowID:", filterHrs);
 
-      // Group results by name and task area
-      let groupedData = groupFilteredData(filterHrs);
-      // setFilteredHoursArray(groupedData);
-      console.log("group filter hours by user", groupedData);
-      // setFilteredHours(...dataState.filteredHours, {
-      //   projectName: selectedProjectName,
-      //   data: groupedData,
-      // });
-      dispatchData({
-        type: "filterByProject",
-        action: { projectName: name, data: groupedData },
-      });
+    // Group results by name and task area
+    let groupedData = groupFilteredData(filterHrs);
+    // setFilteredHoursArray(groupedData);
+    console.log("group filter hours by user", groupedData);
+    // setFilteredHours(...dataState.filteredHours, {
+    //   projectName: selectedProjectName,
+    //   data: groupedData,
+    // });
+    dispatchData({
+      type: "filterByProject",
+      action: { projectName: name, data: groupedData },
+    });
 
-      console.log("state of hours to group for UI:", dataState.filteredHours);
-    }
+    console.log("state of hours to group for UI:", dataState.filteredHours);
+    // }
   };
 
   // Group data by resource - per project, all the hours billed user. This gets pushed to filtered hours array that will be looped over to render UI
