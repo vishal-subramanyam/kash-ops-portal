@@ -85,9 +85,16 @@ function dataReducer(state, action) {
       return {
         ...state,
         filteredHours: [
-          ...state.filteredHours,
-          { projectName: action.projectName, data: action.data },
+          // ...state.filteredHours,
+          { projectName: action.action.projectName, data: action.action.data },
         ],
+      };
+    }
+    case "setDateRangeData": {
+      console.log(action);
+      return {
+        ...state,
+        dataPerDateRangeFilter: action.data,
       };
     }
     default: {
@@ -105,6 +112,7 @@ function NewInvoice(props) {
     companiesList: [],
     companyProjectsList: [],
     companyAdminsDetail: [],
+    dataPerDateRangeFilter: [],
     filteredHours: [],
     dateRangeFrom: "",
     dateRangeTo: "",
@@ -220,15 +228,24 @@ function NewInvoice(props) {
     // get the name of the selected project
     let selectedProjectName =
       e.target[e.target.selectedIndex].getAttribute("value");
-    // dispatch state action and set selected project sow id to state
-    //  dispatchData({
-    //    type: "chooseProject",
-    //      sowId: selectedProjectSowId,
 
-    //  });
+    getRecordsPerProject(
+      selectedProjectName,
+      selectedProjectSowId,
+      dataState.dataPerDateRangeFilter
+    );
+
+    // dispatch state action and set selected project sow id to state
     dispatchData({
       type: "chooseProject",
       data: { sowId: selectedProjectSowId, projectName: selectedProjectName },
+    });
+  };
+
+  const handleDispatchDateRangeData = (arr) => {
+    dispatchData({
+      type: "setDateRangeData",
+      data: arr,
     });
   };
 
@@ -268,25 +285,43 @@ function NewInvoice(props) {
     //   projectName: selectedProjectName,
     //   data: groupedData,
     // });
+    dispatchData({
+      type: "filterByProject",
+      action: { projectName: name, data: groupedData },
+    });
 
     console.log("state of hours to group for UI:", dataState.filteredHours);
   };
 
   // Group data by resource - per project, all the hours billed user. This gets pushed to filtered hours array that will be looped over to render UI
   const groupFilteredData = (arr) => {
-    let grouped = {};
-    arr.forEach((obj) => {
-      let fullName = obj.FullName;
+    // let grouped = {};
+    // arr.forEach((obj) => {
+    //   let fullName = obj.FullName;
 
-      if (!grouped[fullName]) {
-        grouped[fullName] = [];
-      }
+    //   if (!grouped[fullName]) {
+    //     grouped[fullName] = [];
+    //   }
 
-      grouped[fullName].push(obj);
-    });
-    return grouped;
+    //   grouped[fullName].push(obj);
+    // });
+    // return grouped;
+
+    let consolidatedArr = Object.values(
+      arr.reduce((prevRec, currRecord) => {
+        if (!prevRec[currRecord.FullName]) {
+          prevRec[currRecord.FullName] = {
+            name: currRecord.FullName,
+            data: [],
+          };
+        }
+        prevRec[currRecord.FullName].data.push(currRecord);
+        return prevRec;
+      }, {})
+    );
+    return consolidatedArr;
   };
-
+  // =====================================
   // =====================================
 
   // Choose filter for date range start
@@ -454,6 +489,7 @@ function NewInvoice(props) {
               to={dataState.dateRangeTo}
               projectName={dataState.selectedProjectName}
               filterByProject={getRecordsPerProject}
+              setDateRangeData={handleDispatchDateRangeData}
             />
           )}
         </>

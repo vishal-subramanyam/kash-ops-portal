@@ -32,7 +32,7 @@ function CreateTimesheetInvoice(props) {
       console.log(values);
 
       // Assign all Timesheet data per filters - from, to and companyId - to state array
-      setDataPerDateRangeFilter(values[0].value);
+      props.setDateRangeData(values[0].value);
 
       // trigger function to filter out project data sharing the selected project sow id
       props.filterByProject(props.projectName, props.sowId, values[0].value);
