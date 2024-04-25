@@ -2,40 +2,53 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/ManageInvoices.css";
-import { getTimesheetEntryDetails } from "../hooks/FetchData";
+// import { getTimesheetEntryDetails } from "../hooks/FetchData";
 import AlertMessage from "../components/AlertMessage";
 
 function CreateTimesheetInvoice(props) {
   let alertMessage = useRef();
   let [message, setMessage] = useState("");
   let { companyId, sowId, from, to } = props;
+  // let trimmedFilteredHours = Object.values(
+  //   props.filteredHours.reduce((c, e) => {
+  //     if (!c[e.projectName]) c[e.projectName] = e;
+  //     return c;
+  //   }, {})
+  // );
 
   useEffect(() => {
     console.log(
-      `use effect to fetch Timsheet data per filter - from: ${from}, to: ${to}, company id: ${companyId}`
+      "use effect to fetch Timsheet data per filter - from:",
+      from,
+      "to:",
+      to,
+      "company id:",
+      companyId,
+      "and sowId:",
+      sowId
     );
-    fetchTSData(from, to, companyId);
-  }, [from, to, companyId]);
+    props.checkFilters();
+  }, [from, to, companyId, sowId]);
 
-  // Should I run function with useMemo hook? or useCallback hook?
-  // const fetchTSData = (companyId, sowId, from, to) => {
-  const fetchTSData = useCallback((from, to, companyId) => {
-    console.log("trigger fetch to get data", from, to);
+  // // Should I run function with useMemo hook? or useCallback hook?
+  // // const fetchTSData = (companyId, sowId, from, to) => {
+  // const fetchTSData = useCallback((from, to, companyId) => {
+  //   console.log("trigger fetch to get data", from, to);
 
-    // resolve the promise in order to get the hours billed array. When promise is resolved, filter response array with filter values above and return new array - array of objects, each object is a user with properties: name, totalBilledHours, details: array containing all sub task entries for a project
-    Promise.allSettled([
-      getTimesheetEntryDetails(from, to, companyId),
-      // getTimesheetEntryDetails(from, to, companyId, sowId),
-    ]).then((values) => {
-      console.log("promise to get TS data resolved:", values);
+  //   // resolve the promise in order to get the hours billed array. When promise is resolved, filter response array with filter values above and return new array - array of objects, each object is a user with properties: name, totalBilledHours, details: array containing all sub task entries for a project
+  //   Promise.allSettled([
+  //     getTimesheetEntryDetails(from, to, companyId),
+  //     // getTimesheetEntryDetails(from, to, companyId, sowId),
+  //   ]).then((values) => {
+  //     console.log("promise to get TS data resolved:", values);
 
-      // Assign all Timesheet data per filters - from, to and companyId - to state array
-      // props.setDateRangeData(values[0].value);
+  //     // Assign all Timesheet data per filters - from, to and companyId - to state array
+  //     // props.setDateRangeData(values[0].value);
 
-      // trigger function to filter out project data sharing the selected project sow id
-      props.filterByProject(props.projectName, props.sowId, values[0].value);
-    });
-  }, []);
+  //     // trigger function to filter out project data sharing the selected project sow id
+  //     // props.filterByProject(props.projectName, props.sowId, values[0].value);
+  //   });
+  // }, []);
 
   const alertMessageDisplay = (entry) => {
     return entry;
@@ -95,10 +108,13 @@ function CreateTimesheetInvoice(props) {
               </header>
               {/* List of resource's name and billed hours per task area for specific project */}
               {/* List of billed hours per Task */}
-              {console.log(
-                "state array for data display on UI",
-                props.filteredHours
-              )}
+              {
+                // console.log(
+                //   "state array for data display on UI")
+                props.filteredHours.map((rec) => {
+                  console.log(rec);
+                })
+              }
               <ol>
                 <li>
                   <ol>

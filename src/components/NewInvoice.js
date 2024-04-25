@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/ManageInvoices.css";
 import InvoiceDateRangeFilter from "./InvoiceDateRangeFilter";
+import { getTimesheetEntryDetails } from "../hooks/FetchData";
 import {
   getCompanies,
   fetchCompanyAdmins,
@@ -38,7 +39,6 @@ function dataReducer(state, action) {
     }
     case "chooseCompanyAndFilterProjects": {
       // set selectedCompanyId
-      console.log("choose company reducer case", state);
 
       // Filter projects arr by action.companyId and return only the projects associated with that companyId
 
@@ -53,7 +53,6 @@ function dataReducer(state, action) {
     }
     case "chooseProject": {
       // set selectedProjectSowId
-      console.log("choose project reducer case", state);
       console.log(action);
       return {
         ...state,
@@ -63,8 +62,7 @@ function dataReducer(state, action) {
     }
     case "chooseDateFrom": {
       // set dateRangeFrom to selected date
-      console.log("choose date from reducer case", state);
-
+      console.log("updating state for date from filter");
       return {
         ...state,
         dateRangeFrom: action.dateFrom,
@@ -72,7 +70,7 @@ function dataReducer(state, action) {
     }
     case "chooseDateTo": {
       // set dateRangeTo to selected date
-      console.log("choose date to reducer case", state);
+      console.log("updating state for date to filter");
 
       return {
         ...state,
@@ -102,7 +100,13 @@ function dataReducer(state, action) {
       console.log("trying to filter out identical entries", trimmedArr);
       return {
         ...state,
-        filteredHours: trimmedArr,
+        filteredHours: [
+          ...state.filteredHours,
+          {
+            projectName: action.action.projectName,
+            data: action.action.data,
+          },
+        ],
       };
     }
     case "setDateRangeData": {
@@ -208,9 +212,38 @@ function NewInvoice(props) {
   });
   //   resolvePromises();
   useEffect(() => {
-    console.log("use effect run");
+    console.log("use effect run initial fetch calls");
     resolvePromises();
   }, []);
+
+  const allFiltersSet = (...filters) => {
+    console.log("all filters set", filters);
+
+    // fetchTSData(
+    //   dataState.selectedCompanyId,
+    //   dataState.dateRangeFrom,
+    //   dataState.dateRangeTo
+    // );
+  };
+
+  // check to see if filters are filled out
+  const checkFilters = () => {
+    console.log("function to check if all filters are filled out");
+    if (
+      dataState.selectedCompanyId &&
+      dataState.selectedProjectSowId &&
+      dataState.dateRangeFrom &&
+      dataState.dateRangeTo
+    ) {
+      console.log("all filters are filled out");
+      allFiltersSet(
+        dataState.selectedCompanyId,
+        dataState.selectedProjectSowId,
+        dataState.dateRangeFrom,
+        dataState.dateRangeTo
+      );
+    }
+  };
 
   // Show loading component while data is being fetched
   if (isLoading) {
@@ -219,10 +252,10 @@ function NewInvoice(props) {
 
   // Choose company from filter dropdown and update state
   const selectCompanyFilter = (e) => {
+    // set state to track selected company Id filter selection
     let selectedCompanyId =
       e.target[e.target.selectedIndex].getAttribute("data-companyid");
     console.log(selectedCompanyId);
-
     let selectedCompanyName =
       e.target[e.target.selectedIndex].getAttribute("value");
     console.log(selectedCompanyName);
@@ -235,6 +268,7 @@ function NewInvoice(props) {
 
   // Choose company project from dropdown and update state
   const selectProjectFilter = (e) => {
+    // set state to track selected project id and selected project name filter selection
     // get project SOW Id
     let selectedProjectSowId =
       e.target[e.target.selectedIndex].getAttribute("data-sowid");
@@ -245,13 +279,13 @@ function NewInvoice(props) {
       e.target[e.target.selectedIndex].getAttribute("value");
 
     // If state array that's holding all hours between filter date range is NOT empty, in other words, there is TS data in array
-    if (dataState.dataPerDateRangeFilter.length > 0) {
-      getRecordsPerProject(
-        selectedProjectName,
-        selectedProjectSowId,
-        dataState.dataPerDateRangeFilter
-      );
-    }
+    // if (dataState.dataPerDateRangeFilter.length > 0) {
+    //   getRecordsPerProject(
+    //     selectedProjectName,
+    //     selectedProjectSowId,
+    //     dataState.dataPerDateRangeFilter
+    //   );
+    // }
 
     // dispatch state action and set selected project sow id to state
     dispatchData({
@@ -265,6 +299,63 @@ function NewInvoice(props) {
     dispatchData({
       type: "setDateRangeData",
       data: arr,
+    });
+  };
+
+  // Choose filter for date range start
+  const selectDateFromFilter = (e) => {
+    // set state to track date from filter selection
+    console.log(e.target.value);
+    let filterDateFrom = e.target.value;
+    dispatchData({
+      type: "chooseDateFrom",
+      dateFrom: filterDateFrom,
+    });
+  };
+
+  // function to handle both from and to date filters
+  const selectDateRangeFilter = (e) => {
+    let filterDateFrom = "";
+    let filterDateTo = "";
+    if (e.target.name === "date-filter-from") {
+      filterDateFrom = e.target.value;
+    } else if (e.target.name === "date-filter-to") {
+      filterDateTo = e.target.value;
+    }
+
+    console.log(filterDateFrom);
+    console.log(filterDateTo);
+  };
+
+  // Choose filter for date range end
+  const selectDateToFilter = (e) => {
+    // set state to track date to filter selection
+    console.log(e.target.value);
+    let filterDateTo = e.target.value;
+    dispatchData({
+      type: "chooseDateTo",
+      dateTo: filterDateTo,
+    });
+  };
+
+  // function to run to get TS records per filters
+  // Should I run function with useMemo hook? or useCallback hook?
+  // const fetchTSData = (companyId, sowId, from, to) => {
+  const fetchTSData = (from, to, companyId) => {
+    console.log("trigger fetch to get data", from, to);
+
+    // resolve the promise in order to get the hours billed array. When promise is resolved, filter response array with filter values above and return new array - array of objects, each object is a user with properties: name, totalBilledHours, details: array containing all sub task entries for a project
+    Promise.allSettled([
+      getTimesheetEntryDetails(from, to, companyId),
+      // getTimesheetEntryDetails(from, to, companyId, sowId),
+    ]).then((values) => {
+      console.log("promise to get TS data resolved:", values);
+
+      // Assign all Timesheet data per filters - from, to and companyId - to state array
+      // props.setDateRangeData(values[0].value);
+
+      // trigger function to filter out project data sharing the selected project sow id
+      // props.filterByProject(props.projectName, props.sowId, values[0].value);
     });
   };
 
@@ -346,42 +437,6 @@ function NewInvoice(props) {
   };
   // =====================================
   // =====================================
-
-  // Choose filter for date range start
-  const selectDateFromFilter = (e) => {
-    console.log(e.target.value);
-    let filterDateFrom = e.target.value;
-
-    dispatchData({
-      type: "chooseDateFrom",
-      dateFrom: filterDateFrom,
-    });
-  };
-
-  // function to handle both from and to date filters
-  const selectDateRangeFilter = (e) => {
-    let filterDateFrom = "";
-    let filterDateTo = "";
-    if (e.target.name === "date-filter-from") {
-      filterDateFrom = e.target.value;
-    } else if (e.target.name === "date-filter-to") {
-      filterDateTo = e.target.value;
-    }
-
-    console.log(filterDateFrom);
-    console.log(filterDateTo);
-  };
-
-  // Choose filter for date range end
-  const selectDateToFilter = (e) => {
-    console.log(e.target.value);
-    let filterDateTo = e.target.value;
-
-    dispatchData({
-      type: "chooseDateTo",
-      dateTo: filterDateTo,
-    });
-  };
 
   return (
     <section className="ManageInvoices--new-invoice-tab-content">
@@ -512,8 +567,9 @@ function NewInvoice(props) {
               to={dataState.dateRangeTo}
               projectName={dataState.selectedProjectName}
               filteredHours={dataState.filteredHours}
-              filterByProject={getRecordsPerProject}
-              setDateRangeData={handleDispatchDateRangeData}
+              checkFilters={checkFilters}
+              // filterByProject={getRecordsPerProject}
+              // setDateRangeData={handleDispatchDateRangeData}
             />
           )}
         </>
