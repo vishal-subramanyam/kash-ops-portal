@@ -8,7 +8,7 @@ import AlertMessage from "../components/AlertMessage";
 function CreateTimesheetInvoice(props) {
   let alertMessage = useRef();
   let [message, setMessage] = useState("");
-  let { companyId, sowId, from, to } = props;
+  // let { companyId, sowId, from, to } = props;
   // let trimmedFilteredHours = Object.values(
   //   props.filteredHours.reduce((c, e) => {
   //     if (!c[e.projectName]) c[e.projectName] = e;
@@ -16,19 +16,10 @@ function CreateTimesheetInvoice(props) {
   //   }, {})
   // );
 
-  useEffect(() => {
-    console.log(
-      "use effect to fetch Timsheet data per filter - from:",
-      from,
-      "to:",
-      to,
-      "company id:",
-      companyId,
-      "and sowId:",
-      sowId
-    );
-    props.checkFilters();
-  }, [from, to, companyId, sowId]);
+  // useEffect(() => {
+  // "use effect to check if filters are filled out";
+  // props.checkFilters();
+  // }, []);
 
   // // Should I run function with useMemo hook? or useCallback hook?
   // // const fetchTSData = (companyId, sowId, from, to) => {

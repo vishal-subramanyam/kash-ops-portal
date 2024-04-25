@@ -100,13 +100,7 @@ function dataReducer(state, action) {
       console.log("trying to filter out identical entries", trimmedArr);
       return {
         ...state,
-        filteredHours: [
-          ...state.filteredHours,
-          {
-            projectName: action.action.projectName,
-            data: action.action.data,
-          },
-        ],
+        filteredHours: trimmedArr,
       };
     }
     case "setDateRangeData": {
@@ -216,14 +210,39 @@ function NewInvoice(props) {
     resolvePromises();
   }, []);
 
-  const allFiltersSet = (...filters) => {
-    console.log("all filters set", filters);
+  useEffect(() => {
+    checkFilters();
+  }, [
+    dataState.selectedCompanyId,
+    dataState.selectedProjectSowId,
+    dataState.dateRangeFrom,
+    dataState.dateRangeTo,
+  ]);
 
-    // fetchTSData(
-    //   dataState.selectedCompanyId,
-    //   dataState.dateRangeFrom,
-    //   dataState.dateRangeTo
-    // );
+  const allFiltersSet = (...filters) => {
+    let [
+      selectedCompanyId,
+      selectedProjectSowId,
+      dateRangeFrom,
+      dateRangeTo,
+      selectedProjectName,
+    ] = filters;
+    console.log(
+      "trigger fetch. all filters set:",
+      selectedCompanyId,
+      selectedProjectSowId,
+      dateRangeFrom,
+      dateRangeTo,
+      selectedProjectName
+    );
+
+    fetchTSData(
+      dateRangeFrom,
+      dateRangeTo,
+      selectedCompanyId,
+      selectedProjectSowId,
+      selectedProjectName
+    );
   };
 
   // check to see if filters are filled out
@@ -240,7 +259,8 @@ function NewInvoice(props) {
         dataState.selectedCompanyId,
         dataState.selectedProjectSowId,
         dataState.dateRangeFrom,
-        dataState.dateRangeTo
+        dataState.dateRangeTo,
+        dataState.selectedProjectName
       );
     }
   };
@@ -341,7 +361,7 @@ function NewInvoice(props) {
   // function to run to get TS records per filters
   // Should I run function with useMemo hook? or useCallback hook?
   // const fetchTSData = (companyId, sowId, from, to) => {
-  const fetchTSData = (from, to, companyId) => {
+  const fetchTSData = (from, to, companyId, sowId, projectName) => {
     console.log("trigger fetch to get data", from, to);
 
     // resolve the promise in order to get the hours billed array. When promise is resolved, filter response array with filter values above and return new array - array of objects, each object is a user with properties: name, totalBilledHours, details: array containing all sub task entries for a project
@@ -355,7 +375,7 @@ function NewInvoice(props) {
       // props.setDateRangeData(values[0].value);
 
       // trigger function to filter out project data sharing the selected project sow id
-      // props.filterByProject(props.projectName, props.sowId, values[0].value);
+      getRecordsPerProject(projectName, sowId, values[0].value);
     });
   };
 
@@ -561,11 +581,11 @@ function NewInvoice(props) {
             <></>
           ) : (
             <CreateTimesheetInvoice
-              companyId={dataState.selectedCompanyId}
-              sowId={dataState.selectedProjectSowId}
-              from={dataState.dateRangeFrom}
-              to={dataState.dateRangeTo}
-              projectName={dataState.selectedProjectName}
+              // companyId={dataState.selectedCompanyId}
+              // sowId={dataState.selectedProjectSowId}
+              // from={dataState.dateRangeFrom}
+              // to={dataState.dateRangeTo}
+              // projectName={dataState.selectedProjectName}
               filteredHours={dataState.filteredHours}
               checkFilters={checkFilters}
               // filterByProject={getRecordsPerProject}
