@@ -39,15 +39,16 @@ function dataReducer(state, action) {
     }
     case "chooseCompanyAndFilterProjects": {
       // set selectedCompanyId
-
+      console.log(action);
       // Filter projects arr by action.companyId and return only the projects associated with that companyId
 
       let filteredProjects = state.companyProjectsList.filter((project) => {
-        return project.CompanyId === action.companyId;
+        return project.CompanyId === action.data.companyId;
       });
       return {
         ...state,
-        selectedCompanyId: action.companyId,
+        selectedCompanyId: action.data.companyId,
+        selectedCompanyName: action.data.companyName,
         companyProjectsList: filteredProjects,
       };
     }
@@ -88,8 +89,9 @@ function dataReducer(state, action) {
       let projectHrs = state.filteredHours;
       console.log(projectHrs);
       projectHrs.push({
-        projectName: action.action.projectName,
-        data: action.action.data,
+        projectName: action.data.projectName,
+        projectSowId: action.data.projectSowId,
+        data: action.data.data,
       });
       let trimmedArr = Object.values(
         projectHrs.reduce((c, e) => {
@@ -282,7 +284,7 @@ function NewInvoice(props) {
     // dispatch state action to update the selected company Id and filter list of projects in state to only return projects that share the selected company Id
     dispatchData({
       type: "chooseCompanyAndFilterProjects",
-      companyId: selectedCompanyId,
+      data: { companyId: selectedCompanyId, companyName: selectedCompanyName },
     });
   };
 
@@ -420,7 +422,7 @@ function NewInvoice(props) {
     // });
     dispatchData({
       type: "filterByProject",
-      action: { projectName: name, data: groupedData },
+      data: { projectName: name, projectSowId: id, data: groupedData },
     });
 
     console.log("state of hours to group for UI:", dataState.filteredHours);
@@ -582,10 +584,11 @@ function NewInvoice(props) {
           ) : (
             <CreateTimesheetInvoice
               // companyId={dataState.selectedCompanyId}
+              companyName={dataState.selectedCompanyName}
               // sowId={dataState.selectedProjectSowId}
-              // from={dataState.dateRangeFrom}
-              // to={dataState.dateRangeTo}
               // projectName={dataState.selectedProjectName}
+              from={dataState.dateRangeFrom}
+              to={dataState.dateRangeTo}
               filteredHours={dataState.filteredHours}
               checkFilters={checkFilters}
               // filterByProject={getRecordsPerProject}

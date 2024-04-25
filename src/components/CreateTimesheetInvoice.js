@@ -4,6 +4,7 @@ import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/ManageInvoices.css";
 // import { getTimesheetEntryDetails } from "../hooks/FetchData";
 import AlertMessage from "../components/AlertMessage";
+import { hslToRgb } from "@mui/material";
 
 function CreateTimesheetInvoice(props) {
   let alertMessage = useRef();
@@ -53,11 +54,11 @@ function CreateTimesheetInvoice(props) {
       <header>
         <h1 className="invoice-details-title">Invoice Details</h1>
         <section>
-          <h5 className="invoice-company-name">United Educators</h5>
+          <h4 className="invoice-company-name">{props.companyName}</h4>
           <section className="">
-            <p>03/01/2024</p>
+            <p>{props.from}</p>
             <span>-</span>
-            <p>03/31/2024</p>
+            <p>{props.to}</p>
           </section>
         </section>
       </header>
@@ -65,81 +66,121 @@ function CreateTimesheetInvoice(props) {
       <section className="invoice-company-projects-container">
         {/* seperate each section below by project */}
 
-        <section className="invoice-company-project">
-          <h4>Operational Services (UNE2022050301)</h4>
+        {
+          // console.log(
+          //   "state array for data display on UI")
+          props.filteredHours.map((rec, i) => {
+            console.log(rec);
+            return (
+              <section key={i} className="invoice-company-project">
+                <h5>
+                  {rec.projectName} ({rec.projectSowId})
+                </h5>
+                <section className="invoice-details-by-resource">
+                  {rec.data.map((userHrs, j) => {
+                    {
+                      /* This is the accordian that will show more details when clicked and expanded */
+                    }
+                    return (
+                      <details key={j}>
+                        <summary>
+                          <h6>{userHrs.name}</h6>
+                          {/* set to span several columns to match UI design*/}
+                          <ol className="invoice--user-record-totals-row">
+                            <li className="invoice--user-record-totals-item invoice--user-record-set-all-roles-input">
+                              <input
+                                type="text"
+                                onChange={(e) => console.log(e.target)}
+                              />
+                            </li>
+                            <li
+                              className="invoice--user-record-totals-item
+"
+                            >
+                              <p className="invoice--user-total-hrs-billed">
+                                0
+                              </p>
+                            </li>
+                            <li
+                              className="invoice--user-record-totals-item
+invoice--user-record-set-all-rates"
+                            >
+                              <span>$</span>
+                              <input
+                                type="number"
+                                onChange={(e) => console.log(e.target)}
+                              />
+                            </li>
+                            <li
+                              className="invoice--user-record-totals-item
+"
+                            >
+                              <p className="invoice--user-total-billed-amount">
+                                $0
+                              </p>
+                            </li>
+                          </ol>
+                        </summary>
+                        <div className="invoice--user-record-details-container">
+                          <header>
+                            <ol>
+                              <li>Name</li>
+                              <li>Work Area</li>
+                              <li>Task</li>
+                              <li>Role</li>
+                              <li>
+                                Rate <span>(/hr)</span>
+                              </li>
+                              <li>Amount</li>
+                            </ol>
+                          </header>
+                          {/* List of resource's name and billed hours per task area for specific project */}
+                          {/* List of billed hours per Task */}
 
-          <section className="invoice-details-by-resource">
-            <details>
-              <summary>
-                <h6>Randy Lane</h6>
-                {/* set to span several columns to match UI design*/}
-                <input type="text" onChange={(e) => console.log(e.target)} />
-                <p>30</p>
-                <div>
-                  <span>$</span>
-                  <input
-                    type="number"
-                    onChange={(e) => console.log(e.target)}
-                  />
-                </div>
-                <p>$6,200</p>
-              </summary>
-              <div className="details-container"></div>
-              <header>
-                <ol>
-                  <li>Name</li>
-                  <li>Work Area</li>
-                  <li>Task</li>
-                  <li>Role</li>
-                  <li>
-                    Rate <span>(/hr)</span>
-                  </li>
-                  <li>Amount</li>
-                </ol>
-              </header>
-              {/* List of resource's name and billed hours per task area for specific project */}
-              {/* List of billed hours per Task */}
-              {
-                // console.log(
-                //   "state array for data display on UI")
-                props.filteredHours.map((rec) => {
-                  console.log(rec);
-                })
-              }
-              <ol>
-                <li>
-                  <ol>
-                    <li>Randy Lane</li>
-                    <li>Operations</li>
-                    <li>
-                      Ticket Tracking, monitoring and updates, Project
-                      Management Work
-                    </li>
-                    <li>
-                      <input
-                        type="text"
-                        onChange={(e) => console.log(e.target)}
-                      />
-                    </li>
-                    <li>10</li>
-                    <li>
-                      <span>$</span>
-                      <input
-                        type="number"
-                        onChange={(e) => console.log(e.target)}
-                      />
-                    </li>
-                    <li>$5,000</li>
-                    <li>
-                      <FontAwesomeIcon icon={faCircleXmark} />
-                    </li>
-                  </ol>
-                </li>
-              </ol>
-            </details>
-            {/* This is the accordian that will show more details when clicked and expanded */}
-          </section>
-        </section>
+                          <ol>
+                            {userHrs.data.map((hrs, k) => {
+                              return (
+                                <li key={k}>
+                                  <ol>
+                                    <li>{hrs.FullName}</li>
+                                    <li>{hrs.SubAssignment}</li>
+                                    <li>{hrs.SubAssignmentSegment1}</li>
+                                    <li>
+                                      <input
+                                        id="invoice--user-role-input"
+                                        type="text"
+                                        onChange={(e) => console.log(e.target)}
+                                      />
+                                    </li>
+                                    <li id="invoice--user-record-hrs">
+                                      {hrs.TotalHours}
+                                    </li>
+                                    <li>
+                                      <span>$</span>
+                                      <input
+                                        id="invoice--user-rate-input"
+                                        type="number"
+                                        onChange={(e) => console.log(e.target)}
+                                      />
+                                    </li>
+                                    <li>$0</li>
+                                    <li>
+                                      <FontAwesomeIcon icon={faCircleXmark} />
+                                    </li>
+                                  </ol>
+                                </li>
+                              );
+                            })}
+                          </ol>
+                        </div>
+                      </details>
+                    );
+                  })}
+                </section>
+              </section>
+            );
+          })
+        }
       </section>
       <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
     </>
