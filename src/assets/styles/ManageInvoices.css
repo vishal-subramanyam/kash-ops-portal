@@ -80,7 +80,7 @@
 
 .ManageInvoices--new-invoice-tab-content {
   background-color: #ffe4f1;
-  height: 100dvh;
+  /* height: 100dvh; */
   padding: 1rem;
 }
 
@@ -117,6 +117,44 @@ New Timesheet Invoice Workflow and Component Styles
 
 .invoice-filter-form select {
   width: 100%;
+}
+
+.new-invoice--from-timesheet-container {
+  background-color: #fff;
+}
+
+.invoice-details-by-resource details summary {
+  background-color: #ffdecc;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.invoice-details-by-resource details summary h6 {
+  grid-column: 1/4;
+}
+
+.invoice-details-by-resource details summary ol {
+  grid-column: 4/7;
+}
+
+.new-invoice--from-timesheet-container header ol {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.new-invoice--from-timesheet-container ol {
+  padding-left: 0;
+  list-style: none;
+}
+
+.invoice-details-by-resource details {
+  padding: 0.5rem 0;
+}
+
+.ManageInvoices--new-invoice-tab-inner-content {
+  max-width: 1050px;
+  margin: 0 auto;
+  border: 1px solid;
 }
 
 /* ================================================================================

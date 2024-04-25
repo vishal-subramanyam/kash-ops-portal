@@ -461,144 +461,153 @@ function NewInvoice(props) {
   // =====================================
 
   return (
-    <section className="ManageInvoices--new-invoice-tab-content">
-      <button
-        className="ManageInvoices--create-new-invoice-btn"
-        type="button"
-        onClick={(e) => props.openNewInvoiceModal(e)}
-        style={{ display: props.newInvoiceType === "" ? "flex" : "none" }}
-      >
-        <FontAwesomeIcon className="create-new-invoice-icon" icon={faPlus} />
-        Create New Invoice
-      </button>
-      {console.log("invoice type chosen", props.newInvoiceType)}
+    <section
+      className="ManageInvoices--new-invoice-tab-content"
+      style={{
+        height: dataState.filteredHours.length === 0 ? "100dvh" : "auto",
+      }}
+    >
+      <div className="ManageInvoices--new-invoice-tab-inner-content">
+        <button
+          className="ManageInvoices--create-new-invoice-btn"
+          type="button"
+          onClick={(e) => props.openNewInvoiceModal(e)}
+          style={{ display: props.newInvoiceType === "" ? "flex" : "none" }}
+        >
+          <FontAwesomeIcon className="create-new-invoice-icon" icon={faPlus} />
+          Create New Invoice
+        </button>
+        {console.log("invoice type chosen", props.newInvoiceType)}
 
-      {/* If newInvoiceType state not updated with user selection, show nothing. If "New Timesheet Invoice" button clicked, show that UI and blank invoice UI if "Blank Invoice" button clicked */}
-      {props.newInvoiceType === "" ? (
-        <></>
-      ) : props.newInvoiceType === "new-timesheet-invoice" ? (
-        <>
-          <h5 className="new-invoice-heading">New Timesheet Invoice</h5>
-          {/* Filter invoice params. Set filter params as a state object and update said object with the values from the filters. Pass those values back up to run filters on data. */}
-          {/* {console.log(companiesArr)} */}
-          {console.log("state data", dataState)}
-          {/* Date Range Filter Form */}
-          <form method="POST" className="invoice-filter-form">
-            <fieldset className="invoice-filter--company">
-              <label htmlFor="company-selection">Company</label>
-              <select
-                id="company-selection"
-                name="company-selection"
-                typeof="text"
-                onChange={selectCompanyFilter}
+        {/* If newInvoiceType state not updated with user selection, show nothing. If "New Timesheet Invoice" button clicked, show that UI and blank invoice UI if "Blank Invoice" button clicked */}
+        {props.newInvoiceType === "" ? (
+          <></>
+        ) : props.newInvoiceType === "new-timesheet-invoice" ? (
+          <>
+            <h5 className="new-invoice-heading">New Timesheet Invoice</h5>
+            {/* Filter invoice params. Set filter params as a state object and update said object with the values from the filters. Pass those values back up to run filters on data. */}
+            {/* {console.log(companiesArr)} */}
+            {console.log("state data", dataState)}
+            {/* Date Range Filter Form */}
+            <form method="POST" className="invoice-filter-form">
+              <fieldset className="invoice-filter--company">
+                <label htmlFor="company-selection">Company</label>
+                <select
+                  id="company-selection"
+                  name="company-selection"
+                  typeof="text"
+                  onChange={selectCompanyFilter}
+                >
+                  <option value=""></option>
+                  {/* map over list of companies */}
+                  {console.log(dataState)}
+                  {dataState.companiesList.map((company, i) => {
+                    return (
+                      <option
+                        key={i}
+                        value={company.CompanyName}
+                        data-companyid={company.CompanyId}
+                      >
+                        {company.CompanyName}
+                      </option>
+                    );
+                  })}
+                </select>
+              </fieldset>
+              <fieldset
+                className="invoice-filter--project"
+                style={{
+                  display: dataState.selectedCompanyId === "" ? "none" : "flex",
+                }}
               >
-                <option value=""></option>
-                {/* map over list of companies */}
-                {console.log(dataState)}
-                {dataState.companiesList.map((company, i) => {
-                  return (
-                    <option
-                      key={i}
-                      value={company.CompanyName}
-                      data-companyid={company.CompanyId}
-                    >
-                      {company.CompanyName}
-                    </option>
-                  );
-                })}
-              </select>
-            </fieldset>
-            <fieldset
-              className="invoice-filter--project"
-              style={{
-                display: dataState.selectedCompanyId === "" ? "none" : "flex",
-              }}
-            >
-              <label htmlFor="project-selection">Project</label>
-              <select
-                id="project-selection"
-                name="project-selection"
-                typeof="text"
-                onChange={selectProjectFilter}
+                <label htmlFor="project-selection">Project</label>
+                <select
+                  id="project-selection"
+                  name="project-selection"
+                  typeof="text"
+                  onChange={selectProjectFilter}
+                >
+                  <option value=""></option>
+                  {dataState.companyProjectsList.map((project, i) => {
+                    return (
+                      <option
+                        key={i}
+                        value={project.ProjectCategory}
+                        data-sowid={project.SowId}
+                      >
+                        {project.ProjectCategory}
+                      </option>
+                    );
+                  })}
+                </select>
+              </fieldset>
+
+              <fieldset
+                className="invoice-date-rage-form-group"
+                style={{
+                  display:
+                    dataState.selectedCompanyId === "" ||
+                    dataState.selectedProjectSowId == ""
+                      ? "none"
+                      : "flex",
+                }}
               >
-                <option value=""></option>
-                {dataState.companyProjectsList.map((project, i) => {
-                  return (
-                    <option
-                      key={i}
-                      value={project.ProjectCategory}
-                      data-sowid={project.SowId}
-                    >
-                      {project.ProjectCategory}
-                    </option>
-                  );
-                })}
-              </select>
-            </fieldset>
-
-            <fieldset
-              className="invoice-date-rage-form-group"
-              style={{
-                display:
-                  dataState.selectedCompanyId === "" ||
-                  dataState.selectedProjectSowId == ""
-                    ? "none"
-                    : "flex",
-              }}
-            >
-              <h5>Date Range</h5>
-              <div className="invoice-filter-date-wrapper">
-                <div>
-                  <label htmlFor="date-filter-from">Start Date</label>
-                  <input
-                    id="date-filter-from"
-                    name="date-filter-from"
-                    type="date"
-                    onChange={selectDateFromFilter}
-                  />
-                </div>
-
-                <div>
+                <h5>Date Range</h5>
+                <div className="invoice-filter-date-wrapper">
                   <div>
-                    <label htmlFor="date-filter-to">End Date</label>
+                    <label htmlFor="date-filter-from">Start Date</label>
                     <input
-                      id="date-filter-to"
-                      name="date-filter-to"
+                      id="date-filter-from"
+                      name="date-filter-from"
                       type="date"
-                      onChange={selectDateToFilter}
+                      onChange={selectDateFromFilter}
                     />
                   </div>
+
+                  <div>
+                    <div>
+                      <label htmlFor="date-filter-to">End Date</label>
+                      <input
+                        id="date-filter-to"
+                        name="date-filter-to"
+                        type="date"
+                        onChange={selectDateToFilter}
+                      />
+                    </div>
+                  </div>
                 </div>
+              </fieldset>
+            </form>
+            {/* END Date Range Filter Form */}
+
+            {/* Hide the create invoice component untill all filter fields are filled out */}
+
+            {dataState.selectedCompanyId === "" ||
+            dataState.selectedProjectSowId === "" ||
+            dataState.dateRangeFrom === "" ||
+            dataState.dateRangeTo === "" ? (
+              <></>
+            ) : (
+              <div className="new-invoice--from-timesheet-container">
+                <CreateTimesheetInvoice
+                  // companyId={dataState.selectedCompanyId}
+                  companyName={dataState.selectedCompanyName}
+                  // sowId={dataState.selectedProjectSowId}
+                  // projectName={dataState.selectedProjectName}
+                  from={dataState.dateRangeFrom}
+                  to={dataState.dateRangeTo}
+                  filteredHours={dataState.filteredHours}
+                  checkFilters={checkFilters}
+                  // filterByProject={getRecordsPerProject}
+                  // setDateRangeData={handleDispatchDateRangeData}
+                />
               </div>
-            </fieldset>
-          </form>
-          {/* END Date Range Filter Form */}
-
-          {/* Hide the create invoice component untill all filter fields are filled out */}
-
-          {dataState.selectedCompanyId === "" ||
-          dataState.selectedProjectSowId === "" ||
-          dataState.dateRangeFrom === "" ||
-          dataState.dateRangeTo === "" ? (
-            <></>
-          ) : (
-            <CreateTimesheetInvoice
-              // companyId={dataState.selectedCompanyId}
-              companyName={dataState.selectedCompanyName}
-              // sowId={dataState.selectedProjectSowId}
-              // projectName={dataState.selectedProjectName}
-              from={dataState.dateRangeFrom}
-              to={dataState.dateRangeTo}
-              filteredHours={dataState.filteredHours}
-              checkFilters={checkFilters}
-              // filterByProject={getRecordsPerProject}
-              // setDateRangeData={handleDispatchDateRangeData}
-            />
-          )}
-        </>
-      ) : (
-        <>"This is the Blank Invoice UI section</>
-      )}
+            )}
+          </>
+        ) : (
+          <>"This is the Blank Invoice UI section</>
+        )}
+      </div>
     </section>
   );
 }
