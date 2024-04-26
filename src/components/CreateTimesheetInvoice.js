@@ -52,10 +52,10 @@ function CreateTimesheetInvoice(props) {
   return (
     <>
       <header>
-        <h1 className="invoice-details-title">Invoice Details</h1>
-        <section>
-          <h4 className="invoice-company-name">{props.companyName}</h4>
-          <section className="">
+        <h1 className="invoice--title">Invoice Details</h1>
+        <section className="invoice--company-details">
+          <h4 className="invoice--company-name">{props.companyName}</h4>
+          <section className="invoice--date-range">
             <p>{props.from}</p>
             <span>-</span>
             <p>{props.to}</p>
@@ -121,7 +121,7 @@ invoice--user-record-set-all-rates"
                             </li>
                           </ol>
                         </summary>
-                        <div className="invoice--user-record-details-container">
+                        <div className="invoice--user-records-container">
                           <header>
                             <ol>
                               <li>Name</li>
