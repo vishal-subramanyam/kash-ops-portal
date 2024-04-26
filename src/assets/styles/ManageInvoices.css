@@ -104,14 +104,69 @@ New Timesheet Invoice Workflow and Component Styles
 
 .new-invoice-heading {
   color: #00af83;
+  margin-bottom: -20px;
 }
 
-.invoice-date-rage-form-group {
+/* New TS Invoice Filter START */
+.invoice-filter-form {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-gap: 0.5rem;
+  position: relative;
+  height: 120px;
+}
+
+.invoice-filter--company {
+  grid-column: 1 /3;
+  position: absolute;
+  bottom: 0;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 0.5rem;
+}
+.invoice-filter--project {
+  grid-column: 3 /5;
+  position: absolute;
+  bottom: 0;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 0.5rem;
+}
+.invoice-date-range-form-group {
+  grid-column: 5 / 9;
+  position: relative;
+}
+
+.invoice-filter-date-wrapper {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  padding-bottom: 0.5rem;
+  align-items: end;
+  justify-content: space-between;
+  width: 95%;
+}
+
+.invoice-filter-date-wrapper div {
+  display: flex;
+  flex-direction: column;
+  height: 60px;
+  width: 50%;
+  justify-content: space-between;
+}
+
+.invoice-date-range-form-group {
   flex-direction: column; /* display: flex; is set inline with a ternary to handle conditional rendering of date range filter*/
   background-color: #beeadf;
+  padding: 0.5rem 0.5rem 0 0.5rem;
+  border-radius: 20px;
 }
 
-.invoice-date-rage-form-group h5 {
+.invoice-date-range-form-group h5 {
   color: #00af83;
 }
 
@@ -119,6 +174,9 @@ New Timesheet Invoice Workflow and Component Styles
   width: 100%;
 }
 
+/* New TS Invoice Filter END */
+
+/* NEW INVOICE RE4CORDS */
 .new-invoice--from-timesheet-container {
   background-color: #fff;
   margin: 1rem 0;
@@ -128,8 +186,15 @@ New Timesheet Invoice Workflow and Component Styles
 
 /* Invoice Header Styles */
 .invoice--title {
+  text-transform: uppercase;
   font-weight: bolder;
   color: #cf4688;
+}
+
+.invoice--company-name {
+  margin-bottom: 0;
+  color: #4599fb;
+  text-transform: uppercase;
 }
 /*.invoice--company-name{} */
 
@@ -139,8 +204,16 @@ New Timesheet Invoice Workflow and Component Styles
 
 .invoice--date-range {
   display: flex;
+  color: #838383;
 }
 
+.invoice--project-description span {
+  color: #9cc0cc;
+}
+
+.invoice--project-description {
+  color: #047ca3;
+}
 /*  */
 
 .invoice-details-by-resource details summary {
@@ -191,7 +264,7 @@ New Timesheet Invoice Workflow and Component Styles
 .ManageInvoices--new-invoice-tab-inner-content {
   max-width: 1050px;
   margin: 0 auto;
-  border: 1px solid;
+  /* border: 1px solid; */
 }
 .invoice--user-record-totals-item input,
 .invoice--user-record-details input {
@@ -283,39 +356,5 @@ Choose New Invoice Type Modal
 
   .close-modal-icon {
     grid-column: 6/7;
-  }
-
-  .invoice-filter-form {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    grid-gap: 0.5rem;
-    position: relative;
-    height: 95px;
-  }
-
-  .invoice-filter--company {
-    grid-column: 1 /3;
-    position: absolute;
-    bottom: 0;
-    height: 80%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  .invoice-filter--project {
-    grid-column: 3 /5;
-    position: absolute;
-    bottom: 0;
-    height: 80%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  .invoice-date-rage-form-group {
-    grid-column: 5 / 9;
-  }
-
-  .invoice-filter-date-wrapper {
-    display: flex;
   }
 }

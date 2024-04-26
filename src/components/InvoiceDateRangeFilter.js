@@ -47,7 +47,7 @@ function InvoiceDateRangeFilter(props) {
         </select>
       </fieldset>
 
-      <fieldset className="invoice-date-rage-form-group">
+      <fieldset className="invoice-date-range-form-group">
         <h5>Date Range</h5>
         <div>
           <div>

@@ -269,7 +269,7 @@ function NewInvoice(props) {
 
   // Show loading component while data is being fetched
   if (isLoading) {
-    return <LoadingData />;
+    return <LoadingData bgColor={"#ffe4f1"} />;
   }
 
   // Choose company from filter dropdown and update state
@@ -543,7 +543,7 @@ function NewInvoice(props) {
               </fieldset>
 
               <fieldset
-                className="invoice-date-rage-form-group"
+                className="invoice-date-range-form-group"
                 style={{
                   display:
                     dataState.selectedCompanyId === "" ||
@@ -565,15 +565,13 @@ function NewInvoice(props) {
                   </div>
 
                   <div>
-                    <div>
-                      <label htmlFor="date-filter-to">End Date</label>
-                      <input
-                        id="date-filter-to"
-                        name="date-filter-to"
-                        type="date"
-                        onChange={selectDateToFilter}
-                      />
-                    </div>
+                    <label htmlFor="date-filter-to">End Date</label>
+                    <input
+                      id="date-filter-to"
+                      name="date-filter-to"
+                      type="date"
+                      onChange={selectDateToFilter}
+                    />
                   </div>
                 </div>
               </fieldset>

@@ -42,6 +42,19 @@ function CreateTimesheetInvoice(props) {
   //   });
   // }, []);
 
+  // Convert the from and to date to read mm/dd/yyy instead of how it comes from the DB: yyyy-mm-dd
+  const convertDateFormat = (date) => {
+    const newDate = date.replaceAll("-", "/").split("/");
+    console.log(newDate);
+
+    const temp = newDate[1];
+    newDate[1] = newDate[2];
+    newDate[2] = temp;
+
+    const newDateFormat = newDate.reverse().join("/");
+    return newDateFormat;
+  };
+
   const alertMessageDisplay = (entry) => {
     return entry;
   };
@@ -52,13 +65,13 @@ function CreateTimesheetInvoice(props) {
   return (
     <>
       <header>
-        <h1 className="invoice--title">Invoice Details</h1>
+        <h2 className="invoice--title">Invoice Details</h2>
         <section className="invoice--company-details">
-          <h4 className="invoice--company-name">{props.companyName}</h4>
+          <h5 className="invoice--company-name">{props.companyName}</h5>
           <section className="invoice--date-range">
-            <p>{props.from}</p>
+            <p>{convertDateFormat(props.from)}</p>
             <span>-</span>
-            <p>{props.to}</p>
+            <p>{convertDateFormat(props.to)}</p>
           </section>
         </section>
       </header>
@@ -73,9 +86,11 @@ function CreateTimesheetInvoice(props) {
             console.log(rec);
             return (
               <section key={i} className="invoice-company-project">
-                <h5>
-                  {rec.projectName} ({rec.projectSowId})
-                </h5>
+                <h6 className="invoice--project-description">
+                  {rec.projectName}
+                  <span>({rec.projectSowId})</span>
+                </h6>
+
                 <section className="invoice-details-by-resource">
                   {rec.data.map((userHrs, j) => {
                     {
