@@ -128,6 +128,7 @@ invoice--user-record-set-all-rates"
                               <li>Work Area</li>
                               <li>Task</li>
                               <li>Role</li>
+                              <li>Hours</li>
                               <li>
                                 Rate <span>(/hr)</span>
                               </li>
@@ -137,11 +138,11 @@ invoice--user-record-set-all-rates"
                           {/* List of resource's name and billed hours per task area for specific project */}
                           {/* List of billed hours per Task */}
 
-                          <ol>
+                          <ol className="invoice--user-record-details-container">
                             {userHrs.data.map((hrs, k) => {
                               return (
                                 <li key={k}>
-                                  <ol>
+                                  <ol className="invoice--user-record-details">
                                     <li>{hrs.FullName}</li>
                                     <li>{hrs.SubAssignment}</li>
                                     <li>{hrs.SubAssignmentSegment1}</li>

@@ -121,25 +121,35 @@ New Timesheet Invoice Workflow and Component Styles
 
 .new-invoice--from-timesheet-container {
   background-color: #fff;
+  margin: 1rem 0;
+  padding: 0.75rem 1.25rem;
+  border-radius: 20px;
 }
 
 .invoice-details-by-resource details summary {
   background-color: #ffdecc;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(7, minmax(75px, 150px)) 50px;
 }
 
 .invoice-details-by-resource details summary h6 {
   grid-column: 1/4;
 }
 
-.invoice-details-by-resource details summary ol {
-  grid-column: 4/7;
+.invoice--user-record-totals-row {
+  grid-column: 4 / 8;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(75px, 150px));
 }
 
 .new-invoice--from-timesheet-container header ol {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(7, minmax(75px, 150px)) 50px;
+}
+
+.invoice--user-record-details {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(75px, 150px)) 50px;
 }
 
 .new-invoice--from-timesheet-container ol {
@@ -155,6 +165,10 @@ New Timesheet Invoice Workflow and Component Styles
   max-width: 1050px;
   margin: 0 auto;
   border: 1px solid;
+}
+.invoice--user-record-totals-item input,
+.invoice--user-record-details input {
+  width: 80%;
 }
 
 /* ================================================================================
