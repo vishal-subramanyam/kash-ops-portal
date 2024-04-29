@@ -52,6 +52,8 @@ function dataReducer(state, action) {
         selectedCompanyProjects: filteredProjects,
         selectedProjectSowId: "",
         selectedProjectName: "",
+        dateRangeFrom: "",
+        dateRangeTo: "",
         filteredHours: [],
       };
     }
@@ -345,13 +347,16 @@ function NewInvoice(props) {
       dataState.dateRangeFrom !== e.target.value
     ) {
       console.log("date FROM fetch triggered", dataState.dateRangeFrom);
-      fetchTSData(
-        e.target.value,
-        dataState.dateRangeTo,
-        dataState.selectedCompanyId,
-        dataState.selectedProjectSowId,
-        dataState.selectedProjectName
-      );
+      Promise.allSettled([
+        getTimesheetEntryDetails(
+          e.target.value,
+          dataState.dateRangeTo,
+          dataState.selectedCompanyId
+        ),
+        // getTimesheetEntryDetails(from, to, companyId, sowId),
+      ]).then((values) => {
+        console.log("promise to get TS data resolved:", values);
+      });
     }
   };
 
@@ -374,6 +379,7 @@ function NewInvoice(props) {
     // set state to track date to filter selection
     console.log(e.target.value);
     let filterDateTo = e.target.value;
+
     dispatchData({
       type: "chooseDateTo",
       dateTo: filterDateTo,
@@ -384,14 +390,17 @@ function NewInvoice(props) {
       dataState.dateRangeTo !== "" &&
       dataState.dateRangeTo !== e.target.value
     ) {
-      console.log("date FROM fetch triggered", dataState.dateRangeFrom);
-      fetchTSData(
-        dataState.dateRangeFrom,
-        e.target.value,
-        dataState.selectedCompanyId,
-        dataState.selectedProjectSowId,
-        dataState.selectedProjectName
-      );
+      console.log("date TO fetch triggered", dataState.dateRangeTo);
+      Promise.allSettled([
+        getTimesheetEntryDetails(
+          dataState.dateRangeFrom,
+          e.target.value,
+          dataState.selectedCompanyId
+        ),
+        // getTimesheetEntryDetails(from, to, companyId, sowId),
+      ]).then((values) => {
+        console.log("promise to get TS data resolved:", values);
+      });
     }
   };
 
