@@ -184,6 +184,14 @@ New Timesheet Invoice Workflow and Component Styles
   border-radius: 20px;
 }
 
+.new-invoice--from-timesheet-container header {
+  border-bottom: 2px solid #d9d9d9;
+}
+
+.invoice-company-projects-container {
+  margin-top: 0.5rem;
+}
+
 /* Invoice Header Styles */
 .invoice--title {
   text-transform: uppercase;
@@ -192,6 +200,7 @@ New Timesheet Invoice Workflow and Component Styles
 }
 
 .invoice--company-name {
+  margin-bottom: 0.5rem;
   margin-bottom: 0;
   color: #4599fb;
   text-transform: uppercase;
@@ -199,12 +208,16 @@ New Timesheet Invoice Workflow and Component Styles
 /*.invoice--company-name{} */
 
 .invoice--company-details {
-  display: flex;
+  display: grid;
+  grid-template-columns: 40% 60%;
+  align-items: center;
 }
 
 .invoice--date-range {
   display: flex;
   color: #838383;
+  width: 40%;
+  justify-content: space-between;
 }
 
 .invoice--project-description span {
@@ -221,7 +234,7 @@ New Timesheet Invoice Workflow and Component Styles
   display: grid;
   grid-template-columns: repeat(7, minmax(75px, 150px)) 50px;
   align-items: center;
-  padding: 0;
+  padding: 0 0.25rem;
   height: 55px;
 }
 
@@ -237,9 +250,15 @@ New Timesheet Invoice Workflow and Component Styles
   margin-bottom: 0;
 }
 
+.invoice--user-records-container header {
+  border-bottom: 2px solid #d9d9d9;
+  margin: 0.25rem;
+}
+
 .new-invoice--from-timesheet-container header ol {
   display: grid;
   grid-template-columns: repeat(7, minmax(75px, 150px)) 50px;
+  margin-bottom: 0.25rem;
 }
 
 .invoice--user-record-details {
@@ -253,6 +272,8 @@ New Timesheet Invoice Workflow and Component Styles
 }
 
 .invoice-details-by-resource details {
+  border: 3px solid #d3eded;
+  border-radius: 10px;
   padding: 0;
   margin: 1rem 0;
 }
@@ -269,6 +290,10 @@ New Timesheet Invoice Workflow and Component Styles
 .invoice--user-record-totals-item input,
 .invoice--user-record-details input {
   width: 80%;
+}
+
+.invoice--user-record-details-container {
+  margin: 1rem 0.25rem;
 }
 
 /* ================================================================================

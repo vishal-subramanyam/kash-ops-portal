@@ -49,7 +49,10 @@ function dataReducer(state, action) {
         ...state,
         selectedCompanyId: action.data.companyId,
         selectedCompanyName: action.data.companyName,
-        companyProjectsList: filteredProjects,
+        selectedCompanyProjects: filteredProjects,
+        selectedProjectSowId: "",
+        selectedProjectName: "",
+        filteredHours: [],
       };
     }
     case "chooseProject": {
@@ -126,6 +129,7 @@ function NewInvoice(props) {
     selectedProjectName: "",
     companiesList: [],
     companyProjectsList: [],
+    selectedCompanyProjects: [],
     companyAdminsDetail: [],
     dataPerDateRangeFilter: [],
     filteredHours: [],
@@ -205,7 +209,7 @@ function NewInvoice(props) {
         setIsLoading(false);
       }
     );
-  });
+  }, []);
   //   resolvePromises();
   useEffect(() => {
     console.log("use effect run initial fetch calls");
@@ -349,7 +353,6 @@ function NewInvoice(props) {
     console.log(filterDateTo);
   };
 
-  // Choose filter for date range end
   const selectDateToFilter = (e) => {
     // set state to track date to filter selection
     console.log(e.target.value);
@@ -463,8 +466,10 @@ function NewInvoice(props) {
   return (
     <section
       className="ManageInvoices--new-invoice-tab-content"
+      // set style height to 100dvh if filteredHours.length = 1 or less.
+      //  When user selects a company from dropdown, in state, filteredHours is updated to object with empty data array and empty strings for project name and sowId properites
       style={{
-        height: dataState.filteredHours.length === 0 ? "100dvh" : "auto",
+        height: dataState.filteredHours.length <= 1 ? "100dvh" : "auto",
       }}
     >
       <div className="ManageInvoices--new-invoice-tab-inner-content">
@@ -528,7 +533,7 @@ function NewInvoice(props) {
                   onChange={selectProjectFilter}
                 >
                   <option value=""></option>
-                  {dataState.companyProjectsList.map((project, i) => {
+                  {dataState.selectedCompanyProjects.map((project, i) => {
                     return (
                       <option
                         key={i}
@@ -546,10 +551,8 @@ function NewInvoice(props) {
                 className="invoice-date-range-form-group"
                 style={{
                   display:
-                    dataState.selectedCompanyId === "" ||
-                    dataState.selectedProjectSowId == ""
-                      ? "none"
-                      : "flex",
+                    // dataState.selectedCompanyId === "" ||
+                    dataState.selectedProjectSowId == "" ? "none" : "flex",
                 }}
               >
                 <h5>Date Range</h5>
