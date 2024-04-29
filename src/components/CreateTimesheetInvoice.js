@@ -93,9 +93,8 @@ function CreateTimesheetInvoice(props) {
 
                 <section className="invoice-details-by-resource">
                   {rec.data.map((userHrs, j) => {
-                    {
-                      /* This is the accordian that will show more details when clicked and expanded */
-                    }
+                    /* This is the accordian that will show more details when clicked and expanded */
+
                     return (
                       <details key={j}>
                         <summary>

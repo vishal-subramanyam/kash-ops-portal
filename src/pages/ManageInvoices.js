@@ -27,8 +27,6 @@ function ManageInvoices(props) {
     setNewInvoiceType(el);
   };
 
-  console.log(newInvoiceType);
-
   return (
     <main className="ManageInvoices--main-container max-width--main-container">
       <div className="kash_operations--upper-section-holder ManageInvoices--heading">

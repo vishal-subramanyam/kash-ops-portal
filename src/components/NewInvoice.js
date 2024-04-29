@@ -320,7 +320,7 @@ function NewInvoice(props) {
     });
   };
 
-  // Set state object property array for TS records betweeen date range filter
+  // Set state object property array for TS records betweeen date range filter for selectedCompanyId and selectedProjectSowId
   const handleDispatchDateRangeData = (arr) => {
     dispatchData({
       type: "setDateRangeData",
@@ -337,6 +337,22 @@ function NewInvoice(props) {
       type: "chooseDateFrom",
       dateFrom: filterDateFrom,
     });
+
+    // should NOT happen when user first fills out filters.
+    // fetch data function if date from is not an empty string (or initial state value)
+    if (
+      dataState.dateRangeFrom !== "" &&
+      dataState.dateRangeFrom !== e.target.value
+    ) {
+      console.log("date FROM fetch triggered", dataState.dateRangeFrom);
+      fetchTSData(
+        e.target.value,
+        dataState.dateRangeTo,
+        dataState.selectedCompanyId,
+        dataState.selectedProjectSowId,
+        dataState.selectedProjectName
+      );
+    }
   };
 
   // function to handle both from and to date filters
@@ -353,6 +369,7 @@ function NewInvoice(props) {
     console.log(filterDateTo);
   };
 
+  // Choose filter for date range end
   const selectDateToFilter = (e) => {
     // set state to track date to filter selection
     console.log(e.target.value);
@@ -361,6 +378,21 @@ function NewInvoice(props) {
       type: "chooseDateTo",
       dateTo: filterDateTo,
     });
+    // should NOT happen when user first fills out filters.
+    // fetch data function if date to is not an empty string (or initial state value)
+    if (
+      dataState.dateRangeTo !== "" &&
+      dataState.dateRangeTo !== e.target.value
+    ) {
+      console.log("date FROM fetch triggered", dataState.dateRangeFrom);
+      fetchTSData(
+        dataState.dateRangeFrom,
+        e.target.value,
+        dataState.selectedCompanyId,
+        dataState.selectedProjectSowId,
+        dataState.selectedProjectName
+      );
+    }
   };
 
   // function to run to get TS records per filters
@@ -377,7 +409,7 @@ function NewInvoice(props) {
       console.log("promise to get TS data resolved:", values);
 
       // Assign all Timesheet data per filters - from, to and companyId - to state array
-      // props.setDateRangeData(values[0].value);
+      // handleDispatchDateRangeData(values[0].value);
 
       // trigger function to filter out project data sharing the selected project sow id
       getRecordsPerProject(projectName, sowId, values[0].value);
