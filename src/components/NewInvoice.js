@@ -254,8 +254,9 @@ function NewInvoice(props) {
   };
 
   // check to see if filters are filled out
-  const checkFilters = () => {
+  const checkFilters = (e) => {
     console.log("function to check if all filters are filled out");
+    e.preventDefault();
     if (
       dataState.selectedCompanyId &&
       dataState.selectedProjectSowId &&
@@ -263,14 +264,13 @@ function NewInvoice(props) {
       dataState.dateRangeTo
     ) {
       console.log("all filters are filled out");
-      // allFiltersSet(
-      //   dataState.selectedCompanyId,
-      //   dataState.selectedProjectSowId,
-      //   dataState.dateRangeFrom,
-      //   dataState.dateRangeTo,
-      //   dataState.selectedProjectName
-      // );
-      return true;
+      allFiltersSet(
+        dataState.selectedCompanyId,
+        dataState.selectedProjectSowId,
+        dataState.dateRangeFrom,
+        dataState.dateRangeTo,
+        dataState.selectedProjectName
+      );
     }
   };
 
@@ -323,11 +323,6 @@ function NewInvoice(props) {
       type: "chooseProject",
       data: { sowId: selectedProjectSowId, projectName: selectedProjectName },
     });
-
-    // run checkFilters() to see if all filters are filled out
-    if (checkFilters()) {
-      console.log("all filters set");
-    }
   };
 
   // Set state object property array for TS records betweeen date range filter for selectedCompanyId and selectedProjectSowId
@@ -350,23 +345,23 @@ function NewInvoice(props) {
 
     // should NOT happen when user first fills out filters.
     // fetch data function if date from is not an empty string (or initial state value)
-    if (
-      dataState.dateRangeFrom !== "" &&
-      dataState.dateRangeFrom !== e.target.value &&
-      dataState.dateRangeTo !== ""
-    ) {
-      console.log("date FROM fetch triggered", dataState.dateRangeFrom);
-      Promise.allSettled([
-        getTimesheetEntryDetails(
-          e.target.value,
-          dataState.dateRangeTo,
-          dataState.selectedCompanyId
-        ),
-        // getTimesheetEntryDetails(from, to, companyId, sowId),
-      ]).then((values) => {
-        console.log("promise to get TS data resolved:", values);
-      });
-    }
+    // if (
+    //   dataState.dateRangeFrom !== "" &&
+    //   dataState.dateRangeFrom !== e.target.value &&
+    //   dataState.dateRangeTo !== ""
+    // ) {
+    //   console.log("date FROM fetch triggered", dataState.dateRangeFrom);
+    //   Promise.allSettled([
+    //     getTimesheetEntryDetails(
+    //       e.target.value,
+    //       dataState.dateRangeTo,
+    //       dataState.selectedCompanyId
+    //     ),
+    //     // getTimesheetEntryDetails(from, to, companyId, sowId),
+    //   ]).then((values) => {
+    //     console.log("promise to get TS data resolved:", values);
+    //   });
+    // }
   };
 
   // function to handle both from and to date filters
@@ -395,23 +390,23 @@ function NewInvoice(props) {
     });
     // should NOT happen when user first fills out filters.
     // fetch data function if date to is not an empty string (or initial state value)
-    if (
-      dataState.dateRangeTo !== "" &&
-      dataState.dateRangeTo !== e.target.value &&
-      dataState.dateRangeTo !== ""
-    ) {
-      console.log("date TO fetch triggered", dataState.dateRangeTo);
-      Promise.allSettled([
-        getTimesheetEntryDetails(
-          dataState.dateRangeFrom,
-          e.target.value,
-          dataState.selectedCompanyId
-        ),
-        // getTimesheetEntryDetails(from, to, companyId, sowId),
-      ]).then((values) => {
-        console.log("promise to get TS data resolved:", values);
-      });
-    }
+    // if (
+    //   dataState.dateRangeTo !== "" &&
+    //   dataState.dateRangeTo !== e.target.value &&
+    //   dataState.dateRangeTo !== ""
+    // ) {
+    //   console.log("date TO fetch triggered", dataState.dateRangeTo);
+    //   Promise.allSettled([
+    //     getTimesheetEntryDetails(
+    //       dataState.dateRangeFrom,
+    //       e.target.value,
+    //       dataState.selectedCompanyId
+    //     ),
+    //     // getTimesheetEntryDetails(from, to, companyId, sowId),
+    //   ]).then((values) => {
+    //     console.log("promise to get TS data resolved:", values);
+    //   });
+    // }
   };
 
   // function to run to get TS records per filters
@@ -429,7 +424,6 @@ function NewInvoice(props) {
 
       // Assign all Timesheet data per filters - from, to and companyId - to state array
       // handleDispatchDateRangeData(values[0].value);
-
       // trigger function to filter out project data sharing the selected project sow id
       getRecordsPerProject(projectName, sowId, values[0].value);
     });
@@ -545,7 +539,11 @@ function NewInvoice(props) {
             {/* {console.log(companiesArr)} */}
             {console.log("state data", dataState)}
             {/* Date Range Filter Form */}
-            <form method="POST" className="invoice-filter-form">
+            <form
+              method="POST"
+              className="invoice-filter-form"
+              onSubmit={(e) => checkFilters(e)}
+            >
               <fieldset className="invoice-filter--company">
                 <label htmlFor="company-selection">Company</label>
                 <select
@@ -629,6 +627,26 @@ function NewInvoice(props) {
                   </div>
                 </div>
               </fieldset>
+              <input
+                className="invoice--apply-filters-btn"
+                value="Apply Filters"
+                type="submit"
+                // disabled={
+                //   dataState.selectedCompanyId === "" ||
+                //   dataState.selectedProjectSowId === "" ||
+                //   dataState.dateRangeFrom === "" ||
+                //   dataState.dateRangeTo === ""
+                //     ? "true"
+                //     : "false"
+                // }
+                style={{
+                  display:
+                    dataState.dateRangeFrom === "" ||
+                    dataState.dateRangeTo === ""
+                      ? "none"
+                      : "flex",
+                }}
+              />
             </form>
             {/* END Date Range Filter Form */}
 
