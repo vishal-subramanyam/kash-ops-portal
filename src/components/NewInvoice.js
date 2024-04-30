@@ -110,6 +110,12 @@ function dataReducer(state, action) {
         filteredHours: trimmedArr,
       };
     }
+    case "clearHrsArrayOnDateChange": {
+      return {
+        ...state,
+        filteredHours: action.data,
+      };
+    }
     case "setDateRangeData": {
       console.log(action);
       return {
@@ -141,6 +147,7 @@ function NewInvoice(props) {
   let loggedInUser = props.loggedInUserInfo;
   let [isLoading, setIsLoading] = useState(true);
   let [dataState, dispatchData] = useReducer(dataReducer, initialDataState);
+  let selectProjectDropdown = useRef();
   //   let [selectedCompanyId, setSelectedCompanyId] = useState("");
   //   let [companyProjects, setCompanyProjects] = useState([]);
   //   let [filterRangeParams, setFilterRangeParams] = useState({
@@ -257,6 +264,19 @@ function NewInvoice(props) {
   const checkFilters = (e) => {
     console.log("function to check if all filters are filled out");
     e.preventDefault();
+    // if (!dataState.selectedCompanyId) {
+    //   alert("Please select a company from the dropdown.");
+    //   return false;
+    // } else if (!dataState.selectedProjectSowId) {
+    //   alert("Please select a project from the dropdown.");
+    //   return false;
+    // } else if (!dataState.dateRangeFrom) {
+    //   alert("Please select a FROM date from the date from picker.");
+    //   return false;
+    // } else if (!dataState.dateRangeTo) {
+    //   alert("Please select a TO date from the date from picker.");
+    //   return false;
+    // } else
     if (
       dataState.selectedCompanyId &&
       dataState.selectedProjectSowId &&
@@ -271,6 +291,9 @@ function NewInvoice(props) {
         dataState.dateRangeTo,
         dataState.selectedProjectName
       );
+      return true;
+    } else {
+      return false;
     }
   };
 
@@ -288,6 +311,10 @@ function NewInvoice(props) {
     let selectedCompanyName =
       e.target[e.target.selectedIndex].getAttribute("value");
     console.log(selectedCompanyName);
+
+    // force the project dropdown to initialize as an empty value instead of a choice automatically rendering when company is changed
+    // added a ref to the project dropdown and will set its value to empty string when company changes
+    selectProjectDropdown.current.value = "";
     // dispatch state action to update the selected company Id and filter list of projects in state to only return projects that share the selected company Id
     dispatchData({
       type: "chooseCompanyAndFilterProjects",
@@ -345,23 +372,17 @@ function NewInvoice(props) {
 
     // should NOT happen when user first fills out filters.
     // fetch data function if date from is not an empty string (or initial state value)
-    // if (
-    //   dataState.dateRangeFrom !== "" &&
-    //   dataState.dateRangeFrom !== e.target.value &&
-    //   dataState.dateRangeTo !== ""
-    // ) {
-    //   console.log("date FROM fetch triggered", dataState.dateRangeFrom);
-    //   Promise.allSettled([
-    //     getTimesheetEntryDetails(
-    //       e.target.value,
-    //       dataState.dateRangeTo,
-    //       dataState.selectedCompanyId
-    //     ),
-    //     // getTimesheetEntryDetails(from, to, companyId, sowId),
-    //   ]).then((values) => {
-    //     console.log("promise to get TS data resolved:", values);
-    //   });
-    // }
+    if (
+      dataState.dateRangeFrom !== "" &&
+      dataState.dateRangeFrom !== e.target.value &&
+      dataState.dateRangeTo !== ""
+    ) {
+      console.log("date FROM fetch triggered", dataState.dateRangeFrom);
+      dispatchData({
+        type: "clearHrsArrayOnDateChange",
+        data: [],
+      });
+    }
   };
 
   // function to handle both from and to date filters
@@ -388,25 +409,20 @@ function NewInvoice(props) {
       type: "chooseDateTo",
       dateTo: filterDateTo,
     });
+
     // should NOT happen when user first fills out filters.
     // fetch data function if date to is not an empty string (or initial state value)
-    // if (
-    //   dataState.dateRangeTo !== "" &&
-    //   dataState.dateRangeTo !== e.target.value &&
-    //   dataState.dateRangeTo !== ""
-    // ) {
-    //   console.log("date TO fetch triggered", dataState.dateRangeTo);
-    //   Promise.allSettled([
-    //     getTimesheetEntryDetails(
-    //       dataState.dateRangeFrom,
-    //       e.target.value,
-    //       dataState.selectedCompanyId
-    //     ),
-    //     // getTimesheetEntryDetails(from, to, companyId, sowId),
-    //   ]).then((values) => {
-    //     console.log("promise to get TS data resolved:", values);
-    //   });
-    // }
+    if (
+      dataState.dateRangeFrom !== "" &&
+      dataState.dateRangeFrom !== e.target.value &&
+      dataState.dateRangeTo !== ""
+    ) {
+      console.log("date TO fetch triggered", dataState.dateRangeFrom);
+      dispatchData({
+        type: "clearHrsArrayOnDateChange",
+        data: [],
+      });
+    }
   };
 
   // function to run to get TS records per filters
@@ -551,6 +567,7 @@ function NewInvoice(props) {
                   name="company-selection"
                   typeof="text"
                   onChange={selectCompanyFilter}
+                  required
                 >
                   <option value=""></option>
                   {/* map over list of companies */}
@@ -579,7 +596,9 @@ function NewInvoice(props) {
                   id="project-selection"
                   name="project-selection"
                   typeof="text"
+                  ref={selectProjectDropdown}
                   onChange={selectProjectFilter}
+                  required
                 >
                   <option value=""></option>
                   {dataState.selectedCompanyProjects.map((project, i) => {
@@ -612,7 +631,9 @@ function NewInvoice(props) {
                       id="date-filter-from"
                       name="date-filter-from"
                       type="date"
+                      value={dataState.dateRangeFrom}
                       onChange={selectDateFromFilter}
+                      required
                     />
                   </div>
 
@@ -622,7 +643,9 @@ function NewInvoice(props) {
                       id="date-filter-to"
                       name="date-filter-to"
                       type="date"
+                      value={dataState.dateRangeTo}
                       onChange={selectDateToFilter}
+                      required
                     />
                   </div>
                 </div>
