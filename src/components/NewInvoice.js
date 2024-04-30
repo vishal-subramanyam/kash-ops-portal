@@ -218,14 +218,14 @@ function NewInvoice(props) {
     resolvePromises();
   }, []);
 
-  useEffect(() => {
-    checkFilters();
-  }, [
-    dataState.selectedCompanyId,
-    dataState.selectedProjectSowId,
-    dataState.dateRangeFrom,
-    dataState.dateRangeTo,
-  ]);
+  // useEffect(() => {
+  //   checkFilters();
+  // }, [
+  //   dataState.selectedCompanyId,
+  //   dataState.selectedProjectSowId,
+  //   dataState.dateRangeFrom,
+  //   dataState.dateRangeTo,
+  // ]);
 
   const allFiltersSet = (...filters) => {
     let [
@@ -263,13 +263,14 @@ function NewInvoice(props) {
       dataState.dateRangeTo
     ) {
       console.log("all filters are filled out");
-      allFiltersSet(
-        dataState.selectedCompanyId,
-        dataState.selectedProjectSowId,
-        dataState.dateRangeFrom,
-        dataState.dateRangeTo,
-        dataState.selectedProjectName
-      );
+      // allFiltersSet(
+      //   dataState.selectedCompanyId,
+      //   dataState.selectedProjectSowId,
+      //   dataState.dateRangeFrom,
+      //   dataState.dateRangeTo,
+      //   dataState.selectedProjectName
+      // );
+      return true;
     }
   };
 
@@ -315,11 +316,18 @@ function NewInvoice(props) {
     //   );
     // }
 
+    // Check to see if all filters are filled out - user may be choosing a filter out of order
+
     // dispatch state action and set selected project sow id to state
     dispatchData({
       type: "chooseProject",
       data: { sowId: selectedProjectSowId, projectName: selectedProjectName },
     });
+
+    // run checkFilters() to see if all filters are filled out
+    if (checkFilters()) {
+      console.log("all filters set");
+    }
   };
 
   // Set state object property array for TS records betweeen date range filter for selectedCompanyId and selectedProjectSowId
@@ -344,7 +352,8 @@ function NewInvoice(props) {
     // fetch data function if date from is not an empty string (or initial state value)
     if (
       dataState.dateRangeFrom !== "" &&
-      dataState.dateRangeFrom !== e.target.value
+      dataState.dateRangeFrom !== e.target.value &&
+      dataState.dateRangeTo !== ""
     ) {
       console.log("date FROM fetch triggered", dataState.dateRangeFrom);
       Promise.allSettled([
@@ -388,7 +397,8 @@ function NewInvoice(props) {
     // fetch data function if date to is not an empty string (or initial state value)
     if (
       dataState.dateRangeTo !== "" &&
-      dataState.dateRangeTo !== e.target.value
+      dataState.dateRangeTo !== e.target.value &&
+      dataState.dateRangeTo !== ""
     ) {
       console.log("date TO fetch triggered", dataState.dateRangeTo);
       Promise.allSettled([
@@ -469,7 +479,7 @@ function NewInvoice(props) {
       data: { projectName: name, projectSowId: id, data: groupedData },
     });
 
-    console.log("state of hours to group for UI:", dataState.filteredHours);
+    // console.log("state of hours to group for UI:", dataState.filteredHours);
     // }
   };
 
