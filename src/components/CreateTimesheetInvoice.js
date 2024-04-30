@@ -192,6 +192,17 @@ invoice--user-record-set-all-rates"
                     );
                   })}
                 </section>
+
+                <section className="invoice--project-sub-total">
+                  <ol>
+                    <li>PROJECT SUBTOTAL</li>
+                    <li>
+                      {rec.projectName}
+                      <span>({rec.projectSowId})</span>
+                    </li>
+                    <li>$0</li>
+                  </ol>
+                </section>
               </section>
             );
           })

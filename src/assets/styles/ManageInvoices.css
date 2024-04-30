@@ -304,6 +304,11 @@ New Timesheet Invoice Workflow and Component Styles
   margin: 1rem 0.25rem;
 }
 
+.invoice--project-sub-total ol {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(75px, 150px)) 50px;
+  list-style: none;
+}
 /* ================================================================================
 Choose New Invoice Type Modal
 =================================================================================== */
@@ -365,6 +370,7 @@ Choose New Invoice Type Modal
   font-size: 0.85rem;
 }
 
+/* MEDIA QUERIES */
 /* @media only screen and (min-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) { */
 @media only screen and (min-device-width: 768px) and (-webkit-min-device-pixel-ratio: 1) {
   .new-invoice-type-selection {
