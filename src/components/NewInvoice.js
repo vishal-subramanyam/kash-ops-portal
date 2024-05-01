@@ -529,15 +529,21 @@ function NewInvoice(props) {
     // });
     // return grouped;
 
+    // Add Role, Rate and Amount fields as properties for user record object for Invoice workkflow
+    let updatedArr = arr.map((record) => {
+      return { ...record, rate: 0, role: "", amount: 0 };
+    });
+    console.log(updatedArr);
+
     let consolidatedArr = Object.values(
-      arr.reduce((prevRec, currRecord) => {
-        if (!prevRec[currRecord.FullName]) {
-          prevRec[currRecord.FullName] = {
+      updatedArr.reduce((prevRec, currRecord) => {
+        if (!prevRec[currRecord.EmpId]) {
+          prevRec[currRecord.EmpId] = {
             name: currRecord.FullName,
             data: [],
           };
         }
-        prevRec[currRecord.FullName].data.push(currRecord);
+        prevRec[currRecord.EmpId].data.push(currRecord);
         return prevRec;
       }, {})
     );
@@ -562,7 +568,7 @@ function NewInvoice(props) {
         // set style height to 100dvh if filteredHours.length = 1 or less.
         //  When user selects a company from dropdown, in state, filteredHours is updated to object with empty data array and empty strings for project name and sowId properites
         style={{
-          height: dataState.filteredHours.length < 1 ? "100dvh" : "auto",
+          height: dataState.filteredHours.length < 1 ? "100dvh" : "100vh",
         }}
       >
         <div className="ManageInvoices--new-invoice-tab-inner-content">
