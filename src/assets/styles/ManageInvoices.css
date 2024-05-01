@@ -213,7 +213,6 @@ New Timesheet Invoice Workflow and Component Styles
   color: #4599fb;
   text-transform: uppercase;
 }
-/*.invoice--company-name{} */
 
 .invoice--company-details {
   display: grid;
@@ -235,7 +234,10 @@ New Timesheet Invoice Workflow and Component Styles
 .invoice--project-description {
   color: #047ca3;
 }
-/*  */
+
+.invoice-company-project {
+  margin-top: 0.75rem;
+}
 
 .invoice-details-by-resource details summary {
   background-color: #ffdecc;
@@ -309,6 +311,17 @@ New Timesheet Invoice Workflow and Component Styles
   display: grid;
   grid-template-columns: repeat(7, minmax(75px, 150px)) 50px;
   list-style: none;
+  background-color: #d9fad1;
+  align-items: center;
+  border-radius: 5px;
+  margin: 1rem 0 1.5rem 0;
+  height: 42px;
+  padding: 0 0.6rem;
+}
+
+.invoice--project-sub-total {
+  border-top: 1px solid #d9d9d9;
+  border-bottom: 3px solid #606060;
 }
 
 .invoice--project-sub-total ol li:first-child {
@@ -316,7 +329,7 @@ New Timesheet Invoice Workflow and Component Styles
   grid-column: 1 / 3;
 }
 .invoice--project-sub-total ol li:nth-child(2) {
-  grid-column: 3 / 5;
+  grid-column: 3 / 7;
   color: #d191f0;
   font-weight: bolder;
 }
