@@ -111,7 +111,8 @@ function dataReducer(state, action) {
         filteredHours: trimmedArr,
       };
     }
-    case "clearHrsArrayOnDateChange": {
+    // Update filteredHours Array with what is passed as action.data (including an empty array)
+    case "updateFilteredHrsArr": {
       return {
         ...state,
         filteredHours: action.data,
@@ -392,8 +393,9 @@ function NewInvoice(props) {
       dataState.dateRangeTo !== ""
     ) {
       console.log("date FROM fetch triggered", dataState.dateRangeFrom);
+      // send dispatch to update state - clear the filteredHours array with empty array
       dispatchData({
-        type: "clearHrsArrayOnDateChange",
+        type: "updateFilteredHrsArr",
         data: [],
       });
     }
@@ -432,8 +434,9 @@ function NewInvoice(props) {
       dataState.dateRangeTo !== ""
     ) {
       console.log("date TO fetch triggered", dataState.dateRangeFrom);
+      // send dispatch to update state - clear the filteredHours array with empty array
       dispatchData({
-        type: "clearHrsArrayOnDateChange",
+        type: "updateFilteredHrsArr",
         data: [],
       });
     }
@@ -531,7 +534,7 @@ function NewInvoice(props) {
 
     // Add Role, Rate and Amount fields as properties for user record object for Invoice workkflow
     let updatedArr = arr.map((record) => {
-      return { ...record, rate: 0, role: "", amount: 0 };
+      return { ...record, Rate: 0, Role: "", Amount: 0 };
     });
     console.log(updatedArr);
 
@@ -551,6 +554,13 @@ function NewInvoice(props) {
   };
   // =====================================
   // =====================================
+
+  const dispatchUpdateToFilteredHrsArr = (arr) => {
+    dispatchData({
+      type: "updateFilteredHrsArr",
+      data: arr,
+    });
+  };
 
   const alertMessageDisplay = (entry) => {
     return entry;
@@ -733,6 +743,7 @@ function NewInvoice(props) {
                     to={dataState.dateRangeTo}
                     filteredHours={dataState.filteredHours}
                     checkFilters={checkFilters}
+                    updateFilteredHrsArr={dispatchUpdateToFilteredHrsArr}
                     // filterByProject={getRecordsPerProject}
                     // setDateRangeData={handleDispatchDateRangeData}
                   />

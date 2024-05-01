@@ -2,16 +2,24 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/ManageInvoices.css";
-// import { getTimesheetEntryDetails } from "../hooks/FetchData";
 import AlertMessage from "../components/AlertMessage";
-import { hslToRgb } from "@mui/material";
 
 function CreateTimesheetInvoice(props) {
   let alertMessage = useRef();
   let [message, setMessage] = useState("");
 
-  const updateUserTSRecordsRole = (i, j, propName, e) => {
+  // Apply delay/ debouncer? to wait a couple seconds before triggering dispatch to update filterHours Array in state
+  const updateUserAllRecords = (i, j, propName, e) => {
     console.log(i, j, propName, e.target.value);
+    let updatedRecords = [];
+  };
+
+  // Apply delay/ debouncer? to wait a couple seconds before triggering dispatch to update filterHours Array in state
+  const updateUserSingleRecord = (i, j, k, propName, e) => {
+    console.log(i, j, propName, e.target.value);
+    let updatedRecordValue = props.filteredHours[i].data[j].data[k];
+    updatedRecordValue[propName] = e.target.value;
+    console.log(updatedRecordValue);
   };
 
   // Convert the from and to date to read mm/dd/yyy instead of how it comes from the DB: yyyy-mm-dd
@@ -77,7 +85,7 @@ function CreateTimesheetInvoice(props) {
                               <input
                                 type="text"
                                 onBlur={(e) =>
-                                  updateUserTSRecordsRole(i, j, "role", e)
+                                  updateUserAllRecords(i, j, "Role", e)
                                 }
                               />
                             </li>
@@ -138,7 +146,16 @@ invoice--user-record-set-all-rates"
                                       <input
                                         id="invoice--user-role-input"
                                         type="text"
-                                        onChange={(e) => console.log(e.target)}
+                                        onChange={(e) =>
+                                          updateUserSingleRecord(
+                                            i,
+                                            j,
+                                            k,
+                                            "Role",
+                                            e
+                                          )
+                                        }
+                                        defaultValue={hrs.Role}
                                       />
                                     </li>
                                     <li id="invoice--user-record-hrs">
@@ -149,10 +166,19 @@ invoice--user-record-set-all-rates"
                                       <input
                                         id="invoice--user-rate-input"
                                         type="number"
-                                        onChange={(e) => console.log(e.target)}
+                                        onChange={(e) =>
+                                          updateUserSingleRecord(
+                                            i,
+                                            j,
+                                            k,
+                                            "Rate",
+                                            e
+                                          )
+                                        }
+                                        defaultValue={hrs.Rate}
                                       />
                                     </li>
-                                    <li>$0</li>
+                                    <li>$ {hrs.Amount}</li>
                                     <li>
                                       <FontAwesomeIcon icon={faCircleXmark} />
                                     </li>

@@ -278,6 +278,11 @@ New Timesheet Invoice Workflow and Component Styles
   grid-template-columns: repeat(7, minmax(75px, 150px)) 50px;
 }
 
+.invoice--user-record-details li:last-child {
+  color: #e37171;
+}
+
+/* Remove padding-left and list-style from ALL ol elements that are children (and grand-children, etc) of .new-invoice--from-timesheet-container */
 .new-invoice--from-timesheet-container ol {
   padding-left: 0;
   list-style: none;
