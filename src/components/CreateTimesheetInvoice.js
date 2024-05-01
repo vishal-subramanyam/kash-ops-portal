@@ -9,38 +9,10 @@ import { hslToRgb } from "@mui/material";
 function CreateTimesheetInvoice(props) {
   let alertMessage = useRef();
   let [message, setMessage] = useState("");
-  // let { companyId, sowId, from, to } = props;
-  // let trimmedFilteredHours = Object.values(
-  //   props.filteredHours.reduce((c, e) => {
-  //     if (!c[e.projectName]) c[e.projectName] = e;
-  //     return c;
-  //   }, {})
-  // );
 
-  // useEffect(() => {
-  // "use effect to check if filters are filled out";
-  // props.checkFilters();
-  // }, []);
-
-  // // Should I run function with useMemo hook? or useCallback hook?
-  // // const fetchTSData = (companyId, sowId, from, to) => {
-  // const fetchTSData = useCallback((from, to, companyId) => {
-  //   console.log("trigger fetch to get data", from, to);
-
-  //   // resolve the promise in order to get the hours billed array. When promise is resolved, filter response array with filter values above and return new array - array of objects, each object is a user with properties: name, totalBilledHours, details: array containing all sub task entries for a project
-  //   Promise.allSettled([
-  //     getTimesheetEntryDetails(from, to, companyId),
-  //     // getTimesheetEntryDetails(from, to, companyId, sowId),
-  //   ]).then((values) => {
-  //     console.log("promise to get TS data resolved:", values);
-
-  //     // Assign all Timesheet data per filters - from, to and companyId - to state array
-  //     // props.setDateRangeData(values[0].value);
-
-  //     // trigger function to filter out project data sharing the selected project sow id
-  //     // props.filterByProject(props.projectName, props.sowId, values[0].value);
-  //   });
-  // }, []);
+  const updateUserTSRecordsRole = (i, j, propName, e) => {
+    console.log(i, j, propName, e.target.value);
+  };
 
   // Convert the from and to date to read mm/dd/yyy instead of how it comes from the DB: yyyy-mm-dd
   const convertDateFormat = (date) => {
@@ -104,7 +76,9 @@ function CreateTimesheetInvoice(props) {
                             <li className="invoice--user-record-totals-item invoice--user-record-set-all-roles-input">
                               <input
                                 type="text"
-                                onChange={(e) => console.log(e.target)}
+                                onBlur={(e) =>
+                                  updateUserTSRecordsRole(i, j, "role", e)
+                                }
                               />
                             </li>
                             <li

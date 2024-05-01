@@ -568,7 +568,7 @@ function NewInvoice(props) {
         // set style height to 100dvh if filteredHours.length = 1 or less.
         //  When user selects a company from dropdown, in state, filteredHours is updated to object with empty data array and empty strings for project name and sowId properites
         style={{
-          height: dataState.filteredHours.length < 1 ? "100dvh" : "100vh",
+          height: dataState.filteredHours.length < 1 ? "100dvh" : "100%",
         }}
       >
         <div className="ManageInvoices--new-invoice-tab-inner-content">
