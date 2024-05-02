@@ -226,7 +226,7 @@ function NewInvoice(props) {
   }, []);
 
   const checkStateProject = () => {
-    console.log("Check project in state via useEffect");
+    // console.log("Check project in state via useEffect");
     if (dataState.selectedProjectSowId !== "") {
       dataState.filteredHours.map((project) => {
         if (project.projectSowId === dataState.selectedProjectSowId) {
@@ -239,7 +239,7 @@ function NewInvoice(props) {
   };
 
   const checkStateDates = (e) => {
-    console.log("Check dates in state via useEffect");
+    // console.log("Check dates in state via useEffect");
     if (
       dataState.dateRangeFrom !== "" &&
       // dataState.dateRangeFrom !== e.target.value &&
