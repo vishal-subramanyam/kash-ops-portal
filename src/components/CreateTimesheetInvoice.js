@@ -17,9 +17,22 @@ function CreateTimesheetInvoice(props) {
   // Apply delay/ debouncer? to wait a couple seconds before triggering dispatch to update filterHours Array in state
   const updateUserSingleRecord = (i, j, k, propName, e) => {
     console.log(i, j, propName, e.target.value);
-    let updatedRecordValue = props.filteredHours[i].data[j].data[k];
+    let stateHrsCopy = [...props.filteredHours];
+    let updatedRecordValue = stateHrsCopy[i].data[j].data[k];
     updatedRecordValue[propName] = e.target.value;
+    // single user record object
     console.log(updatedRecordValue);
+    // updated hours array to send to dispatch to update filteredHours array
+    console.log(stateHrsCopy);
+
+    // Calculate Amount field - individual user record Rate * Hrs
+    if (propName === "Rate") {
+      updatedRecordValue["Amount"] =
+        e.target.value * updatedRecordValue["TotalHours"];
+    }
+
+    // update filteredHours array in state with prop value update
+    props.updateFilteredHrsArr(stateHrsCopy);
   };
 
   // Convert the from and to date to read mm/dd/yyy instead of how it comes from the DB: yyyy-mm-dd
@@ -63,7 +76,10 @@ function CreateTimesheetInvoice(props) {
           // console.log(
           //   "state array for data display on UI")
           props.filteredHours.map((rec, i) => {
-            console.log(rec);
+            console.log(
+              "Individual Project in filteredHours state array:",
+              rec
+            );
             return (
               <section key={i} className="invoice-company-project">
                 <h6 className="invoice--project-description">
@@ -166,6 +182,7 @@ invoice--user-record-set-all-rates"
                                       <input
                                         id="invoice--user-rate-input"
                                         type="number"
+                                        min={0}
                                         onChange={(e) =>
                                           updateUserSingleRecord(
                                             i,
@@ -178,7 +195,7 @@ invoice--user-record-set-all-rates"
                                         defaultValue={hrs.Rate}
                                       />
                                     </li>
-                                    <li>$ {hrs.Amount}</li>
+                                    <li>$ {hrs.Amount.toFixed(2)}</li>
                                     <li>
                                       <FontAwesomeIcon icon={faCircleXmark} />
                                     </li>
