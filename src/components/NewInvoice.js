@@ -18,6 +18,7 @@ import {
   getCompanyProjects,
 } from "../hooks/FetchData";
 import AlertMessage from "./AlertMessage";
+import { GridColumnsPanel } from "@mui/x-data-grid";
 
 // Reducer function to manipulate state
 function dataReducer(state, action) {
@@ -69,19 +70,19 @@ function dataReducer(state, action) {
     }
     case "chooseDateFrom": {
       // set dateRangeFrom to selected date
-      console.log("updating state for date from filter");
+      console.log("updating state for DATE FROM filter");
       return {
         ...state,
-        dateRangeFrom: action.dateFrom,
+        dateRangeFrom: action.data,
       };
     }
     case "chooseDateTo": {
       // set dateRangeTo to selected date
-      console.log("updating state for date to filter");
+      console.log("updating state for DATE TO filter");
 
       return {
         ...state,
-        dateRangeTo: action.dateTo,
+        dateRangeTo: action.data,
       };
     }
     case "filterByProject": {
@@ -223,12 +224,54 @@ function NewInvoice(props) {
       }
     );
   }, []);
+
+  const checkStateProject = () => {
+    console.log("Check project in state via useEffect");
+    if (dataState.selectedProjectSowId !== "") {
+      dataState.filteredHours.map((project) => {
+        if (project.projectSowId === dataState.selectedProjectSowId) {
+          alert("project already added to the invoice");
+        } else {
+          checkFilters();
+        }
+      });
+    }
+  };
+
+  const checkStateDates = (e) => {
+    console.log("Check dates in state via useEffect");
+    if (
+      dataState.dateRangeFrom !== "" &&
+      // dataState.dateRangeFrom !== e.target.value &&
+      dataState.dateRangeTo !== ""
+    ) {
+      console.log("date fetch triggered", dataState.dateRangeTo);
+      // send dispatch to update state - clear the filteredHours array with empty array
+
+      // TO-DO: set a promise to wait for the dispatch to state to to be success THEN trigger checkFilters()
+
+      dispatchPromiseClearHrsArr()
+        .then((res) => {
+          // checkFilters()s
+          console.log("checkFilters() call", dataState);
+          checkFilters();
+        })
+        .catch((err) => alert("ERROR FILTERING"));
+    }
+  };
   //   resolvePromises();
   useEffect(() => {
     console.log("use effect run initial fetch calls");
     resolvePromises();
   }, []);
 
+  useEffect(() => {
+    checkStateDates();
+  }, [dataState.dateRangeFrom, dataState.dateRangeTo]);
+
+  useEffect(() => {
+    checkStateProject();
+  }, [dataState.selectedProjectSowId]);
   // useEffect(() => {
   //   checkFilters();
   // }, [
@@ -266,8 +309,8 @@ function NewInvoice(props) {
 
   // check to see if filters are filled out
   const checkFilters = (e) => {
-    console.log("function to check if all filters are filled out");
-    e.preventDefault();
+    console.log("checkFilters function to check if all filters are filled out");
+    // e.preventDefault();
     // if (!dataState.selectedCompanyId) {
     //   alert("Please select a company from the dropdown.");
     //   return false;
@@ -365,6 +408,11 @@ function NewInvoice(props) {
       type: "chooseProject",
       data: { sowId: selectedProjectSowId, projectName: selectedProjectName },
     });
+
+    // if currently selected project sow id is not empty string - a proejct has not yet been selected
+    // if (dataState.selectedProjectSowId !== "") {
+    checkFilters();
+    // }
   };
 
   // Set state object property array for TS records betweeen date range filter for selectedCompanyId and selectedProjectSowId
@@ -375,30 +423,44 @@ function NewInvoice(props) {
     });
   };
 
+  const dispatchPromiseClearHrsArr = () => {
+    return new Promise((res, rej) => {
+      console.log("resolvePromise");
+      // send dispatch to clear filterHours state array
+      dispatchData({
+        type: "updateFilteredHrsArr",
+        data: [],
+      });
+      res("Success");
+    });
+  };
+
+  const dispatchPromiseDates = (type, val) => {
+    console.log("dispatch promise dates");
+    return new Promise((res, rej) => {
+      dispatchData({
+        type: type,
+        data: val,
+      });
+      res();
+    });
+  };
+
   // Choose filter for date range start
   const selectDateFromFilter = (e) => {
     // set state to track date from filter selection
     console.log(e.target.value);
     let filterDateFrom = e.target.value;
-    dispatchData({
-      type: "chooseDateFrom",
-      dateFrom: filterDateFrom,
-    });
-
-    // should NOT happen when user first fills out filters.
-    // fetch data function if date from is not an empty string (or initial state value)
-    if (
-      dataState.dateRangeFrom !== "" &&
-      dataState.dateRangeFrom !== e.target.value &&
-      dataState.dateRangeTo !== ""
-    ) {
-      console.log("date FROM fetch triggered", dataState.dateRangeFrom);
-      // send dispatch to update state - clear the filteredHours array with empty array
-      dispatchData({
-        type: "updateFilteredHrsArr",
-        data: [],
+    dispatchPromiseDates("chooseDateFrom", filterDateFrom)
+      .then((res) => {
+        console.log("date FROM promise success", res);
+        //  console.log("State variable updated successfully.");
+        console.log("State value after update:", dataState);
+        checkStateDates(e);
+      })
+      .catch((err) => {
+        alert("There was a problem setting the from date filter.");
       });
-    }
   };
 
   // function to handle both from and to date filters
@@ -421,25 +483,13 @@ function NewInvoice(props) {
     console.log(e.target.value);
     let filterDateTo = e.target.value;
 
-    dispatchData({
-      type: "chooseDateTo",
-      dateTo: filterDateTo,
-    });
-
-    // should NOT happen when user first fills out filters.
-    // fetch data function if date to is not an empty string (or initial state value)
-    if (
-      dataState.dateRangeFrom !== "" &&
-      dataState.dateRangeFrom !== e.target.value &&
-      dataState.dateRangeTo !== ""
-    ) {
-      console.log("date TO fetch triggered", dataState.dateRangeFrom);
-      // send dispatch to update state - clear the filteredHours array with empty array
-      dispatchData({
-        type: "updateFilteredHrsArr",
-        data: [],
-      });
-    }
+    dispatchPromiseDates("chooseDateTo", filterDateTo)
+      .then((res) => {
+        console.log("update to state successful");
+        console.log("dispatch promise date to filter success", dataState);
+        checkStateDates(e);
+      })
+      .catch((err) => alert("Unable to set date to filter.", err));
   };
 
   // function to run to get TS records per filters
@@ -609,7 +659,7 @@ function NewInvoice(props) {
               <form
                 method="POST"
                 className="invoice-filter-form"
-                onSubmit={(e) => checkFilters(e)}
+                // onSubmit={(e) => checkFilters(e)}
               >
                 <fieldset className="invoice-filter--company">
                   <label htmlFor="company-selection">Company</label>
@@ -702,7 +752,7 @@ function NewInvoice(props) {
                     </div>
                   </div>
                 </fieldset>
-                <input
+                {/* <input
                   className="invoice--apply-filters-btn"
                   value="Apply Filters"
                   type="submit"
@@ -721,7 +771,7 @@ function NewInvoice(props) {
                         ? "none"
                         : "flex",
                   }}
-                />
+                /> */}
               </form>
               {/* END Date Range Filter Form */}
 
