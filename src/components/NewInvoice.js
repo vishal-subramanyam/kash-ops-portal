@@ -516,72 +516,71 @@ function NewInvoice(props) {
   // HANDLE FILTER BY PROJECT
   // =====================================
 
+  const searchForSowIdPromise = (arr, id, name) => {
+    return new Promise((res, rej) => {
+      let isProject = false;
+      // Iterate the filterHrs array to see if there is an object that does not have a projectSowId value of "id" from fn argument input
+      arr.map((project) => {
+        // if (project["SowId"] !== id) {
+        if (project["SowId"] !== dataState.selectedProjectSowId) {
+          console.log("Sow Id not present");
+        } else {
+          isProject = true;
+        }
+      });
+
+      console.log(isProject);
+      if (isProject) {
+        res("Success!");
+      } else {
+        rej("Sow Id Exists.");
+      }
+    });
+  };
+
   // filter Timesheet data to get records for selected sow Id
   const getRecordsPerProject = (name, id, arr) => {
-    console.log("function to filter hours by selected project");
-    // if (
-    //   !dataState.filteredHours.some((project) => project.hasOwnProperty(name))
-    // ) {
-    //   // setFilteredHours([
-    //   //   ...dataState.filteredHours,
-    //   //   {
-    //   //     projectName: record.ProjectCategory,
-    //   //     data: [],
-    //   //   },
-    //   // ]);
-    //   dispatchData({
-    //     type: "filterByProject",
-    //     action: { projectName: name, data: [] },
-    //   });
-    // }
+    console.log(
+      "function to filter hours by selected project. name:",
+      name,
+      " id:",
+      id,
+      "arr:",
+      arr
+    );
 
-    // If input array is not an empty array, in other words, there is TS data in array
-    // if (arr.length > 0) {
-    // filter resulting array per company id filter and sow id filter
-    let filterHrs = arr.filter((record, i) => {
-      return record.SowId === id;
-    });
-    console.log("Filter hours by sowID:", filterHrs);
-    if (filterHrs.length === 0) {
-      setMessage(
-        alertMessageDisplay(
-          `There is no data for the following project: ${name}.`
-        )
-      );
-      alertMessage.current.showModal();
-      return;
-    }
-    // Group results by name and task area
-    let groupedData = groupFilteredData(filterHrs);
-    // setFilteredHoursArray(groupedData);
-    console.log("group filter hours by user", groupedData);
-    // setFilteredHours(...dataState.filteredHours, {
-    //   projectName: selectedProjectName,
-    //   data: groupedData,
-    // });
-    dispatchData({
-      type: "filterByProject",
-      data: { projectName: name, projectSowId: id, data: groupedData },
-    });
+    // Set a promise to wait for loop over arr to see if there is project data
+    searchForSowIdPromise(arr, id, name)
+      .then((res) => {
+        console.log("Sow Id has data", res);
+        // filter resulting array per company id filter and sow id filter
+        let filterHrs = arr.filter((record, i) => {
+          return record.SowId === id;
+        });
+        console.log("Filter hours by sowID:", filterHrs);
 
-    // console.log("state of hours to group for UI:", dataState.filteredHours);
-    // }
+        // Group results by name and task area
+        let groupedData = groupFilteredData(filterHrs);
+        // setFilteredHoursArray(groupedData);
+        console.log("group filter hours by user", groupedData);
+
+        dispatchData({
+          type: "filterByProject",
+          data: { projectName: name, projectSowId: id, data: groupedData },
+        });
+      })
+      .catch((err) => {
+        setMessage(
+          alertMessageDisplay(
+            `There is no data for the following project: ${name}.`
+          )
+        );
+        alertMessage.current.showModal();
+      });
   };
 
   // Group data by resource - per project, all the hours billed user. This gets pushed to filtered hours array that will be looped over to render UI
   const groupFilteredData = (arr) => {
-    // let grouped = {};
-    // arr.forEach((obj) => {
-    //   let fullName = obj.FullName;
-
-    //   if (!grouped[fullName]) {
-    //     grouped[fullName] = [];
-    //   }
-
-    //   grouped[fullName].push(obj);
-    // });
-    // return grouped;
-
     // Add Role, Rate and Amount fields as properties for user record object for Invoice workkflow
     let updatedArr = arr.map((record) => {
       return { ...record, Rate: 0, Role: "", Amount: 0 };
