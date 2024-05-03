@@ -48,13 +48,13 @@ function CreateTimesheetInvoice(props) {
     return newDateFormat;
   };
 
-  const alertMessageDisplay = (entry) => {
-    return entry;
-  };
+  // const alertMessageDisplay = (entry) => {
+  //   return entry;
+  // };
 
-  const closeAlert = () => {
-    alertMessage.current.close();
-  };
+  // const closeAlert = () => {
+  //   alertMessage.current.close();
+  // };
   return (
     <>
       <header>
@@ -239,7 +239,7 @@ invoice--user-record-set-all-rates"
         <section className="invoice--btn-container">
           <button
             className="invoice--create-btn"
-            onClick={() => console.log("Create new invoice btn click.")}
+            onClick={() => console.log(props.hrsToServer)}
           >
             Create Invoice
           </button>

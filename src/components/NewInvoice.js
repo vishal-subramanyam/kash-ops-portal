@@ -107,9 +107,19 @@ function dataReducer(state, action) {
         }, {})
       );
       console.log("trying to filter out identical entries", trimmedArr);
+
+      let projectHrsToServer = state.hrsSentToServer;
+      projectHrsToServer.push(...action.data.sourceData);
+      let trimmedSrcArr = Object.values(
+        projectHrsToServer.reduce((c, e) => {
+          if (!c[e.projectSowId]) c[e.projectSowId] = e;
+          return c;
+        }, {})
+      );
       return {
         ...state,
         filteredHours: trimmedArr,
+        hrsSentToServer: trimmedSrcArr,
       };
     }
     // Update filteredHours Array with what is passed as action.data (including an empty array)
@@ -157,6 +167,7 @@ function NewInvoice(props) {
     companyAdminsDetail: [],
     dataPerDateRangeFilter: [],
     filteredHours: [],
+    hrsSentToServer: [],
     dateRangeFrom: "",
     dateRangeTo: "",
   };
@@ -579,7 +590,12 @@ function NewInvoice(props) {
 
         dispatchData({
           type: "filterByProject",
-          data: { projectName: name, projectSowId: id, data: groupedData },
+          data: {
+            projectName: name,
+            projectSowId: id,
+            data: groupedData.newArr,
+            sourceData: groupedData.sourceArr,
+          },
         });
       })
       .catch((err) => {
@@ -612,7 +628,8 @@ function NewInvoice(props) {
         return prevRec;
       }, {})
     );
-    return consolidatedArr;
+    // return consolidatedArr;
+    return { newArr: consolidatedArr, sourceArr: updatedArr };
   };
   // =====================================
   // =====================================
@@ -813,6 +830,7 @@ function NewInvoice(props) {
                     companyName={dataState.selectedCompanyName}
                     // sowId={dataState.selectedProjectSowId}
                     // projectName={dataState.selectedProjectName}
+                    hrsToServer={dataState.hrsSentToServer}
                     from={dataState.dateRangeFrom}
                     to={dataState.dateRangeTo}
                     filteredHours={dataState.filteredHours}
