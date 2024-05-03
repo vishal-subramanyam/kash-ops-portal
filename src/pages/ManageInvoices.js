@@ -81,6 +81,7 @@ function ManageInvoices(props) {
           openNewInvoiceModal={openNewInvoiceTypeModal}
           newInvoiceType={newInvoiceType}
           loggedInUserInfo={loggedInUserLocal}
+          resetInvoiceType={selectInvoiceType}
         />
       ) : (
         <ModifyInvoice />

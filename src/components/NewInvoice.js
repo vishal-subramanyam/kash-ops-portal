@@ -126,6 +126,19 @@ function dataReducer(state, action) {
         dataPerDateRangeFilter: action.data,
       };
     }
+    case "cancelInvoice": {
+      // clear state values but keep data from initial fetch from companies, projects and company admin tables
+      return {
+        ...state,
+        selectedCompanyId: "",
+        selectedCompanyName: "",
+        selectedProjectSowId: "",
+        selectedProjectName: "",
+        filteredHours: [],
+        dateRangeFrom: "",
+        dateRangeTo: "",
+      };
+    }
     default: {
       throw Error("Unknown action: " + action.type);
     }
@@ -619,6 +632,18 @@ function NewInvoice(props) {
     alertMessage.current.close();
   };
 
+  const dispatchCancelInvoice = () => {
+    // when user clicks cancel button on Invoice,
+
+    // reset invoice type state to empty string
+    props.resetInvoiceType("");
+    // reset state to initialState in order to reset the page
+    dispatchData({
+      type: "cancelInvoice",
+      payload: [],
+    });
+  };
+
   return (
     <>
       <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
@@ -793,6 +818,7 @@ function NewInvoice(props) {
                     filteredHours={dataState.filteredHours}
                     checkFilters={checkFilters}
                     updateFilteredHrsArr={dispatchUpdateToFilteredHrsArr}
+                    cancel={dispatchCancelInvoice}
                     // filterByProject={getRecordsPerProject}
                     // setDateRangeData={handleDispatchDateRangeData}
                   />

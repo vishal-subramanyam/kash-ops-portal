@@ -350,6 +350,56 @@ New Timesheet Invoice Workflow and Component Styles
   grid-column: 7 / 8;
   color: #09bc25;
 }
+
+.invoice--projects-total-amount ol {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(75px, 150px)) 50px;
+  list-style: none;
+  background-color: #ffd9c3;
+  align-items: center;
+  border-radius: 5px;
+  margin: 1rem 0 1.5rem 0;
+  height: 42px;
+  padding: 0 0.6rem;
+}
+
+.invoice--projects-total-amount ol li:first-child {
+  grid-column: 1 / 7;
+}
+
+.invoice--projects-total-amount ol li:nth-child(2) {
+  grid-column: 7/ 8;
+}
+
+.invoice--projects-total-amount ol li h6 {
+  margin: 0;
+  font-weight: bold;
+}
+
+.invoice--projects-total-amount ol li p {
+  font-weight: bold;
+}
+
+.invoice--create-btn {
+  color: #fff;
+  background-color: #31945e;
+  height: 3rem;
+  border-radius: 8px;
+  padding: 0 0.5rem;
+  width: 156px;
+  max-width: 156px;
+  margin: 0 1rem 0 0;
+}
+.invoice--cancel-btn {
+  color: #fff;
+  background-color: #ff4848;
+  height: 3rem;
+  border-radius: 8px;
+  padding: 0 0.5rem;
+  width: 156px;
+  max-width: 156px;
+}
+
 /* ================================================================================
 Choose New Invoice Type Modal
 =================================================================================== */

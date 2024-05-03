@@ -224,8 +224,34 @@ invoice--user-record-set-all-rates"
             );
           })
         }
+
+        <section className="invoice--projects-total-amount">
+          <ol>
+            <li>
+              <h6>Invoice Total:</h6>
+            </li>
+            <li>
+              <p>$0</p>
+            </li>
+          </ol>
+        </section>
+
+        <section className="invoice--btn-container">
+          <button
+            className="invoice--create-btn"
+            onClick={() => console.log("Create new invoice btn click.")}
+          >
+            Create Invoice
+          </button>
+          <button
+            className="invoice--cancel-btn"
+            onClick={() => props.cancel()}
+          >
+            Cancel
+          </button>
+        </section>
       </section>
-      <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
+      {/* <AlertMessage ref={alertMessage} close={closeAlert} message={message} /> */}
     </>
   );
 }
