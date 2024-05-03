@@ -102,24 +102,24 @@ function dataReducer(state, action) {
       });
       let trimmedArr = Object.values(
         projectHrs.reduce((c, e) => {
-          if (!c[e.projectName]) c[e.projectName] = e;
+          if (!c[e.projectSowId]) c[e.projectSowId] = e;
           return c;
         }, {})
       );
       console.log("trying to filter out identical entries", trimmedArr);
 
-      let projectHrsToServer = state.hrsSentToServer;
-      projectHrsToServer.push(...action.data.sourceData);
-      let trimmedSrcArr = Object.values(
-        projectHrsToServer.reduce((c, e) => {
-          if (!c[e.projectSowId]) c[e.projectSowId] = e;
-          return c;
-        }, {})
-      );
+      // let projectHrsToServer = state.hrsSentToServer;
+      // projectHrsToServer.push(...action.data.sourceData);
+      // let trimmedSrcArr = Object.values(
+      //   projectHrsToServer.reduce((c, e) => {
+      //     if (!c[e.projectSowId]) c[e.projectSowId] = e;
+      //     return c;
+      //   }, {})
+      // );
       return {
         ...state,
         filteredHours: trimmedArr,
-        hrsSentToServer: trimmedSrcArr,
+        // hrsSentToServer: trimmedSrcArr,
       };
     }
     // Update filteredHours Array with what is passed as action.data (including an empty array)
@@ -216,6 +216,22 @@ function NewInvoice(props) {
     Promise.allSettled([projects(), companyAdmins(), companies()]).then(
       (values) => {
         console.log("Fetch Data: ", values);
+
+        let companiesWithProjects = [];
+        let allCompanies = values[2].value;
+        let allProjects = values[0].value;
+
+        // iterate allProjects array to determine which company has projects -
+        // loop allProjects, at each index, loop over allCompanies
+        for (let i = 0; i <= allProjects.length; i++) {
+          for (let j = 0; j <= allCompanies; j++) {
+            if (allCompanies[j].CompanyId === allProjects[i].CompanyId) {
+              companiesWithProjects.push(allCompanies[j]);
+            }
+          }
+          console.log(companiesWithProjects);
+        }
+
         if (loggedInUser.AdminLevel === "Super Admin") {
           dispatchData({
             type: "initialize",
@@ -594,7 +610,7 @@ function NewInvoice(props) {
             projectName: name,
             projectSowId: id,
             data: groupedData.newArr,
-            sourceData: groupedData.sourceArr,
+            // sourceData: groupedData.sourceArr,
           },
         });
       })
