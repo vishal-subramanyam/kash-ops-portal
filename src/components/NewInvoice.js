@@ -18,7 +18,6 @@ import {
   getCompanyProjects,
 } from "../hooks/FetchData";
 import AlertMessage from "./AlertMessage";
-import { GridColumnsPanel } from "@mui/x-data-grid";
 
 // Reducer function to manipulate state
 function dataReducer(state, action) {
@@ -70,19 +69,19 @@ function dataReducer(state, action) {
     }
     case "chooseDateFrom": {
       // set dateRangeFrom to selected date
-      console.log("updating state for DATE FROM filter");
+      console.log("updating state for date from filter");
       return {
         ...state,
-        dateRangeFrom: action.data,
+        dateRangeFrom: action.dateFrom,
       };
     }
     case "chooseDateTo": {
       // set dateRangeTo to selected date
-      console.log("updating state for DATE TO filter");
+      console.log("updating state for date to filter");
 
       return {
         ...state,
-        dateRangeTo: action.data,
+        dateRangeTo: action.dateTo,
       };
     }
     case "filterByProject": {
@@ -102,24 +101,14 @@ function dataReducer(state, action) {
       });
       let trimmedArr = Object.values(
         projectHrs.reduce((c, e) => {
-          if (!c[e.projectSowId]) c[e.projectSowId] = e;
+          if (!c[e.projectName]) c[e.projectName] = e;
           return c;
         }, {})
       );
       console.log("trying to filter out identical entries", trimmedArr);
-
-      // let projectHrsToServer = state.hrsSentToServer;
-      // projectHrsToServer.push(...action.data.sourceData);
-      // let trimmedSrcArr = Object.values(
-      //   projectHrsToServer.reduce((c, e) => {
-      //     if (!c[e.projectSowId]) c[e.projectSowId] = e;
-      //     return c;
-      //   }, {})
-      // );
       return {
         ...state,
         filteredHours: trimmedArr,
-        // hrsSentToServer: trimmedSrcArr,
       };
     }
     // Update filteredHours Array with what is passed as action.data (including an empty array)
@@ -134,19 +123,6 @@ function dataReducer(state, action) {
       return {
         ...state,
         dataPerDateRangeFilter: action.data,
-      };
-    }
-    case "cancelInvoice": {
-      // clear state values but keep data from initial fetch from companies, projects and company admin tables
-      return {
-        ...state,
-        selectedCompanyId: "",
-        selectedCompanyName: "",
-        selectedProjectSowId: "",
-        selectedProjectName: "",
-        filteredHours: [],
-        dateRangeFrom: "",
-        dateRangeTo: "",
       };
     }
     default: {
@@ -167,7 +143,6 @@ function NewInvoice(props) {
     companyAdminsDetail: [],
     dataPerDateRangeFilter: [],
     filteredHours: [],
-    hrsSentToServer: [],
     dateRangeFrom: "",
     dateRangeTo: "",
   };
@@ -216,22 +191,6 @@ function NewInvoice(props) {
     Promise.allSettled([projects(), companyAdmins(), companies()]).then(
       (values) => {
         console.log("Fetch Data: ", values);
-
-        let companiesWithProjects = [];
-        let allCompanies = values[2].value;
-        let allProjects = values[0].value;
-
-        // iterate allProjects array to determine which company has projects -
-        // loop allProjects, at each index, loop over allCompanies
-        for (let i = 0; i <= allProjects.length; i++) {
-          for (let j = 0; j <= allCompanies; j++) {
-            if (allCompanies[j].CompanyId === allProjects[i].CompanyId) {
-              companiesWithProjects.push(allCompanies[j]);
-            }
-          }
-          console.log(companiesWithProjects);
-        }
-
         if (loggedInUser.AdminLevel === "Super Admin") {
           dispatchData({
             type: "initialize",
@@ -264,54 +223,12 @@ function NewInvoice(props) {
       }
     );
   }, []);
-
-  const checkStateProject = () => {
-    // console.log("Check project in state via useEffect");
-    if (dataState.selectedProjectSowId !== "") {
-      dataState.filteredHours.map((project) => {
-        if (project.projectSowId === dataState.selectedProjectSowId) {
-          alert("project already added to the invoice");
-        } else {
-          checkFilters();
-        }
-      });
-    }
-  };
-
-  const checkStateDates = (e) => {
-    // console.log("Check dates in state via useEffect");
-    if (
-      dataState.dateRangeFrom !== "" &&
-      // dataState.dateRangeFrom !== e.target.value &&
-      dataState.dateRangeTo !== ""
-    ) {
-      console.log("date fetch triggered", dataState.dateRangeTo);
-      // send dispatch to update state - clear the filteredHours array with empty array
-
-      // TO-DO: set a promise to wait for the dispatch to state to to be success THEN trigger checkFilters()
-
-      dispatchPromiseClearHrsArr()
-        .then((res) => {
-          // checkFilters()s
-          console.log("checkFilters() call", dataState);
-          checkFilters();
-        })
-        .catch((err) => alert("ERROR FILTERING"));
-    }
-  };
   //   resolvePromises();
   useEffect(() => {
     console.log("use effect run initial fetch calls");
     resolvePromises();
   }, []);
 
-  useEffect(() => {
-    checkStateDates();
-  }, [dataState.dateRangeFrom, dataState.dateRangeTo]);
-
-  useEffect(() => {
-    checkStateProject();
-  }, [dataState.selectedProjectSowId]);
   // useEffect(() => {
   //   checkFilters();
   // }, [
@@ -349,8 +266,8 @@ function NewInvoice(props) {
 
   // check to see if filters are filled out
   const checkFilters = (e) => {
-    console.log("checkFilters function to check if all filters are filled out");
-    // e.preventDefault();
+    console.log("function to check if all filters are filled out");
+    e.preventDefault();
     // if (!dataState.selectedCompanyId) {
     //   alert("Please select a company from the dropdown.");
     //   return false;
@@ -448,11 +365,6 @@ function NewInvoice(props) {
       type: "chooseProject",
       data: { sowId: selectedProjectSowId, projectName: selectedProjectName },
     });
-
-    // if currently selected project sow id is not empty string - a proejct has not yet been selected
-    // if (dataState.selectedProjectSowId !== "") {
-    checkFilters();
-    // }
   };
 
   // Set state object property array for TS records betweeen date range filter for selectedCompanyId and selectedProjectSowId
@@ -463,44 +375,30 @@ function NewInvoice(props) {
     });
   };
 
-  const dispatchPromiseClearHrsArr = () => {
-    return new Promise((res, rej) => {
-      console.log("resolvePromise");
-      // send dispatch to clear filterHours state array
-      dispatchData({
-        type: "updateFilteredHrsArr",
-        data: [],
-      });
-      res("Success");
-    });
-  };
-
-  const dispatchPromiseDates = (type, val) => {
-    console.log("dispatch promise dates");
-    return new Promise((res, rej) => {
-      dispatchData({
-        type: type,
-        data: val,
-      });
-      res();
-    });
-  };
-
   // Choose filter for date range start
   const selectDateFromFilter = (e) => {
     // set state to track date from filter selection
     console.log(e.target.value);
     let filterDateFrom = e.target.value;
-    dispatchPromiseDates("chooseDateFrom", filterDateFrom)
-      .then((res) => {
-        console.log("date FROM promise success", res);
-        //  console.log("State variable updated successfully.");
-        console.log("State value after update:", dataState);
-        checkStateDates(e);
-      })
-      .catch((err) => {
-        alert("There was a problem setting the from date filter.");
+    dispatchData({
+      type: "chooseDateFrom",
+      dateFrom: filterDateFrom,
+    });
+
+    // should NOT happen when user first fills out filters.
+    // fetch data function if date from is not an empty string (or initial state value)
+    if (
+      dataState.dateRangeFrom !== "" &&
+      dataState.dateRangeFrom !== e.target.value &&
+      dataState.dateRangeTo !== ""
+    ) {
+      console.log("date FROM fetch triggered", dataState.dateRangeFrom);
+      // send dispatch to update state - clear the filteredHours array with empty array
+      dispatchData({
+        type: "updateFilteredHrsArr",
+        data: [],
       });
+    }
   };
 
   // function to handle both from and to date filters
@@ -523,13 +421,25 @@ function NewInvoice(props) {
     console.log(e.target.value);
     let filterDateTo = e.target.value;
 
-    dispatchPromiseDates("chooseDateTo", filterDateTo)
-      .then((res) => {
-        console.log("update to state successful");
-        console.log("dispatch promise date to filter success", dataState);
-        checkStateDates(e);
-      })
-      .catch((err) => alert("Unable to set date to filter.", err));
+    dispatchData({
+      type: "chooseDateTo",
+      dateTo: filterDateTo,
+    });
+
+    // should NOT happen when user first fills out filters.
+    // fetch data function if date to is not an empty string (or initial state value)
+    if (
+      dataState.dateRangeFrom !== "" &&
+      dataState.dateRangeFrom !== e.target.value &&
+      dataState.dateRangeTo !== ""
+    ) {
+      console.log("date TO fetch triggered", dataState.dateRangeFrom);
+      // send dispatch to update state - clear the filteredHours array with empty array
+      dispatchData({
+        type: "updateFilteredHrsArr",
+        data: [],
+      });
+    }
   };
 
   // function to run to get TS records per filters
@@ -556,76 +466,72 @@ function NewInvoice(props) {
   // HANDLE FILTER BY PROJECT
   // =====================================
 
-  const searchForSowIdPromise = (arr, id, name) => {
-    return new Promise((res, rej) => {
-      let isProject = false;
-      // Iterate the filterHrs array to see if there is an object that does not have a projectSowId value of "id" from fn argument input
-      arr.map((project) => {
-        // if (project["SowId"] !== id) {
-        if (project["SowId"] !== dataState.selectedProjectSowId) {
-          console.log("Sow Id not present");
-        } else {
-          isProject = true;
-        }
-      });
-
-      console.log(isProject);
-      if (isProject) {
-        res("Success!");
-      } else {
-        rej("Sow Id Exists.");
-      }
-    });
-  };
-
   // filter Timesheet data to get records for selected sow Id
   const getRecordsPerProject = (name, id, arr) => {
-    console.log(
-      "function to filter hours by selected project. name:",
-      name,
-      " id:",
-      id,
-      "arr:",
-      arr
-    );
+    console.log("function to filter hours by selected project");
+    // if (
+    //   !dataState.filteredHours.some((project) => project.hasOwnProperty(name))
+    // ) {
+    //   // setFilteredHours([
+    //   //   ...dataState.filteredHours,
+    //   //   {
+    //   //     projectName: record.ProjectCategory,
+    //   //     data: [],
+    //   //   },
+    //   // ]);
+    //   dispatchData({
+    //     type: "filterByProject",
+    //     action: { projectName: name, data: [] },
+    //   });
+    // }
 
-    // Set a promise to wait for loop over arr to see if there is project data
-    searchForSowIdPromise(arr, id, name)
-      .then((res) => {
-        console.log("Sow Id has data", res);
-        // filter resulting array per company id filter and sow id filter
-        let filterHrs = arr.filter((record, i) => {
-          return record.SowId === id;
-        });
-        console.log("Filter hours by sowID:", filterHrs);
+    // If input array is not an empty array, in other words, there is TS data in array
+    // if (arr.length > 0) {
+    // filter resulting array per company id filter and sow id filter
+    let filterHrs = arr.filter((record, i) => {
+      return record.SowId === id;
+    });
+    console.log("Filter hours by sowID:", filterHrs);
+    if (filterHrs.length === 0) {
+      setMessage(
+        alertMessageDisplay(
+          `There is no data for the following project: ${name}.`
+        )
+      );
+      alertMessage.current.showModal();
+      return;
+    }
+    // Group results by name and task area
+    let groupedData = groupFilteredData(filterHrs);
+    // setFilteredHoursArray(groupedData);
+    console.log("group filter hours by user", groupedData);
+    // setFilteredHours(...dataState.filteredHours, {
+    //   projectName: selectedProjectName,
+    //   data: groupedData,
+    // });
+    dispatchData({
+      type: "filterByProject",
+      data: { projectName: name, projectSowId: id, data: groupedData },
+    });
 
-        // Group results by name and task area
-        let groupedData = groupFilteredData(filterHrs);
-        // setFilteredHoursArray(groupedData);
-        console.log("group filter hours by user", groupedData);
-
-        dispatchData({
-          type: "filterByProject",
-          data: {
-            projectName: name,
-            projectSowId: id,
-            data: groupedData.newArr,
-            // sourceData: groupedData.sourceArr,
-          },
-        });
-      })
-      .catch((err) => {
-        setMessage(
-          alertMessageDisplay(
-            `There is no data for the following project: ${name}.`
-          )
-        );
-        alertMessage.current.showModal();
-      });
+    // console.log("state of hours to group for UI:", dataState.filteredHours);
+    // }
   };
 
   // Group data by resource - per project, all the hours billed user. This gets pushed to filtered hours array that will be looped over to render UI
   const groupFilteredData = (arr) => {
+    // let grouped = {};
+    // arr.forEach((obj) => {
+    //   let fullName = obj.FullName;
+
+    //   if (!grouped[fullName]) {
+    //     grouped[fullName] = [];
+    //   }
+
+    //   grouped[fullName].push(obj);
+    // });
+    // return grouped;
+
     // Add Role, Rate and Amount fields as properties for user record object for Invoice workkflow
     let updatedArr = arr.map((record) => {
       return { ...record, Rate: 0, Role: "", Amount: 0 };
@@ -644,8 +550,7 @@ function NewInvoice(props) {
         return prevRec;
       }, {})
     );
-    // return consolidatedArr;
-    return { newArr: consolidatedArr, sourceArr: updatedArr };
+    return consolidatedArr;
   };
   // =====================================
   // =====================================
@@ -663,18 +568,6 @@ function NewInvoice(props) {
 
   const closeAlert = () => {
     alertMessage.current.close();
-  };
-
-  const dispatchCancelInvoice = () => {
-    // when user clicks cancel button on Invoice,
-
-    // reset invoice type state to empty string
-    props.resetInvoiceType("");
-    // reset state to initialState in order to reset the page
-    dispatchData({
-      type: "cancelInvoice",
-      payload: [],
-    });
   };
 
   return (
@@ -716,7 +609,7 @@ function NewInvoice(props) {
               <form
                 method="POST"
                 className="invoice-filter-form"
-                // onSubmit={(e) => checkFilters(e)}
+                onSubmit={(e) => checkFilters(e)}
               >
                 <fieldset className="invoice-filter--company">
                   <label htmlFor="company-selection">Company</label>
@@ -809,7 +702,7 @@ function NewInvoice(props) {
                     </div>
                   </div>
                 </fieldset>
-                {/* <input
+                <input
                   className="invoice--apply-filters-btn"
                   value="Apply Filters"
                   type="submit"
@@ -828,7 +721,7 @@ function NewInvoice(props) {
                         ? "none"
                         : "flex",
                   }}
-                /> */}
+                />
               </form>
               {/* END Date Range Filter Form */}
 
@@ -846,13 +739,11 @@ function NewInvoice(props) {
                     companyName={dataState.selectedCompanyName}
                     // sowId={dataState.selectedProjectSowId}
                     // projectName={dataState.selectedProjectName}
-                    hrsToServer={dataState.hrsSentToServer}
                     from={dataState.dateRangeFrom}
                     to={dataState.dateRangeTo}
                     filteredHours={dataState.filteredHours}
                     checkFilters={checkFilters}
                     updateFilteredHrsArr={dispatchUpdateToFilteredHrsArr}
-                    cancel={dispatchCancelInvoice}
                     // filterByProject={getRecordsPerProject}
                     // setDateRangeData={handleDispatchDateRangeData}
                   />
