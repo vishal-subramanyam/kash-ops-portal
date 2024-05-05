@@ -562,6 +562,18 @@ function NewInvoice(props) {
     });
   };
 
+  const dispatchCancelInvoice = () => {
+    // when user clicks cancel button on Invoice,
+
+    // reset invoice type state to empty string
+    props.resetInvoiceType("");
+    // reset state to initialState in order to reset the page
+    dispatchData({
+      type: "cancelInvoice",
+      payload: [],
+    });
+  };
+
   const alertMessageDisplay = (entry) => {
     return entry;
   };
@@ -736,6 +748,7 @@ function NewInvoice(props) {
                 <div className="new-invoice--from-timesheet-container">
                   <CreateTimesheetInvoice
                     // companyId={dataState.selectedCompanyId}
+                    cancel={dispatchCancelInvoice}
                     companyName={dataState.selectedCompanyName}
                     // sowId={dataState.selectedProjectSowId}
                     // projectName={dataState.selectedProjectName}
