@@ -57,6 +57,18 @@ function CreateTimesheetInvoice(props) {
     return newDateFormat;
   };
 
+  // update individual user's billed hours value at accordian level
+  const displayUserTotalBilledHrs = (i, j) => {
+    let stateHrsCopy = [...props.filteredHours];
+    let updatedRecordValue = stateHrsCopy[i].data[j];
+
+    let totalBilledHours = updatedRecordValue.data.reduce((acc, currRecord) => {
+      return acc + parseFloat(currRecord.TotalHours);
+    }, 0);
+
+    return totalBilledHours;
+  };
+
   return (
     <>
       <header>
@@ -112,7 +124,7 @@ function CreateTimesheetInvoice(props) {
 "
                             >
                               <p className="invoice--user-total-hrs-billed">
-                                0
+                                {displayUserTotalBilledHrs(i, j)}
                               </p>
                             </li>
                             <li
