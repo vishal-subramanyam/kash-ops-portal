@@ -569,6 +569,7 @@ function NewInvoice(props) {
   // =====================================
 
   const dispatchUpdateToFilteredHrsArr = (arr) => {
+    console.log("dispatch to clear filtered hrs array");
     dispatchData({
       type: "updateFilteredHrsArr",
       data: arr,

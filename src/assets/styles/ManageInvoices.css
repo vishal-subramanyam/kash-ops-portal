@@ -179,8 +179,16 @@ New Timesheet Invoice Workflow and Component Styles
 }
 
 .invoice--apply-filters-btn {
-  grid-column: 8/9;
-  grid-row: 3/4;
+  width: 100%;
+  font-size: 0.9rem;
+  border: unset;
+  border-radius: 5px;
+  background-color: #beeadf;
+  grid-column: 8 / 9;
+  grid-row: 3 / 4;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 1px 2px 5px hsla(0 0% 0%/ 0.4);
 }
 
 /* New TS Invoice Filter END */
@@ -257,10 +265,12 @@ New Timesheet Invoice Workflow and Component Styles
 }
 
 .invoice--user-record-totals-row {
-  grid-column: 4 / 8;
+  grid-column: 4 / 9;
   display: grid;
-  grid-template-columns: repeat(4, minmax(75px, 150px));
+  grid-template-columns: repeat(4, minmax(75px, 150px)) 50px;
   margin-bottom: 0;
+  justify-content: center;
+  align-items: center;
 }
 
 .invoice--user-records-container header {
@@ -398,6 +408,15 @@ New Timesheet Invoice Workflow and Component Styles
   padding: 0 0.5rem;
   width: 156px;
   max-width: 156px;
+}
+
+.invoice--spread-values-btn {
+  display: flex;
+  width: 100%;
+  font-size: 12px;
+  border-radius: 5px;
+  background-color: #beeadf;
+  box-shadow: 1px 2px 5px hsla(0 0% 0%/ 0.4);
 }
 
 /* ================================================================================

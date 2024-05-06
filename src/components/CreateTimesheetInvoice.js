@@ -2,14 +2,18 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/ManageInvoices.css";
-import AlertMessage from "../components/AlertMessage";
 
 function CreateTimesheetInvoice(props) {
+  let userRecordAmountTotal = useRef();
+  let [userRecordRole, setUserRecordRole] = useState("");
+  let [userRecordTotalAmount, setUserRecordTotalAmount] = useState(0);
+  let [userRecordTotalHrs, setUserRecordTotalHrs] = useState(0);
+
   // Apply delay/ debouncer? to wait a couple seconds before triggering dispatch to update filterHours Array in state
   const updateUserAllRecords = (i, j, propName, e) => {
     let stateHrsCopy = [...props.filteredHours];
     let updatedRecordValue = stateHrsCopy[i].data[j];
-    console.log(i, j, propName, e.target.value);
+    console.log("update all user record", i, j, propName, e.target.value);
     console.log(updatedRecordValue);
 
     // iterate all billed hours array to a project by an individual user to update their role property with input value
@@ -25,7 +29,7 @@ function CreateTimesheetInvoice(props) {
 
   // Apply delay/ debouncer? to wait a couple seconds before triggering dispatch to update filterHours Array in state
   const updateUserSingleRecord = (i, j, k, propName, e) => {
-    console.log(i, j, propName, e.target.value);
+    console.log("update user single record", i, j, propName, e.target.value);
     let stateHrsCopy = [...props.filteredHours];
     let updatedRecordValue = stateHrsCopy[i].data[j].data[k];
     updatedRecordValue[propName] = e.target.value;
@@ -57,7 +61,7 @@ function CreateTimesheetInvoice(props) {
     return newDateFormat;
   };
 
-  // update individual user's billed hours value at accordian level
+  // update individual user's total billed hours value at accordian level
   const displayUserTotalBilledHrs = (i, j) => {
     let stateHrsCopy = [...props.filteredHours];
     let updatedRecordValue = stateHrsCopy[i].data[j];
@@ -66,7 +70,48 @@ function CreateTimesheetInvoice(props) {
       return acc + parseFloat(currRecord.TotalHours);
     }, 0);
 
+    // return total billed hours to display at top level of user record accordian
     return totalBilledHours;
+  };
+
+  const updateUserRecordAmount = (i, j, hrs, e) => {
+    console.log(
+      "update user rate to set total amount",
+      i,
+      j,
+      hrs,
+      e.target.value
+    );
+
+    console.log(hrs * e.target.value);
+    let totalAmount = hrs * e.target.value;
+    setUserRecordTotalAmount(totalAmount);
+  };
+
+  // display the total amount - rate * hours - at top level of accordian for individual user records
+  const displayUserRecordTotalAmount = (total) => {
+    console.log(total);
+    return total;
+  };
+
+  // update overall rate values for individual user records
+  const displayUserOverallRate = (i, j, e) => {
+    let stateHrsCopy = [...props.filteredHours];
+    let updatedRecordValue = stateHrsCopy[i].data[j];
+    console.log(updatedRecordValue);
+    updatedRecordValue.data.map((record, k) => {
+      console.log(record);
+      // updateUserSingleRecord(i, j, k, "Rate", e);
+      return (record["Rate"] = parseFloat(e.target.value));
+    });
+
+    console.log(updatedRecordValue);
+    console.log(stateHrsCopy);
+    // call updateUserSingleRecord function to run update to single record Amount
+    // updateUserSingleRecord;
+
+    // update filteredHours array in state with prop value update
+    props.updateFilteredHrsArr(stateHrsCopy);
   };
 
   return (
@@ -114,9 +159,9 @@ function CreateTimesheetInvoice(props) {
                             <li className="invoice--user-record-totals-item invoice--user-record-set-all-roles-input">
                               <input
                                 type="text"
-                                onChange={(e) =>
-                                  updateUserAllRecords(i, j, "Role", e)
-                                }
+                                // onChange={(e) =>
+                                //   updateUserAllRecords(i, j, "Role", e)
+                                // }
                               />
                             </li>
                             <li
@@ -134,7 +179,16 @@ invoice--user-record-set-all-rates"
                               <span>$</span>
                               <input
                                 type="number"
-                                onChange={(e) => console.log(e.target)}
+                                min={0}
+                                onChange={(e) =>
+                                  // displayUserOverallRate(i, j, e)
+                                  updateUserRecordAmount(
+                                    i,
+                                    j,
+                                    displayUserTotalBilledHrs(i, j),
+                                    e
+                                  )
+                                }
                               />
                             </li>
                             <li
@@ -142,8 +196,16 @@ invoice--user-record-set-all-rates"
 "
                             >
                               <p className="invoice--user-total-billed-amount">
-                                $0
+                                $ {userRecordTotalAmount}
                               </p>
+                            </li>
+                            <li>
+                              <button
+                                className="invoice--spread-values-btn"
+                                onClick={(e) => console.log(e)}
+                              >
+                                Spread Values
+                              </button>
                             </li>
                           </ol>
                         </summary>
@@ -166,6 +228,7 @@ invoice--user-record-set-all-rates"
 
                           <ol className="invoice--user-record-details-container">
                             {userHrs.data.map((hrs, k) => {
+                              console.log(hrs);
                               return (
                                 <li key={k}>
                                   <ol className="invoice--user-record-details">
@@ -197,6 +260,7 @@ invoice--user-record-set-all-rates"
                                         id="invoice--user-rate-input"
                                         type="number"
                                         min={0}
+                                        defaultValue={hrs.Rate}
                                         onChange={(e) =>
                                           updateUserSingleRecord(
                                             i,
@@ -206,7 +270,6 @@ invoice--user-record-set-all-rates"
                                             e
                                           )
                                         }
-                                        defaultValue={hrs.Rate}
                                       />
                                     </li>
                                     <li>$ {hrs.Amount.toFixed(2)}</li>
