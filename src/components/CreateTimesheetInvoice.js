@@ -5,13 +5,22 @@ import "../assets/styles/ManageInvoices.css";
 import AlertMessage from "../components/AlertMessage";
 
 function CreateTimesheetInvoice(props) {
-  let alertMessage = useRef();
-  let [message, setMessage] = useState("");
-
   // Apply delay/ debouncer? to wait a couple seconds before triggering dispatch to update filterHours Array in state
   const updateUserAllRecords = (i, j, propName, e) => {
+    let stateHrsCopy = [...props.filteredHours];
+    let updatedRecordValue = stateHrsCopy[i].data[j];
     console.log(i, j, propName, e.target.value);
-    let updatedRecords = [];
+    console.log(updatedRecordValue);
+
+    // iterate all billed hours array to a project by an individual user to update their role property with input value
+    updatedRecordValue.data.map((record) => {
+      console.log(record);
+      return (record[propName] = e.target.value);
+    });
+
+    console.log(stateHrsCopy);
+    // update filteredHours array in state with prop value update
+    props.updateFilteredHrsArr(stateHrsCopy);
   };
 
   // Apply delay/ debouncer? to wait a couple seconds before triggering dispatch to update filterHours Array in state
@@ -48,13 +57,6 @@ function CreateTimesheetInvoice(props) {
     return newDateFormat;
   };
 
-  // const alertMessageDisplay = (entry) => {
-  //   return entry;
-  // };
-
-  // const closeAlert = () => {
-  //   alertMessage.current.close();
-  // };
   return (
     <>
       <header>
@@ -100,7 +102,7 @@ function CreateTimesheetInvoice(props) {
                             <li className="invoice--user-record-totals-item invoice--user-record-set-all-roles-input">
                               <input
                                 type="text"
-                                onBlur={(e) =>
+                                onChange={(e) =>
                                   updateUserAllRecords(i, j, "Role", e)
                                 }
                               />

@@ -125,6 +125,19 @@ function dataReducer(state, action) {
         dataPerDateRangeFilter: action.data,
       };
     }
+    case "cancelInvoice": {
+      // clear state values but keep data from initial fetch from companies, projects and company admin tables
+      return {
+        ...state,
+        selectedCompanyId: "",
+        selectedCompanyName: "",
+        selectedProjectSowId: "",
+        selectedProjectName: "",
+        filteredHours: [],
+        dateRangeFrom: "",
+        dateRangeTo: "",
+      };
+    }
     default: {
       throw Error("Unknown action: " + action.type);
     }
