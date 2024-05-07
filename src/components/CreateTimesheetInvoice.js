@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/ManageInvoices.css";
+import UsersDetailsByProject from "./UsersDetailsByProject";
 
 function CreateTimesheetInvoice(props) {
   let userRecordAmountTotal = useRef();
@@ -74,20 +75,6 @@ function CreateTimesheetInvoice(props) {
     return totalBilledHours;
   };
 
-  const updateUserRecordAmount = (i, j, hrs, e) => {
-    console.log(
-      "update user rate to set total amount",
-      i,
-      j,
-      hrs,
-      e.target.value
-    );
-
-    console.log(hrs * e.target.value);
-    let totalAmount = hrs * e.target.value;
-    setUserRecordTotalAmount(totalAmount);
-  };
-
   // display the total amount - rate * hours - at top level of accordian for individual user records
   const displayUserRecordTotalAmount = (total) => {
     console.log(total);
@@ -151,138 +138,14 @@ function CreateTimesheetInvoice(props) {
                     /* This is the accordian that will show more details when clicked and expanded */
 
                     return (
-                      <details key={j}>
-                        <summary>
-                          <h6>{userHrs.name}</h6>
-                          {/* set to span several columns to match UI design*/}
-                          <ol className="invoice--user-record-totals-row">
-                            <li className="invoice--user-record-totals-item invoice--user-record-set-all-roles-input">
-                              <input
-                                type="text"
-                                // onChange={(e) =>
-                                //   updateUserAllRecords(i, j, "Role", e)
-                                // }
-                              />
-                            </li>
-                            <li
-                              className="invoice--user-record-totals-item
-"
-                            >
-                              <p className="invoice--user-total-hrs-billed">
-                                {displayUserTotalBilledHrs(i, j)}
-                              </p>
-                            </li>
-                            <li
-                              className="invoice--user-record-totals-item
-invoice--user-record-set-all-rates"
-                            >
-                              <span>$</span>
-                              <input
-                                type="number"
-                                min={0}
-                                onChange={(e) =>
-                                  // displayUserOverallRate(i, j, e)
-                                  updateUserRecordAmount(
-                                    i,
-                                    j,
-                                    displayUserTotalBilledHrs(i, j),
-                                    e
-                                  )
-                                }
-                              />
-                            </li>
-                            <li
-                              className="invoice--user-record-totals-item
-"
-                            >
-                              <p className="invoice--user-total-billed-amount">
-                                $ {userRecordTotalAmount}
-                              </p>
-                            </li>
-                            <li>
-                              <button
-                                className="invoice--spread-values-btn"
-                                onClick={(e) => console.log(e)}
-                              >
-                                Spread Values
-                              </button>
-                            </li>
-                          </ol>
-                        </summary>
-                        <div className="invoice--user-records-container">
-                          <header>
-                            <ol>
-                              <li>Name</li>
-                              <li>Work Area</li>
-                              <li>Task</li>
-                              <li>Role</li>
-                              <li>Hours</li>
-                              <li>
-                                Rate <span>(/hr)</span>
-                              </li>
-                              <li>Amount</li>
-                            </ol>
-                          </header>
-                          {/* List of resource's name and billed hours per task area for specific project */}
-                          {/* List of billed hours per Task */}
-
-                          <ol className="invoice--user-record-details-container">
-                            {userHrs.data.map((hrs, k) => {
-                              console.log(hrs);
-                              return (
-                                <li key={k}>
-                                  <ol className="invoice--user-record-details">
-                                    <li>{hrs.FullName}</li>
-                                    <li>{hrs.SubAssignment}</li>
-                                    <li>{hrs.SubAssignmentSegment1}</li>
-                                    <li>
-                                      <input
-                                        id="invoice--user-role-input"
-                                        type="text"
-                                        onChange={(e) =>
-                                          updateUserSingleRecord(
-                                            i,
-                                            j,
-                                            k,
-                                            "Role",
-                                            e
-                                          )
-                                        }
-                                        defaultValue={hrs.Role}
-                                      />
-                                    </li>
-                                    <li id="invoice--user-record-hrs">
-                                      {hrs.TotalHours}
-                                    </li>
-                                    <li>
-                                      <span>$</span>
-                                      <input
-                                        id="invoice--user-rate-input"
-                                        type="number"
-                                        min={0}
-                                        defaultValue={hrs.Rate}
-                                        onChange={(e) =>
-                                          updateUserSingleRecord(
-                                            i,
-                                            j,
-                                            k,
-                                            "Rate",
-                                            e
-                                          )
-                                        }
-                                      />
-                                    </li>
-                                    <li>$ {hrs.Amount.toFixed(2)}</li>
-                                    <li>
-                                      <FontAwesomeIcon icon={faCircleXmark} />
-                                    </li>
-                                  </ol>
-                                </li>
-                              );
-                            })}
-                          </ol>
-                        </div>
-                      </details>
+                      <UsersDetailsByProject
+                        key={j}
+                        i={i}
+                        j={j}
+                        userHrs={userHrs}
+                        updateUserSingleRecord={updateUserSingleRecord}
+                        displayUserTotalBilledHrs={displayUserTotalBilledHrs}
+                      />
                     );
                   })}
                 </section>
