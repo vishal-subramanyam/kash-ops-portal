@@ -68,7 +68,12 @@ invoice--user-record-set-all-rates"
             <button
               className="invoice--spread-values-btn"
               onClick={() =>
-                props.updateUserAllRecords(userRecordRole, userRecordRate)
+                props.updateUserAllRecords(
+                  props.i,
+                  props.j,
+                  userRecordRole,
+                  userRecordRate
+                )
               }
             >
               Spread Values
