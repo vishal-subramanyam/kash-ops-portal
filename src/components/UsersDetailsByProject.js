@@ -9,14 +9,20 @@ function UsersDetailsByProject(props) {
   let [userRecordTotalHrs, setUserRecordTotalHrs] = useState(
     props.displayUserTotalBilledHrs(props.i, props.j)
   );
+  let [userRecordRate, setUserRecordRate] = useState(0);
 
   const updateUserRecordAmount = (e) => {
-    console.log("update user rate to set total amount", e.target.value);
-    console.log(userRecordTotalHrs);
+    // console.log("update user rate to set total amount", e.target.value);
+    // console.log(userRecordTotalHrs);
 
-    console.log(userRecordTotalHrs * e.target.value);
+    // console.log(userRecordTotalHrs * e.target.value);
     let totalAmount = userRecordTotalHrs * e.target.value;
     setUserRecordTotalAmount(totalAmount);
+  };
+
+  const updateUserRole = (e) => {
+    console.log(e.target.value);
+    setUserRecordRole(e.target.value);
   };
 
   return (
@@ -26,12 +32,7 @@ function UsersDetailsByProject(props) {
         {/* set to span several columns to match UI design*/}
         <ol className="invoice--user-record-totals-row">
           <li className="invoice--user-record-totals-item invoice--user-record-set-all-roles-input">
-            <input
-              type="text"
-              // onChange={(e) =>
-              //   updateUserAllRecords(i, j, "Role", e)
-              // }
-            />
+            <input type="text" onChange={(e) => updateUserRole(e)} />
           </li>
           <li
             className="invoice--user-record-totals-item
@@ -66,7 +67,9 @@ invoice--user-record-set-all-rates"
           <li>
             <button
               className="invoice--spread-values-btn"
-              onClick={(e) => console.log(e)}
+              onClick={() =>
+                props.updateUserAllRecords(userRecordRole, userRecordRate)
+              }
             >
               Spread Values
             </button>

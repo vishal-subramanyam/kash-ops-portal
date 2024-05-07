@@ -143,6 +143,7 @@ function CreateTimesheetInvoice(props) {
                         i={i}
                         j={j}
                         userHrs={userHrs}
+                        updateUserAllRecords={updateUserAllRecords}
                         updateUserSingleRecord={updateUserSingleRecord}
                         displayUserTotalBilledHrs={displayUserTotalBilledHrs}
                       />
