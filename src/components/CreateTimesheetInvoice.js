@@ -11,19 +11,23 @@ function CreateTimesheetInvoice(props) {
   let [userRecordTotalHrs, setUserRecordTotalHrs] = useState(0);
 
   // Apply delay/ debouncer? to wait a couple seconds before triggering dispatch to update filterHours Array in state
-  const updateUserAllRecords = (i, j, propName, e) => {
+  const updateUserAllRecords = (i, j, role, rate) => {
     let stateHrsCopy = [...props.filteredHours];
     let updatedRecordValue = stateHrsCopy[i].data[j];
-    console.log("update all user record", i, j, propName, e.target.value);
+    console.log("update all user record", i, j, role, rate);
     console.log(updatedRecordValue);
 
     // iterate all billed hours array to a project by an individual user to update their role property with input value
     updatedRecordValue.data.map((record) => {
-      console.log(record);
-      return (record[propName] = e.target.value);
+      console.log(record["Rate"]);
+      record["Role"] = role;
+      record["Rate"] = parseFloat(rate);
+
+      if (record["Rate"]) {
+        record["Amount"] = rate * record["TotalHours"];
+      }
     });
 
-    console.log(stateHrsCopy);
     // update filteredHours array in state with prop value update
     props.updateFilteredHrsArr(stateHrsCopy);
   };

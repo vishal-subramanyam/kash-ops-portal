@@ -16,6 +16,7 @@ function UsersDetailsByProject(props) {
     // console.log(userRecordTotalHrs);
 
     // console.log(userRecordTotalHrs * e.target.value);
+    setUserRecordRate(e.target.value);
     let totalAmount = userRecordTotalHrs * e.target.value;
     setUserRecordTotalAmount(totalAmount);
   };
@@ -129,7 +130,7 @@ invoice--user-record-set-all-rates"
                       id="invoice--user-rate-input"
                       type="number"
                       min={0}
-                      defaultValue={hrs.Rate}
+                      value={hrs.Rate}
                       onChange={(e) =>
                         props.updateUserSingleRecord(
                           props.i,
