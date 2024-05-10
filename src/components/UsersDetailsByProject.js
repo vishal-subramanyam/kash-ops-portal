@@ -26,6 +26,71 @@ function UsersDetailsByProject(props) {
     setUserRecordRole(e.target.value);
   };
 
+  // Apply delay/ debouncer? to wait a couple seconds before triggering dispatch to update filterHours Array in state
+  const updateUserAllRecords = (i, j, role, rate) => {
+    let stateHrsCopy = [...props.filteredHours];
+    let updatedRecordValue = stateHrsCopy[i].data[j];
+    console.log("update all user record", i, j, role, rate);
+    console.log(updatedRecordValue);
+
+    // iterate all billed hours array to a project by an individual user to update their role property with input value
+    updatedRecordValue.data.map((record) => {
+      console.log(record["Rate"]);
+      record["Role"] = role;
+      record["Rate"] = parseFloat(rate);
+
+      if (record["Rate"]) {
+        record["Amount"] = rate * record["TotalHours"];
+      }
+    });
+    props.setHrsToServer(stateHrsCopy);
+
+    // run function to iterate user billed data in a project to account for rate update in order to render update in total amount in accordian
+    let updatedTotalAmount = updatedRecordValue.data.reduce((acc, curr) => {
+      return acc + curr.Amount;
+    }, 0);
+    setUserRecordTotalAmount(updatedTotalAmount);
+
+    // send arrray to calculate total amount for individual project
+    props.individualProjectSubTotal(stateHrsCopy, props.i);
+    // update filteredHours array in state with prop value update
+    props.updateFilteredHrsArr(stateHrsCopy);
+  };
+
+  // Apply delay/ debouncer? to wait a couple seconds before triggering dispatch to update filterHours Array in state
+  const updateUserSingleRecord = (i, j, k, propName, e) => {
+    console.log("update user single record", i, j, propName, e.target.value);
+    let stateHrsCopy = [...props.filteredHours];
+    let updatedRecordValue = stateHrsCopy[i].data[j].data[k];
+    updatedRecordValue[propName] = e.target.value;
+    // single user record object
+    console.log(updatedRecordValue);
+    // updated hours array to send to dispatch to update filteredHours array
+    console.log(stateHrsCopy);
+
+    // Calculate Amount field - individual user record Rate * Hrs
+    if (propName === "Rate") {
+      updatedRecordValue["Amount"] =
+        e.target.value * updatedRecordValue["TotalHours"];
+    }
+
+    // run function to iterate user billed data in a project to account for rate update in order to render update in total amount in accordian
+    let updatedTotalAmount = stateHrsCopy[i].data[j].data.reduce(
+      (acc, curr) => {
+        return acc + curr.Amount;
+      },
+      0
+    );
+    setUserRecordTotalAmount(updatedTotalAmount);
+
+    props.setHrsToServer(stateHrsCopy);
+
+    // send arrray to calculate total amount for individual project
+    props.individualProjectSubTotal(stateHrsCopy, props.i);
+    // update filteredHours array in state with prop value update
+    props.updateFilteredHrsArr(stateHrsCopy);
+  };
+
   return (
     <details>
       <summary>
@@ -69,7 +134,7 @@ invoice--user-record-set-all-rates"
             <button
               className="invoice--spread-values-btn"
               onClick={() =>
-                props.updateUserAllRecords(
+                updateUserAllRecords(
                   props.i,
                   props.j,
                   userRecordRole,
@@ -112,13 +177,7 @@ invoice--user-record-set-all-rates"
                       id="invoice--user-role-input"
                       type="text"
                       onChange={(e) =>
-                        props.updateUserSingleRecord(
-                          props.i,
-                          props.j,
-                          k,
-                          "Role",
-                          e
-                        )
+                        updateUserSingleRecord(props.i, props.j, k, "Role", e)
                       }
                       defaultValue={hrs.Role}
                     />
@@ -132,13 +191,7 @@ invoice--user-record-set-all-rates"
                       min={0}
                       value={hrs.Rate}
                       onChange={(e) =>
-                        props.updateUserSingleRecord(
-                          props.i,
-                          props.j,
-                          k,
-                          "Rate",
-                          e
-                        )
+                        updateUserSingleRecord(props.i, props.j, k, "Rate", e)
                       }
                     />
                   </li>

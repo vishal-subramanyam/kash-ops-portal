@@ -125,6 +125,18 @@ function dataReducer(state, action) {
         dataPerDateRangeFilter: action.data,
       };
     }
+    case "updateSubTotalArr": {
+      return {
+        ...state,
+        subTotals: action.data,
+      };
+    }
+    case "updateInvoiceTotal": {
+      return {
+        ...state,
+        invoiceTotalAmount: action.data,
+      };
+    }
     case "cancelInvoice": {
       // clear state values but keep data from initial fetch from companies, projects and company admin tables
       return {
@@ -596,6 +608,20 @@ function NewInvoice(props) {
     alertMessage.current.close();
   };
 
+  // update dataState to track invoice total amount and the sub total arr
+  const updateSubTotalArr = (arg) => {
+    dispatchData({
+      type: "updateSubTotalArr",
+      data: arg,
+    });
+  };
+  const updateInvoiceTotal = (arg) => {
+    dispatchData({
+      type: "updateInvoiceTotal",
+      data: arg,
+    });
+  };
+
   return (
     <>
       <AlertMessage ref={alertMessage} close={closeAlert} message={message} />
@@ -771,6 +797,10 @@ function NewInvoice(props) {
                     filteredHours={dataState.filteredHours}
                     checkFilters={checkFilters}
                     updateFilteredHrsArr={dispatchUpdateToFilteredHrsArr}
+                    showModifyInvoice={props.showModifyInvoice}
+                    saveHrsToServer={props.saveHrsToServer}
+                    updateSubTotalArr={updateSubTotalArr}
+                    updateInvoiceTotal={updateInvoiceTotal}
                     // filterByProject={getRecordsPerProject}
                     // setDateRangeData={handleDispatchDateRangeData}
                   />

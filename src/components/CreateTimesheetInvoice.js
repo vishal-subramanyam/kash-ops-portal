@@ -3,55 +3,70 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/ManageInvoices.css";
 import UsersDetailsByProject from "./UsersDetailsByProject";
+import IndividualProjectSubTotal from "./IndividualProjectSubTotal";
 
 function CreateTimesheetInvoice(props) {
-  let userRecordAmountTotal = useRef();
-  let [userRecordRole, setUserRecordRole] = useState("");
-  let [userRecordTotalAmount, setUserRecordTotalAmount] = useState(0);
-  let [userRecordTotalHrs, setUserRecordTotalHrs] = useState(0);
+  let [hrsToServer, setHrsToServer] = useState([]);
+  let [eachProjectSubTotal, setProjectSubTotal] = useState({});
+  let [invoiceDueDate, setInvoiceDueDate] = useState("");
+  let [invoiceTotal, setInvoiceTotal] = useState(0);
+  // // Apply delay/ debouncer? to wait a couple seconds before triggering dispatch to update filterHours Array in state
+  // const updateUserAllRecords = (i, j, role, rate) => {
+  //   let stateHrsCopy = [...props.filteredHours];
+  //   let updatedRecordValue = stateHrsCopy[i].data[j];
+  //   console.log("update all user record", i, j, role, rate);
+  //   console.log(updatedRecordValue);
 
-  // Apply delay/ debouncer? to wait a couple seconds before triggering dispatch to update filterHours Array in state
-  const updateUserAllRecords = (i, j, role, rate) => {
-    let stateHrsCopy = [...props.filteredHours];
-    let updatedRecordValue = stateHrsCopy[i].data[j];
-    console.log("update all user record", i, j, role, rate);
-    console.log(updatedRecordValue);
+  //   // iterate all billed hours array to a project by an individual user to update their role property with input value
+  //   updatedRecordValue.data.map((record) => {
+  //     console.log(record["Rate"]);
+  //     record["Role"] = role;
+  //     record["Rate"] = parseFloat(rate);
 
-    // iterate all billed hours array to a project by an individual user to update their role property with input value
-    updatedRecordValue.data.map((record) => {
-      console.log(record["Rate"]);
-      record["Role"] = role;
-      record["Rate"] = parseFloat(rate);
+  //     if (record["Rate"]) {
+  //       record["Amount"] = rate * record["TotalHours"];
+  //     }
+  //   });
+  //   setHrsToServer(stateHrsCopy);
 
-      if (record["Rate"]) {
-        record["Amount"] = rate * record["TotalHours"];
-      }
-    });
+  //   // send arrray to calculate total amount for individual project
+  //   individualProjectSubTotal(stateHrsCopy);
+  //   // update filteredHours array in state with prop value update
+  //   props.updateFilteredHrsArr(stateHrsCopy);
+  // };
 
-    // update filteredHours array in state with prop value update
-    props.updateFilteredHrsArr(stateHrsCopy);
-  };
+  // // Apply delay/ debouncer? to wait a couple seconds before triggering dispatch to update filterHours Array in state
+  // const updateUserSingleRecord = (i, j, k, propName, e) => {
+  //   console.log("update user single record", i, j, propName, e.target.value);
+  //   let stateHrsCopy = [...props.filteredHours];
+  //   let updatedRecordValue = stateHrsCopy[i].data[j].data[k];
+  //   updatedRecordValue[propName] = e.target.value;
+  //   // single user record object
+  //   console.log(updatedRecordValue);
+  //   // updated hours array to send to dispatch to update filteredHours array
+  //   console.log(stateHrsCopy);
 
-  // Apply delay/ debouncer? to wait a couple seconds before triggering dispatch to update filterHours Array in state
-  const updateUserSingleRecord = (i, j, k, propName, e) => {
-    console.log("update user single record", i, j, propName, e.target.value);
-    let stateHrsCopy = [...props.filteredHours];
-    let updatedRecordValue = stateHrsCopy[i].data[j].data[k];
-    updatedRecordValue[propName] = e.target.value;
-    // single user record object
-    console.log(updatedRecordValue);
-    // updated hours array to send to dispatch to update filteredHours array
-    console.log(stateHrsCopy);
+  //   // Calculate Amount field - individual user record Rate * Hrs
+  //   if (propName === "Rate") {
+  //     updatedRecordValue["Amount"] =
+  //       e.target.value * updatedRecordValue["TotalHours"];
+  //   }
 
-    // Calculate Amount field - individual user record Rate * Hrs
-    if (propName === "Rate") {
-      updatedRecordValue["Amount"] =
-        e.target.value * updatedRecordValue["TotalHours"];
-    }
+  //   // run function to iterate user billed data in a project to account for rate update in order to render update in total amount in accordian
+  //   let updatedTotalAmount = stateHrsCopy[i].data[j].data.reduce(
+  //     (acc, curr) => {
+  //       return acc + curr.Amount;
+  //     },
+  //     0
+  //   );
+  //   console.log(updatedTotalAmount);
+  //   setHrsToServer(stateHrsCopy);
 
-    // update filteredHours array in state with prop value update
-    props.updateFilteredHrsArr(stateHrsCopy);
-  };
+  //   // send arrray to calculate total amount for individual project
+  //   individualProjectSubTotal(stateHrsCopy);
+  //   // update filteredHours array in state with prop value update
+  //   props.updateFilteredHrsArr(stateHrsCopy);
+  // };
 
   // Convert the from and to date to read mm/dd/yyy instead of how it comes from the DB: yyyy-mm-dd
   const convertDateFormat = (date) => {
@@ -105,6 +120,61 @@ function CreateTimesheetInvoice(props) {
     props.updateFilteredHrsArr(stateHrsCopy);
   };
 
+  // send state update on ManageInvoices component to track hours for invoice and other pertinent data
+  const hoursToServer = (hrsToServer, subTotals, total) => {
+    console.log("create invoice btn clicked", hrsToServer, subTotals, total);
+    props.saveHrsToServer(hrsToServer, subTotals, total);
+    props.showModifyInvoice("modifyTab");
+  };
+
+  const individualProjectSubTotal = (arr, i) => {
+    // need to track specific project the subtotal is being applied
+    console.log(arr);
+    console.log(i);
+    let projectHrs = eachProjectSubTotal;
+
+    // iterate the billed hr array for each user per project and calculate each user's total amount and store in new array
+    let totalHrsPerProjectArr = arr[i].data.map((proj, j) => {
+      console.log(proj.data);
+      return proj.data.reduce((acc, curr) => {
+        return acc + curr.Amount;
+      }, 0);
+    });
+
+    // get total Amount/ project subtotal for all user billed hours
+    let totalHrsPerProject = totalHrsPerProjectArr.reduce((acc, curr) => {
+      return acc + curr;
+    }, 0);
+    console.log(i, totalHrsPerProject);
+
+    if (!projectHrs[i]) {
+      projectHrs[i] = 0;
+    }
+    projectHrs[i] = totalHrsPerProject;
+    // setProjectSubTotal((prev) => [
+    //   ...prev,
+    //   { i: `${prev + totalHrsPerProject}` },
+    // ]);
+    console.log(projectHrs);
+    updateInvoiceTotal(projectHrs);
+
+    // dispatch to track the sub totals for the multiple projects
+    props.updateSubTotalArr(projectHrs);
+
+    // setProjectSubTotal((prev) => [...prev, { projectHrs }]);
+  };
+
+  const updateInvoiceTotal = (hrs) => {
+    let totalsArr = Object.values(hrs);
+    let total = totalsArr.reduce((acc, cur) => {
+      return acc + cur;
+    }, 0);
+    setInvoiceTotal(total);
+
+    // dispatch to track total of all projects
+    props.updateInvoiceTotal(total);
+  };
+
   return (
     <>
       <header>
@@ -121,53 +191,44 @@ function CreateTimesheetInvoice(props) {
       {/* The section below is the container for the various company projects and their corresponding billed hours */}
       <section className="invoice-company-projects-container">
         {/* seperate each section below by project */}
+        {props.filteredHours.map((rec, i) => {
+          console.log("Individual Project in filteredHours state array:", rec);
+          return (
+            <section key={i} className="invoice-company-project">
+              <h6 className="invoice--project-description">
+                {rec.projectName}
+                <span>({rec.projectSowId})</span>
+              </h6>
+              <section className="invoice-details-by-resource">
+                {rec.data.map((userHrs, j) => {
+                  /* This is the accordian that will show more details when clicked and expanded */
+                  return (
+                    <UsersDetailsByProject
+                      key={j}
+                      i={i}
+                      j={j}
+                      userHrs={userHrs}
+                      // updateUserAllRecords={updateUserAllRecords}
+                      // updateUserSingleRecord={updateUserSingleRecord}
 
-        {
-          // console.log(
-          //   "state array for data display on UI")
-          props.filteredHours.map((rec, i) => {
-            console.log(
-              "Individual Project in filteredHours state array:",
-              rec
-            );
-            return (
-              <section key={i} className="invoice-company-project">
-                <h6 className="invoice--project-description">
-                  {rec.projectName}
-                  <span>({rec.projectSowId})</span>
-                </h6>
-
-                <section className="invoice-details-by-resource">
-                  {rec.data.map((userHrs, j) => {
-                    /* This is the accordian that will show more details when clicked and expanded */
-                    return (
-                      <UsersDetailsByProject
-                        key={j}
-                        i={i}
-                        j={j}
-                        userHrs={userHrs}
-                        updateUserAllRecords={updateUserAllRecords}
-                        updateUserSingleRecord={updateUserSingleRecord}
-                        displayUserTotalBilledHrs={displayUserTotalBilledHrs}
-                      />
-                    );
-                  })}
-                </section>
-
-                <section className="invoice--project-sub-total">
-                  <ol>
-                    <li>PROJECT SUBTOTAL</li>
-                    <li>
-                      {rec.projectName}
-                      <span>({rec.projectSowId})</span>
-                    </li>
-                    <li>$0</li>
-                  </ol>
-                </section>
+                      filteredHours={props.filteredHours}
+                      displayUserTotalBilledHrs={displayUserTotalBilledHrs}
+                      setHrsToServer={setHrsToServer}
+                      individualProjectSubTotal={individualProjectSubTotal}
+                      updateFilteredHrsArr={props.updateFilteredHrsArr}
+                    />
+                  );
+                })}
               </section>
-            );
-          })
-        }
+              <IndividualProjectSubTotal
+                i={i} // current project index from top level map function
+                name={rec.projectName}
+                sowId={rec.projectSowId}
+                subTotal={eachProjectSubTotal}
+              />
+            </section>
+          );
+        })}
 
         <section className="invoice--projects-total-amount">
           <ol>
@@ -175,7 +236,7 @@ function CreateTimesheetInvoice(props) {
               <h6>Invoice Total:</h6>
             </li>
             <li>
-              <p>$0</p>
+              <p>$ {invoiceTotal}</p>
             </li>
           </ol>
         </section>
@@ -183,7 +244,9 @@ function CreateTimesheetInvoice(props) {
         <section className="invoice--btn-container">
           <button
             className="invoice--create-btn"
-            onClick={() => console.log(props.hrsToServer)}
+            onClick={() =>
+              hoursToServer(hrsToServer, eachProjectSubTotal, invoiceTotal)
+            }
           >
             Create Invoice
           </button>
