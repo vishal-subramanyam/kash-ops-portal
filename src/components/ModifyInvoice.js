@@ -4,10 +4,10 @@ import "../assets/styles/ManageInvoices.css";
 function ModifyInvoice(props) {
   console.log(props.hrsToServer["hrs"]);
   return (
-    <section className="ModifyInvoice--modify-invoice-tab-content">
+    <section className="ManageInvoices--modify-invoice-tab-content">
       <section className="Invoice-pdf--container">
         <header>
-          <section>
+          <section className="Invoice-pdf--heading">
             <h1>Invoice</h1>
             <h5>KASH Tech, LLC</h5>
           </section>
@@ -15,46 +15,49 @@ function ModifyInvoice(props) {
             <section className="Invoice-header-left">
               <ol>
                 <li className="Invoice-num">
-                  <p>Invoice #</p> <p>ABC123</p>
+                  <p>Invoice #</p> <p className="Invoice-detail">ABC123</p>
                 </li>
                 <li className="Invoice-date">
-                  <p>Invoice Date</p> <p>05/01/2024</p>
+                  <p>Invoice Date</p>{" "}
+                  <p className="Invoice-detail">05/01/2024</p>
                 </li>
                 <li className="Invoice-period">
                   <p>Invoice Period</p>
                   <div>
-                    <p>01/01/2024 - 05/01/2024</p>
+                    <p className="Invoice-detail">01/01/2024 - 05/01/2024</p>
                   </div>
                 </li>
                 <li className="Invoice-due-date">
-                  <p>Due Date</p> <p>05/10/2024</p>
+                  <p>Due Date</p> <p className="Invoice-detail">05/10/2024</p>
                 </li>
               </ol>
             </section>
             <section className="Invoice-header-right">
-              <h6>ATTN:</h6>
-              <ol>
-                <li>John Smith</li>
-                <li>
-                  <b>Sample Company</b>
-                </li>
-                <li>123 Sample Drive</li>
-                <li>Suite 587</li>
-                <li>Columbus, OH 43081</li>
-                <li>564-854-4297</li>
-              </ol>
+              <section className="Invoice-pdf--attn">
+                <h6>ATTN:</h6>
+                <ol>
+                  <li>John Smith</li>
+                  <li>
+                    <b>Sample Company</b>
+                  </li>
+                  <li>123 Sample Drive</li>
+                  <li>Suite 587</li>
+                  <li>Columbus, OH 43081</li>
+                  <li>564-854-4297</li>
+                </ol>
+              </section>
             </section>
           </section>
         </header>
         <main className="Invoice-pdf--project-data-container">
           <ol className="Invoice-pdf--project-details">
             {/* map over props.hrsToServer["hrs"]*/}
-            <li className="Inboice-pdf--individual-project">
-              <header>
-                Project: <span></span>
+            <li className="Invoice-pdf--individual-project">
+              <header className="Invoice-pdf--project-name">
+                Project: <span>Operations Development</span>
               </header>
               <section className="Invoice-pdf--project-hrs">
-                <header>
+                <header className="Invoice-pdf--project-hrs-header">
                   <ol>
                     <li>Name</li>
                     <li>Role</li>
@@ -66,18 +69,18 @@ function ModifyInvoice(props) {
                   </ol>
                 </header>
                 {/* iterate over the hrs data array from  props.hrsToServer["hrs"] */}
-                <ol>
+                <ol className="Invoice-pdf--project-hrs-details">
                   <li>
-                    <ol>
+                    <ol className="Invoice-pdf--project-hrs-record">
                       <li>Alex Gardner</li>
                       <li>Bi Developer</li>
                       <li>164.50</li>
                       <li>$50</li>
-                      <li>$3250.00</li>{" "}
+                      <li>$3250.00</li>
                     </ol>
                   </li>
                   <li>
-                    <ol>
+                    <ol className="Invoice-pdf--project-hrs-record">
                       <li>Garrett Anderson</li>
                       <li>Web Developer</li>
                       <li>65</li>
