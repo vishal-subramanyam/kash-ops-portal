@@ -419,6 +419,10 @@ New Timesheet Invoice Workflow and Component Styles
   box-shadow: 1px 2px 5px hsla(0 0% 0%/ 0.4);
 }
 
+.invoice--tx-rt-due-date-inputs input {
+  border: 2px solid #ffc83c;
+}
+
 /* ================================================================================
 Modify Invoice PDF UI
 =================================================================================== */
@@ -456,6 +460,10 @@ Modify Invoice PDF UI
   display: flex;
   justify-content: space-between;
   font-size: 0.75rem;
+}
+
+.Invoice-pdf--attn {
+  width: 50%;
 }
 
 .Invoice-header-right {
@@ -508,12 +516,12 @@ Modify Invoice PDF UI
 .Invoice-pdf--project-hrs-header ol {
   font-weight: bold;
   display: grid;
-  grid-template-columns: repeat(5, minmax(75px, 150px));
+  grid-template-columns: repeat(5, minmax(75px, 250px));
 }
 
 .Invoice-pdf--project-hrs-record {
   display: grid;
-  grid-template-columns: repeat(5, minmax(75px, 150px));
+  grid-template-columns: repeat(5, minmax(75px, 250px));
 }
 
 .Invoice-pdf--project-hrs-record li {

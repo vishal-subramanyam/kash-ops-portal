@@ -241,6 +241,18 @@ function CreateTimesheetInvoice(props) {
           </ol>
         </section>
 
+        {/* save due date and tax rate on state of createtimesheetinvoice component to pass as args with create btn below */}
+        <section className="invoice--tx-rt-due-date-inputs">
+          <div>
+            <label htmlFor="invoice--due-date">Due Date</label>
+            <input name="invoice--due-date" type="date"></input>
+          </div>
+          <div>
+            <label htmlFor="invoice--tax-rate">Tax Rate</label>
+            <input name="invoice--tax-rate" type="number" min={0}></input>
+          </div>
+        </section>
+
         <section className="invoice--btn-container">
           <button
             className="invoice--create-btn"
