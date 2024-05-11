@@ -798,7 +798,7 @@ function NewInvoice(props) {
                     checkFilters={checkFilters}
                     updateFilteredHrsArr={dispatchUpdateToFilteredHrsArr}
                     showModifyInvoice={props.showModifyInvoice}
-                    saveHrsToServer={props.saveHrsToServer}
+                    saveDataToServer={props.saveDataToServer}
                     updateSubTotalArr={updateSubTotalArr}
                     updateInvoiceTotal={updateInvoiceTotal}
                     // filterByProject={getRecordsPerProject}

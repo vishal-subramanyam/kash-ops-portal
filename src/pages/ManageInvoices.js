@@ -9,7 +9,7 @@ import NewInvoiceTypeModal from "../components/NewInvoiceTypeModal";
 function ManageInvoices(props) {
   let chooseInvoiceTypeModal = useRef("");
   let [newInvoiceType, setNewInvoiceType] = useState("");
-  let [hrsToServer, setHrsToServer] = useState({});
+  let [dataToServer, setDataToServer] = useState({});
   let [tabActive, setTabActive] = useState("newTab");
   let newInvoiceTabActive = "ManageInvoices--tab ManageInvoices--tab-active";
   let newInvoiceTabNotActive =
@@ -33,9 +33,15 @@ function ManageInvoices(props) {
     setTabActive("modifyTab");
   };
 
-  const trackhrsToServer = (arr, subTotals, total) => {
-    console.log("tracking");
-    setHrsToServer({ hrs: arr, subTotals: subTotals, total: total });
+  const trackDataToServer = (payload) => {
+    console.log("create invoice", payload);
+    // setHrsToServer({
+    //   hrs: arr,
+    //   sub_totals: subTotals,
+    //   total: total,
+    //   invoice_num: invoiceNum,
+    //   due_date: dueDate,
+    // });
   };
 
   return (
@@ -94,10 +100,10 @@ function ManageInvoices(props) {
           loggedInUserInfo={loggedInUserLocal}
           resetInvoiceType={selectInvoiceType}
           showModifyInvoice={actionModifyTab}
-          saveHrsToServer={trackhrsToServer}
+          saveDataToServer={trackDataToServer}
         />
       ) : (
-        <ModifyInvoice hrsToServer={hrsToServer} />
+        <ModifyInvoice dataToServer={dataToServer} />
       )}
 
       {/* Choose new invoice type modal popup */}

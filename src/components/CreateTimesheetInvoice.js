@@ -10,6 +10,8 @@ function CreateTimesheetInvoice(props) {
   let [eachProjectSubTotal, setProjectSubTotal] = useState({});
   let [invoiceDueDate, setInvoiceDueDate] = useState("");
   let [invoiceTotal, setInvoiceTotal] = useState(0);
+  let [dueDate, setDueDate] = useState("");
+  let [invoiceNum, setInvoiceNum] = useState("");
   // // Apply delay/ debouncer? to wait a couple seconds before triggering dispatch to update filterHours Array in state
   // const updateUserAllRecords = (i, j, role, rate) => {
   //   let stateHrsCopy = [...props.filteredHours];
@@ -121,9 +123,23 @@ function CreateTimesheetInvoice(props) {
   };
 
   // send state update on ManageInvoices component to track hours for invoice and other pertinent data
-  const hoursToServer = (hrsToServer, subTotals, total) => {
+  const hoursToServer = (
+    hrsToServer,
+    subTotals,
+    total,
+    invoiceNum,
+    dueDate
+  ) => {
     console.log("create invoice btn clicked", hrsToServer, subTotals, total);
-    props.saveHrsToServer(hrsToServer, subTotals, total);
+    let dataToServer = {
+      hrs: hrsToServer,
+      sub_totals: subTotals,
+      total: total,
+      invoice_num: invoiceNum,
+      due_date: dueDate,
+    };
+    console.log(dataToServer);
+    props.saveDataToServer(dataToServer);
     props.showModifyInvoice("modifyTab");
   };
 
@@ -245,11 +261,20 @@ function CreateTimesheetInvoice(props) {
         <section className="invoice--tx-rt-due-date-inputs">
           <div>
             <label htmlFor="invoice--due-date">Due Date</label>
-            <input name="invoice--due-date" type="date"></input>
+            <input
+              name="invoice--due-date"
+              type="date"
+              onBlur={(e) => setDueDate(e.target.value)}
+            ></input>
           </div>
           <div>
             <label htmlFor="invoice--tax-rate">Tax Rate</label>
-            <input name="invoice--tax-rate" type="number" min={0}></input>
+            <input
+              name="invoice--tax-rate"
+              type="number"
+              min={0}
+              onBlur={(e) => setInvoiceNum(e.target.value)}
+            ></input>
           </div>
         </section>
 
@@ -257,7 +282,13 @@ function CreateTimesheetInvoice(props) {
           <button
             className="invoice--create-btn"
             onClick={() =>
-              hoursToServer(hrsToServer, eachProjectSubTotal, invoiceTotal)
+              hoursToServer(
+                hrsToServer,
+                eachProjectSubTotal,
+                invoiceTotal,
+                invoiceNum,
+                dueDate
+              )
             }
           >
             Create Invoice

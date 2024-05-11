@@ -2,7 +2,7 @@ import React from "react";
 import "../assets/styles/ManageInvoices.css";
 
 function ModifyInvoice(props) {
-  console.log(props.hrsToServer["hrs"]);
+  console.log(props.dataToServer["hrs"]);
   return (
     <section className="ManageInvoices--modify-invoice-tab-content">
       <section className="Invoice-pdf--container">
@@ -51,7 +51,7 @@ function ModifyInvoice(props) {
         </header>
         <main className="Invoice-pdf--project-data-container">
           <ol className="Invoice-pdf--project-details">
-            {/* map over props.hrsToServer["hrs"]*/}
+            {/* map over props.dataToServer["hrs"]*/}
             <li className="Invoice-pdf--individual-project">
               <header className="Invoice-pdf--project-name">
                 Project: <span>Operations Development</span>
@@ -68,7 +68,7 @@ function ModifyInvoice(props) {
                     <li>Amount</li>
                   </ol>
                 </header>
-                {/* iterate over the hrs data array from  props.hrsToServer["hrs"] */}
+                {/* iterate over the hrs data array from  props.dataToServer["hrs"] */}
                 <ol className="Invoice-pdf--project-hrs-details">
                   <li>
                     <ol className="Invoice-pdf--project-hrs-record">
