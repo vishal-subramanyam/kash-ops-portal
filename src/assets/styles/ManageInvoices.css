@@ -419,8 +419,22 @@ New Timesheet Invoice Workflow and Component Styles
   box-shadow: 1px 2px 5px hsla(0 0% 0%/ 0.4);
 }
 
+.invoice--tx-rt-due-date-inputs div {
+  display: flex;
+  flex-direction: column;
+  width: 8rem;
+  margin-bottom: 0.5rem;
+}
+
+.invoice--tx-rt-due-date-inputs label {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
 .invoice--tx-rt-due-date-inputs input {
-  border: 2px solid #ffc83c;
+  border: 5px solid #ffc83c;
+  border-radius: 5px;
+  height: 2rem;
 }
 
 /* ================================================================================
