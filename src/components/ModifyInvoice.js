@@ -31,7 +31,7 @@ function ModifyInvoice(props) {
                 </li>
               </ol>
             </section>
-            <spection className="Invoice-header-right">
+            <section className="Invoice-header-right">
               <h6>ATTN:</h6>
               <ol>
                 <li>John Smith</li>
@@ -43,7 +43,7 @@ function ModifyInvoice(props) {
                 <li>Columbus, OH 43081</li>
                 <li>564-854-4297</li>
               </ol>
-            </spection>
+            </section>
           </section>
         </header>
         <main className="Invoice-pdf--project-data-container">
