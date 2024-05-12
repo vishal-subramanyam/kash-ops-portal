@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useRef } from "react";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 import "../assets/styles/ManageInvoices.css";
 
 function ModifyInvoice(props) {
   console.log(props.dataToServer);
+  let invoicePDF = useRef();
+  const downloadPDF = () => {
+    console.log("download PDF triggered");
+    html2canvas(invoicePDF.current).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "pt", "a4", false);
+      pdf.addImage(imgData, "PNG", 0, 0, 600, 0, undefined, false);
+      pdf.save(`${props.dataToServer.invoice_num}.pdf`);
+    });
+  };
+
   return (
     <section className="ManageInvoices--modify-invoice-tab-content">
-      <section className="Invoice-pdf--container">
+      <section className="Invoice-pdf--container" ref={invoicePDF}>
         <header>
           <section className="Invoice-pdf--heading">
             <h1>Invoice</h1>
@@ -143,10 +156,7 @@ function ModifyInvoice(props) {
           </ol>
         </footer>
       </section>
-      <button
-        className="Invoice-pdf--pdf-btn"
-        onClick={(e) => console.log("Download PDF")}
-      >
+      <button className="Invoice-pdf--pdf-btn" onClick={(e) => downloadPDF()}>
         Download PDF
       </button>
     </section>
