@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import { domain } from "../assets/api/apiEndpoints";
 import "../assets/styles/Styles.css";
 import "../assets/styles/ManageInvoices.css";
 import NewInvoice from "../components/NewInvoice";
