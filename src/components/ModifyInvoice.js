@@ -82,7 +82,7 @@ function ModifyInvoice(props) {
           <ol className="Invoice-pdf--project-details">
             {/* map over props.dataToServer["hrs"]*/}
 
-            {props.dataToServer.invoiceHrs.map((project, p) => {
+            {props.dataToServer.invoice_hrs.map((project, p) => {
               return (
                 <li key={p} className="Invoice-pdf--individual-project">
                   <header className="Invoice-pdf--project-name">

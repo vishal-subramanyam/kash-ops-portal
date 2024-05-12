@@ -148,9 +148,7 @@ function CreateTimesheetInvoice(props) {
     let invoiceNum = `INV_${props.companyId}`;
 
     // iterate hrsToServer to extract all individual user record and add invoice_detail_id property to each record object - invoice num + i of iterator
-
     let hrsArrToServer = [];
-
     for (let i = 0; i < hrsToServer.length; i++) {
       for (let j = 0; j < hrsToServer[i].data.length; j++) {
         for (let k = 0; k < hrsToServer[i].data[j].data.length; k++) {
@@ -203,11 +201,12 @@ function CreateTimesheetInvoice(props) {
 
     let dataToServer = {
       hrs: hrsToServer,
-      hrsFlat: hrsArrToServer,
-      invoiceHrs: hrsForInvoice,
+      hrs_flat: hrsArrToServer,
+      invoice_hrs: hrsForInvoice,
       sub_totals: subTotals,
       pre_tax_total: total,
       grand_total: grandTotal,
+      invoice_id: invoiceId,
       invoice_num: invoiceNum,
       tax_rate: taxRate,
       tax_rate_dec: taxRateDec,

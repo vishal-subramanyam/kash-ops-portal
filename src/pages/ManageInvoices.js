@@ -37,9 +37,12 @@ function ManageInvoices(props) {
   const trackDataToServer = (payload) => {
     console.log("create invoice", payload);
     setDataToServer(payload);
+    createInvoice(payload);
+    createInvoiceDetails(payload);
   };
 
-  const createInvoice = async () => {
+  const createInvoice = async (invoiceInfo) => {
+    console.log("Attn User EmpId", invoiceInfo.attn["id"]);
     try {
       const response = await fetch(
         `${domain}GenericTransactionService/processTransaction`,
@@ -52,19 +55,19 @@ function ManageInvoices(props) {
             // your expected POST request payload goes here
             data: [
               {
-                InvoiceId: "1122",
-                CreatedBy: "411065",
-                AttentionTo: "8844422",
-                CompanyId: "KAT20240101",
-                GrandTotal: "3333.55",
-                TaxRate: "0.04",
-                CreationDate: "01/05/2024",
-                DueDate: "25/05/2024",
-                InvoicePeriodStart: "01/05/2024",
-                InvoicePeriodEnd: "25/05/2024",
-                InvoiceNum: "INVOICE_NUM",
-                InternalNotes: "INTERNAL_NOTES",
-                ExternalNotes: "EXTERNAL_NOTES",
+                InvoiceId: invoiceInfo.invoice_id,
+                CreatedBy: loggedInUserLocal.EmpId,
+                AttentionTo: invoiceInfo.attn["id"],
+                CompanyId: invoiceInfo.company_id,
+                GrandTotal: invoiceInfo.grand_total,
+                TaxRate: invoiceInfo.tax_rate_dec,
+                CreationDate: invoiceInfo.creation_date,
+                DueDate: invoiceInfo.due_date,
+                InvoicePeriodStart: invoiceInfo.date_from,
+                InvoicePeriodEnd: invoiceInfo.date_to,
+                InvoiceNum: invoiceInfo.invoice_num,
+                InternalNotes: "",
+                ExternalNotes: "",
               },
             ],
             _keyword_: "KASH_OPERATIONS_INVOICE_TABLE",
@@ -79,7 +82,8 @@ function ManageInvoices(props) {
     }
   };
 
-  const createInvoiceDetails = async () => {
+  const createInvoiceDetails = async (invoiceInfo) => {
+    console.log("Invoice Details to server", invoiceInfo);
     try {
       const response = await fetch(
         `${domain}GenericTransactionService/processTransaction`,
@@ -90,27 +94,14 @@ function ManageInvoices(props) {
           },
           body: JSON.stringify({
             // payload will be the flat array of hours
-            data: [
-              {
-                InvoiceDetailId: "112202",
-                InvoiceId: "1122",
-                SowId: "FSU0220240101",
-                EmpId: "411065",
-                Rate: "44.5",
-                TotalHrs: "54.25",
-                Amount: "2414.13",
-                ResourceRole: "RESOURCE_ROLE",
-                SubAssignmentTitle: "SUB_ASSIGNMENT_TITLE",
-                SubAssignmentSegment1: "SUB_ASSIGNMENT_SEGMENT_1",
-              },
-            ],
+            data: invoiceInfo.hrs_flat,
             _keyword_: "KASH_OPERATIONS_INVOICE_DETAIL_TABLE",
             secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
           }),
         }
       );
     } catch (error) {
-      alert("Unable to create invoice", error);
+      alert("Unable to add invoice details", error);
       //  setMessage(alertMessageDisplay(`Unable to create invoice. Error: ${error}`));
       //  alertMessage.current.showModal();
     }
