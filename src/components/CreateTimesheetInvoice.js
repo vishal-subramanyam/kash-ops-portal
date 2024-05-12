@@ -8,10 +8,11 @@ import IndividualProjectSubTotal from "./IndividualProjectSubTotal";
 function CreateTimesheetInvoice(props) {
   let [hrsToServer, setHrsToServer] = useState([]);
   let [eachProjectSubTotal, setProjectSubTotal] = useState({});
-  let [invoiceDueDate, setInvoiceDueDate] = useState("");
   let [invoiceTotal, setInvoiceTotal] = useState(0);
   let [dueDate, setDueDate] = useState("");
-  let [invoiceNum, setInvoiceNum] = useState("");
+  let [creationDate, setCreationDate] = useState("");
+  let [attn, setAttn] = useState({});
+  let [taxRate, setTaxRate] = useState(0);
   // // Apply delay/ debouncer? to wait a couple seconds before triggering dispatch to update filterHours Array in state
   // const updateUserAllRecords = (i, j, role, rate) => {
   //   let stateHrsCopy = [...props.filteredHours];
@@ -127,16 +128,97 @@ function CreateTimesheetInvoice(props) {
     hrsToServer,
     subTotals,
     total,
-    invoiceNum,
-    dueDate
+    taxRate,
+    dueDate,
+    attn
   ) => {
-    console.log("create invoice btn clicked", hrsToServer, subTotals, total);
+    console.log(
+      "create invoice btn clicked",
+      hrsToServer,
+      subTotals,
+      total,
+      taxRate,
+      dueDate,
+      attn
+    );
+
+    // auto generate invoice id
+    let invoiceId = Math.floor(10000 + Math.random() * 90000);
+    // auto generate invoice num
+    let invoiceNum = `INV_${props.companyId}`;
+
+    // iterate hrsToServer to extract all individual user record and add invoice_detail_id property to each record object - invoice num + i of iterator
+
+    let hrsArrToServer = [];
+
+    for (let i = 0; i < hrsToServer.length; i++) {
+      for (let j = 0; j < hrsToServer[i].data.length; j++) {
+        for (let k = 0; k < hrsToServer[i].data[j].data.length; k++) {
+          let usrRec = hrsToServer[i].data[j].data[k];
+          let invoiceDetailId = invoiceId + "_" + (k + 1);
+          usrRec["invoiceDetailId"] = invoiceDetailId;
+          console.log(usrRec);
+          hrsArrToServer.push(usrRec);
+        }
+      }
+    }
+
+    //  create array for invoice hrs display: array of project objects containing array of ALL user hrs
+    let hrsForInvoice = [];
+    for (let i = 0; i < hrsToServer.length; i++) {
+      let projectHrs = { projectName: "", hrs: [] };
+      if (!projectHrs["projectName"]) {
+        projectHrs["projectName"] = hrsToServer[i].projectName;
+      }
+      for (let j = 0; j < hrsToServer[i].data.length; j++) {
+        for (let k = 0; k < hrsToServer[i].data[j].data.length; k++) {
+          let usrRec = hrsToServer[i].data[j].data[k];
+          let invoiceDetailId = invoiceId + "_" + (k + 1);
+          usrRec["InvoiceDetailId"] = invoiceDetailId;
+          console.log(usrRec);
+          projectHrs["hrs"].push(usrRec);
+        }
+      }
+      hrsForInvoice.push(projectHrs);
+    }
+
+    // hrsToServer.map((project) => {
+    //   project.data.map((usr) => {
+    //     usr.data.map((hrs, i) => {
+    //       let usrRec = { ...hrs };
+    //       let invoiceDetailId = invoiceId + i;
+    //       usrRec["invoiceDetailId"] = invoiceDetailId;
+    //       console.log(usrRec);
+    //       return usrRec;
+    //     });
+    //   });
+    // });
+
+    console.log(hrsForInvoice);
+
+    // convert taxRate to decimal, add subTotals (reduce method) then multiply by tax rate
+    let taxRateDec = taxRate * 0.01;
+    let taxTotal = total * taxRateDec;
+    let grandTotal = taxTotal + total;
+
     let dataToServer = {
       hrs: hrsToServer,
+      hrsFlat: hrsArrToServer,
+      invoiceHrs: hrsForInvoice,
       sub_totals: subTotals,
-      total: total,
+      pre_tax_total: total,
+      grand_total: grandTotal,
       invoice_num: invoiceNum,
+      tax_rate: taxRate,
+      tax_rate_dec: taxRateDec,
       due_date: dueDate,
+      creation_date: creationDate,
+      attn: attn,
+      company_id: props.companyId,
+      company_name: props.companyName,
+      company_info: props.selCompanyInfo,
+      date_from: props.from,
+      date_to: props.to,
     };
     console.log(dataToServer);
     props.saveDataToServer(dataToServer);
@@ -260,6 +342,48 @@ function CreateTimesheetInvoice(props) {
         {/* save due date and tax rate on state of createtimesheetinvoice component to pass as args with create btn below */}
         <section className="invoice--tx-rt-due-date-inputs">
           <div>
+            <label htmlFor="invoice--attn">Attn</label>
+            <select
+              name="invoice--attn"
+              type="date"
+              onChange={(e) =>
+                setAttn({
+                  id: e.target[e.target.selectedIndex].getAttribute(
+                    "data-empid"
+                  ),
+                  name: e.target.value,
+                })
+              }
+            >
+              <option value=""></option>
+              {props.companyAdmins
+                .filter((admin, i) => {
+                  if (props.companyId === admin.CompanyId) {
+                    return admin;
+                  }
+                })
+                .map((a, j) => {
+                  return (
+                    <option
+                      key={j}
+                      data-empid={a.EmpId}
+                      value={a.FirstName + " " + a.LastName}
+                    >
+                      {a.FirstName + " " + a.LastName}
+                    </option>
+                  );
+                })}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="invoice--due-date">Creation Date</label>
+            <input
+              name="invoice--due-date"
+              type="date"
+              onBlur={(e) => setCreationDate(e.target.value)}
+            ></input>
+          </div>
+          <div>
             <label htmlFor="invoice--due-date">Due Date</label>
             <input
               name="invoice--due-date"
@@ -273,7 +397,7 @@ function CreateTimesheetInvoice(props) {
               name="invoice--tax-rate"
               type="number"
               min={0}
-              onBlur={(e) => setInvoiceNum(e.target.value)}
+              onBlur={(e) => setTaxRate(e.target.value)}
             ></input>
           </div>
         </section>
@@ -286,8 +410,9 @@ function CreateTimesheetInvoice(props) {
                 hrsToServer,
                 eachProjectSubTotal,
                 invoiceTotal,
-                invoiceNum,
-                dueDate
+                taxRate,
+                dueDate,
+                attn
               )
             }
           >

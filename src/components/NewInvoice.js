@@ -789,7 +789,12 @@ function NewInvoice(props) {
                   <CreateTimesheetInvoice
                     // companyId={dataState.selectedCompanyId}
                     cancel={dispatchCancelInvoice}
+                    companyId={dataState.selectedCompanyId}
                     companyName={dataState.selectedCompanyName}
+                    selCompanyInfo={dataState.companiesList.filter(
+                      (comp) => comp.CompanyId === dataState.selectedCompanyId
+                    )}
+                    companyAdmins={dataState.companyAdminsDetail}
                     // sowId={dataState.selectedProjectSowId}
                     // projectName={dataState.selectedProjectName}
                     from={dataState.dateRangeFrom}

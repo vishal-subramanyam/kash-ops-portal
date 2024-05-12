@@ -77,6 +77,10 @@
 .ManageInvoices--modify-invoice-tab-content {
   background-color: #fb68af;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 1.5rem;
 }
 
 .ManageInvoices--new-invoice-tab-content {
@@ -431,10 +435,22 @@ New Timesheet Invoice Workflow and Component Styles
   margin-bottom: 0.25rem;
 }
 
-.invoice--tx-rt-due-date-inputs input {
+.invoice--tx-rt-due-date-inputs input,
+.invoice--tx-rt-due-date-inputs select {
   border: 5px solid #ffc83c;
   border-radius: 5px;
   height: 2rem;
+}
+
+.Invoice-pdf--project-hrs ol {
+  padding: 0;
+  list-style: none;
+}
+
+.invoice--tx-rt-due-date-inputs {
+  display: flex;
+  width: 55%;
+  justify-content: space-between;
 }
 
 /* ================================================================================
@@ -596,6 +612,16 @@ footer ol {
 
 footer ol li:last-child {
   color: #f98340;
+}
+
+.Invoice-pdf--pdf-btn {
+  width: 10rem;
+  height: 2rem;
+  font-size: 0.9rem;
+  border: unset;
+  border-radius: 5px;
+  background-color: #beeadf;
+  box-shadow: 1px 2px 5px hsla(0 0% 0% / 0.4);
 }
 /* ================================================================================
 Choose New Invoice Type Modal

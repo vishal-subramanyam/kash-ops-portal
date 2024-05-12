@@ -973,9 +973,11 @@ CREATE TABLE
     kash_operations_invoice_detail_table (
         invoice_detail_id INT PRIMARY KEY NOT NULL,
         invoice_id INT NOT NULL,
-        sow_id INT,
         emp_id INT,
         rate DECIMAL,
+        total_hrs DECIMAL,
+        amount DECIMAL,
+        sow_id VARCHAR(20),
         resource_role VARCHAR(255),
         sub_assignment_title VARCHAR(255),
         sub_assignment_segment_1 VARCHAR(255),

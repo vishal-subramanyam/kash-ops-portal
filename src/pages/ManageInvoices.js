@@ -35,13 +35,7 @@ function ManageInvoices(props) {
 
   const trackDataToServer = (payload) => {
     console.log("create invoice", payload);
-    // setHrsToServer({
-    //   hrs: arr,
-    //   sub_totals: subTotals,
-    //   total: total,
-    //   invoice_num: invoiceNum,
-    //   due_date: dueDate,
-    // });
+    setDataToServer(payload);
   };
 
   return (
