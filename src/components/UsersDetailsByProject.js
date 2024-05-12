@@ -91,6 +91,48 @@ function UsersDetailsByProject(props) {
     props.updateFilteredHrsArr(stateHrsCopy);
   };
 
+  // Apply delay/ debouncer? to wait a couple seconds before triggering dispatch to update filterHours Array in state
+  const deleteUserSingleRecord = (i, j, k, e) => {
+    console.log("delete user single record", i, j, k, e.target);
+    let stateHrsCopy = [...props.filteredHours];
+    console.log(stateHrsCopy);
+
+    let currentRecord = stateHrsCopy[i].data[j].data[k];
+    let updatedHrs = stateHrsCopy[i].data[j].data.filter((rec, i) => {
+      return rec.TotalHours !== currentRecord.TotalHours;
+    });
+    console.log(stateHrsCopy);
+    console.log(stateHrsCopy[i].data[j].data[k]);
+    stateHrsCopy[i].data[j].data = updatedHrs;
+    // single user record object
+    console.log(updatedHrs);
+    // updated hours array to send to dispatch to update filteredHours array
+    console.log(stateHrsCopy);
+
+    // Calculate Amount field - individual user record Rate * Hrs
+    // if (propName === "Rate") {
+    //   updatedRecordValue["Amount"] =
+    //     e.target.value * updatedRecordValue["TotalHours"];
+    // }
+
+    // run function to iterate user billed data in a project to account for record deletion in order to render update in total amount in accordian
+    let updatedTotalAmount = stateHrsCopy[i].data[j].data.reduce(
+      (acc, curr) => {
+        return acc + curr.Amount;
+      },
+      0
+    );
+    console.log(updatedTotalAmount);
+    setUserRecordTotalAmount(updatedTotalAmount);
+
+    props.setHrsToServer(stateHrsCopy);
+
+    // send arrray to calculate total amount for individual project
+    props.individualProjectSubTotal(stateHrsCopy, props.i);
+    // update filteredHours array in state with prop value update
+    props.updateFilteredHrsArr(stateHrsCopy);
+  };
+
   return (
     <details>
       <summary>
@@ -197,7 +239,12 @@ invoice--user-record-set-all-rates"
                   </li>
                   <li>$ {hrs.Amount.toFixed(2)}</li>
                   <li>
-                    <FontAwesomeIcon icon={faCircleXmark} />
+                    <FontAwesomeIcon
+                      icon={faCircleXmark}
+                      onClick={(e) =>
+                        deleteUserSingleRecord(props.i, props.j, k, e)
+                      }
+                    />
                   </li>
                 </ol>
               </li>

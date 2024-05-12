@@ -171,7 +171,7 @@ function CreateTimesheetInvoice(props) {
       for (let j = 0; j < hrsToServer[i].data.length; j++) {
         for (let k = 0; k < hrsToServer[i].data[j].data.length; k++) {
           let usrRec = hrsToServer[i].data[j].data[k];
-          let invoiceDetailId = invoiceId + "_" + (k + 1);
+          let invoiceDetailId = invoiceId + (k + 1);
           usrRec["InvoiceDetailId"] = invoiceDetailId;
           console.log(usrRec);
           projectHrs["hrs"].push(usrRec);
@@ -199,6 +199,7 @@ function CreateTimesheetInvoice(props) {
     let taxTotal = total * taxRateDec;
     let grandTotal = taxTotal + total;
 
+    // add properties for internal and external notes
     let dataToServer = {
       hrs: hrsToServer,
       hrs_flat: hrsArrToServer,
