@@ -38,6 +38,83 @@ function ManageInvoices(props) {
     setDataToServer(payload);
   };
 
+  const createInvoice = async () => {
+    try {
+      const response = await fetch(
+        `${domain}GenericTransactionService/processTransaction`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // your expected POST request payload goes here
+            data: [
+              {
+                InvoiceId: "1122",
+                CreatedBy: "411065",
+                AttentionTo: "8844422",
+                CompanyId: "KAT20240101",
+                GrandTotal: "3333.55",
+                TaxRate: "0.04",
+                CreationDate: "01/05/2024",
+                DueDate: "25/05/2024",
+                InvoicePeriodStart: "01/05/2024",
+                InvoicePeriodEnd: "25/05/2024",
+                InvoiceNum: "INVOICE_NUM",
+                InternalNotes: "INTERNAL_NOTES",
+                ExternalNotes: "EXTERNAL_NOTES",
+              },
+            ],
+            _keyword_: "KASH_OPERATIONS_INVOICE_TABLE",
+            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+          }),
+        }
+      );
+    } catch (error) {
+      alert("Unable to create invoice", error);
+      //  setMessage(alertMessageDisplay(`Unable to create invoice. Error: ${error}`));
+      //  alertMessage.current.showModal();
+    }
+  };
+
+  const createInvoiceDetails = async () => {
+    try {
+      const response = await fetch(
+        `${domain}GenericTransactionService/processTransaction`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // payload will be the flat array of hours
+            data: [
+              {
+                InvoiceDetailId: "112202",
+                InvoiceId: "1122",
+                SowId: "FSU0220240101",
+                EmpId: "411065",
+                Rate: "44.5",
+                TotalHrs: "54.25",
+                Amount: "2414.13",
+                ResourceRole: "RESOURCE_ROLE",
+                SubAssignmentTitle: "SUB_ASSIGNMENT_TITLE",
+                SubAssignmentSegment1: "SUB_ASSIGNMENT_SEGMENT_1",
+              },
+            ],
+            _keyword_: "KASH_OPERATIONS_INVOICE_DETAIL_TABLE",
+            secretkey: "2bf52be7-9f68-4d52-9523-53f7f267153b",
+          }),
+        }
+      );
+    } catch (error) {
+      alert("Unable to create invoice", error);
+      //  setMessage(alertMessageDisplay(`Unable to create invoice. Error: ${error}`));
+      //  alertMessage.current.showModal();
+    }
+  };
+
   return (
     <main className="ManageInvoices--main-container max-width--main-container">
       <div className="kash_operations--upper-section-holder ManageInvoices--heading">
