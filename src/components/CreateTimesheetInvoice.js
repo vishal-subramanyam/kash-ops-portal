@@ -143,7 +143,7 @@ function CreateTimesheetInvoice(props) {
     );
 
     // auto generate invoice id
-    let invoiceId = Math.floor(10000 + Math.random() * 90000);
+    let invoiceId = Math.floor(10000000 + Math.random() * 90000000);
     // auto generate invoice num
     let invoiceNum = `INV_${props.companyId}`;
 
@@ -364,7 +364,20 @@ function CreateTimesheetInvoice(props) {
         <section className="invoice--tx-rt-due-date-inputs">
           <div>
             <label htmlFor="invoice--attn">Attn</label>
-            <select
+            <input
+              name="invoice--attn"
+              defaultValue=""
+              data-empid="000000"
+              onChange={(e) =>
+                setAttn({
+                  // id: e.target[e.target.selectedIndex].getAttribute(
+                  //   "data-empid"
+                  // ),
+                  name: e.target.value,
+                })
+              }
+            />
+            {/* <select
               name="invoice--attn"
               type="date"
               onChange={(e) =>
@@ -394,7 +407,7 @@ function CreateTimesheetInvoice(props) {
                     </option>
                   );
                 })}
-            </select>
+            </select> */}
           </div>
           <div>
             <label htmlFor="invoice--due-date">Creation Date</label>

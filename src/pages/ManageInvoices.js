@@ -36,7 +36,7 @@ function ManageInvoices(props) {
 
   const trackDataToServer = (payload) => {
     console.log("create invoice", payload);
-    // setDataToServer(payload);
+    setDataToServer(payload);
     createInvoice(payload);
     createInvoiceDetails(payload);
   };
@@ -166,9 +166,7 @@ function ManageInvoices(props) {
           saveDataToServer={trackDataToServer}
         />
       ) : (
-        <ModifyInvoice
-        // dataToServer={dataToServer}
-        />
+        <ModifyInvoice dataToServer={dataToServer} />
       )}
 
       {/* Choose new invoice type modal popup */}
