@@ -149,17 +149,18 @@ function CreateTimesheetInvoice(props) {
 
     // iterate hrsToServer to extract all individual user record and add invoice_detail_id property to each record object - invoice num + i of iterator
     let hrsArrToServer = [];
-    for (let i = 0; i < hrsToServer.length; i++) {
-      for (let j = 0; j < hrsToServer[i].data.length; j++) {
-        for (let k = 0; k < hrsToServer[i].data[j].data.length; k++) {
-          let usrRec = hrsToServer[i].data[j].data[k];
-          let invoiceDetailId = invoiceId + "_" + (k + 1);
-          usrRec["invoiceDetailId"] = invoiceDetailId;
-          console.log(usrRec);
-          hrsArrToServer.push(usrRec);
-        }
-      }
-    }
+    // for (let i = 0; i < hrsToServer.length; i++) {
+    //   for (let j = 0; j < hrsToServer[i].data.length; j++) {
+    //     for (let k = 0; k < hrsToServer[i].data[j].data.length; k++) {
+    //       let usrRec = hrsToServer[i].data[j].data[k];
+    //       let invoiceDetailId = invoiceId + (k + 1);
+    //       usrRec["InvoiceDetailId"] = invoiceDetailId;
+    //       usrRec["InvoiceId"] = invoiceId;
+    //       console.log(usrRec);
+    //       hrsArrToServer.push(usrRec);
+    //     }
+    //   }
+    // }
 
     //  create array for invoice hrs display: array of project objects containing array of ALL user hrs
     let hrsForInvoice = [];
@@ -171,10 +172,30 @@ function CreateTimesheetInvoice(props) {
       for (let j = 0; j < hrsToServer[i].data.length; j++) {
         for (let k = 0; k < hrsToServer[i].data[j].data.length; k++) {
           let usrRec = hrsToServer[i].data[j].data[k];
-          let invoiceDetailId = invoiceId + (k + 1);
+          console.log(hrsToServer[i].data[j].data[k].SubAssignment);
+          console.log(hrsToServer[i].data[j].data[k].TotalHours);
+          console.log(hrsToServer[i].data[j].data[k].Role);
+          console.log(
+            invoiceId
+              .toString()
+              .split("")
+              .push(k + 1)
+          );
+          let invoiceDetailId = invoiceId + k;
+          // let invoiceDetailId = invoiceId
+          //   .toString()
+          //   .split("")
+          //   .push(k + 1)
+          //   .join("");
           usrRec["InvoiceDetailId"] = invoiceDetailId;
+          usrRec["InvoiceId"] = invoiceId;
+          usrRec["SubAssignmentTitle"] =
+            hrsToServer[i].data[j].data[k].SubAssignment;
+          usrRec["TotalHrs"] = hrsToServer[i].data[j].data[k].TotalHours;
+          usrRec["ResourceRole"] = hrsToServer[i].data[j].data[k].Role;
           console.log(usrRec);
           projectHrs["hrs"].push(usrRec);
+          hrsArrToServer.push(usrRec);
         }
       }
       hrsForInvoice.push(projectHrs);
