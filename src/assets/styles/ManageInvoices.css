@@ -458,6 +458,10 @@ New Timesheet Invoice Workflow and Component Styles
 Modify Invoice PDF UI
 =================================================================================== */
 
+.Invoice-pdf--placeholder-container {
+  height: 100vh;
+}
+
 .Invoice-pdf--container {
   max-width: 1250px;
   background-color: #fff;

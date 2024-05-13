@@ -19,7 +19,7 @@ function ModifyInvoice(props) {
   return (
     <section className="ManageInvoices--modify-invoice-tab-content">
       {!props.dataToServer ? (
-        <></>
+        <div className="Invoice-pdf--placeholder-container"></div>
       ) : (
         <>
           <section className="Invoice-pdf--container" ref={invoicePDF}>
