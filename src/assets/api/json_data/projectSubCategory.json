@@ -1,0 +1,200 @@
+{
+  "data": [
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "ADM220503",
+      "SubTaskTitle": "Admin",
+      "Segment2": "-",
+      "Segment1": "-",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "DEP220503",
+      "SubTaskTitle": "Deployment",
+      "Segment2": "-",
+      "Segment1": "-",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "abc123",
+      "ProjectSubTaskId": "ABCWUP01",
+      "SubTaskTitle": "Resolving issues found in 9.2",
+      "Segment2": "-",
+      "Segment1": "-",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "DOC220503",
+      "SubTaskTitle": "Documentation",
+      "Segment2": "-",
+      "Segment1": "-",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "DOC220503",
+      "SubTaskTitle": "Documentation",
+      "Segment2": "-",
+      "Segment1": "Documentation",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "OPS220503",
+      "SubTaskTitle": "Operations",
+      "Segment2": "-",
+      "Segment1": "-",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "OPS220503",
+      "SubTaskTitle": "Operations",
+      "Segment2": "-",
+      "Segment1": "Monitoring and Remediation of Daily loads",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "OPS220503",
+      "SubTaskTitle": "Operations",
+      "Segment2": "-",
+      "Segment1": "Maintenance of Tibco S/W  including patching and upgrades",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "OPS220503",
+      "SubTaskTitle": "Operations",
+      "Segment2": "-",
+      "Segment1": "Ticket Tracking, monitoring and updates, Project Management work",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "RDI220503",
+      "SubTaskTitle": "Reports/Data/Integration",
+      "Segment2": "-",
+      "Segment1": "-",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "RDI220503",
+      "SubTaskTitle": "Reports/Data/Integration",
+      "Segment2": "-",
+      "Segment1": "Implement new report and enhancements",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "RDI220503",
+      "SubTaskTitle": "Reports/Data/Integration",
+      "Segment2": "-",
+      "Segment1": "Implement new data flows",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "RDI220503",
+      "SubTaskTitle": "Reports/Data/Integration",
+      "Segment2": "-",
+      "Segment1": "Root cause analysis for coding inefficiencies, suggests for improvements",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "RDI220503",
+      "SubTaskTitle": "Reports/Data/Integration",
+      "Segment2": "-",
+      "Segment1": "Existing data flows fixes and enhancements",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "RDI220503",
+      "SubTaskTitle": "Reports/Data/Integration",
+      "Segment2": "-",
+      "Segment1": "Existing report and dashboard fixes and enhancements",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "TRO220503",
+      "SubTaskTitle": "Training/Onboarding",
+      "Segment2": "-",
+      "Segment1": "-",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "abc123",
+      "ProjectSubTaskId": "ABCWUP01",
+      "SubTaskTitle": "Resolving issues found in 9.2",
+      "Segment2": "-",
+      "Segment1": "HTML pages",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "abc123",
+      "ProjectSubTaskId": "ABCWUP01",
+      "SubTaskTitle": "Resolving issues found in 9.2",
+      "Segment2": "-",
+      "Segment1": "Report Caster Jobs",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "Zendesk",
+      "SubTaskTitle": "Zendesk",
+      "Segment2": "-",
+      "Segment1": "-",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "Zendesk",
+      "SubTaskTitle": "Zendesk",
+      "Segment2": "-",
+      "Segment1": "Zendesk",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "RLG02212024aph",
+      "ProjectSubTaskId": "Consultaion",
+      "SubTaskTitle": "Consultation",
+      "Segment2": "-",
+      "Segment1": "-",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "RLG02212024aph",
+      "ProjectSubTaskId": "Consultaion",
+      "SubTaskTitle": "Consultation",
+      "Segment2": "-",
+      "Segment1": "travel",
+      "Segment3": "-"
+    },
+    {
+      "SowId": "RLG02212024aph",
+      "ProjectSubTaskId": "Consultaion",
+      "SubTaskTitle": "Consultation",
+      "Segment2": "",
+      "Segment1": "Develop/deliver",
+      "Segment3": ""
+    },
+    {
+      "SowId": "UNE2022050301",
+      "ProjectSubTaskId": "DEP220503",
+      "SubTaskTitle": "Deployment",
+      "Segment2": "",
+      "Segment1": "Data Operations for package preparation and deployment",
+      "Segment3": ""
+    }
+  ],
+  "success": "true",
+  "_keyword_": "KASH_OPERATIONS_PROJECT_SUB_CATEGORY_TABLE",
+  "rows": "24",
+  "_transfer_id_": "81768529-0819-465f-8fd0-4e01dd302467"
+}

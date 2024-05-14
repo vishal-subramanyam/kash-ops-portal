@@ -1,0 +1,213 @@
+{
+  "data": [
+    {
+      "CompanyId": "UNE202205",
+      "KashOperationsUsn": "jroy",
+      "EmpId": "123"
+    },
+    {
+      "CompanyId": "UNE202205",
+      "KashOperationsUsn": "kmunley",
+      "EmpId": "4566211"
+    },
+    {
+      "CompanyId": "ABC202306",
+      "KashOperationsUsn": "athomas",
+      "EmpId": "30607"
+    },
+    {
+      "CompanyId": "UNE202205",
+      "KashOperationsUsn": "alexg",
+      "EmpId": "8844422"
+    },
+    {
+      "CompanyId": "ASB20240101",
+      "KashOperationsUsn": "jroy",
+      "EmpId": "123"
+    },
+    {
+      "CompanyId": "ASB20240101",
+      "KashOperationsUsn": "rlane",
+      "EmpId": "3594124"
+    },
+    {
+      "CompanyId": "LEA20240101",
+      "KashOperationsUsn": "dmonson",
+      "EmpId": "9975157"
+    },
+    {
+      "CompanyId": "HTZ20240101",
+      "KashOperationsUsn": "dmonson",
+      "EmpId": "9975157"
+    },
+    {
+      "CompanyId": "STX202112",
+      "KashOperationsUsn": "jroy",
+      "EmpId": "123"
+    },
+    {
+      "CompanyId": "STX202112",
+      "KashOperationsUsn": "dmonson",
+      "EmpId": "9975157"
+    },
+    {
+      "CompanyId": "UNB20240101",
+      "KashOperationsUsn": "dmonson",
+      "EmpId": "9975157"
+    },
+    {
+      "CompanyId": "FSU20240101",
+      "KashOperationsUsn": "dmonson",
+      "EmpId": "9975157"
+    },
+    {
+      "CompanyId": "FSU20240101",
+      "KashOperationsUsn": "jroy",
+      "EmpId": "123"
+    },
+    {
+      "CompanyId": "FSU20240101",
+      "KashOperationsUsn": "akshey",
+      "EmpId": "5618412"
+    },
+    {
+      "CompanyId": "KAT20240101",
+      "KashOperationsUsn": "jroy",
+      "EmpId": "123"
+    },
+    {
+      "CompanyId": "KAT20240101",
+      "KashOperationsUsn": "rlane",
+      "EmpId": "3594124"
+    },
+    {
+      "CompanyId": "FAU20240101",
+      "KashOperationsUsn": "jroy",
+      "EmpId": "123"
+    },
+    {
+      "CompanyId": "FAU20240101",
+      "KashOperationsUsn": "dmonson",
+      "EmpId": "9975157"
+    },
+    {
+      "CompanyId": "RLG20240101",
+      "KashOperationsUsn": "jroy",
+      "EmpId": "123"
+    },
+    {
+      "CompanyId": "RLG20240101",
+      "KashOperationsUsn": "rlane",
+      "EmpId": "3594124"
+    },
+    {
+      "CompanyId": "SWR20240101",
+      "KashOperationsUsn": "ktovmassian",
+      "EmpId": "4850285"
+    },
+    {
+      "CompanyId": "SWR20240101",
+      "KashOperationsUsn": "dmonson",
+      "EmpId": "9975157"
+    },
+    {
+      "CompanyId": "ICC20240101",
+      "KashOperationsUsn": "jdrake",
+      "EmpId": "32556393"
+    },
+    {
+      "CompanyId": "KAT20240101",
+      "KashOperationsUsn": "jdrake",
+      "EmpId": "32556393"
+    },
+    {
+      "CompanyId": "ASB20240101",
+      "KashOperationsUsn": "jdrake",
+      "EmpId": "32556393"
+    },
+    {
+      "CompanyId": "UNE202205",
+      "KashOperationsUsn": "rlane",
+      "EmpId": "3594124"
+    },
+    {
+      "CompanyId": "MED03052212",
+      "KashOperationsUsn": "athomas",
+      "EmpId": "30607"
+    },
+    {
+      "CompanyId": "1",
+      "KashOperationsUsn": "jroy",
+      "EmpId": "123"
+    },
+    {
+      "CompanyId": "KAT20240101",
+      "KashOperationsUsn": "alexg",
+      "EmpId": "8844422"
+    },
+    {
+      "CompanyId": "ICC20240101",
+      "KashOperationsUsn": "jroy",
+      "EmpId": "123"
+    },
+    {
+      "CompanyId": "BPC20240101",
+      "KashOperationsUsn": "kmunley",
+      "EmpId": "4566211"
+    },
+    {
+      "CompanyId": "1",
+      "KashOperationsUsn": "jdrake",
+      "EmpId": "32556393"
+    },
+    {
+      "CompanyId": "SWR20240101",
+      "KashOperationsUsn": "kmunley",
+      "EmpId": "4566211"
+    },
+    {
+      "CompanyId": "4",
+      "KashOperationsUsn": "jroy",
+      "EmpId": "123"
+    },
+    {
+      "CompanyId": "1251",
+      "KashOperationsUsn": "kmunley",
+      "EmpId": "4566211"
+    },
+    {
+      "CompanyId": "1251",
+      "KashOperationsUsn": "jroy",
+      "EmpId": "123"
+    },
+    {
+      "CompanyId": "FSU20240101",
+      "KashOperationsUsn": "kmunley",
+      "EmpId": "4566211"
+    },
+    {
+      "CompanyId": "RL20240301",
+      "KashOperationsUsn": "jroy",
+      "EmpId": "123"
+    },
+    {
+      "CompanyId": "RL20240301",
+      "KashOperationsUsn": "rlane",
+      "EmpId": "3594124"
+    },
+    {
+      "CompanyId": "SWR20240101",
+      "KashOperationsUsn": "nagappannp",
+      "EmpId": "4841154"
+    },
+    {
+      "CompanyId": "FAU20240101",
+      "KashOperationsUsn": "kmunley",
+      "EmpId": "4566211"
+    }
+  ],
+  "success": "true",
+  "_keyword_": "KASH_OPERATIONS_COMPANY_ADMIN_ROLE_TABLE",
+  "rows": "41",
+  "_transfer_id_": "b82cb508-cbf2-45c9-a604-70c23cbd8519"
+}
