@@ -45,7 +45,6 @@ function App() {
     <div className="App">
       {/* hide NavBar if username in local storage is "null" because value in local storage is a string */}
       {username !== "null" ? <NavBar userInfo={loggedInUserLocal} /> : <></>}
-      {/* <Suspense fallback={<LoadingData />}> */}
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route
@@ -260,7 +259,6 @@ function App() {
           }
         />
       </Routes>
-      {/* </Suspense> */}
     </div>
   );
 }
