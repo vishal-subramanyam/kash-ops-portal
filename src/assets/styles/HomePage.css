@@ -97,13 +97,17 @@ a {
 }
 .timesheet-card--details_tag {
   --characteristic-color: #30bc70;
+  border-radius: 0 0.5rem 0.5rem 0;
+  right: -16ch;
+  padding-left: 2rem;
+  transform-origin: left;
 }
 
 .invoice-card--details_tag {
   --characteristic-color: #e43b8c;
 }
 .employee-card--details_tag,
-.timesheet-card--details_tag,
+/* .timesheet-card--details_tag, */
 .invoice-card--details_tag {
   border-radius: 0.5rem 0 0 0.5rem;
   /* left: -85%; */
@@ -194,12 +198,12 @@ a {
 .kash_operations_home--timesheets-card--wrapper:hover
   ~ .timesheets-card-watermark {
   opacity: 1;
-  transform: translate(20%, -50%);
+  transform: translate(-120%, -50%);
 }
 
 .kash_operations_home--invoices-card--wrapper:hover ~ .invoices-card-watermark {
   opacity: 1;
-  transform: translate(0%, -50%);
+  transform: translate(10%, -50%);
 }
 
 /* ################################################################### */

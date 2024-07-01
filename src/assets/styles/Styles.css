@@ -105,7 +105,7 @@ input[type="text"] {
   flex-direction: column;
 }
 .max-width--main-container {
-  max-width: 1300px;
+  /* max-width: 1300px; */
   margin: 0 auto;
   /* padding-bottom: 2rem; */
   padding: 1rem;
@@ -369,7 +369,7 @@ input:checked + .slider:before {
   z-index: -1;
   inset: -1rem 0 -1rem -60vw;
   /*height: 100%;*/
-  width: 250vw;
+  width: 158.85vw;
   background: hsla(176, 74%, 70%, 25%);
 }
 
@@ -385,7 +385,7 @@ input:checked + .slider:before {
   inset: -1rem 0 -1rem -60vw;
   /*height: 100%;*/
   /* width: 250vw; */
-  width: 156.85vw;
+  width: 158.85vw;
   background: hsla(176, 74%, 70%, 25%);
 }
 
@@ -1367,18 +1367,21 @@ input:checked + .slider:before {
   gap: 0.5rem;
   font-weight: 300;
   margin: 0 auto 1.5rem auto;
-  height: 2rem;
+  /* height: 2rem; */
   background-color: #fefaf7;
   border: solid 2px var(--kashtech_operations--characteristic-orange-1);
   border-radius: 0.3rem;
-  text-align: center;
+  /* text-align: center; */
   padding: 0 0.5rem;
+}
+.edit-user-dropdown option:first-child {
+  color: #dc6a00;
 }
 
 .update-user-btn {
   margin-right: 0.5rem;
-  background-color: #706aaa !important;
-  border-color: #706aaa !important;
+  background-color: #3a7760 !important;
+  border-color: #3a7760 !important;
   width: 5rem;
   max-height: 2.5rem;
   font-size: 75%;
@@ -1389,8 +1392,8 @@ input:checked + .slider:before {
 }
 
 .delete-user-btn {
-  background-color: #fa9b4b !important;
-  border-color: #fa9b4b !important;
+  background-color: #c13535 !important;
+  border-color: #c13535 !important;
   width: 5rem;
   max-height: 2.5rem;
   font-size: 75%;

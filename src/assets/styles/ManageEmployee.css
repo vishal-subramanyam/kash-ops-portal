@@ -18,7 +18,8 @@
 }
 
 .ManageEmployees--edit-tab {
-  background-color: #a2d299;
+  --edit-employee-tab-color: #d4f6cd;
+  background-color: var(--edit-employee-tab-color);
   color: #2a8519;
   border-top-right-radius: 0.5rem;
   border-top-left-radius: 0.5rem;

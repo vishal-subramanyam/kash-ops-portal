@@ -1,5 +1,5 @@
 .EditEmployeeInfo--wrapper {
-  background-color: #a2d299;
+  background-color: #d4f6cd;
 }
 
 .employee-info-form label {
@@ -11,6 +11,7 @@
 
 .employee-info-form input {
   font-weight: 400;
+  text-indent: 0.3rem;
 }
 
 .employee-info-form {
@@ -56,6 +57,7 @@
   height: 2rem;
   background-color: #fefaf7;
   border-radius: 0.3rem;
+  padding-left: 0.3rem;
 }
 
 .edit-user-form-container {

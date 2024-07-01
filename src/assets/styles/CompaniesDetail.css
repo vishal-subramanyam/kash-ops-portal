@@ -18,7 +18,7 @@
   max-width: 1000px;
   margin: 0 auto 1rem auto;
   padding: 1rem;
-  border-radius: 5px;
+  border-radius: 1.2rem;
   box-shadow: 0px 12px 25px 2px rgba(197, 197, 197, 0.4);
 }
 
@@ -48,7 +48,7 @@
 }
 
 .CompanyInfoCard--projects-section {
-  margin-top: 3rem;
+  margin-top: 1rem;
 }
 
 .CompanyInfoCard--projects-num-display label {
@@ -125,7 +125,7 @@
 }
 
 .CompanyInfoDetail--project-progress-bar-wrapper {
-  box-shadow: inset -1px 4px 7px 0px #9b9b9b;
+  box-shadow: inset -1px 2px 7px 0px #b7b7b7;
   height: 1.5rem;
   border-radius: 12px;
 }
@@ -146,7 +146,7 @@
   border-radius: 5px;
   display: flex;
   flex-direction: column;
-  max-width: 230px;
+  /* max-width: 230px; */
   height: 100%;
   justify-content: space-between;
 }

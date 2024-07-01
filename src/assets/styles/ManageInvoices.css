@@ -176,12 +176,20 @@ New Timesheet Invoice Workflow and Component Styles
 
 .invoice-date-range-form-group h5 {
   color: #00af83;
+  font-weight: 600;
 }
 
 .invoice-filter-form select {
   width: 100%;
+  border-radius: 0.3rem;
+  border: 2px solid #be3f7c;
 }
 
+.invoice-filter-date-wrapper input {
+  border-radius: 0.3rem;
+  border: 2px solid #1a8990;
+  text-indent: 0.3rem;
+}
 .invoice--apply-filters-btn {
   width: 100%;
   font-size: 0.9rem;
@@ -225,6 +233,8 @@ New Timesheet Invoice Workflow and Component Styles
   margin-bottom: 0;
   color: #4599fb;
   text-transform: uppercase;
+  font-size: 0.8rem;
+  font-weight: 900;
 }
 
 .invoice--company-details {
@@ -236,8 +246,11 @@ New Timesheet Invoice Workflow and Component Styles
 .invoice--date-range {
   display: flex;
   color: #838383;
-  width: 40%;
-  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  /* width: 40%;
+  justify-content: space-between; */
+  font-weight: 900;
 }
 
 .invoice--project-description span {
@@ -259,7 +272,7 @@ New Timesheet Invoice Workflow and Component Styles
   align-items: center;
   padding: 0 0.25rem;
   height: 55px;
-  border-radius: 7px;
+  border-radius: 0.3rem 0.3rem 0 0;
 }
 
 .invoice-details-by-resource details summary h6 {
@@ -302,6 +315,10 @@ New Timesheet Invoice Workflow and Component Styles
   padding-left: 0;
   list-style: none;
 }
+.invoice--user-records-container > header > ol {
+  font-weight: 900;
+  color: #e07aa5;
+}
 
 .invoice-details-by-resource details {
   border: 3px solid #d3eded;
@@ -315,13 +332,15 @@ New Timesheet Invoice Workflow and Component Styles
 }
 
 .ManageInvoices--new-invoice-tab-inner-content {
-  max-width: 1050px;
+  max-width: 1450px;
   margin: 0 auto;
   /* border: 1px solid; */
 }
 .invoice--user-record-totals-item input,
 .invoice--user-record-details input {
   width: 80%;
+  border-radius: 0.3rem;
+  border: 2px solid #be3f7c;
 }
 
 .invoice--user-record-details-container {
@@ -369,7 +388,7 @@ New Timesheet Invoice Workflow and Component Styles
   display: grid;
   grid-template-columns: repeat(7, minmax(75px, 150px)) 50px;
   list-style: none;
-  background-color: #ffd9c3;
+  background-color: #ccf4ff;
   align-items: center;
   border-radius: 5px;
   margin: 1rem 0 1.5rem 0;
@@ -437,7 +456,7 @@ New Timesheet Invoice Workflow and Component Styles
 
 .invoice--tx-rt-due-date-inputs input,
 .invoice--tx-rt-due-date-inputs select {
-  border: 5px solid #ffc83c;
+  border: 3px solid #ff9f3f;
   border-radius: 5px;
   height: 2rem;
 }

@@ -296,7 +296,7 @@ function AddEmployee(props) {
                 htmlFor="employee-form--id-input"
                 className="employee-form--id-label"
               >
-                Employee ID
+                Employee ID (INT)
                 <input
                   required
                   type="text"

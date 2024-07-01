@@ -36,8 +36,8 @@ body {
 
 .NavBar--control-center-link {
   text-decoration: none;
-  border-bottom: 2px solid #297ab4;
-  font-size: 0.8rem;
+  border-bottom: 3px solid #297ab4;
+  font-size: 0.9rem;
   width: 70%;
 }
 
@@ -69,7 +69,7 @@ body {
 }
 
 .NavBar--user-icon svg {
-  color: #336045;
+  color: #307fb9;
   border: 2px solid #ffa564;
   padding: 0.5rem;
   border-radius: 50%;
@@ -81,8 +81,8 @@ body {
 }
 
 .NavBar--user-hub-link {
-  border-bottom: 2px solid #ff922d;
-  font-size: 0.8rem;
+  border-bottom: 3px solid #ff922d;
+  font-size: 0.9rem;
   text-decoration: none;
   width: 70%;
 }
