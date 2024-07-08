@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { domain } from "../assets/api/apiEndpoints";
+import "../assets/styles/Styles.css";
 import SuccessMessage from "../components/SuccessMessage";
 import AlertMessage from "../components/AlertMessage";
 
@@ -225,7 +226,7 @@ function EditCompanyDetails(props) {
         close={closeAlert}
         message={message}
       />
-      <main className="edit-company-page__main-section max-width--main-container">
+      <main className="add-company-page__main-section max-width--main-container">
         <h1 className="edit-company-title form-page-title--lg-1">
           Edit or Delete a Company
         </h1>
