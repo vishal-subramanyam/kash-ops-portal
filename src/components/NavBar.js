@@ -4,6 +4,19 @@ import { useAuth } from "../hooks/Authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import "../assets/styles/NavBar.css";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Fade from "@mui/material/Fade";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import { Popover } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { ReactComponent as ClientsIcon } from "../assets/images/clientsIcon.svg";
+import { ReactComponent as EmployeeIcon } from "../assets/images/employeeIcon.svg";
+import { ReactComponent as InvoiceIcon } from "../assets/images/invoicesIcon.svg";
+import { ReactComponent as TimesheetIcon } from "../assets/images/timesheetIcon.svg";
+import "../assets/styles/HomePage.css";
+import "../assets/styles/Styles.css";
 
 function NavBar(props) {
   let { logout } = useAuth();
@@ -28,6 +41,72 @@ function NavBar(props) {
   const changePW = () => {
     navigate("/update-password");
   };
+
+  // MEGAMENU stuff
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [nestedAnchorEl, setNestedAnchorEl] = React.useState(null);
+  const [nestedAnchorEl2, setNestedAnchorEl2] = React.useState(null);
+  const [nestedAnchorEl3, setNestedAnchorEl3] = React.useState(null);
+  const [nestedAnchorEl4, setNestedAnchorEl4] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+    setNestedAnchorEl(null);
+    setNestedAnchorEl2(null);
+    setNestedAnchorEl3(null);
+    setNestedAnchorEl4(null);
+  };
+  const handleNestedClick = (event) => {
+    setNestedAnchorEl(event.currentTarget);
+  };
+  const handleNestedClick2 = (event) => {
+    setNestedAnchorEl2(event.currentTarget);
+  };
+  const handleNestedClick3 = (event) => {
+    setNestedAnchorEl3(event.currentTarget);
+  };
+  const handleNestedClick4 = (event) => {
+    setNestedAnchorEl4(event.currentTarget);
+  };
+  const handleNestedClose = () => {
+    setNestedAnchorEl(null);
+  };
+  const handleNestedClose2 = () => {
+    setNestedAnchorEl2(null);
+  };
+  const handleNestedClose3 = () => {
+    setNestedAnchorEl3(null);
+  };
+  const handleNestedClose4 = () => {
+    setNestedAnchorEl4(null);
+  };
+  const handleMenuItemClick = (path) => {
+    handleClose();
+    navigate(path);
+  };
+  const BlueIcon = styled(ClientsIcon)({
+    width: "1.5rem",
+    height: "1.5rem",
+    fill: "currentColor",
+  });
+  const OrangeIcon = styled(EmployeeIcon)({
+    width: "1.5rem",
+    height: "1.5rem",
+    fill: "currentColor",
+  });
+  const PinkIcon = styled(InvoiceIcon)({
+    width: "1.5rem",
+    height: "1.5rem",
+    fill: "currentColor",
+  });
+  const GreenIcon = styled(TimesheetIcon)({
+    width: "1.5rem",
+    height: "1.5rem",
+    fill: "currentColor",
+  });
 
   return (
     <nav className="NavBar">
@@ -130,9 +209,237 @@ function NavBar(props) {
       <div className="NavBar--nav-links">
         <ol className="NavBar--nav-links-list">
           <li className="NavBar--user-hub-link-container">
-            <Link to="/" className="NavBar--user-hub-link">
+            <Link
+              // to="/"
+              className="NavBar--user-hub-link"
+              onClick={handleClick}
+            >
               User Hub
             </Link>
+            <Menu
+              id="fade-menu"
+              MenuListProps={{
+                "aria-labelledby": "fade-button",
+              }}
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              TransitionComponent={Fade}
+            >
+              {props.admin === '"Basic User"' ? (
+                <></>
+              ) : (
+                <>
+                  <MenuItem
+                    onClick={handleNestedClick}
+                    sx={{
+                      "&:hover": {
+                        backgroundColor: "#315C75",
+                        color: "white",
+                      },
+                    }}
+                  >
+                    <ListItemIcon>
+                      <OrangeIcon />
+                    </ListItemIcon>
+                    Employees
+                    <ListItemIcon>
+                      <NavigateNextIcon />
+                    </ListItemIcon>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={handleNestedClick2}
+                    sx={{
+                      "&:hover": { backgroundColor: "#315C75", color: "white" },
+                    }}
+                  >
+                    <ListItemIcon>
+                      <BlueIcon />
+                    </ListItemIcon>
+                    Clients
+                    <ListItemIcon>
+                      <NavigateNextIcon />
+                    </ListItemIcon>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={handleNestedClick3}
+                    sx={{
+                      "&:hover": { backgroundColor: "#315C75", color: "white" },
+                    }}
+                  >
+                    <ListItemIcon>
+                      <PinkIcon />
+                    </ListItemIcon>
+                    Invoices
+                    <ListItemIcon>
+                      <NavigateNextIcon />
+                    </ListItemIcon>
+                  </MenuItem>
+                </>
+              )}
+              <MenuItem
+                onClick={handleNestedClick4}
+                sx={{
+                  "&:hover": { backgroundColor: "#315C75", color: "white" },
+                }}
+              >
+                <ListItemIcon>
+                  <GreenIcon />
+                </ListItemIcon>
+                Timesheets
+                <ListItemIcon>
+                  <NavigateNextIcon />
+                </ListItemIcon>
+              </MenuItem>
+            </Menu>
+            <Popover
+              id="nested-menu"
+              anchorEl={nestedAnchorEl}
+              open={Boolean(nestedAnchorEl)}
+              onClose={handleNestedClose}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+            >
+              <MenuItem
+                onClick={() => handleMenuItemClick("/employees-detail")}
+                sx={{
+                  backgroundColor: "#E27C32",
+                  "&:hover": { backgroundColor: "#E27C32" },
+                  color: "white",
+                  borderTopRightRadius: "20px",
+                }}
+              >
+                Employee Reports
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleMenuItemClick("/manage-employee")}
+                sx={{ "&:hover": { backgroundColor: "#FFD5BD" } }}
+              >
+                Manage Employees
+              </MenuItem>
+            </Popover>
+            <Popover
+              id="nested-menu2"
+              anchorEl={nestedAnchorEl2}
+              open={Boolean(nestedAnchorEl2)}
+              onClose={handleNestedClose2}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+            >
+              <MenuItem
+                onClick={() => handleMenuItemClick("/companies-detail")}
+                sx={{
+                  backgroundColor: "#23699C",
+                  "&:hover": { backgroundColor: "#23699C" },
+                  color: "white",
+                  borderTopRightRadius: "20px",
+                }}
+              >
+                Company Reports
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleMenuItemClick("/edit-company-details")}
+                sx={{ "&:hover": { backgroundColor: "#BAE2FF" } }}
+              >
+                Manage Companies
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleMenuItemClick("/edit-project-details")}
+                sx={{ "&:hover": { backgroundColor: "#BAE2FF" } }}
+              >
+                Manage Projects
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleMenuItemClick("/edit-project")}
+                sx={{ "&:hover": { backgroundColor: "#BAE2FF" } }}
+              >
+                Project Sub Assignments
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleMenuItemClick("/manage-company-admin")}
+                sx={{ "&:hover": { backgroundColor: "#BAE2FF" } }}
+              >
+                Company Admins
+              </MenuItem>
+            </Popover>
+            <Popover
+              id="nested-menu3"
+              anchorEl={nestedAnchorEl3}
+              open={Boolean(nestedAnchorEl3)}
+              onClose={handleNestedClose3}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+            >
+              <MenuItem
+                onClick={() => handleMenuItemClick("/invoice-detail")}
+                sx={{
+                  backgroundColor: "#E43B8C",
+                  "&:hover": { backgroundColor: "#E43B8C" },
+                  color: "white",
+                  borderTopRightRadius: "20px",
+                }}
+              >
+                Invoice Reports
+              </MenuItem>
+              <MenuItem
+                onClick={() =>
+                  handleMenuItemClick("/invoice-hub/manage-invoices")
+                }
+                sx={{ "&:hover": { backgroundColor: "#FFDDED" } }}
+              >
+                Manage Invoices
+              </MenuItem>
+            </Popover>
+            <Popover
+              id="nested-menu4"
+              anchorEl={nestedAnchorEl4}
+              open={Boolean(nestedAnchorEl4)}
+              onClose={handleNestedClose4}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+            >
+              <MenuItem
+                onClick={() => handleMenuItemClick("/timesheet-reports")}
+                sx={{
+                  backgroundColor: "#348D4D",
+                  "&:hover": { backgroundColor: "#348D4D" },
+                  borderTopRightRadius: "20px",
+                  color: "white",
+                }}
+              >
+                Timesheet Reports
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleMenuItemClick("/update-timesheet")}
+                sx={{ "&:hover": { backgroundColor: "#A4F5A3" } }}
+              >
+                Submit Timesheet
+              </MenuItem>
+            </Popover>
           </li>
 
           <li className="NavBar--control-center-link-container">

@@ -27,6 +27,13 @@ body {
 
 .NavBar--user-hub-link-container {
   width: 90%;
+  position: relative;
+  left: -9.375rem;
+}
+
+.NavBar--control-center-link-container {
+  position: relative;
+  left: -9.375rem;
 }
 
 .NavBar--nav-links-list li a,
@@ -39,6 +46,7 @@ body {
   border-bottom: 3px solid #297ab4;
   font-size: 0.9rem;
   width: 70%;
+  margin-left: 0;
 }
 
 .NavBar--control-center-link:hover {
@@ -85,6 +93,7 @@ body {
   font-size: 0.9rem;
   text-decoration: none;
   width: 70%;
+  margin-left: 0;
 }
 
 .NavBar--user-hub-link:hover {
