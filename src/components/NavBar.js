@@ -17,6 +17,15 @@ import { ReactComponent as InvoiceIcon } from "../assets/images/invoicesIcon.svg
 import { ReactComponent as TimesheetIcon } from "../assets/images/timesheetIcon.svg";
 import "../assets/styles/HomePage.css";
 import "../assets/styles/Styles.css";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import ListItemText from "@mui/material/ListItemText";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import CloseIcon from "@mui/icons-material/Close";
 
 function NavBar(props) {
   let { logout } = useAuth();
@@ -85,6 +94,7 @@ function NavBar(props) {
   };
   const handleMenuItemClick = (path) => {
     handleClose();
+    handleDrawerClose();
     navigate(path);
   };
   const BlueIcon = styled(ClientsIcon)({
@@ -107,6 +117,16 @@ function NavBar(props) {
     height: "1.5rem",
     fill: "currentColor",
   });
+
+  //SIDE MENU STUFF
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
+  const handleDrawerClose = () => {
+    setDrawerOpen(false);
+  };
 
   return (
     <nav className="NavBar">
@@ -237,13 +257,15 @@ function NavBar(props) {
                         backgroundColor: "#315C75",
                         color: "white",
                       },
+                      display: "flex",
+                      justifyContent: "space-between",
                     }}
                   >
                     <ListItemIcon>
                       <OrangeIcon />
                     </ListItemIcon>
                     Employees
-                    <ListItemIcon>
+                    <ListItemIcon sx={{ minWidth: "auto", marginLeft: "auto" }}>
                       <NavigateNextIcon />
                     </ListItemIcon>
                   </MenuItem>
@@ -251,13 +273,15 @@ function NavBar(props) {
                     onClick={handleNestedClick2}
                     sx={{
                       "&:hover": { backgroundColor: "#315C75", color: "white" },
+                      display: "flex",
+                      justifyContent: "space-between",
                     }}
                   >
                     <ListItemIcon>
                       <BlueIcon />
                     </ListItemIcon>
                     Clients
-                    <ListItemIcon>
+                    <ListItemIcon sx={{ minWidth: "auto", marginLeft: "auto" }}>
                       <NavigateNextIcon />
                     </ListItemIcon>
                   </MenuItem>
@@ -265,13 +289,15 @@ function NavBar(props) {
                     onClick={handleNestedClick3}
                     sx={{
                       "&:hover": { backgroundColor: "#315C75", color: "white" },
+                      display: "flex",
+                      justifyContent: "space-between",
                     }}
                   >
                     <ListItemIcon>
                       <PinkIcon />
                     </ListItemIcon>
                     Invoices
-                    <ListItemIcon>
+                    <ListItemIcon sx={{ minWidth: "auto", marginLeft: "auto" }}>
                       <NavigateNextIcon />
                     </ListItemIcon>
                   </MenuItem>
@@ -281,13 +307,15 @@ function NavBar(props) {
                 onClick={handleNestedClick4}
                 sx={{
                   "&:hover": { backgroundColor: "#315C75", color: "white" },
+                  display: "flex",
+                  justifyContent: "space-between",
                 }}
               >
                 <ListItemIcon>
                   <GreenIcon />
                 </ListItemIcon>
                 Timesheets
-                <ListItemIcon>
+                <ListItemIcon sx={{ minWidth: "auto", marginLeft: "auto" }}>
                   <NavigateNextIcon />
                 </ListItemIcon>
               </MenuItem>
@@ -310,7 +338,7 @@ function NavBar(props) {
                 onClick={() => handleMenuItemClick("/employees-detail")}
                 sx={{
                   backgroundColor: "#E27C32",
-                  "&:hover": { backgroundColor: "#E27C32" },
+                  "&:hover": { backgroundColor: "#BE560B" },
                   color: "white",
                   borderTopRightRadius: "20px",
                 }}
@@ -342,7 +370,7 @@ function NavBar(props) {
                 onClick={() => handleMenuItemClick("/companies-detail")}
                 sx={{
                   backgroundColor: "#23699C",
-                  "&:hover": { backgroundColor: "#23699C" },
+                  "&:hover": { backgroundColor: "#0A4169" },
                   color: "white",
                   borderTopRightRadius: "20px",
                 }}
@@ -367,12 +395,18 @@ function NavBar(props) {
               >
                 Project Sub Assignments
               </MenuItem>
-              <MenuItem
-                onClick={() => handleMenuItemClick("/manage-company-admin")}
-                sx={{ "&:hover": { backgroundColor: "#BAE2FF" } }}
-              >
-                Company Admins
-              </MenuItem>
+              {props.admin === '"Admin"' ? (
+                <></>
+              ) : (
+                <>
+                  <MenuItem
+                    onClick={() => handleMenuItemClick("/manage-company-admin")}
+                    sx={{ "&:hover": { backgroundColor: "#BAE2FF" } }}
+                  >
+                    Company Admins
+                  </MenuItem>
+                </>
+              )}
             </Popover>
             <Popover
               id="nested-menu3"
@@ -392,7 +426,7 @@ function NavBar(props) {
                 onClick={() => handleMenuItemClick("/invoice-detail")}
                 sx={{
                   backgroundColor: "#E43B8C",
-                  "&:hover": { backgroundColor: "#E43B8C" },
+                  "&:hover": { backgroundColor: "#BB075D" },
                   color: "white",
                   borderTopRightRadius: "20px",
                 }}
@@ -426,7 +460,7 @@ function NavBar(props) {
                 onClick={() => handleMenuItemClick("/timesheet-reports")}
                 sx={{
                   backgroundColor: "#348D4D",
-                  "&:hover": { backgroundColor: "#348D4D" },
+                  "&:hover": { backgroundColor: "#01661D" },
                   borderTopRightRadius: "20px",
                   color: "white",
                 }}
@@ -440,13 +474,369 @@ function NavBar(props) {
                 Submit Timesheet
               </MenuItem>
             </Popover>
-          </li>
 
-          <li className="NavBar--control-center-link-container">
-            <Link to="/control-center" className="NavBar--control-center-link">
-              Control Center
-            </Link>
+            <IconButton
+              edge="start"
+              color="black"
+              aria-label="menu"
+              onClick={handleDrawerToggle}
+              sx={{ position: "fixed", top: 12, left: 100 }}
+            >
+              <MenuIcon />
+            </IconButton>
+
+            <Drawer
+              anchor="left"
+              open={drawerOpen}
+              onClose={handleDrawerClose}
+              variant="persistent"
+              sx={{
+                "& .MuiDrawer-paper": {
+                  width: 240,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                },
+              }}
+            >
+              <IconButton
+                onClick={handleDrawerToggle}
+                sx={{ position: "absolute", top: 8, right: 8, zIndex: 1 }}
+              >
+                <CloseIcon />
+              </IconButton>
+              <List sx={{ width: "100%", textAlign: "center" }}>
+                {props.admin === '"Basic User"' ? (
+                  <></>
+                ) : (
+                  <>
+                    <ListItem
+                      sx={{
+                        justifyContent: "center",
+                        position: "relative",
+                        "&::after": {
+                          content: '""',
+                          position: "absolute",
+                          bottom: 0,
+                          left: 0,
+                          width: "100%",
+                          height: 3,
+                          backgroundColor: "#F57407",
+                          borderRadius: 1,
+                        },
+                      }}
+                    >
+                      <ListItemIcon sx={{ minWidth: 0, mr: "0.4rem" }}>
+                        <OrangeIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primaryTypographyProps={{ fontSize: "1.5rem" }}
+                        primary="Employees"
+                        sx={{ color: "#F57407" }}
+                      />
+                    </ListItem>
+                    <List component="div" disablePadding sx={{ width: "100%" }}>
+                      <ListItem
+                        button
+                        onClick={() => handleMenuItemClick("/employees-detail")}
+                        sx={{
+                          justifyContent: "center",
+                          "&:hover": {
+                            color: "#F57407",
+                            backgroundColor: "#D4EFF6",
+                          },
+                        }}
+                      >
+                        <ListItemIcon
+                          sx={{ color: "#F57407", minWidth: 0, mr: "0.4rem" }}
+                        >
+                          <FiberManualRecordIcon fontSize="0.55rem" />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary="Reports"
+                          sx={{ marginRight: "10.3rem" }}
+                        />
+                      </ListItem>
+                      <ListItem
+                        button
+                        onClick={() => handleMenuItemClick("/manage-employee")}
+                        sx={{
+                          justifyContent: "center",
+                          paddingLeft: 4,
+                          "&:hover": {
+                            color: "#F57407",
+                            backgroundColor: "#D4EFF6",
+                          },
+                        }}
+                      >
+                        <ListItemText primary="Manage Employees" />
+                      </ListItem>
+                    </List>
+
+                    <ListItem
+                      sx={{
+                        justifyContent: "center",
+                        position: "relative",
+                        "&::after": {
+                          content: '""',
+                          position: "absolute",
+                          bottom: 0,
+                          left: 0,
+                          width: "100%",
+                          height: 3,
+                          backgroundColor: "#047CA3",
+                          borderRadius: 1,
+                        },
+                      }}
+                    >
+                      <ListItemIcon sx={{ minWidth: 0, mr: "0.4rem" }}>
+                        <BlueIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primaryTypographyProps={{ fontSize: "1.5rem" }}
+                        primary="Clients"
+                        sx={{ color: "#047CA3" }}
+                      />
+                    </ListItem>
+                    <List component="div" disablePadding sx={{ width: "100%" }}>
+                      <ListItem
+                        button
+                        onClick={() => handleMenuItemClick("/companies-detail")}
+                        sx={{
+                          justifyContent: "center",
+                          "&:hover": {
+                            color: "#047CA3",
+                            backgroundColor: "#D4EFF6",
+                          },
+                        }}
+                      >
+                        <ListItemIcon
+                          sx={{ color: "#047CA3", minWidth: 0, mr: "0.4rem" }}
+                        >
+                          <FiberManualRecordIcon fontSize="0.55rem" />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary="Reports"
+                          sx={{ marginRight: "10.3rem" }}
+                        />
+                      </ListItem>
+                      <ListItem
+                        button
+                        onClick={() =>
+                          handleMenuItemClick("/edit-company-details")
+                        }
+                        sx={{
+                          justifyContent: "center",
+                          paddingLeft: 4,
+                          "&:hover": {
+                            color: "#047CA3",
+                            backgroundColor: "#D4EFF6",
+                          },
+                        }}
+                      >
+                        <ListItemText primary="Manage Companies" />
+                      </ListItem>
+                      <ListItem
+                        button
+                        onClick={() =>
+                          handleMenuItemClick("/edit-project-details")
+                        }
+                        sx={{
+                          justifyContent: "center",
+                          paddingLeft: 4,
+                          "&:hover": {
+                            color: "#047CA3",
+                            backgroundColor: "#D4EFF6",
+                          },
+                        }}
+                      >
+                        <ListItemText primary="Manage Projects" />
+                      </ListItem>
+                      <ListItem
+                        button
+                        onClick={() => handleMenuItemClick("/edit-project")}
+                        sx={{
+                          justifyContent: "center",
+                          paddingLeft: 4,
+                          "&:hover": {
+                            color: "#047CA3",
+                            backgroundColor: "#D4EFF6",
+                          },
+                        }}
+                      >
+                        <ListItemText primary="Project Sub Assignments" />
+                      </ListItem>
+                      {props.admin === '"Admin"' ? (
+                        <></>
+                      ) : (
+                        <>
+                          <ListItem
+                            button
+                            onClick={() =>
+                              handleMenuItemClick("/manage-company-admin")
+                            }
+                            sx={{
+                              justifyContent: "center",
+                              paddingLeft: 4,
+                              "&:hover": {
+                                color: "#047CA3",
+                                backgroundColor: "#D4EFF6",
+                              },
+                            }}
+                          >
+                            <ListItemText primary="Company Admins" />
+                          </ListItem>
+                        </>
+                      )}
+                    </List>
+                    <ListItem
+                      sx={{
+                        justifyContent: "center",
+                        position: "relative",
+                        "&::after": {
+                          content: '""',
+                          position: "absolute",
+                          bottom: 0,
+                          left: 0,
+                          width: "100%",
+                          height: 3,
+                          backgroundColor: "#E43B8C",
+                          borderRadius: 1,
+                        },
+                      }}
+                    >
+                      <ListItemIcon sx={{ minWidth: 0, mr: "0.4rem" }}>
+                        <PinkIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primaryTypographyProps={{ fontSize: "1.5rem" }}
+                        primary="Invoices"
+                        sx={{ color: "#E43B8C" }}
+                      />
+                    </ListItem>
+                    <List component="div" disablePadding sx={{ width: "100%" }}>
+                      <ListItem
+                        button
+                        onClick={() => handleMenuItemClick("/invoice-detail")}
+                        sx={{
+                          justifyContent: "center",
+                          "&:hover": {
+                            color: "#E43B8C",
+                            backgroundColor: "#D4EFF6",
+                          },
+                        }}
+                      >
+                        <ListItemIcon
+                          sx={{ color: "#E43B8C", minWidth: 0, mr: "0.4rem" }}
+                        >
+                          <FiberManualRecordIcon fontSize="0.55rem" />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary="Reports"
+                          sx={{ marginRight: "10.3rem" }}
+                        />
+                      </ListItem>
+                      <ListItem
+                        button
+                        onClick={() =>
+                          handleMenuItemClick("/invoice-hub/manage-invoices")
+                        }
+                        sx={{
+                          justifyContent: "center",
+                          paddingLeft: 4,
+                          "&:hover": {
+                            color: "#E43B8C",
+                            backgroundColor: "#D4EFF6",
+                          },
+                        }}
+                      >
+                        <ListItemText primary="Manage Invoices" />
+                      </ListItem>
+                    </List>
+                  </>
+                )}
+                <ListItem
+                  sx={{
+                    justifyContent: "center",
+                    position: "relative",
+                    "&::after": {
+                      content: '""',
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      width: "100%",
+                      height: 3,
+                      backgroundColor: "#54C488",
+                      borderRadius: 1,
+                    },
+                  }}
+                >
+                  <ListItemIcon sx={{ minWidth: 0, mr: "0.4rem" }}>
+                    <GreenIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primaryTypographyProps={{ fontSize: "1.5rem" }}
+                    primary="Timesheets"
+                    sx={{ color: "#54C488" }}
+                  />
+                </ListItem>
+                <List component="div" disablePadding sx={{ width: "100%" }}>
+                  <ListItem
+                    button
+                    onClick={() => handleMenuItemClick("/timesheet-reports")}
+                    sx={{
+                      justifyContent: "center",
+                      "&:hover": {
+                        color: "#54C488",
+                        backgroundColor: "#D4EFF6",
+                      },
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{ color: "#54C488", minWidth: 0, mr: "0.4rem" }}
+                    >
+                      <FiberManualRecordIcon fontSize="0.55rem" />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Reports"
+                      sx={{
+                        marginRight: "10.3rem",
+                      }}
+                    />
+                  </ListItem>
+                  <ListItem
+                    button
+                    onClick={() => handleMenuItemClick("/update-timesheet")}
+                    sx={{
+                      justifyContent: "center",
+                      paddingLeft: 4,
+                      "&:hover": {
+                        color: "#54C488",
+                        backgroundColor: "#D4EFF6",
+                      },
+                    }}
+                  >
+                    <ListItemText primary="Submit Timesheet" />
+                  </ListItem>
+                </List>
+              </List>
+            </Drawer>
           </li>
+          {props.admin === '"Basic User"' ? (
+            <></>
+          ) : (
+            <>
+              <li className="NavBar--control-center-link-container">
+                <Link
+                  to="/control-center"
+                  className="NavBar--control-center-link"
+                >
+                  Control Center
+                </Link>
+              </li>
+            </>
+          )}
           <li>
             <p className="kash_operations_home--user-welcome-msg">
               Welcome, {/* <span id="kash_ops_user--first-name"> */}

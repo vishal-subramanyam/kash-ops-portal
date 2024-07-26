@@ -15,6 +15,7 @@ function HomePage(props) {
             textAlign: "center",
             lineHeight: "1.06",
             color: "#356575",
+            marginLeft: "28.5rem",
           }}
         >
           KASH Tech Operations

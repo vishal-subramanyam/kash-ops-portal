@@ -28,6 +28,10 @@ a {
 .kash_operations_home--user-welcome-msg {
   font-size: 0.8rem;
   flex-basis: 20%;
+  white-space: nowrap;
+  margin-left: 0;
+  position: relative;
+  left: -2rem;
 }
 .kash_operations_home--catgories-holder {
   position: relative;
